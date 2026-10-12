@@ -360,7 +360,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 var S = {
   projects: [],
   articles: [],
-  global: { stripeSecretKey: '', webhookSecret: '', brevoKey: '', uploaderUrl: 'https://olympeathletique.com/cf-upload.php', uploaderSecret: '84371afd91e88147340792202012eb2b3ea6b4942bc6b06a', wpUser: '', wpAppPassword: '' },
+  global: { stripeSecretKey: '', webhookSecret: '', brevoKey: '', uploaderUrl: 'https://olympeathletique.com/cf-upload.php', uploaderSecret: '84371afd91e88147340792202012eb2b3ea6b4942bc6b06a', wpUser: '', wpAppPassword: '', lastSyncedAt: 0 },
   currentId: null, tab: 'pages',
   activeLang: {}
 };
@@ -382,7 +382,7 @@ function getActiveLang(pid) { var p = getP(pid); return S.activeLang[pid] || get
 function isDefaultLang(pid) { var p = getP(pid); return getActiveLang(pid) === getDefaultLang(p); }
 
 // ===================== STORAGE =====================
-function save() {
+function save(skipSync) {
   var lite = S.projects.map(function(p) {
     return Object.assign({}, p, {
       pages: p.pages.map(function(pg) {
@@ -470,6 +470,14 @@ function save() {
       });
     });
   });
+  if (!skipSync) scheduleSyncPush();
+}
+
+function migrateProject(p) {
+  // Migration : ajouter les champs langue si absents
+  if (!p.languages) p.languages = ['fr'];
+  if (!p.defaultLanguage) p.defaultLanguage = 'fr';
+  if (!p.nameTranslations) p.nameTranslations = {};
 }
 
 function load() {
@@ -478,10 +486,7 @@ function load() {
     if (raw) {
       S.projects = JSON.parse(raw);
       S.projects.forEach(function(p) {
-        // Migration : ajouter les champs langue si absents
-        if (!p.languages) p.languages = ['fr'];
-        if (!p.defaultLanguage) p.defaultLanguage = 'fr';
-        if (!p.nameTranslations) p.nameTranslations = {};
+        migrateProject(p);
         p.pages.forEach(function(pg) {
           pg.content = localStorage.getItem('cf_pg_' + pg.id) || null;
           if (pg.variants) pg.variants.forEach(function(v) {
@@ -511,6 +516,55 @@ function load() {
     var g = localStorage.getItem('cf_global');
     if (g) S.global = Object.assign(S.global, JSON.parse(g));
   } catch(e) { S.projects = []; }
+}
+
+// ===================== SYNC MULTI-APPAREILS (cf-sync.php) =====================
+function getSyncConfig() {
+  var url = S.global.uploaderUrl || '';
+  var secret = S.global.uploaderSecret || '';
+  if (!url || !secret) return null;
+  return { url: url.replace('cf-upload.php', 'cf-sync.php'), secret: secret };
+}
+
+var _syncPushTimer = null;
+function scheduleSyncPush() {
+  clearTimeout(_syncPushTimer);
+  _syncPushTimer = setTimeout(syncPush, 1500);
+}
+
+function syncPush() {
+  var cfg = getSyncConfig();
+  if (!cfg) return;
+  var ts = Date.now();
+  S.global.lastSyncedAt = ts;
+  var payload = JSON.stringify({ savedAt: ts, data: { projects: S.projects, articles: S.articles, global: S.global } });
+  fetch(cfg.url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CF-Secret': cfg.secret },
+    body: payload
+  }).then(function(r){ return r.json(); }).then(function(res) {
+    console.log('[CF sync] push OK, savedAt=', ts, res);
+  }).catch(function(e) { console.warn('[CF sync] push erreur (hors ligne ?) :', e.message); });
+}
+
+function syncPull(onDone) {
+  var cfg = getSyncConfig();
+  if (!cfg) { onDone(false); return; }
+  fetch(cfg.url, { headers: { 'X-CF-Secret': cfg.secret } })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (!res || !res.data || !res.savedAt) { console.log('[CF sync] rien à récupérer sur le serveur'); onDone(false); return; }
+      var localTs = S.global.lastSyncedAt || 0;
+      if (res.savedAt <= localTs) { console.log('[CF sync] local déjà à jour (local=' + localTs + ', serveur=' + res.savedAt + ')'); onDone(false); return; }
+      S.projects = res.data.projects || [];
+      S.articles = res.data.articles || [];
+      S.global = Object.assign({}, S.global, res.data.global || {}, { lastSyncedAt: res.savedAt });
+      S.projects.forEach(migrateProject);
+      save(true); // met en cache localStorage sans re-déclencher un push
+      console.log('[CF sync] état distant appliqué (serveur=' + res.savedAt + ' > local=' + localTs + ')');
+      onDone(true);
+    })
+    .catch(function(e) { console.warn('[CF sync] pull erreur (hors ligne ?) :', e.message); onDone(false); });
 }
 
 // ===================== UTILS =====================
@@ -585,6 +639,7 @@ function showGlobal() {
     '<button class="btn btn-secondary btn-sm" onclick="deployCfUploader()">📦 Déployer/mettre à jour cf-upload.php</button>' +
     '<button class="btn btn-secondary btn-sm" onclick="deployWpProxy()">📤 Déployer cf-wp-proxy.php</button>' +
     '<button class="btn btn-secondary btn-sm" onclick="deployAstraChild()">🎨 Déployer le thème enfant Astra</button>' +
+    '<button class="btn btn-secondary btn-sm" onclick="deployCfSync()">🔄 Déployer cf-sync.php (synchro multi-appareils)</button>' +
     '</div>' +
     '<div class="info-box" style="margin-top:10px">À faire une seule fois. Après le thème : WP → Apparence → Thèmes → Activer "Olympe Athlétique".</div></div>' +
 
@@ -3153,6 +3208,58 @@ function deployCfUploader() {
   }).catch(function(e) { notify('⛔ Erreur réseau : ' + e.message, 'error'); });
 }
 
+function deployCfSync() {
+  var url    = S.global.uploaderUrl || '';
+  var secret = S.global.uploaderSecret || '';
+  if (!url || !secret) { notify('Configurez d\'abord l\'URL et le secret uploader dans les Réglages globaux', 'error'); return; }
+  var php = [
+    '<?php',
+    '// CopyFunnel - Sync multi-appareils de l\'état du dashboard',
+    '$SECRET = \'' + secret + '\';',
+    '$origin = $_SERVER[\'HTTP_ORIGIN\'] ?? \'*\';',
+    'header(\'Access-Control-Allow-Origin: \' . $origin);',
+    'header(\'Access-Control-Allow-Methods: GET, POST, OPTIONS\');',
+    'header(\'Access-Control-Allow-Headers: Content-Type, X-CF-Secret\');',
+    'header(\'Vary: Origin\');',
+    'header(\'Content-Type: application/json\');',
+    'if ($_SERVER[\'REQUEST_METHOD\'] === \'OPTIONS\') { http_response_code(200); exit; }',
+    'if (($_SERVER[\'HTTP_X_CF_SECRET\'] ?? \'\') !== $SECRET) { http_response_code(403); echo json_encode([\'error\'=>\'Unauthorized\']); exit; }',
+    '$file = __DIR__ . \'/cf-sync-data.json\';',
+    'if ($_SERVER[\'REQUEST_METHOD\'] === \'GET\') {',
+    '    if (!file_exists($file)) { echo json_encode([\'data\'=>null]); exit; }',
+    '    readfile($file);',
+    '    exit;',
+    '}',
+    'if ($_SERVER[\'REQUEST_METHOD\'] === \'POST\') {',
+    '    $body = file_get_contents(\'php://input\');',
+    '    $json = json_decode($body, true);',
+    '    if ($json === null || !isset($json[\'savedAt\'])) { http_response_code(400); echo json_encode([\'error\'=>\'Invalid payload\']); exit; }',
+    '    $ok = file_put_contents($file, $body, LOCK_EX) !== false;',
+    '    echo json_encode([\'success\'=>$ok, \'savedAt\'=>$json[\'savedAt\']]);',
+    '    exit;',
+    '}',
+    'http_response_code(405); echo json_encode([\'error\'=>\'Method not allowed\']);'
+  ].join('\n');
+
+  var parsedUrl = new URL(url);
+  var pathParts = parsedUrl.pathname.split('/');
+  var destPath  = pathParts.slice(1, -1).filter(Boolean).join('/');
+  var destFile  = (destPath ? destPath + '/' : '') + 'cf-sync.php';
+
+  notify('📦 Déploiement de cf-sync.php…');
+  fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CF-Secret': secret },
+    body: JSON.stringify({ files: [{ path: destFile, content: php }] })
+  }).then(function(r){ return r.json(); }).then(function(data) {
+    if (data.success || (data.results && data.results[0] && data.results[0].ok)) {
+      notify('✅ cf-sync.php déployé ! La synchro multi-appareils est active.');
+    } else {
+      notify('⛔ Échec : ' + (data.errors && data.errors[0] ? data.errors[0] : JSON.stringify(data)), 'error');
+    }
+  }).catch(function(e) { notify('⛔ Erreur réseau : ' + e.message, 'error'); });
+}
+
 function deployWpProxy() {
   var url    = S.global.uploaderUrl || 'https://olympeathletique.com/cf-upload.php';
   var secret = S.global.uploaderSecret || '';
@@ -3357,6 +3464,14 @@ load();
 // Migration : extraire og:image des produits HTML existants sans miniature
 
 renderHome();
+
+// Synchro multi-appareils : récupère en arrière-plan la version serveur si plus récente
+syncPull(function(updated) {
+  if (updated) {
+    notify('🔄 Données synchronisées depuis un autre appareil');
+    if (S.currentId) { renderProject(S.currentId); } else { renderHome(); }
+  }
+});
 
 document.querySelectorAll('.modal-overlay').forEach(function(el) {
   el.addEventListener('click', function(e) { if (e.target === el) el.classList.remove('open'); });
