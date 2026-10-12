@@ -532,19 +532,24 @@ function scheduleSyncPush() {
   _syncPushTimer = setTimeout(syncPush, 1500);
 }
 
-function syncPush() {
+function syncPush(notifyUser) {
   var cfg = getSyncConfig();
-  if (!cfg) return;
+  if (!cfg) { if (notifyUser) notify('Configurez d\'abord l\'URL et le secret uploader', 'error'); return; }
   var ts = Date.now();
   S.global.lastSyncedAt = ts;
   var payload = JSON.stringify({ savedAt: ts, data: { projects: S.projects, articles: S.articles, global: S.global } });
+  if (notifyUser) notify('📤 Envoi de mes données vers le serveur…');
   fetch(cfg.url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'X-CF-Secret': cfg.secret },
     body: payload
   }).then(function(r){ return r.json(); }).then(function(res) {
     console.log('[CF sync] push OK, savedAt=', ts, res);
-  }).catch(function(e) { console.warn('[CF sync] push erreur (hors ligne ?) :', e.message); });
+    if (notifyUser) { if (res && res.success) notify('✅ Données envoyées sur le serveur !'); else notify('⛔ Échec envoi : ' + JSON.stringify(res), 'error'); }
+  }).catch(function(e) {
+    console.warn('[CF sync] push erreur (hors ligne ?) :', e.message);
+    if (notifyUser) notify('⛔ Erreur réseau : ' + e.message, 'error');
+  });
 }
 
 function syncPull(onDone) {
@@ -640,6 +645,7 @@ function showGlobal() {
     '<button class="btn btn-secondary btn-sm" onclick="deployWpProxy()">📤 Déployer cf-wp-proxy.php</button>' +
     '<button class="btn btn-secondary btn-sm" onclick="deployAstraChild()">🎨 Déployer le thème enfant Astra</button>' +
     '<button class="btn btn-secondary btn-sm" onclick="deployCfSync()">🔄 Déployer cf-sync.php (synchro multi-appareils)</button>' +
+    '<button class="btn btn-secondary btn-sm" onclick="syncPush(true)">📤 Forcer l\'envoi de mes données vers le serveur</button>' +
     '</div>' +
     '<div class="info-box" style="margin-top:10px">À faire une seule fois. Après le thème : WP → Apparence → Thèmes → Activer "Olympe Athlétique".</div></div>' +
 
