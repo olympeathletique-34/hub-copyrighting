@@ -1310,9 +1310,11 @@ function renderProductsTab(p, c) {
       '<div class="product-meta">' + (pr.description || '') +
       (pr.url ? ' · <a href="' + pr.url + '" target="_blank" style="color:var(--accent);font-size:11px">' + pr.url.replace(/^https?:\/\/[^\/]+/, '…') + '</a>' : (pr.htmlFilename ? ' · 📄 ' + pr.htmlFilename : '')) +
       // Badges langues
+      ghBadge(p.id, i, pr) +
       (pr.translations ? ' · ' + Object.keys(pr.translations).map(function(l){ return '<span style="font-size:10px;background:rgba(108,99,255,.2);color:var(--accent);border-radius:4px;padding:1px 5px">' + langFlag(l) + ' ' + l.toUpperCase() + '</span>'; }).join(' ') : '') +
       '</div></div>' +
-      '<div style="display:flex;gap:4px">' +
+      '<div style="display:flex;gap:4px;align-items:center">' +
+      (isDefault ? ghRoleSelect(p.id, i, pr) : '') +
       (isDefault && pr.type === 'html' ? '<button class="btn btn-icon btn-sm" onclick="editProductHtml(\'' + p.id + '\',' + i + ')" title="Éditer le HTML">🎨</button>' : '') +
       (isDefault && pr.type === 'html' && (pr.htmlContent || localStorage.getItem('cf_prod_' + pr.id)) ? '<button class="btn btn-icon btn-sm" onclick="dlProduct(\'' + p.id + '\',' + i + ')" title="Télécharger HTML">⬇️</button>' : '') +
       (isDefault ? '<button class="btn btn-icon btn-sm" onclick="editProduct(\'' + p.id + '\',' + i + ')" title="Modifier les infos">✏️</button>' : '') +
@@ -1331,7 +1333,7 @@ function renderProductsTab(p, c) {
   }
 
   c.innerHTML =
-    nameHint +
+    nameHint + (isDefault ? ghPanelHtml(p) : '') +
     '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">' +
     '<div class="section-title">Produits digitaux (' + prods.length + ')' +
     (prods.length > 1 ? ' <span style="font-size:11px;color:var(--text2);font-weight:400;margin-left:6px">🖱️ Glissez pour réordonner</span>' : '') +
@@ -1369,7 +1371,7 @@ function setupProdDragDrop(pid) {
         var p = getP(pid);
         var moved = p.products.splice(dragIdx, 1)[0];
         p.products.splice(targetIdx, 0, moved);
-        save(); notify('Ordre mis à jour !'); renderProject(pid);
+        save(); notify('Ordre mis à jour !'); renderProject(pid); ghScheduleManifest(pid);
       }
     });
   });
@@ -1447,9 +1449,14 @@ function saveProduct() {
     if (type === 'html' && window._prodHtmlContent) {
       pr.htmlFilename = window._prodHtmlFilename;
       try { localStorage.setItem('cf_prod_' + pr.id, window._prodHtmlContent); } catch(e) {}
+      pr.htmlContent = window._prodHtmlContent;
+      if (pr.ghPath) var _ghPushIdx = _editProdIdx;
     }
+    if (pr.ghPath) ghScheduleManifest(_prodPid);
     save(); closeModal('modal-add-product'); notify('Produit mis à jour !');
-    resetProdModal(); renderProject(_prodPid);
+    var _ghPid = _prodPid;
+    resetProdModal(); renderProject(_ghPid);
+    if (_ghPushIdx !== undefined) ghOfferPush(_ghPid, _ghPushIdx);
     return;
   }
 
@@ -2526,7 +2533,7 @@ function saveEditorPage() {
       var pr = pp.products[pi.idx];
       pr.htmlContent = html;
       try { localStorage.setItem('cf_prod_' + pr.id, html); } catch(e) {}
-      save(); notify('Produit sauvegardé !'); _editProdInfo = null; closeEditor(); renderProject(pi.pid); return;
+      save(); notify('Produit sauvegardé !'); _editProdInfo = null; closeEditor(); renderProject(pi.pid); ghOfferPush(pi.pid, pi.idx); return;
     }
   }
 
@@ -3485,6 +3492,309 @@ document.querySelectorAll('.modal-overlay').forEach(function(el) {
 document.getElementById('np-name').addEventListener('keydown', function(e) { if (e.key === 'Enter') createProject(); });
 document.getElementById('na-title').addEventListener('keydown', function(e) { if (e.key === 'Enter') createArticle(); });
 // initArtDrop() est appelé automatiquement par renderArticles() via setTimeout
+
+// ===================== GITHUB (hub-projets) =====================
+// Relie l'onglet Produits d'un projet au dossier <dossier>/produits/ du dépôt GitHub hub-projets.
+// - Synchroniser : lit les fichiers HTML et le manifeste produits.json (ordre + rôle de chaque produit).
+// - Ordre et rôle : enregistrés automatiquement dans produits.json sur GitHub.
+// - Après une modification dans l'éditeur : propose de pousser le fichier sur GitHub.
+// Le token reste dans ce navigateur (localStorage « cf_gh_cfg ») : il n'est jamais synchronisé ni publié.
+
+var GH_API = 'https://api.github.com';
+var GH_ROLES = [
+  ['', '— non décidé'],
+  ['capture', 'Capture'],
+  ['appel', 'Appel'],
+  ['approfondissement', 'Approfondissement'],
+  ['bonus', 'Bonus'],
+  ['order-bump', 'Order bump']
+];
+var GH_ROLE_COLORS = { capture:'#4caf50', appel:'#2196f3', approfondissement:'#6c63ff', bonus:'#ff9800', 'order-bump':'#ff6584' };
+
+function ghCfg() {
+  var c = {};
+  try { c = JSON.parse(localStorage.getItem('cf_gh_cfg') || '{}'); } catch (e) {}
+  c.repo = c.repo || 'olympeathletique-34/hub-projets';
+  c.branch = c.branch || 'main';
+  return c;
+}
+function ghSaveCfg(c) { localStorage.setItem('cf_gh_cfg', JSON.stringify(c)); }
+
+function ghSaveToken() {
+  var inp = document.getElementById('gh-token-input');
+  var t = inp ? inp.value.trim() : '';
+  if (!t) { notify('Colle ton token GitHub', 'error'); return; }
+  var c = ghCfg(); c.token = t; ghSaveCfg(c);
+  window._ghFolders = null;
+  notify('Token GitHub enregistré dans ce navigateur');
+  if (_prodPid) renderProject(_prodPid);
+}
+function ghForgetToken() {
+  if (!confirm('Oublier le token GitHub sur ce navigateur ?')) return;
+  var c = ghCfg(); delete c.token; ghSaveCfg(c);
+  if (_prodPid) renderProject(_prodPid);
+}
+
+function ghFetch(path, opts) {
+  var c = ghCfg();
+  opts = opts || {};
+  var headers = Object.assign({
+    'Authorization': 'Bearer ' + c.token,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  }, opts.headers || {});
+  return fetch(GH_API + path, Object.assign({}, opts, { headers: headers, cache: 'no-store' })).then(function (r) {
+    if (r.status === 404) return null;
+    if (!r.ok) return r.text().then(function (t) {
+      var msg = t; try { msg = JSON.parse(t).message; } catch (e) {}
+      var err = new Error('GitHub ' + r.status + ' : ' + msg); err.status = r.status; throw err;
+    });
+    return opts.raw ? r.text() : r.json();
+  });
+}
+function ghEnc(path) { return path.split('/').map(encodeURIComponent).join('/'); }
+function ghContentsPath(path) { var c = ghCfg(); return '/repos/' + c.repo + '/contents/' + ghEnc(path) + '?ref=' + encodeURIComponent(c.branch); }
+
+function ghUtf8ToB64(str) {
+  var bytes = new TextEncoder().encode(str), bin = '';
+  for (var i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+
+function ghList(dir) { return ghFetch(ghContentsPath(dir)); }
+function ghRaw(path) { return ghFetch(ghContentsPath(path), { raw: true, headers: { 'Accept': 'application/vnd.github.raw+json' } }); }
+function ghMeta(path) { return ghFetch(ghContentsPath(path)).then(function (m) { return m && !Array.isArray(m) ? m : null; }); }
+
+function ghPut(path, text, sha, message) {
+  var c = ghCfg();
+  var body = { message: message, content: ghUtf8ToB64(text), branch: c.branch };
+  if (sha) body.sha = sha;
+  return ghFetch('/repos/' + c.repo + '/contents/' + ghEnc(path), {
+    method: 'PUT', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' }
+  }).then(function (res) { return res.content.sha; });
+}
+
+function ghListFolders() {
+  if (window._ghFolders) return Promise.resolve(window._ghFolders);
+  return ghList('').then(function (items) {
+    window._ghFolders = (items || []).filter(function (it) {
+      return it.type === 'dir' && !/^[0-9.]/.test(it.name);
+    }).map(function (it) { return it.name; });
+    return window._ghFolders;
+  });
+}
+
+function ghTitleOf(html, fallback) {
+  var m = /<title[^>]*>([^<]+)<\/title>/i.exec(html || '');
+  return m ? m[1].trim() : fallback;
+}
+
+// ---------- Panneau dans l'onglet Produits ----------
+function ghPanelHtml(p) {
+  var c = ghCfg();
+  var box = 'background:rgba(108,99,255,.08);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:12px';
+  if (!c.token) {
+    return '<div style="' + box + '">' +
+      '<div style="font-weight:600;margin-bottom:6px">🐙 Relier à GitHub (hub-projets)</div>' +
+      '<div style="color:var(--text2);margin-bottom:8px">Colle un token GitHub <b>fine-grained</b>, limité au dépôt <code>' + escHtml(c.repo) + '</code>, permission <b>Contents : Read and write</b>. Il reste uniquement dans ce navigateur.</div>' +
+      '<div style="display:flex;gap:6px"><input type="password" class="form-input" id="gh-token-input" style="flex:1;padding:6px 10px;font-size:12px" placeholder="github_pat_…">' +
+      '<button class="btn btn-primary btn-sm" onclick="ghSaveToken()">Enregistrer</button></div></div>';
+  }
+  var folder = (p.settings && p.settings.ghFolder) || '';
+  var last = p.settings && p.settings.ghLastSync ? new Date(p.settings.ghLastSync).toLocaleString('fr-FR') : 'jamais';
+  var link = folder ? 'https://github.com/' + c.repo + '/tree/' + c.branch + '/' + ghEnc(folder) + '/produits' : '';
+  setTimeout(function () { ghFillFolderSelect(folder); }, 0);
+  return '<div style="' + box + ';display:flex;flex-wrap:wrap;align-items:center;gap:8px">' +
+    '<span style="font-weight:600">🐙 GitHub</span>' +
+    '<select class="form-input" id="gh-folder-select" style="padding:5px 8px;font-size:12px;width:auto" onchange="ghSetFolder(\'' + p.id + '\',this.value)">' +
+    '<option value="">— dossier non relié —</option>' + (folder ? '<option value="' + escAttr(folder) + '" selected>' + escHtml(folder) + '/produits</option>' : '') + '</select>' +
+    (folder ? '<button class="btn btn-primary btn-sm" id="gh-sync-btn" onclick="ghSync(\'' + p.id + '\')">🔄 Synchroniser</button>' : '') +
+    (folder ? '<a href="' + link + '" target="_blank" style="color:var(--accent)">ouvrir sur GitHub</a>' : '') +
+    '<span style="color:var(--text2);margin-left:auto">Dernière synchro : ' + last + '</span>' +
+    '<button class="btn btn-icon btn-sm" onclick="ghForgetToken()" title="Oublier le token">🔑</button>' +
+    '</div>';
+}
+
+function ghFillFolderSelect(current) {
+  var sel = document.getElementById('gh-folder-select');
+  if (!sel) return;
+  ghListFolders().then(function (folders) {
+    sel = document.getElementById('gh-folder-select');
+    if (!sel) return;
+    sel.innerHTML = '<option value="">— dossier non relié —</option>' + folders.map(function (f) {
+      return '<option value="' + escAttr(f) + '"' + (f === current ? ' selected' : '') + '>' + escHtml(f) + '/produits</option>';
+    }).join('');
+  }).catch(function (e) { notify(e.message, 'error'); });
+}
+
+function ghSetFolder(pid, folder) {
+  var p = getP(pid);
+  p.settings = p.settings || {};
+  p.settings.ghFolder = folder;
+  save();
+  renderProject(pid);
+  if (folder) ghSync(pid);
+}
+
+function ghRoleSelect(pid, i, pr) {
+  var col = GH_ROLE_COLORS[pr.role] || 'var(--text2)';
+  return '<select class="form-input" title="Rôle dans le tunnel" style="padding:3px 6px;font-size:11px;width:auto;color:' + col + '" onchange="ghSetRole(\'' + pid + '\',' + i + ',this.value)">' +
+    GH_ROLES.map(function (r) { return '<option value="' + r[0] + '"' + ((pr.role || '') === r[0] ? ' selected' : '') + '>' + r[1] + '</option>'; }).join('') +
+    '</select>';
+}
+
+function ghBadge(pid, i, pr) {
+  if (!pr.ghPath) return '';
+  var s = '<span title="' + escAttr(pr.ghPath) + '" style="font-size:10px;border-radius:4px;padding:1px 5px;';
+  if (pr.ghMissing) return ' · ' + s + 'background:rgba(244,67,54,.2);color:#f44336">🐙 absent de GitHub</span>';
+  if (pr.ghDirty) return ' · ' + s + 'background:rgba(255,152,0,.2);color:#ff9800">🐙 modifié ici</span> <a href="#" style="font-size:10px;color:var(--accent)" onclick="ghPushProduct(\'' + pid + '\',' + i + ');return false">⬆️ pousser</a>';
+  return ' · ' + s + 'background:rgba(76,175,80,.15);color:#4caf50">🐙 synchro</span>';
+}
+
+function ghSetRole(pid, i, role) {
+  var p = getP(pid);
+  p.products[i].role = role;
+  save();
+  ghScheduleManifest(pid);
+  renderProject(pid);
+}
+
+// ---------- Synchronisation GitHub → hub-copyrighting ----------
+function ghSync(pid) {
+  var p = getP(pid);
+  var folder = p && p.settings && p.settings.ghFolder;
+  if (!folder) return;
+  var dir = folder + '/produits';
+  var btn = document.getElementById('gh-sync-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Synchro…'; }
+  var stats = { ajoutes: 0, maj: 0, conflits: 0, absents: 0 };
+
+  Promise.all([ghList(dir), ghMeta(dir + '/produits.json')]).then(function (res) {
+    var items = res[0] || [];
+    var manMeta = res[1];
+    var manifest = { produits: [] };
+    if (manMeta && manMeta.content) {
+      try { manifest = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(manMeta.content.replace(/\n/g, '')), function (ch) { return ch.charCodeAt(0); }))); } catch (e) { notify('produits.json illisible, ignoré', 'error'); }
+    }
+    p.settings.ghManifestSha = manMeta ? manMeta.sha : null;
+    var manByFile = {};
+    (manifest.produits || []).forEach(function (m, idx) { manByFile[m.fichier] = Object.assign({ _idx: idx }, m); });
+
+    var files = items.filter(function (it) { return it.type === 'file' && /\.html?$/i.test(it.name); });
+    var seen = {};
+    if (!p.products) p.products = [];
+
+    return files.reduce(function (chain, f) {
+      return chain.then(function () {
+        seen[f.path] = true;
+        var m = manByFile[f.name] || {};
+        var pr = p.products.find(function (x) { return x.ghPath === f.path; });
+        if (pr) {
+          pr.ghMissing = false;
+          if (m.role !== undefined) pr.role = m.role;
+          if (m.nom) pr.name = m.nom;
+          if (pr.ghSha === f.sha) return;
+          if (pr.ghDirty && !confirm('« ' + pr.name + ' » a été modifié ici ET sur GitHub.\n\nOK = remplacer ta version locale par celle de GitHub\nAnnuler = garder ta version locale (tu pourras la pousser)')) { stats.conflits++; return; }
+          return ghRaw(f.path).then(function (html) {
+            pr.htmlContent = html; pr.ghSha = f.sha; pr.ghDirty = false; pr.htmlFilename = f.name;
+            try { localStorage.setItem('cf_prod_' + pr.id, html); } catch (e) {}
+            stats.maj++;
+          });
+        }
+        return ghRaw(f.path).then(function (html) {
+          var np = { id: uid(), name: m.nom || ghTitleOf(html, f.name.replace(/\.html?$/i, '')), description: '', type: 'html', url: '',
+            htmlFilename: f.name, htmlContent: html, ghPath: f.path, ghSha: f.sha, role: m.role || '' };
+          p.products.push(np);
+          try { localStorage.setItem('cf_prod_' + np.id, html); } catch (e) {}
+          stats.ajoutes++;
+        });
+      });
+    }, Promise.resolve()).then(function () {
+      p.products.forEach(function (pr) {
+        if (pr.ghPath && pr.ghPath.indexOf(dir + '/') === 0 && !seen[pr.ghPath]) { if (!pr.ghMissing) stats.absents++; pr.ghMissing = true; }
+      });
+      // Ordre : celui du manifeste pour les produits GitHub, les autres gardent leur place à la suite.
+      var rank = function (pr) {
+        if (!pr.ghPath) return 1e6;
+        var m = manByFile[pr.ghPath.split('/').pop()];
+        return m ? m._idx : 1e5;
+      };
+      p.products = p.products.map(function (pr, i) { return { pr: pr, i: i }; })
+        .sort(function (a, b) { return (rank(a.pr) - rank(b.pr)) || (a.i - b.i); })
+        .map(function (x) { return x.pr; });
+      p.settings.ghLastSync = Date.now();
+      save();
+      renderProject(pid);
+      notify('GitHub : ' + stats.ajoutes + ' ajouté(s), ' + stats.maj + ' mis à jour' +
+        (stats.conflits ? ', ' + stats.conflits + ' conflit(s) gardé(s) en local' : '') +
+        (stats.absents ? ', ' + stats.absents + ' absent(s) de GitHub' : ''));
+      // Crée ou complète le manifeste si des fichiers n'y figurent pas encore.
+      var missing = files.some(function (f) { return !manByFile[f.name]; });
+      if (missing) ghScheduleManifest(pid, 0);
+    });
+  }).catch(function (e) {
+    notify(e.status === 401 ? 'Token GitHub refusé (expiré ou invalide) : clique sur 🔑 pour le changer' : e.message, 'error');
+    if (btn) { btn.disabled = false; btn.textContent = '🔄 Synchroniser'; }
+  });
+}
+
+// ---------- Manifeste produits.json (ordre + rôle) ----------
+var _ghManifestTimers = {};
+function ghScheduleManifest(pid, delay) {
+  var p = getP(pid);
+  if (!p || !p.settings || !p.settings.ghFolder || !ghCfg().token) return;
+  clearTimeout(_ghManifestTimers[pid]);
+  _ghManifestTimers[pid] = setTimeout(function () { ghSaveManifest(pid); }, delay === undefined ? 1500 : delay);
+}
+
+function ghSaveManifest(pid) {
+  var p = getP(pid);
+  var dir = p.settings.ghFolder + '/produits';
+  var path = dir + '/produits.json';
+  var list = (p.products || []).filter(function (pr) { return pr.ghPath && !pr.ghMissing && pr.ghPath.indexOf(dir + '/') === 0; });
+  var manifest = {
+    _info: "Géré par hub-copyrighting.vercel.app : ordre des produits et rôle dans le tunnel (capture, appel, approfondissement, bonus, order-bump, ou vide si non décidé). Les IA peuvent le lire ; seul le porteur de projet le modifie, via hub-copyrighting.",
+    produits: list.map(function (pr) { return { fichier: pr.ghPath.split('/').pop(), nom: pr.name, role: pr.role || '' }; })
+  };
+  var text = JSON.stringify(manifest, null, 2) + '\n';
+  return ghMeta(path).then(function (meta) {
+    return ghPut(path, text, meta ? meta.sha : null, 'hub-copyrighting · ' + p.settings.ghFolder + ' : ordre et rôles des produits');
+  }).then(function (sha) {
+    p.settings.ghManifestSha = sha; save(true);
+    notify('Ordre et rôles enregistrés sur GitHub');
+  }).catch(function (e) { notify('Manifeste non enregistré : ' + e.message, 'error'); });
+}
+
+// ---------- Pousser une modification de produit vers GitHub ----------
+function ghOfferPush(pid, idx) {
+  var p = getP(pid), pr = p && p.products[idx];
+  if (!pr || !pr.ghPath || !ghCfg().token) return;
+  pr.ghDirty = true; save();
+  setTimeout(function () {
+    var msg = prompt('Mettre aussi à jour « ' + pr.name + ' » sur GitHub ?\n\nMessage du commit (Annuler = plus tard, avec ⬆️ pousser) :', 'hub-copyrighting · modification de ' + pr.htmlFilename);
+    if (msg) ghPushProduct(pid, idx, msg); else renderProject(pid);
+  }, 50);
+}
+
+function ghPushProduct(pid, idx, message) {
+  var p = getP(pid), pr = p && p.products[idx];
+  if (!pr || !pr.ghPath) return;
+  var html = pr.htmlContent || localStorage.getItem('cf_prod_' + pr.id);
+  if (!html) { notify('Contenu HTML introuvable', 'error'); return; }
+  message = message || 'hub-copyrighting · modification de ' + pr.htmlFilename;
+  ghMeta(pr.ghPath).then(function (meta) {
+    if (meta && pr.ghSha && meta.sha !== pr.ghSha &&
+        !confirm('« ' + pr.name + ' » a changé sur GitHub depuis ta dernière synchro (une IA l\'a peut-être modifié).\n\nOK = écraser avec ta version\nAnnuler = ne rien envoyer (synchronise d\'abord pour voir la version GitHub)')) {
+      throw new Error('Envoi annulé : conflit avec la version GitHub');
+    }
+    return ghPut(pr.ghPath, html, meta ? meta.sha : null, message);
+  }).then(function (sha) {
+    pr.ghSha = sha; pr.ghDirty = false; pr.ghMissing = false;
+    save(); renderProject(pid);
+    notify('✅ « ' + pr.name + ' » mis à jour sur GitHub');
+  }).catch(function (e) { notify(e.message, 'error'); renderProject(pid); });
+}
+
 </script>
 </body>
 </html>
