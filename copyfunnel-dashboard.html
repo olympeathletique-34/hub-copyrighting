@@ -1229,6 +1229,7 @@ function onProdFileUpload(inp) {
   reader.onload = function(e) {
     // e.target.result = "data:mime/type;base64,XXXX"
     var b64 = e.target.result.split(',')[1];
+    window._prodUploadedB64 = b64; window._prodUploadedName = file.name;
     var safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
     var proj = getP(_prodPid);
     var projFolder = (proj && proj.settings && proj.settings.folder) || (proj ? proj.name.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'') : '');
@@ -1305,7 +1306,7 @@ function renderProductsTab(p, c) {
     }
     return '<div class="product-item" draggable="true" data-index="' + i + '">' +
       '<span class="drag-handle" title="Glissez pour réordonner">⠿</span>' +
-      '<div class="product-icon">' + pIcon(pr.type) + '</div>' +
+      '<div class="product-icon">' + ghIcon(pr) + '</div>' +
       '<div class="product-info"><div class="product-name">' + pr.name + '</div>' +
       '<div class="product-meta">' + (pr.description || '') +
       (pr.url ? ' · <a href="' + pr.url + '" target="_blank" style="color:var(--accent);font-size:11px">' + pr.url.replace(/^https?:\/\/[^\/]+/, '…') + '</a>' : (pr.htmlFilename ? ' · 📄 ' + pr.htmlFilename : '')) +
@@ -1404,6 +1405,7 @@ function resetProdModal() {
   window._prodHtmlContent = null;
   window._prodHtmlFilename = null;
   window._prodUploadedUrl  = null;
+  window._prodUploadedB64 = null; window._prodUploadedName = null;
   document.getElementById('prod-name').value = '';
   document.getElementById('prod-desc').value = '';
   document.getElementById('prod-url').value = '';
@@ -1446,6 +1448,7 @@ function saveProduct() {
     pr.description = document.getElementById('prod-desc').value;
     pr.type = type;
     if (type !== 'html') { pr.url = window._prodUploadedUrl || document.getElementById('prod-url').value; }
+    if (type !== 'html' && pr.ghPath && window._prodUploadedB64) { var _ghFile = { b64: window._prodUploadedB64, name: window._prodUploadedName, idx: _editProdIdx }; }
     if (type === 'html' && window._prodHtmlContent) {
       pr.htmlFilename = window._prodHtmlFilename;
       try { localStorage.setItem('cf_prod_' + pr.id, window._prodHtmlContent); } catch(e) {}
@@ -1457,6 +1460,7 @@ function saveProduct() {
     var _ghPid = _prodPid;
     resetProdModal(); renderProject(_ghPid);
     if (_ghPushIdx !== undefined) ghOfferPush(_ghPid, _ghPushIdx);
+    if (typeof _ghFile !== 'undefined') ghOfferPushFile(_ghPid, _ghFile.idx, _ghFile.b64);
     return;
   }
 
@@ -1467,8 +1471,12 @@ function saveProduct() {
   if (type === 'html') { prod.htmlFilename = window._prodHtmlFilename; prod.url = ''; prod.htmlContent = window._prodHtmlContent; }
   p.products.push(prod);
   if (type === 'html' && window._prodHtmlContent) { try { localStorage.setItem('cf_prod_' + prod.id, window._prodHtmlContent); } catch(e) {} }
+  var _ghNew = { pid: _prodPid, idx: p.products.length - 1, b64: type === 'html' ? null : window._prodUploadedB64, name: type === 'html' ? window._prodHtmlFilename : window._prodUploadedName };
   save(); closeModal('modal-add-product'); notify('Produit ajouté !');
   resetProdModal(); renderProject(_prodPid);
+  if (p.settings && p.settings.ghFolder && ghCfg().token && (type === 'html' || _ghNew.b64)) {
+    setTimeout(function () { if (confirm('Ajouter aussi « ' + name + ' » au dossier GitHub ' + p.settings.ghFolder + '/produits ?')) ghAddToGitHub(_ghNew.pid, _ghNew.idx, _ghNew.b64, _ghNew.name); }, 50);
+  }
 }
 
 // ===================== LANG MANAGEMENT =====================
@@ -3549,7 +3557,7 @@ function ghFetch(path, opts) {
       var msg = t; try { msg = JSON.parse(t).message; } catch (e) {}
       var err = new Error('GitHub ' + r.status + ' : ' + msg); err.status = r.status; throw err;
     });
-    return opts.raw ? r.text() : r.json();
+    return opts.blob ? r.blob() : opts.raw ? r.text() : r.json();
   });
 }
 function ghEnc(path) { return path.split('/').map(encodeURIComponent).join('/'); }
@@ -3565,9 +3573,10 @@ function ghList(dir) { return ghFetch(ghContentsPath(dir)); }
 function ghRaw(path) { return ghFetch(ghContentsPath(path), { raw: true, headers: { 'Accept': 'application/vnd.github.raw+json' } }); }
 function ghMeta(path) { return ghFetch(ghContentsPath(path)).then(function (m) { return m && !Array.isArray(m) ? m : null; }); }
 
-function ghPut(path, text, sha, message) {
+function ghPut(path, text, sha, message) { return ghPutB64(path, ghUtf8ToB64(text), sha, message); }
+function ghPutB64(path, b64, sha, message) {
   var c = ghCfg();
-  var body = { message: message, content: ghUtf8ToB64(text), branch: c.branch };
+  var body = { message: message, content: b64, branch: c.branch };
   if (sha) body.sha = sha;
   return ghFetch('/repos/' + c.repo + '/contents/' + ghEnc(path), {
     method: 'PUT', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' }
@@ -3644,7 +3653,21 @@ function ghRoleSelect(pid, i, pr) {
 }
 
 function ghBadge(pid, i, pr) {
-  if (!pr.ghPath) return '';
+  if (!pr.ghPath) {
+    var gp = getP(pid);
+    if (gp && gp.settings && gp.settings.ghFolder && ghCfg().token && pr.type === 'html' && (pr.htmlContent || localStorage.getItem('cf_prod_' + pr.id)))
+      return ' · <a href="#" style="font-size:10px;color:var(--accent)" onclick="ghAddToGitHub(\'' + pid + '\',' + i + ');return false">🐙 ajouter à GitHub</a>';
+    return '';
+  }
+  var extra = '';
+  if (pr.type !== 'html') {
+    extra = ' · 📎 ' + escHtml(pr.ghPath.split('/').pop()) +
+      ' <a href="#" style="font-size:10px;color:var(--accent)" onclick="ghOpenFile(\'' + pid + '\',' + i + ');return false">👁️ ouvrir</a>';
+    if (!pr.url) extra += ' <a href="#" style="font-size:10px;border-radius:4px;padding:1px 5px;background:rgba(255,152,0,.2);color:#ff9800" title="Pas encore d\'URL publique : copie le fichier sur ton serveur via l\'uploader" onclick="ghPublishFile(\'' + pid + '\',' + i + ');return false">⚠️ à publier</a>';
+  }
+  return ghBadgeState(pid, i, pr) + extra;
+}
+function ghBadgeState(pid, i, pr) {
   var s = '<span title="' + escAttr(pr.ghPath) + '" style="font-size:10px;border-radius:4px;padding:1px 5px;';
   if (pr.ghMissing) return ' · ' + s + 'background:rgba(244,67,54,.2);color:#f44336">🐙 absent de GitHub</span>';
   if (pr.ghDirty) return ' · ' + s + 'background:rgba(255,152,0,.2);color:#ff9800">🐙 modifié ici</span> <a href="#" style="font-size:10px;color:var(--accent)" onclick="ghPushProduct(\'' + pid + '\',' + i + ');return false">⬆️ pousser</a>';
@@ -3680,7 +3703,7 @@ function ghSync(pid) {
     var manByFile = {};
     (manifest.produits || []).forEach(function (m, idx) { manByFile[m.fichier] = Object.assign({ _idx: idx }, m); });
 
-    var files = items.filter(function (it) { return it.type === 'file' && /\.html?$/i.test(it.name); });
+    var files = items.filter(function (it) { return it.type === 'file' && GH_IGNORE.indexOf(it.name) === -1 && it.name.charAt(0) !== '.'; });
     var seen = {};
     if (!p.products) p.products = [];
 
@@ -3688,6 +3711,7 @@ function ghSync(pid) {
       return chain.then(function () {
         seen[f.path] = true;
         var m = manByFile[f.name] || {};
+        if (!/\.html?$/i.test(f.name)) return ghSyncFile(p, f, m, stats);
         var pr = p.products.find(function (x) { return x.ghPath === f.path; });
         if (!pr) {
           // Produit déjà ajouté à la main avec le même fichier : on le relie au lieu de créer un doublon.
@@ -3741,6 +3765,7 @@ function ghSync(pid) {
       save();
       renderProject(pid);
       notify('GitHub : ' + stats.ajoutes + ' ajouté(s), ' + stats.maj + ' mis à jour' +
+        (stats.aPublier ? ', ' + stats.aPublier + ' fichier(s) à publier (uploader non configuré)' : '') +
         (stats.conflits ? ', ' + stats.conflits + ' conflit(s) gardé(s) en local' : '') +
         (stats.absents ? ', ' + stats.absents + ' absent(s) de GitHub' : ''));
       // Crée ou complète le manifeste si des fichiers n'y figurent pas encore.
@@ -3778,6 +3803,142 @@ function ghSaveManifest(pid) {
     p.settings.ghManifestSha = sha; save(true);
     notify('Ordre et rôles enregistrés sur GitHub');
   }).catch(function (e) { notify('Manifeste non enregistré : ' + e.message, 'error'); });
+}
+
+
+// ---------- Fichiers non HTML (PDF, Word, Excel, vidéo, audio, ZIP…) ----------
+function ghIcon(pr) {
+  if (pr.type === 'other') {
+    var name = (pr.ghPath || pr.url || '').split('?')[0];
+    var ext = (name.split('.').pop() || '').toLowerCase();
+    var m = { xlsx:'📊', xls:'📊', csv:'📊', ods:'📊', docx:'📝', doc:'📝', odt:'📝', rtf:'📝', txt:'📝', md:'📝', pptx:'📽️', ppt:'📽️', key:'📽️', png:'🖼️', jpg:'🖼️', jpeg:'🖼️', webp:'🖼️', svg:'🖼️', epub:'📚' };
+    if (m[ext]) return m[ext];
+  }
+  return pIcon(pr.type);
+}
+var GH_IGNORE = ['README.md', 'produits.json'];
+function ghTypeOf(name) {
+  var ext = (name.split('.').pop() || '').toLowerCase();
+  if (ext === 'pdf') return 'pdf';
+  if (['mp4', 'mov', 'avi', 'webm', 'mkv', 'm4v'].indexOf(ext) !== -1) return 'video';
+  if (['mp3', 'wav', 'ogg', 'm4a', 'aac', 'flac'].indexOf(ext) !== -1) return 'audio';
+  if (['zip', 'gz', 'tar', 'rar', '7z'].indexOf(ext) !== -1) return 'zip';
+  return 'other';
+}
+function ghBlobToB64(blob) {
+  return new Promise(function (res, rej) {
+    var r = new FileReader();
+    r.onload = function () { res(String(r.result).split(',')[1]); };
+    r.onerror = rej; r.readAsDataURL(blob);
+  });
+}
+function ghRawBlob(path) { return ghFetch(ghContentsPath(path), { blob: true, headers: { 'Accept': 'application/vnd.github.raw+json' } }); }
+
+// Copie un fichier sur le serveur (uploader des Réglages globaux) pour obtenir une URL publique livrable aux clients.
+function ghUploadToServer(p, name, b64) {
+  var g = S.global;
+  if (!g.uploaderUrl) return Promise.resolve(null);
+  var folder = (p.settings && p.settings.folder) || p.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  var safe = name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  return fetch(g.uploaderUrl, {
+    method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CF-Secret': g.uploaderSecret },
+    body: JSON.stringify({ files: [{ path: (folder ? folder + '/produits/' : 'produits/') + safe, content: b64, _b64: true }] })
+  }).then(function (r) { return r.json(); }).then(function (data) {
+    var res = data.results && data.results[0];
+    if (res && res.ok && res.url) return res.url.replace(/([a-z0-9])\.\//i, '$1/');
+    throw new Error('Uploader : ' + (data.errors && data.errors[0] ? data.errors[0] : 'échec'));
+  });
+}
+
+function ghSyncFile(p, f, m, stats) {
+  var pr = p.products.find(function (x) { return x.ghPath === f.path; });
+  if (!pr) pr = p.products.find(function (x) { return !x.ghPath && x.type !== 'html' && x.type !== 'link' && x.url && decodeURIComponent(x.url.split('/').pop()) === f.name.replace(/[^a-zA-Z0-9._-]/g, '_'); });
+  var isNew = !pr;
+  if (pr) {
+    pr.ghPath = f.path; pr.ghMissing = false;
+    if (m.role !== undefined) pr.role = m.role;
+    if (m.nom) pr.name = m.nom;
+    if (pr.ghSha === f.sha && pr.url) return Promise.resolve();
+    if (pr.ghSha === f.sha && !S.global.uploaderUrl) return Promise.resolve();
+  } else {
+    pr = { id: uid(), name: m.nom || f.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' '), description: '', type: ghTypeOf(f.name), url: '',
+      ghPath: f.path, role: m.role || '' };
+    p.products.push(pr);
+  }
+  var changed = pr.ghSha !== f.sha;
+  pr.ghSha = f.sha; pr.ghDirty = false;
+  if (!S.global.uploaderUrl) { pr.url = changed ? '' : pr.url; if (!pr.url) stats.aPublier = (stats.aPublier || 0) + 1; if (isNew) stats.ajoutes++; else if (changed) stats.maj++; return Promise.resolve(); }
+  return ghRawBlob(f.path).then(ghBlobToB64).then(function (b64) {
+    return ghUploadToServer(p, f.name, b64);
+  }).then(function (url) {
+    pr.url = url || '';
+    if (isNew) stats.ajoutes++; else stats.maj++;
+  }).catch(function (e) {
+    pr.url = changed ? '' : pr.url;
+    stats.aPublier = (stats.aPublier || 0) + 1;
+    console.warn('[GH] publication', f.name, e);
+  });
+}
+
+function ghPublishFile(pid, i) {
+  var p = getP(pid), pr = p.products[i];
+  if (!S.global.uploaderUrl) { notify('Configure l\'uploader dans les Réglages globaux pour publier les fichiers', 'error'); return; }
+  notify('⏳ Publication de « ' + pr.name + ' »…');
+  ghRawBlob(pr.ghPath).then(ghBlobToB64).then(function (b64) { return ghUploadToServer(p, pr.ghPath.split('/').pop(), b64); })
+    .then(function (url) { pr.url = url; save(); renderProject(pid); notify('✅ « ' + pr.name + ' » publié'); })
+    .catch(function (e) { notify(e.message, 'error'); });
+}
+
+function ghOpenFile(pid, i) {
+  var p = getP(pid), pr = p.products[i];
+  var w = window.open('', '_blank');
+  ghRawBlob(pr.ghPath).then(function (blob) {
+    var ext = (pr.ghPath.split('.').pop() || '').toLowerCase();
+    var mime = { pdf: 'application/pdf', mp4: 'video/mp4', mp3: 'audio/mpeg', png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', txt: 'text/plain;charset=utf-8', md: 'text/plain;charset=utf-8' }[ext];
+    var url = URL.createObjectURL(mime ? new Blob([blob], { type: mime }) : blob);
+    if (mime && w) { w.location = url; }
+    else { if (w) w.close(); var a = document.createElement('a'); a.href = url; a.download = pr.ghPath.split('/').pop(); a.click(); }
+  }).catch(function (e) { if (w) w.close(); notify(e.message, 'error'); });
+}
+
+function ghOfferPushFile(pid, idx, b64) {
+  var p = getP(pid), pr = p && p.products[idx];
+  if (!pr || !pr.ghPath) return;
+  pr.ghDirty = true; save(); renderProject(pid);
+  setTimeout(function () {
+    var msg = prompt('Remplacer aussi « ' + pr.ghPath.split('/').pop() + ' » sur GitHub par ce nouveau fichier ?\n\nMessage du commit (Annuler = garder l\'ancien sur GitHub) :', 'hub-copyrighting · nouvelle version de ' + pr.ghPath.split('/').pop());
+    if (!msg) return;
+    ghMeta(pr.ghPath).then(function (meta) {
+      if (meta && pr.ghSha && meta.sha !== pr.ghSha && !confirm('Ce fichier a aussi changé sur GitHub. Écraser quand même ?')) throw new Error('Envoi annulé : conflit avec la version GitHub');
+      return ghPutB64(pr.ghPath, b64, meta ? meta.sha : null, msg);
+    }).then(function (sha) { pr.ghSha = sha; pr.ghDirty = false; save(); renderProject(pid); notify('✅ Fichier mis à jour sur GitHub'); })
+      .catch(function (e) { notify(e.message, 'error'); });
+  }, 50);
+}
+
+// Envoie sur GitHub un produit qui n'y est pas encore (HTML, ou fichier dont on a le contenu).
+function ghAddToGitHub(pid, idx, b64, filename) {
+  var p = getP(pid), pr = p && p.products[idx];
+  if (!pr || !p.settings.ghFolder) return;
+  var isHtml = pr.type === 'html';
+  if (isHtml) {
+    var html = pr.htmlContent || localStorage.getItem('cf_prod_' + pr.id);
+    if (!html) { notify('Contenu HTML introuvable', 'error'); return; }
+    b64 = ghUtf8ToB64(html);
+    filename = filename || pr.htmlFilename;
+  }
+  if (!b64) { notify('Contenu du fichier introuvable : réimporte-le via ✏️', 'error'); return; }
+  filename = (filename || (pr.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + (isHtml ? '.html' : ''))).replace(/[^a-zA-Z0-9._-]/g, '-');
+  var path = p.settings.ghFolder + '/produits/' + filename;
+  ghMeta(path).then(function (meta) {
+    if (meta && !confirm('Un fichier « ' + filename + ' » existe déjà sur GitHub. Le remplacer ?')) throw new Error('Envoi annulé');
+    return ghPutB64(path, b64, meta ? meta.sha : null, 'hub-copyrighting · ajout de ' + filename);
+  }).then(function (sha) {
+    pr.ghPath = path; pr.ghSha = sha; pr.ghDirty = false; pr.ghMissing = false;
+    if (isHtml) pr.htmlFilename = filename;
+    save(); renderProject(pid); ghScheduleManifest(pid, 300);
+    notify('✅ « ' + pr.name + ' » ajouté à GitHub');
+  }).catch(function (e) { notify(e.message, 'error'); });
 }
 
 // ---------- Pousser une modification de produit vers GitHub ----------
