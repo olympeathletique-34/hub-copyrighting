@@ -3689,6 +3689,21 @@ function ghSync(pid) {
         seen[f.path] = true;
         var m = manByFile[f.name] || {};
         var pr = p.products.find(function (x) { return x.ghPath === f.path; });
+        if (!pr) {
+          // Produit déjà ajouté à la main avec le même fichier : on le relie au lieu de créer un doublon.
+          var same = p.products.find(function (x) { return !x.ghPath && x.type === 'html' && x.htmlFilename === f.name; });
+          if (same) return ghRaw(f.path).then(function (html) {
+            var local = same.htmlContent || localStorage.getItem('cf_prod_' + same.id);
+            same.ghPath = f.path; same.ghMissing = false;
+            if (m.role !== undefined && !same.role) same.role = m.role;
+            if (local && local !== html && !confirm('« ' + same.name + ' » existe déjà ici et diffère de la version GitHub.\n\nOK = prendre la version GitHub\nAnnuler = garder ta version (tu pourras la pousser)')) {
+              same.ghSha = f.sha; same.ghDirty = true; stats.conflits++; return;
+            }
+            same.htmlContent = html; same.ghSha = f.sha; same.ghDirty = false;
+            try { localStorage.setItem('cf_prod_' + same.id, html); } catch (e) {}
+            stats.maj++;
+          });
+        }
         if (pr) {
           pr.ghMissing = false;
           if (m.role !== undefined) pr.role = m.role;
