@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Forum — Cahier d'entraînement rhétorique</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#FCFAF5;
+    --ink-2:#F1EDE1;
+    --card:#FFFFFF;
+    --card-line:#DFD9C6;
+    --parchment:#1B2A3F;
+    --text:#2E2B22;
+    --text-dim:#6B6455;
+    --gold:#9C7A1E;
+    --gold-dim:#B08F3E;
+    --sage:#3F6B4C;
+    --brick:#8C3D2E;
+    --font-display:'Fraunces', serif;
+    --font-body:'Source Serif 4', serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--gold); color:#FFFFFF; }
+
+  /* ---------- Layout shell ---------- */
+  .shell{ display:flex; min-height:100vh; }
+  .nav{
+    width:260px; flex-shrink:0; position:sticky; top:0; height:100vh;
+    background:var(--ink-2); border-right:1px solid var(--card-line);
+    padding:32px 22px; overflow-y:auto;
+  }
+  .nav-brand{
+    font-family:var(--font-display); font-weight:700; font-size:1.15rem;
+    color:var(--parchment); letter-spacing:0.02em; margin-bottom:4px;
+  }
+  .nav-sub{
+    font-family:var(--font-mono); font-size:0.65rem; text-transform:uppercase;
+    letter-spacing:0.12em; color:var(--gold-dim); margin-bottom:30px; display:block;
+  }
+  .nav-group{ margin-bottom:22px; }
+  .nav-group-title{
+    font-family:var(--font-mono); font-size:0.68rem; text-transform:uppercase;
+    letter-spacing:0.1em; color:var(--text-dim); margin-bottom:8px;
+  }
+  .nav-link{
+    display:block; font-size:0.86rem; color:var(--text); text-decoration:none;
+    padding:6px 0 6px 12px; border-left:2px solid var(--card-line);
+    transition:all .15s ease; opacity:0.75;
+  }
+  .nav-link:hover{ border-left-color:var(--gold); opacity:1; color:var(--parchment); }
+
+  .main{ flex:1; min-width:0; }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:90px 64px 70px; position:relative; overflow:hidden;
+    border-bottom:1px solid var(--card-line);
+    background:
+      radial-gradient(ellipse at 15% 20%, rgba(201,162,39,0.10), transparent 55%),
+      radial-gradient(ellipse at 85% 80%, rgba(110,146,119,0.08), transparent 55%);
+  }
+  .hero-eyebrow{
+    font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.16em;
+    text-transform:uppercase; color:var(--gold); margin-bottom:22px; display:block;
+  }
+  .hero h1{
+    font-family:var(--font-display); font-weight:700; font-size:clamp(2.2rem,4.4vw,3.6rem);
+    color:var(--parchment); line-height:1.08; max-width:15ch; letter-spacing:-0.01em;
+  }
+  .hero h1 em{ font-style:italic; font-weight:500; color:var(--gold); }
+  .hero p{ margin-top:26px; max-width:56ch; color:var(--text-dim); font-size:1.05rem; }
+  .hero-scale{
+    margin-top:44px; display:flex; align-items:center; gap:18px;
+    font-family:var(--font-mono); font-size:0.78rem; color:var(--text-dim);
+  }
+  .hero-scale .beam{
+    width:180px; height:2px; background:var(--card-line); position:relative;
+  }
+  .hero-scale .beam::before, .hero-scale .beam::after{
+    content:''; position:absolute; top:-6px; width:1px; height:14px; background:var(--card-line);
+  }
+  .hero-scale .beam::before{ left:0; }
+  .hero-scale .beam::after{ right:0; }
+  .side{ color:var(--sage); }
+  .side.right{ color:var(--brick); text-align:right; }
+
+  /* ---------- Section chapter header ---------- */
+  .chapter{ padding:64px 64px 20px; border-bottom:1px solid var(--card-line); scroll-margin-top:20px;}
+  .chapter-label{
+    font-family:var(--font-mono); font-size:0.72rem; color:var(--gold-dim);
+    text-transform:uppercase; letter-spacing:0.14em; margin-bottom:10px;
+  }
+  .chapter h2{
+    font-family:var(--font-display); font-weight:700; font-size:clamp(1.6rem,3vw,2.3rem);
+    color:var(--parchment);
+  }
+  .chapter-intro{ margin-top:14px; max-width:70ch; color:var(--text-dim); }
+
+  /* ---------- Fiche card ---------- */
+  .fiches{ padding:10px 64px 40px; display:flex; flex-direction:column; gap:36px; }
+  .fiche{
+    background:var(--card); border:1px solid var(--card-line); border-radius:6px;
+    overflow:hidden; scroll-margin-top:20px;
+  }
+  .fiche-head{
+    padding:26px 32px 20px; border-bottom:1px solid var(--card-line);
+    display:flex; justify-content:space-between; align-items:baseline; gap:20px; flex-wrap:wrap;
+  }
+  .fiche-num{ font-family:var(--font-mono); font-size:0.7rem; color:var(--gold-dim); }
+  .fiche-head h3{
+    font-family:var(--font-display); font-weight:600; font-size:1.35rem; color:var(--parchment);
+    margin-top:4px;
+  }
+  .fiche-body{ padding:6px 32px 30px; display:grid; gap:22px; }
+
+  .block{ border-left:3px solid var(--card-line); padding:4px 0 4px 18px; }
+  .block-label{
+    font-family:var(--font-mono); font-size:0.7rem; text-transform:uppercase;
+    letter-spacing:0.1em; margin-bottom:6px; display:flex; align-items:center; gap:8px;
+  }
+  .block.these{ border-left-color:var(--gold); }
+  .block.these .block-label{ color:var(--gold); }
+  .block.steelman{ border-left-color:var(--sage); }
+  .block.steelman .block-label{ color:var(--sage); }
+  .block.reponse{ border-left-color:var(--parchment); }
+  .block.reponse .block-label{ color:var(--parchment); }
+  .block p{ color:var(--text); font-size:0.97rem; }
+
+  .sophismes{
+    background:rgba(156,74,54,0.10); border:1px solid rgba(156,74,54,0.35);
+    border-radius:4px; padding:14px 18px; margin-top:2px;
+  }
+  .sophismes .block-label{ color:var(--brick); }
+  .sophismes ul{ padding-left:18px; color:var(--text); font-size:0.92rem; }
+  .sophismes li{ margin-bottom:4px; }
+
+  /* ---------- QCM ---------- */
+  .qcm-wrap{ margin-top:8px; border-top:1px dashed var(--card-line); padding-top:22px; }
+  .qcm-title{
+    font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase;
+    letter-spacing:0.1em; color:var(--gold); margin-bottom:16px;
+  }
+  .qcm{ margin-bottom:22px; }
+  .qcm:last-child{ margin-bottom:0; }
+  .qcm-q{ font-family:var(--font-body); font-weight:600; color:var(--parchment); margin-bottom:10px; font-size:0.98rem; }
+  .qcm-options{ display:flex; flex-direction:column; gap:8px; }
+  .qcm-opt{
+    display:flex; align-items:flex-start; gap:10px; padding:10px 14px;
+    border:1px solid var(--card-line); border-radius:4px; cursor:pointer;
+    background:var(--ink-2); transition:border-color .15s ease, background .15s ease;
+    font-size:0.9rem;
+  }
+  .qcm-opt:hover{ border-color:var(--gold-dim); }
+  .qcm-opt.correct{ border-color:var(--sage); background:rgba(110,146,119,0.14); }
+  .qcm-opt.incorrect{ border-color:var(--brick); background:rgba(156,74,54,0.14); }
+  .qcm-opt .letter{ font-family:var(--font-mono); color:var(--gold-dim); flex-shrink:0; }
+  .qcm-opt.locked{ cursor:default; pointer-events:none; }
+  .qcm-feedback{
+    margin-top:10px; padding:12px 14px; border-radius:4px; font-size:0.88rem;
+    display:none; font-family:var(--font-body); color:var(--text);
+  }
+  .qcm-feedback.show{ display:block; }
+  .qcm-feedback.ok{ background:rgba(110,146,119,0.12); border:1px solid rgba(110,146,119,0.4); }
+  .qcm-feedback.ko{ background:rgba(156,74,54,0.12); border:1px solid rgba(156,74,54,0.4); }
+
+  footer{ padding:50px 64px 90px; color:var(--text-dim); font-size:0.85rem; max-width:70ch; }
+  footer .note{
+    border-top:1px solid var(--card-line); padding-top:20px; margin-top:20px; font-size:0.82rem;
+  }
+
+  /* ---------- Scoreboard ---------- */
+  .scoreboard{
+    position:fixed; bottom:22px; right:22px; z-index:50;
+    background:var(--ink-2); border:1px solid var(--gold-dim); border-radius:6px;
+    padding:12px 18px; font-family:var(--font-mono); font-size:0.78rem; color:var(--parchment);
+    box-shadow:0 8px 24px rgba(0,0,0,0.4); min-width:150px;
+  }
+  .scoreboard .sb-title{ color:var(--gold); text-transform:uppercase; letter-spacing:0.08em; font-size:0.65rem; margin-bottom:6px; }
+  .sb-bar{ height:4px; background:var(--card-line); border-radius:2px; overflow:hidden; margin-top:8px; }
+  .sb-bar-fill{ height:100%; background:var(--gold); width:0%; transition:width .3s ease; }
+
+  /* ---------- Mobile quick-jump menu ---------- */
+  .mobile-menu{
+    display:none; position:sticky; top:0; z-index:40;
+    background:var(--ink-2); border-bottom:1px solid var(--card-line);
+    padding:12px 18px;
+  }
+  .mobile-menu .mm-row{ display:flex; align-items:center; gap:10px; }
+  .mobile-menu .mm-label{
+    font-family:var(--font-mono); font-size:0.68rem; text-transform:uppercase;
+    letter-spacing:0.1em; color:var(--gold); white-space:nowrap;
+  }
+  .mobile-menu select{
+    flex:1; min-width:0; appearance:none; -webkit-appearance:none;
+    background:var(--card) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%239C7A1E"><path d="M5 7l5 6 5-6z"/></svg>') no-repeat right 12px center;
+    background-size:14px; border:1px solid var(--card-line); border-radius:4px;
+    padding:10px 34px 10px 12px; font-family:var(--font-body); font-size:0.92rem;
+    color:var(--text); font-weight:600;
+  }
+
+  @media (max-width: 900px){
+    .nav{ display:none; }
+    .mobile-menu{ display:block; }
+    .hero, .chapter, .fiches{ padding-left:26px; padding-right:26px; }
+    .fiche-body{ padding-left:20px; padding-right:20px; }
+    .scoreboard{ right:12px; bottom:12px; padding:10px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="mobile-menu">
+  <div class="mm-row">
+    <span class="mm-label">Aller à</span>
+    <select id="chapter-jump">
+      <option value="">— Choisir un chapitre —</option>
+      <option value="fondamentaux">0. Fondamentaux &amp; sophismes</option>
+      <option value="eco-chapter">1. Économie</option>
+      <option value="nat-chapter">2. Nation &amp; identité</option>
+      <option value="rac-chapter">3. Racisme &amp; universalisme</option>
+      <option value="lib-chapter">4. Liberté d'expression</option>
+      <option value="nrg-chapter">5. Énergie</option>
+      <option value="med-chapter">6. Médias &amp; pluralisme</option>
+    </select>
+  </div>
+</div>
+
+<div class="shell">
+  <nav class="nav">
+    <div class="nav-brand">Le Forum</div>
+    <span class="nav-sub">Cahier d'entraînement rhétorique</span>
+
+    <div class="nav-group">
+      <div class="nav-group-title">Fondations</div>
+      <a class="nav-link" href="#fondamentaux">Fondamentaux &amp; sophismes</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">Économie</div>
+      <a class="nav-link" href="#eco-1">Impôt &amp; prospérité</a>
+      <a class="nav-link" href="#eco-2">Marché libre vs planification</a>
+      <a class="nav-link" href="#eco-3">État providence</a>
+      <a class="nav-link" href="#eco-4">Hausse du SMIC</a>
+      <a class="nav-link" href="#eco-5">Taxer les surprofits</a>
+      <a class="nav-link" href="#eco-6">Planifier l'agriculture</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">Nation &amp; identité</div>
+      <a class="nav-link" href="#nat-1">Patriotisme</a>
+      <a class="nav-link" href="#nat-2">Immigration</a>
+      <a class="nav-link" href="#nat-3">Roman national</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">Racisme &amp; universalisme</div>
+      <a class="nav-link" href="#rac-1">« Tu es blanc donc raciste »</a>
+      <a class="nav-link" href="#rac-2">Universalisme vs identitarisme</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">Liberté d'expression</div>
+      <a class="nav-link" href="#lib-1">« Wokisme » &amp; censure morale</a>
+      <a class="nav-link" href="#lib-2">Limites de la parole</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">Énergie</div>
+      <a class="nav-link" href="#nrg-1">Nucléaire vs renouvelables</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">Médias</div>
+      <a class="nav-link" href="#med-1">Concentration &amp; pluralisme</a>
+    </div>
+  </nav>
+
+  <main class="main">
+
+    <section class="hero">
+      <span class="hero-eyebrow">Rhétorique appliquée — argumentaire libéral &amp; patriote</span>
+      <h1>S'entraîner à <em>argumenter</em>, pas à écraser.</h1>
+      <p>Ce cahier n'apprend pas des punchlines. Il construit, thème par thème, la thèse libérale et patriote la plus solide possible, l'objection la plus sérieuse qu'on peut lui opposer, et la réponse qui tient face à un interlocuteur qui argumente honnêtement — pas face à un épouvantail. Chaque fiche se termine par un QCM pour vérifier que le raisonnement, pas seulement la conclusion, est acquis.</p>
+      <div class="hero-scale">
+        <span class="side">Thèse</span>
+        <span class="beam"></span>
+        <span class="side right">Objection</span>
+      </div>
+    </section>
+
+    <section class="chapter" id="fondamentaux">
+      <span class="chapter-label">Chapitre 0</span>
+      <h2>Fondamentaux : les outils avant les munitions</h2>
+      <p class="chapter-intro">Trois leviers de persuasion (ethos, pathos, logos) et sept sophismes qui reviennent dans presque tous les débats politiques — à repérer chez l'autre, et surtout à éviter soi-même, car un argument qui gagne par sophisme se retourne dès que l'interlocuteur le repère.</p>
+    </section>
+
+    <section class="fiches" id="fiches-fondamentaux"></section>
+
+    <section class="chapter" id="eco-chapter">
+      <span class="chapter-label">Chapitre 1</span>
+      <h2>Économie : fiscalité, marché, État</h2>
+      <p class="chapter-intro">L'objectif n'est pas de nier que l'État a un rôle, mais de défendre où se situe la ligne raisonnable — et de savoir répondre à l'objection la plus solide, pas à la caricature du « libéral qui déteste les pauvres ».</p>
+    </section>
+    <section class="fiches" id="fiches-eco"></section>
+
+    <section class="chapter" id="nat-chapter">
+      <span class="chapter-label">Chapitre 2</span>
+      <h2>Nation, patriotisme, immigration</h2>
+      <p class="chapter-intro">Distinguer patriotisme civique et nationalisme d'exclusion est la clé pour tenir une position patriote sans tomber dans le sophisme que l'adversaire attend.</p>
+    </section>
+    <section class="fiches" id="fiches-nat"></section>
+
+    <section class="chapter" id="rac-chapter">
+      <span class="chapter-label">Chapitre 3</span>
+      <h2>Racisme systémique &amp; universalisme</h2>
+      <p class="chapter-intro">Le terrain le plus miné : y répondre correctement suppose de séparer ce qui est un vrai constat statistique de ce qui devient une accusation morale collective — et de nommer précisément le sophisme sans nier les faits.</p>
+    </section>
+    <section class="fiches" id="fiches-rac"></section>
+
+    <section class="chapter" id="lib-chapter">
+      <span class="chapter-label">Chapitre 4</span>
+      <h2>Liberté d'expression</h2>
+      <p class="chapter-intro">Défendre le pluralisme des idées sans donner l'impression de minimiser un préjudice réel : l'exercice rhétorique le plus délicat de ce cahier.</p>
+    </section>
+    <section class="fiches" id="fiches-lib"></section>
+
+    <section class="chapter" id="nrg-chapter">
+      <span class="chapter-label">Chapitre 5</span>
+      <h2>Énergie : nucléaire et renouvelables</h2>
+      <p class="chapter-intro">L'énergie n'est pas qu'une question technique, c'est un terrain politique à part entière. L'objectif est de défendre un mix pilotable sans céder à la caricature « pro-nucléaire contre écologiste ».</p>
+    </section>
+    <section class="fiches" id="fiches-nrg"></section>
+
+    <section class="chapter" id="med-chapter">
+      <span class="chapter-label">Chapitre 6</span>
+      <h2>Médias et pluralisme de l'information</h2>
+      <p class="chapter-intro">Répondre à l'argument sur la concentration des médias par les milliardaires sans tomber dans l'angle mort inverse : aucun média, classique ou alternatif, n'est neutre par nature.</p>
+    </section>
+    <section class="fiches" id="fiches-med"></section>
+
+    <footer>
+      <p><strong>Comment utiliser ce cahier en débat réel.</strong> L'objectif réaliste d'un débat familial n'est presque jamais de « gagner » mais de faire progresser la discussion sans rupture : commence par reformuler la position de l'autre avant de répondre (« si je comprends bien, tu dis que... »), cela désamorce l'hostilité et t'oblige à répondre au vrai argument plutôt qu'à une caricature.</p>
+      <p class="note">Ce cahier présente délibérément la meilleure version des arguments libéraux et patriotes, à la demande de son auteur. Les objections présentées sont volontairement steelmanées — c'est-à-dire formulées dans leur version la plus forte, pas la plus faible — car un argumentaire entraîné uniquement contre des caricatures s'effondre face à un vrai débat. Ce document reflète un point de vue engagé, pas une position neutre.</p>
+    </footer>
+
+  </main>
+</div>
+
+<div class="scoreboard">
+  <div class="sb-title">Score du Forum</div>
+  <div id="sb-text">0 / 0</div>
+  <div class="sb-bar"><div class="sb-bar-fill" id="sb-fill"></div></div>
+</div>
+
+<script>
+// ---------------------------------------------------------------
+// DATA
+// ---------------------------------------------------------------
+
+const fondamentaux = [
+  {
+    id:"fond-1",
+    num:"0.1",
+    titre:"Ethos, pathos, logos : les trois leviers",
+    these:"Aristote distingue trois manières de convaincre : l'ethos (la crédibilité de celui qui parle), le pathos (l'émotion suscitée chez l'auditoire) et le logos (la solidité logique de l'argument). Un bon débatteur mobilise les trois, mais un débatteur honnête ne fait jamais reposer sa conviction sur le pathos ou l'ethos seuls quand le logos est faible : c'est précisément ce qui distingue l'argumentation de la manipulation.",
+    steelman:"On peut objecter que cette distinction est elle-même un outil rhétorique parmi d'autres : décrire son propre camp comme « logique » et l'autre comme « émotionnel » est un moyen classique de se donner une supériorité illégitime, alors que l'émotion (l'indignation face à une injustice réelle, par exemple) est souvent un signal rationnel qu'il se passe quelque chose de grave.",
+    reponse:"L'objection est juste sur un point : l'émotion n'est pas disqualifiante en soi. La distinction utile n'est pas « émotion contre raison » mais « l'émotion sert-elle à faire passer un fait, ou remplace-t-elle le fait ? ». Le test simple : peux-tu retirer la charge émotionnelle de ta phrase et garder un argument qui tient encore debout ? Si oui, ton pathos est légitime. Si non, tu argumentais par l'émotion seule.",
+    sophismes:[],
+    qcm:[
+      {
+        q:"Un candidat dit : « Faites-moi confiance, j'ai 20 ans d'expérience » sans détailler sa proposition. Quel levier utilise-t-il principalement ?",
+        options:["Logos", "Ethos", "Pathos"],
+        correct:1,
+        feedback:"Il s'appuie sur sa crédibilité personnelle (ethos) plutôt que sur la solidité de l'argument (logos) ou l'émotion (pathos). Ce n'est pas un sophisme en soi, mais un ethos qui remplace totalement le logos doit alerter."
+      },
+      {
+        q:"Quelle est la bonne manière d'utiliser le pathos dans un débat honnête ?",
+        options:[
+          "Ne jamais l'utiliser, l'émotion est toujours suspecte",
+          "L'utiliser pour illustrer un fait déjà établi par le logos, pas pour le remplacer",
+          "L'utiliser en priorité, c'est ce qui convainc le plus vite"
+        ],
+        correct:1,
+        feedback:"Le pathos légitime vient en appui d'un argument déjà solide sur le fond ; utilisé seul, il devient de la manipulation."
+      }
+    ]
+  },
+  {
+    id:"fond-2",
+    num:"0.2",
+    titre:"Le catalogue des sept sophismes les plus fréquents en débat politique",
+    these:"Un sophisme est un raisonnement qui a l'air valide mais ne l'est pas. Les repérer chez l'autre te permet de répondre au bon niveau ; les éviter toi-même te rend inattaquable. Sept reviennent sans cesse : l'homme de paille (déformer la position adverse pour la rendre facile à battre), la pente glissante (affirmer sans preuve qu'une mesure modérée mènera nécessairement à un extrême), l'ad hominem (attaquer la personne plutôt que l'argument), le faux dilemme (réduire un choix à deux options alors qu'il en existe d'autres), la généralisation hâtive (déduire une règle générale d'un ou deux cas), la culpabilité par association (discréditer une idée par les personnes douteuses qui la partagent aussi) et l'appel à la popularité (une idée serait vraie parce que beaucoup y croient).",
+    steelman:"Certains outils qualifiés de « sophismes » ne sont en réalité pas toujours fallacieux : la pente glissante, par exemple, est parfois un raisonnement empirique valide si l'on peut montrer, données à l'appui, qu'une dynamique historique répétée mène effectivement d'un point A à un point B. La rejeter systématiquement comme sophisme est elle-même une paresse rhétorique.",
+    reponse:"Exact : le test n'est pas le nom de la figure mais la preuve. Une pente glissante étayée par des précédents historiques documentés est un argument inductif légitime. Une pente glissante affirmée sans aucune preuve empirique de l'enchaînement causal est un sophisme. Le réflexe à adopter : demande toujours « quelle est la preuve du mécanisme, pas seulement de la corrélation ? ».",
+    sophismes:[],
+    qcm:[
+      {
+        q:"« Vous êtes contre la hausse du salaire minimum ? Donc vous voulez que les pauvres meurent de faim. » Quel sophisme ?",
+        options:["Faux dilemme / homme de paille", "Appel à la popularité", "Généralisation hâtive"],
+        correct:0,
+        feedback:"On déforme une position nuancée (être contre une hausse précise) en une position extrême et caricaturale (vouloir la misère), tout en ne laissant que deux issues possibles."
+      },
+      {
+        q:"« Si on autorise cette réforme mineure, on finira forcément par [scénario extrême] », affirmé sans aucune donnée à l'appui. Que faire pour juger si c'est un sophisme ?",
+        options:[
+          "Vérifier s'il existe une preuve empirique du mécanisme d'enchaînement",
+          "Rejeter automatiquement l'argument, la pente glissante est toujours fausse",
+          "Accepter l'argument, la prudence est toujours de mise"
+        ],
+        correct:0,
+        feedback:"Une pente glissante n'est un sophisme que si le mécanisme causal n'est pas démontré. Demande toujours la preuve du lien, pas seulement l'affirmation du risque."
+      }
+    ]
+  }
+];
+
+const eco = [
+  {
+    id:"eco-1", num:"1.1",
+    titre:"L'impôt confiscatoire freine-t-il la prospérité ?",
+    these:"Au-delà d'un certain seuil, la fiscalité désincite à investir, entreprendre et rester dans le pays : c'est l'intuition derrière la courbe de Laffer — à un taux trop élevé, l'assiette fiscale se rétrécit plus vite que le taux n'augmente, et les recettes réelles peuvent baisser. L'exode de contribuables et d'entreprises vers des juridictions moins taxées, documenté dans plusieurs pays européens après des hausses brutales de l'impôt sur la fortune ou le capital, illustre ce mécanisme. La propriété privée et la perspective d'un gain conservé sont le moteur de la prise de risque entrepreneuriale.",
+    steelman:"La redistribution n'est pas seulement un frein, c'est une condition de la cohésion sociale et même de l'efficacité économique à long terme : une population en meilleure santé, mieux formée et moins inégalitaire consomme davantage, innove davantage et contient moins de tensions sociales coûteuses. Les pays les plus taxés d'Europe du Nord ont aussi certains des PIB par habitant et indices de développement les plus élevés au monde, ce qui contredit l'idée d'un lien mécanique entre fiscalité forte et déclin économique.",
+    reponse:"Le cas nordique renforce en réalité l'argument libéral bien compris : ces pays combinent une fiscalité élevée sur la consommation et le revenu avec des marchés du travail très flexibles, une ouverture commerciale forte et une fiscalité du capital et des entreprises souvent modérée — ce n'est pas un modèle anti-marché, c'est un marché libre assorti d'un filet ciblé. La critique libérale ne porte pas sur « l'impôt » en général mais sur la fiscalité punitive du capital et du travail productif, qui décourage précisément ce qui finance le filet social sur la durée. Le vrai clivage n'est donc pas « impôt contre pas d'impôt » mais « quelle assiette et quel taux ne tuent pas la poule aux œufs d'or ».",
+    sophismes:["Éviter l'homme de paille inverse : ne pas prêter à l'interlocuteur la position « il ne faut aucun impôt », que personne ne défend sérieusement.", "Éviter de citer un seul pays comme preuve universelle (généralisation hâtive) : toujours comparer plusieurs cas."],
+    qcm:[
+      {
+        q:"Quel est l'argument central de la courbe de Laffer ?",
+        options:[
+          "Plus l'impôt est élevé, plus les recettes de l'État augmentent, sans limite",
+          "Au-delà d'un certain seuil, une hausse du taux d'imposition peut faire baisser les recettes réelles",
+          "L'impôt n'a aucun effet sur le comportement économique des contribuables"
+        ],
+        correct:1,
+        feedback:"L'idée est qu'à partir d'un certain taux, la contraction de l'assiette imposable (moins d'activité, exode, optimisation) l'emporte sur l'effet mécanique de la hausse du taux."
+      },
+      {
+        q:"Un interlocuteur cite le modèle nordique comme preuve qu'une fiscalité élevée n'entrave pas la prospérité. Quelle est la meilleure réponse ?",
+        options:[
+          "Nier que ces pays soient prospères",
+          "Souligner que ce modèle associe fiscalité élevée sur le revenu/consommation à un marché du travail flexible et une fiscalité du capital souvent modérée",
+          "Changer de sujet vers un autre pays"
+        ],
+        correct:1,
+        feedback:"La réponse la plus solide affine la distinction plutôt que de nier les faits : ce n'est pas « la fiscalité » en bloc qui est en cause, mais quelle assiette est taxée et comment."
+      }
+    ]
+  },
+  {
+    id:"eco-2", num:"1.2",
+    titre:"Marché libre ou planification : qui alloue le mieux les ressources ?",
+    these:"L'argument de l'économiste Friedrich Hayek sur le « problème de la connaissance » reste central : aucun planificateur central, aussi bien informé soit-il, ne peut agréger en temps réel les préférences, coûts locaux et informations dispersées entre des millions d'acteurs. Le système de prix du marché fait ce travail automatiquement, en continu, sans qu'un comité ait besoin de tout connaître. L'écart de développement entre l'Allemagne de l'Est planifiée et l'Allemagne de l'Ouest de marché, ou entre la Corée du Nord et la Corée du Sud, illustre empiriquement ce que la théorie prédit.",
+    steelman:"Le marché livré à lui-même ne corrige pas spontanément les monopoles, les crises financières systémiques (2008) ni les externalités négatives comme la pollution ; il n'internalise pas non plus les inégalités de dotation de départ, qui faussent la concurrence dès la ligne de départ. Piketty montre par ailleurs que sans intervention, le rendement du capital tend structurellement à dépasser la croissance, concentrant la richesse indépendamment du mérite ou de l'effort.",
+    reponse:"L'argument libéral bien compris ne défend pas un marché sans aucune règle, mais un marché encadré par un cadre juridique clair (droit de la concurrence, règles prudentielles bancaires) plutôt que piloté par une planification des quantités et des prix. La différence est entre fixer les règles du jeu et jouer à la place des joueurs. Sur les inégalités de départ, la réponse libérale cohérente est l'égalité des chances (éducation, accès au crédit) plutôt que l'égalité des résultats imposée a posteriori, qui réintroduit le problème de calcul économique que Hayek décrivait.",
+    sophismes:["Attention à l'homme de paille classique consistant à assimiler toute régulation à du « collectivisme » : défendre le marché n'oblige pas à défendre l'absence totale de règles."],
+    qcm:[
+      {
+        q:"Quel est le « problème de la connaissance » identifié par Hayek ?",
+        options:[
+          "Les planificateurs manquent de diplômes pour bien gérer l'économie",
+          "Aucun centre de décision ne peut agréger en temps réel l'information dispersée que le système de prix agrège automatiquement",
+          "Les citoyens n'ont pas assez d'informations pour voter correctement"
+        ],
+        correct:1,
+        feedback:"C'est un argument sur la nature dispersée et changeante de l'information économique, pas sur la compétence des individus."
+      },
+      {
+        q:"Face à l'objection sur la crise de 2008, quelle réponse est la plus solide rhétoriquement ?",
+        options:[
+          "Nier que le marché financier ait eu une responsabilité",
+          "Distinguer marché encadré par des règles claires (prudentielles) et marché totalement dérégulé, et situer la défense libérale du côté du premier",
+          "Affirmer que l'État est toujours pire, sans nuance"
+        ],
+        correct:1,
+        feedback:"La réponse qui tient est celle qui précise le niveau de régulation défendu, pas celle qui nie l'existence du problème."
+      }
+    ]
+  },
+  {
+    id:"eco-3", num:"1.3",
+    titre:"État providence : filet de sécurité ou trappe à dépendance ?",
+    these:"Un filet social mal calibré peut créer un aléa moral : si le revenu de l'inactivité approche celui d'un emploi peu qualifié, la désincitation au retour au travail est un effet mesuré dans plusieurs études sur les « trappes à inactivité ». La dette publique qui finance une partie de ces dépenses sans contrepartie de croissance devient un fardeau reporté sur les générations futures, qui n'ont pas voté ces choix.",
+    steelman:"Un filet de sécurité solide n'est pas qu'une dépense : c'est un investissement qui réduit la pauvreté infantile, stabilise la demande en période de crise (les fameux « stabilisateurs automatiques ») et permet aux individus de prendre des risques entrepreneuriaux justement parce qu'ils savent qu'un échec ne signifie pas la ruine totale — plusieurs études montrent une corrélation entre filet social solide et taux de création d'entreprise.",
+    reponse:"Les deux arguments ne sont pas contradictoires si l'on distingue le principe du filet (légitime) et son calibrage (le vrai débat). La réponse libérale cohérente n'est pas « supprimer l'État providence » mais le rendre incitatif : allocations dégressives et non à seuil brutal, conditionnement à une activation réelle (formation, recherche d'emploi), ciblage vers ceux qui en ont réellement besoin plutôt qu'universalisme non financé. L'enjeu rhétorique est de répondre à « vous voulez laisser les gens sans rien » par une distinction claire entre filet et trappe, pas par un déni du filet lui-même.",
+    sophismes:["Ne pas tomber dans l'homme de paille « la gauche veut l'assistanat généralisé » : la plupart des positions de gauche sérieuses défendent aussi l'activation, pas la pure passivité."],
+    qcm:[
+      {
+        q:"Qu'est-ce qu'une « trappe à inactivité » ?",
+        options:[
+          "Une situation où le revenu de l'inactivité est si proche de celui d'un emploi que reprendre le travail n'apporte presque aucun gain net",
+          "Un dispositif juridique qui empêche de licencier",
+          "Une taxe sur les entreprises qui n'embauchent pas"
+        ],
+        correct:0,
+        feedback:"C'est un effet de seuil : la perte des aides à la reprise d'emploi peut annuler le gain salarial, désincitant le retour au travail."
+      },
+      {
+        q:"Quelle est la position libérale la plus défendable sur l'État providence ?",
+        options:[
+          "Le supprimer entièrement",
+          "Le garder à l'identique sans jamais le questionner",
+          "Le conserver comme filet, mais le rendre incitatif et ciblé plutôt qu'universel et à seuil brutal"
+        ],
+        correct:2,
+        feedback:"C'est la position qui résiste le mieux à l'objection du steelman, car elle ne nie pas l'utilité du filet, elle en discute le réglage."
+      }
+    ]
+  },
+  {
+    id:"eco-4", num:"1.4",
+    titre:"Faut-il augmenter fortement le SMIC ?",
+    these:"Une hausse administrée et forte du salaire minimum, déconnectée des gains de productivité réels d'un secteur, risque de détruire des emplois peu qualifiés : les entreprises de main-d'œuvre à faible marge (restauration, commerce, TPE) réagissent à un coût du travail plus élevé soit par l'automatisation, soit par le non-remplacement de postes, soit par la non-embauche des profils les moins qualifiés, souvent les jeunes et les moins diplômés — ceux que la mesure visait justement à aider. Le SMIC français, déjà l'un des plus élevés d'Europe en proportion du salaire médian, laisse mécaniquement moins de marge de progression qu'un SMIC plus bas.",
+    steelman:"Une hausse du salaire minimum augmente le pouvoir d'achat des plus modestes, qui consomment une part plus grande de leur revenu (propension marginale à consommer plus élevée), ce qui soutient la demande intérieure ; plusieurs études empiriques récentes, notamment aux États-Unis (Card &amp; Krueger), montrent des effets négatifs sur l'emploi beaucoup plus faibles que ne le prédisait la théorie classique, en particulier quand la hausse reste modérée et progressive.",
+    reponse:"L'objection est solide sur les hausses modérées et progressives : le consensus économique a effectivement évolué depuis les années 1990 vers des effets sur l'emploi plus faibles que prévu pour des hausses limitées. Mais l'argument libéral ne porte pas sur l'existence d'un salaire minimum en soi, il porte sur son niveau et sa vitesse d'augmentation : une hausse brutale et significative (les propositions de +15 à +20% d'un coup, par exemple) n'a pas le même effet empirique qu'une hausse progressive de quelques points indexée sur la productivité. La réponse rhétorique la plus solide est donc de concéder le point sur les hausses modérées documentées par la recherche, tout en distinguant clairement le cas d'une hausse brutale et non financée par des gains de productivité, qui sort de l'échantillon des études citées par l'objection.",
+    sophismes:["Éviter de citer une étude (Card &amp; Krueger) comme preuve universelle valable pour n'importe quelle ampleur de hausse : la même étude ne dit rien sur une hausse deux fois plus rapide que celles observées."],
+    qcm:[
+      {
+        q:"Que montrent les études les plus récentes (type Card &amp; Krueger) sur les hausses modérées du salaire minimum ?",
+        options:[
+          "Des destructions d'emploi massives et systématiques",
+          "Des effets sur l'emploi souvent plus faibles que ne le prédisait la théorie classique",
+          "Aucun effet mesurable n'a jamais été étudié"
+        ],
+        correct:1,
+        feedback:"C'est l'apport empirique majeur de ces études, à nuancer selon l'ampleur et la vitesse de la hausse étudiée."
+      },
+      {
+        q:"Quelle réponse évite de généraliser abusivement une étude sur les hausses modérées ?",
+        options:[
+          "Rejeter toute étude empirique sur le sujet",
+          "Concéder l'effet limité des hausses modérées documentées, tout en distinguant le cas d'une hausse brutale non financée par la productivité, hors du champ de ces études",
+          "Accepter que toute hausse, quelle que soit son ampleur, aura le même effet nul"
+        ],
+        correct:1,
+        feedback:"C'est la réponse la plus honnête intellectuellement : elle utilise la vraie portée de l'étude sans l'étendre à un cas qu'elle ne couvre pas."
+      }
+    ]
+  },
+  {
+    id:"eco-5", num:"1.5",
+    titre:"Taxer les « surprofits » et « superprofits » : justice fiscale ou improvisation ?",
+    these:"La notion de « surprofit » n'a pas de définition économique stabilisée : un profit élevé peut venir d'un choc externe temporaire (prix de l'énergie), mais aussi d'un cycle d'investissement antérieur, d'un gain de productivité ou d'une prise de risque passée qui a fini par payer. Une taxe décidée après coup, de façon rétroactive et non anticipée par les entreprises, introduit une incertitude fiscale qui décourage l'investissement futur : une entreprise qui sait qu'un profit important sera taxé exceptionnellement dès qu'il devient visible a moins intérêt à investir pour le réaliser.",
+    steelman:"Certains secteurs (énergie, transport maritime) ont connu des profits en forte hausse en 2021-2022 non pas grâce à un mérite entrepreneurial ou une prise de risque, mais du seul fait d'un choc exogène (guerre en Ukraine, reprise post-Covid) : taxer cette rente conjoncturelle non liée à l'effort de l'entreprise, pour financer un bouclier énergétique pour les ménages les plus touchés par la même crise, relève d'une redistribution logique plutôt que d'une punition arbitraire du succès.",
+    reponse:"L'argument tient mieux sur une rente clairement identifiable et temporaire (comme les producteurs d'énergie ayant bénéficié directement de la flambée des prix qu'ils n'ont pas engendrée) que sur une taxation généralisée de tout profit élevé, qui inclut aussi des entreprises ayant simplement bien anticipé ou bien géré la crise. La position libérale cohérente n'est donc pas de rejeter toute taxation exceptionnelle par principe, mais d'exiger qu'elle soit ciblée sur une rente conjoncturelle démontrée (et non un profit de gestion), annoncée à l'avance plutôt que rétroactive, et strictement temporaire — sans quoi elle devient un outil politique reproductible à chaque cycle de résultats favorables, ce qui tue l'incitation à investir à long terme dans n'importe quel secteur.",
+    sophismes:["Attention à l'homme de paille consistant à traiter toute proposition de taxe exceptionnelle comme une hostilité de principe au profit : la réponse la plus forte discute des critères (rente vs mérite, rétroactivité vs anticipation), pas du principe brut."],
+    qcm:[
+      {
+        q:"Pourquoi la notion de « surprofit » pose-t-elle un problème de définition ?",
+        options:[
+          "Parce qu'aucun profit n'est jamais élevé",
+          "Parce qu'un profit élevé peut venir d'une rente conjoncturelle ou d'un mérite entrepreneurial antérieur, et les deux ne sont pas taxés de la même façon légitimement",
+          "Parce que la loi interdit de définir ce mot"
+        ],
+        correct:1,
+        feedback:"Distinguer la rente (chance conjoncturelle) du mérite (gestion, investissement, prise de risque) est la clé de l'argument."
+      },
+      {
+        q:"À quelles conditions une taxe exceptionnelle sur les surprofits devient-elle défendable même du point de vue libéral ?",
+        options:[
+          "Jamais, sous aucune condition",
+          "Si elle cible une rente conjoncturelle clairement identifiée, est annoncée à l'avance plutôt que rétroactive, et reste strictement temporaire",
+          "Dès qu'un profit dépasse un montant arbitraire, quelle qu'en soit l'origine"
+        ],
+        correct:1,
+        feedback:"Ce sont les critères qui distinguent une taxe ciblée et prévisible d'un outil politique reproductible qui décourage l'investissement à long terme."
+      }
+    ]
+  },
+  {
+    id:"eco-6", num:"1.6",
+    titre:"Faut-il planifier l'organisation de secteurs entiers, comme l'agriculture ?",
+    these:"Une planification centralisée de l'agriculture (quotas de production, orientation imposée des cultures, prix administrés) se heurte au même problème de connaissance que la planification industrielle : les conditions de sol, de climat, de marché et de demande varient à l'échelle de chaque exploitation, information qu'un plan national ne peut pas intégrer aussi finement que la décision décentralisée de chaque agriculteur réagissant aux prix et à sa connaissance du terrain. Les tentatives de planification agricole poussée, y compris en Europe via certains volets de la Politique agricole commune, ont montré des effets pervers documentés (surproduction subventionnée de certaines cultures, sous-investissement dans d'autres).",
+    steelman:"L'agriculture n'est pas un marché comme un autre : elle dépend de cycles longs (un verger ou un cheptel ne se réoriente pas en un trimestre), elle est structurellement exposée à une volatilité des prix mondiaux que l'agriculteur individuel ne maîtrise pas, et elle porte des enjeux de souveraineté alimentaire et environnementale qui dépassent le seul signal de prix de court terme — d'où l'existence, dans la plupart des pays développés y compris les plus libéraux, d'une politique agricole avec régulation, stocks stratégiques et aides contracycliques.",
+    reponse:"Le steelman a raison de noter qu'aucun grand pays, y compris les États-Unis, ne laisse son agriculture au marché pur, précisément à cause des cycles longs et des enjeux de souveraineté. La ligne de partage réelle n'est donc pas « marché contre régulation » mais « régulation qui stabilise les prix et les revenus face à la volatilité » (assurance récolte, gestion de stocks stratégiques, réponse à des chocs externes) contre « planification qui décide à la place de l'agriculteur quoi produire et en quelle quantité », qui recrée le problème de connaissance de Hayek à l'échelle d'un secteur entier. La position défendable consiste donc à soutenir des filets de stabilisation contracycliques tout en s'opposant à une orientation centralisée des choix de production.",
+    sophismes:["Éviter l'homme de paille « la gauche veut collectiviser les terres » si l'interlocuteur ne défend en réalité qu'une régulation des prix ou des normes environnementales : bien vérifier ce qui est réellement proposé avant de répondre."],
+    qcm:[
+      {
+        q:"Pourquoi l'agriculture n'est-elle pas un marché comme un autre, selon le steelman ?",
+        options:[
+          "Parce que les agriculteurs ne veulent jamais être régulés",
+          "Parce qu'elle dépend de cycles longs, d'une volatilité des prix mondiaux subie, et d'enjeux de souveraineté alimentaire",
+          "Parce qu'elle n'est pas soumise à l'offre et à la demande"
+        ],
+        correct:1,
+        feedback:"Ce sont les trois raisons structurelles qui justifient une régulation même dans une optique libérale, sans pour autant justifier une planification centralisée des choix de production."
+      },
+      {
+        q:"Quelle est la ligne de partage rhétorique la plus solide sur ce sujet ?",
+        options:[
+          "Marché total contre planification totale",
+          "Régulation qui stabilise face à la volatilité (assurance récolte, stocks stratégiques) contre planification qui décide centralement quoi produire et en quelle quantité",
+          "Il n'existe aucune régulation agricole légitime"
+        ],
+        correct:1,
+        feedback:"Cette distinction permet de défendre un marché agricole encadré sans nier les enjeux réels de volatilité et de souveraineté soulevés par le steelman."
+      }
+    ]
+  }
+];
+
+const nat = [
+  {
+    id:"nat-1", num:"2.1",
+    titre:"Le patriotisme : repli identitaire ou ciment social ?",
+    these:"Ernest Renan définissait la nation comme un « plébiscite de tous les jours », une adhésion volontaire à un projet commun fondé sur une histoire et un avenir partagés — non sur le sang ou l'ethnie. Le patriotisme civique ainsi compris est ce qui permet la confiance interpersonnelle à grande échelle (accepter de payer des impôts pour des inconnus, obéir aux mêmes lois) : les sociétés à forte cohésion nationale affichent généralement une confiance sociale plus élevée, condition de nombreux biens publics.",
+    steelman:"L'histoire montre que le sentiment national a aussi servi à justifier l'exclusion, la guerre et l'oppression coloniale ; un cosmopolitisme moral qui place l'humanité entière sur le même plan, sans hiérarchie de proximité nationale, peut sembler éthiquement supérieur, car il ne fait pas dépendre la valeur d'une vie humaine du hasard de la naissance.",
+    reponse:"C'est précisément la distinction entre nationalisme (une nation supérieure aux autres, définie par le sang ou l'ethnie, justifiant la domination) et patriotisme civique (attachement à une communauté politique et à ses valeurs, ouverte à qui les partage) qui permet de tenir les deux bouts : on peut aimer son pays sans le croire supérieur, de la même façon qu'on peut aimer sa famille sans mépriser les autres familles. Le cosmopolitisme intégral, lui, se heurte à un problème pratique : aucune démocratie de solidarité concrète (impôts, services publics, vote) n'a jamais fonctionné à l'échelle de l'humanité entière plutôt qu'à celle d'une communauté politique délimitée.",
+    sophismes:["Attention à l'homme de paille consistant à réduire tout patriotisme à du nationalisme d'exclusion : la distinction civique/ethnique doit être nommée explicitement pour éviter ce piège."],
+    qcm:[
+      {
+        q:"Quelle est la distinction clé entre patriotisme civique et nationalisme d'exclusion ?",
+        options:[
+          "Il n'y a aucune différence, ce sont des synonymes",
+          "Le patriotisme civique s'attache à des valeurs et institutions communes ouvertes à l'adhésion ; le nationalisme d'exclusion fonde l'appartenance sur l'ethnie ou le sang",
+          "Le patriotisme concerne la gauche, le nationalisme la droite"
+        ],
+        correct:1,
+        feedback:"Cette distinction, héritée notamment de Renan, est l'outil rhétorique central pour défendre le patriotisme sans tomber dans l'accusation d'exclusion."
+      },
+      {
+        q:"Quelle est la limite pratique la plus souvent opposée au cosmopolitisme intégral ?",
+        options:[
+          "Il coûte plus cher en impôts",
+          "Aucune solidarité concrète (redistribution, vote, services publics) n'a jamais fonctionné durablement à l'échelle de l'humanité entière plutôt que d'une communauté politique délimitée",
+          "Il est interdit par la loi dans la plupart des pays"
+        ],
+        correct:1,
+        feedback:"C'est un argument d'échelle et de faisabilité institutionnelle, pas un argument moral contre l'idéal cosmopolite en lui-même."
+      }
+    ]
+  },
+  {
+    id:"nat-2", num:"2.2",
+    titre:"Immigration : chance économique ou pression sur les services publics ?",
+    these:"La position patriote défendable n'est pas « fermer les frontières » mais « maîtriser les flux » : une immigration choisie, régulée et adaptée à la capacité d'accueil réelle (logement, école, santé, marché du travail) évite les tensions que produit une arrivée massive et non anticipée. La capacité d'intégration d'une société n'est pas infinie ni instantanée, et l'ignorer nourrit précisément les mouvements populistes que l'on prétend combattre.",
+    steelman:"Plusieurs secteurs (santé, bâtiment, agriculture, restauration) souffrent de pénuries de main-d'œuvre que l'immigration comble directement ; par ailleurs, dans un contexte de vieillissement démographique et de ratio actifs/retraités déclinant, l'immigration nette contribue positivement aux comptes sociaux dans plusieurs études de long terme, contredisant l'image d'un coût net pour les finances publiques.",
+    reponse:"L'argument économique de la pénurie de main-d'œuvre est solide mais justifie une immigration de travail ciblée et régulée, pas un renoncement à toute maîtrise des flux — ce sont deux débats différents que l'on confond souvent à dessein. La position patriote cohérente distingue trois choses : l'immigration économique choisie (à défendre si elle répond à des besoins identifiés), l'asile (une obligation humanitaire encadrée par le droit international, non négociable dans son principe mais dont l'application peut être réformée), et l'immigration irrégulière non maîtrisée (le vrai point de friction politique). Répondre à « l'immigration est une chance » par « oui, quand elle est choisie et intégrée » évite le faux dilemme entre accueil total et fermeture totale.",
+    sophismes:["Éviter l'amalgame entre les trois catégories (travail, asile, irrégulière) : c'est souvent en les distinguant qu'on désamorce l'accusation de position extrême."],
+    qcm:[
+      {
+        q:"Quelle distinction permet d'éviter le faux dilemme « pour ou contre l'immigration » ?",
+        options:[
+          "Distinguer immigration de travail choisie, asile encadré par le droit international, et immigration irrégulière",
+          "Il n'y a pas de distinction utile, toute immigration se vaut",
+          "Distinguer les immigrés riches des immigrés pauvres"
+        ],
+        correct:0,
+        feedback:"Ces trois catégories relèvent de logiques juridiques et économiques différentes ; les distinguer rend l'argumentaire plus précis et plus difficile à caricaturer."
+      },
+      {
+        q:"Un interlocuteur affirme que l'immigration est nécessairement bénéfique aux comptes publics. Quelle réponse évite à la fois le déni et la capitulation ?",
+        options:[
+          "Nier catégoriquement toute contribution économique positive",
+          "Concéder le constat économique tout en le distinguant de la question, séparée, de la capacité d'accueil et d'intégration à un instant donné",
+          "Changer de sujet"
+        ],
+        correct:1,
+        feedback:"La réponse la plus solide sépare deux questions souvent confondues : la contribution économique agrégée et la capacité d'absorption à court terme des services publics."
+      }
+    ]
+  },
+  {
+    id:"nat-3", num:"2.3",
+    titre:"Faut-il un roman national commun ?",
+    these:"Renan notait que la nation suppose autant un fonds commun de souvenirs partagés qu'un consentement à vivre ensemble : sans récit commun minimal (langue, histoire enseignée, symboles), une société devient une juxtaposition de groupes sans grammaire commune pour trancher ses désaccords. L'école a historiquement joué ce rôle d'unification par le récit nationale, notamment sous la IIIe République.",
+    steelman:"Tout récit national sélectionne ce qu'il raconte et ce qu'il tait : l'histoire coloniale, les violences internes (guerres de religion, répression de mouvements sociaux) sont souvent minorées dans le récit scolaire classique, ce qui peut donner à certains citoyens le sentiment que « leur » histoire n'est pas incluse dans le roman national — nourrissant un sentiment d'extériorité plutôt que d'appartenance.",
+    reponse:"La réponse n'est pas de choisir entre un roman national glorieux et univoque ou son rejet complet au nom de la pluralité des mémoires, mais d'assumer un récit commun lucide : qui inclut les pages sombres sans en faire le seul filtre de lecture du passé. Un pays qui enseigne à la fois ses réussites et ses fautes construit une appartenance plus solide, car plus honnête, qu'un roman uniquement héroïque (fragile au premier examen critique) ou qu'un roman uniquement culpabilisant (qui ne donne à personne envie d'y adhérer). Le renoncement à tout récit commun, lui, ne débouche pas sur plus de justice mais sur l'absence de cadre partagé pour en discuter.",
+    sophismes:["Éviter le faux dilemme entre fierté aveugle et auto-flagellation permanente : nommer explicitement la troisième voie (récit lucide) évite d'être enfermé dans l'un des deux camps caricaturaux."],
+    qcm:[
+      {
+        q:"Quelle est la troisième voie proposée face au dilemme « roman glorieux » vs « rejet du récit national » ?",
+        options:[
+          "Un récit commun lucide qui inclut les réussites et les pages sombres",
+          "Ne plus enseigner l'histoire nationale du tout",
+          "Enseigner uniquement les réussites pour renforcer la fierté"
+        ],
+        correct:0,
+        feedback:"C'est la position qui résiste le mieux à l'objection du steelman sans pour autant l'accepter entièrement."
+      },
+      {
+        q:"Pourquoi un récit uniquement héroïque est-il rhétoriquement fragile ?",
+        options:[
+          "Parce qu'il est trop long à enseigner",
+          "Parce qu'il s'effondre au premier examen critique documenté, ce qui peut retourner l'interlocuteur contre l'idée même de récit commun",
+          "Parce que la loi l'interdit"
+        ],
+        correct:1,
+        feedback:"Un récit qui prétend n'avoir aucune zone d'ombre perd toute crédibilité dès qu'un contre-exemple documenté est produit."
+      }
+    ]
+  }
+];
+
+const rac = [
+  {
+    id:"rac-1", num:"3.1",
+    titre:"« Dès que tu es blanc, tu es raciste » — répondre sans nier ni capituler",
+    these:"Cette phrase, dans sa forme brute, combine deux sophismes identifiables : une généralisation hâtive (une caractéristique de groupe assignée déduit automatiquement une attitude individuelle) et une culpabilité par association ou par appartenance (on est tenu responsable d'un système du seul fait d'appartenir à une catégorie, indépendamment de ses actes ou intentions). La position libérale défend le primat de la responsabilité individuelle : on juge une personne sur ses actes et ses choix, pas sur une catégorie assignée à la naissance — c'est aussi le principe qui fonde le refus du racisme lui-même, et l'appliquer de façon incohérente selon le groupe visé fragilise l'argument.",
+    steelman:"La version sérieuse de cet argument, telle que la formulent des chercheurs en sciences sociales, ne vise pas les intentions individuelles mais des mécanismes institutionnels mesurables : des études de testing à l'embauche ou au logement montrent des écarts de traitement statistiquement significatifs à candidature identique selon le nom ou l'origine perçue du candidat, indépendamment de toute intention raciste consciente de qui recrute. Dans ce cadre, « privilège blanc » ne signifie pas « tu es coupable » mais « tu es statistiquement moins souvent confronté à cet obstacle précis » — un constat descriptif, pas une accusation morale.",
+    reponse:"C'est exactement cette distinction qu'il faut nommer en débat : le constat statistique d'un écart de traitement mesuré (légitime, à discuter sur les données) est différent de son glissement vulgarisé en accusation individuelle automatique (« tu es raciste parce que tu es blanc »), qui est un sophisme même si le premier constat est vrai. La réponse la plus solide n'est donc ni de nier les discriminations documentées, ni d'accepter la culpabilité collective, mais de dire : « Je peux discuter des données sur les discriminations à l'embauche, mais je ne peux pas être jugé coupable d'un système du seul fait de ma couleur de peau, pas plus que quiconque d'un autre groupe ne devrait l'être — c'est le principe même que je défends contre le racisme. »",
+    sophismes:["Généralisation hâtive : de la catégorie au comportement individuel.", "Culpabilité par association/appartenance : responsabilité collective imposée à un individu.", "Attention à ne pas répondre par un homme de paille inverse en niant l'existence de toute discrimination mesurée — cela affaiblit ta position en la rendant réfutable par une seule étude de testing."],
+    qcm:[
+      {
+        q:"Quels sophismes combine la phrase « dès que tu es blanc, tu es raciste » ?",
+        options:[
+          "Appel à la popularité et pente glissante",
+          "Généralisation hâtive et culpabilité par association",
+          "Faux dilemme et appel à l'autorité"
+        ],
+        correct:1,
+        feedback:"On déduit un trait individuel d'une catégorie de groupe (généralisation) et on impute une responsabilité collective à un individu (culpabilité par association)."
+      },
+      {
+        q:"Quelle réponse tient face à la version sérieuse (steelman) de cet argument, appuyée sur des études de testing ?",
+        options:[
+          "Nier que des écarts de traitement mesurés existent",
+          "Accepter la culpabilité individuelle qui en découle",
+          "Distinguer le constat statistique légitime (à discuter sur les données) de son glissement en accusation morale individuelle automatique, qui reste un sophisme même si le constat de départ est vrai"
+        ],
+        correct:2,
+        feedback:"C'est la seule réponse qui ne s'effondre ni face aux données (en les niant) ni face à la logique (en acceptant un sophisme)."
+      }
+    ]
+  },
+  {
+    id:"rac-2", num:"3.2",
+    titre:"Universalisme républicain ou grille de lecture identitaire ?",
+    these:"L'universalisme, hérité de la Déclaration des droits de l'homme, pose l'égalité de tous en droit indépendamment de l'origine, la religion ou la couleur de peau, et refuse en conséquence les statistiques ethniques ou les politiques différenciées selon la catégorie raciale assignée, y compris quand l'intention affichée est réparatrice — au motif que réintroduire des catégories raciales dans le droit ou l'action publique, même à but égalitaire, légitime le principe même que l'on prétend combattre.",
+    steelman:"Refuser toute mesure des discriminations par catégorie peut aussi servir à les rendre invisibles et donc impossibles à corriger : sans données désagrégées, il est difficile de prouver, quantifier et donc traiter un écart de traitement systémique documenté par ailleurs au niveau international. Plusieurs pays anglo-saxons utilisent des statistiques de diversité précisément pour objectiver et suivre l'effet de politiques correctrices, avec des résultats mesurés.",
+    reponse:"La tension est réelle et mérite d'être reconnue plutôt qu'évacuée : on peut concéder l'utilité du testing et d'enquêtes ponctuelles et anonymisées pour mesurer une discrimination (une pratique déjà utilisée en France par certains organismes) sans pour autant inscrire des catégories raciales permanentes dans l'état civil ou l'action publique généralisée, ce qui est un pas supplémentaire aux conséquences plus larges. La position universaliste cohérente n'est donc pas « refuser de mesurer les discriminations » mais « mesurer sans catégoriser durablement le droit par la race » — une distinction entre l'outil ponctuel de diagnostic et le principe permanent d'organisation sociale.",
+    sophismes:["Attention au faux dilemme « universalisme aveugle » contre « communautarisme » : la position nuancée (mesure ponctuelle sans catégorisation permanente) évite d'être enfermé dans l'un des deux pôles."],
+    qcm:[
+      {
+        q:"Pourquoi l'universalisme républicain refuse-t-il en général les statistiques ethniques permanentes ?",
+        options:[
+          "Parce que la discrimination n'existe pas",
+          "Parce qu'inscrire des catégories raciales dans le droit ou l'action publique, même à but égalitaire, légitime le principe de classification par race que l'on cherche à combattre",
+          "Parce que c'est trop coûteux à administrer"
+        ],
+        correct:1,
+        feedback:"L'argument est un argument de principe sur la nature du droit, pas un déni empirique des discriminations."
+      },
+      {
+        q:"Quelle position permet de concilier universalisme et besoin de mesurer les discriminations ?",
+        options:[
+          "Le testing ponctuel et anonymisé comme outil de diagnostic, sans catégorisation raciale permanente du droit",
+          "L'instauration de statistiques ethniques obligatoires dans l'état civil",
+          "Le refus de toute étude sur les discriminations"
+        ],
+        correct:0,
+        feedback:"C'est la réponse qui tient compte du steelman (besoin de mesurer) sans abandonner le principe universaliste (pas de catégorisation raciale permanente)."
+      }
+    ]
+  }
+];
+
+const lib = [
+  {
+    id:"lib-1", num:"4.1",
+    titre:"Le « wokisme » est-il une nouvelle censure morale ?",
+    these:"Le risque identifié par la critique libérale n'est pas l'existence de normes sociales sur ce qui est dit publiquement — elles ont toujours existé — mais un glissement où le désaccord d'idées devient une disqualification morale de la personne (ad hominem généralisé), produisant une autocensure documentée dans plusieurs enquêtes d'opinion où une part croissante de répondants déclare éviter certains sujets par crainte des conséquences sociales plutôt que par conviction.",
+    steelman:"Certains discours ont un coût social réel et mesurable pour ceux qu'ils visent (harcèlement en ligne, discrimination à l'embauche liée à des propos publics) ; les entreprises et plateformes privées ne sont pas l'État et ont le droit, au nom de leur propre liberté contractuelle, de fixer des règles de conduite plus strictes que le droit pénal — ce n'est donc pas de la « censure » au sens juridique du terme, qui ne concerne que l'État.",
+    reponse:"La distinction entre régulation privée légitime et pression normative qui étouffe le débat démocratique est juste en droit mais insuffisante en pratique : quand une norme informelle, même sans intervention de l'État, produit une autocensure aussi large que le montrent les enquêtes, l'effet sur la vitalité démocratique du débat public est réel indépendamment de sa base légale. La réponse la plus solide distingue donc le droit strict (où la nuance « ce n'est pas de la censure d'État » est vraie) de l'effet social agrégé (où la question reste légitime, sous un autre nom : conformisme normatif plutôt que censure).",
+    sophismes:["Éviter d'appeler « censure » au sens juridique une pratique purement privée : c'est un point qui, si contesté avec une définition précise, fait perdre la crédibilité de tout l'argument."],
+    qcm:[
+      {
+        q:"Pourquoi la distinction juridique entre censure d'État et règles privées est-elle importante rhétoriquement ?",
+        options:[
+          "Elle ne l'est pas, les deux sont identiques",
+          "Utiliser le mot « censure » pour une décision privée est juridiquement inexact et donne à l'interlocuteur un point facile à réfuter, affaiblissant le reste de l'argument",
+          "Parce que la loi interdit d'en parler"
+        ],
+        correct:1,
+        feedback:"Une imprécision de vocabulaire donne à l'adversaire un point gratuit ; mieux vaut parler de « pression normative » ou « conformisme social » pour rester rhétoriquement inattaquable."
+      },
+      {
+        q:"Quel est l'argument le plus solide pour s'inquiéter du phénomène même sans nier la distinction juridique ?",
+        options:[
+          "L'ampleur mesurée de l'autocensure dans les enquêtes d'opinion a un effet réel sur la vitalité du débat démocratique, indépendamment de la base légale du phénomène",
+          "Toute règle de conduite privée est illégale",
+          "Les plateformes n'ont aucun droit de fixer des règles"
+        ],
+        correct:0,
+        feedback:"C'est l'argument qui déplace le débat du terrain juridique (perdant) vers le terrain de l'effet démocratique agrégé (plus solide)."
+      }
+    ]
+  },
+  {
+    id:"lib-2", num:"4.2",
+    titre:"Faut-il tout dire, ou existe-t-il des limites légitimes ?",
+    these:"La tradition libérale classique (Mill, « De la liberté ») défend un principe simple : les limites à la liberté d'expression doivent être rares, légales, précisément définies (incitation directe à la violence, diffamation, appel au meurtre) et débattues démocratiquement — jamais informelles, mouvantes ou fondées sur le ressenti d'un instant, car une limite floue peut s'étendre indéfiniment sans jamais être revotée. L'argument du « marché des idées » veut que la meilleure réponse à un mauvais argument soit un meilleur argument, pas son interdiction, qui a pour effet secondaire de rendre l'idée interdite plus attirante par le seul fait d'être proscrite.",
+    steelman:"Le « marché des idées » suppose des participants à armes égales, ce qui n'est pas le cas quand un discours de haine cible spécifiquement un groupe minoritaire déjà en position de vulnérabilité sociale : le préjudice n'est alors pas seulement symbolique mais se traduit par un climat de peur mesurable qui, en pratique, réduit la participation de ce groupe au débat public — produisant l'effet inverse de celui recherché par la liberté d'expression.",
+    reponse:"L'objection est sérieuse et explique pourquoi même les démocraties libérales (France, Allemagne) interdisent légalement l'incitation à la haine raciale ou à la violence — ce n'est donc pas un point de désaccord réel avec la position libérale classique, qui accepte déjà ces limites légales précises. Le vrai point de friction n'est pas « faut-il des limites » (oui, tout le monde en convient) mais « qui les fixe et comment » : la loi votée démocratiquement et appliquée par des juges, avec un droit de recours, ou une norme sociale informelle sans procédure ni limite claire. La réponse la plus solide accepte donc le principe de limites légales précises tout en défendant que leur extension doit rester du ressort du débat démocratique et judiciaire, pas de la pression sociale spontanée.",
+    sophismes:["Éviter le faux dilemme « liberté totale contre censure totale » : la vraie question porte sur la procédure de fixation des limites, pas sur leur existence."],
+    qcm:[
+      {
+        q:"Quel est le vrai point de désaccord entre la position libérale classique et l'objection sur le discours de haine ?",
+        options:[
+          "L'existence même de limites légales à la liberté d'expression",
+          "Qui fixe les limites et selon quelle procédure : la loi démocratique et le juge, ou la pression sociale informelle",
+          "Il n'y a aucun point de désaccord réel"
+        ],
+        correct:1,
+        feedback:"Les deux camps sérieux acceptent déjà des limites légales précises (incitation à la haine, diffamation) ; le vrai clivage porte sur la procédure de fixation de ces limites."
+      },
+      {
+        q:"Quel effet secondaire l'argument du « marché des idées » attribue-t-il à l'interdiction d'une idée plutôt qu'à sa réfutation ?",
+        options:[
+          "Aucun effet particulier",
+          "L'idée interdite devient souvent plus attirante par le seul fait d'être proscrite, sans avoir été réfutée sur le fond",
+          "L'idée disparaît immédiatement et durablement"
+        ],
+        correct:1,
+        feedback:"C'est l'argument classique de Mill : l'interdiction prive la société de l'exercice de réfutation et peut donner à l'idée un attrait supplémentaire lié à l'interdit."
+      }
+    ]
+  }
+];
+
+const nrg = [
+  {
+    id:"nrg-1", num:"5.1",
+    titre:"Sortir du nucléaire au profit du tout-éolien et solaire : bonne idée ?",
+    these:"Le nucléaire est la seule source d'électricité bas-carbone capable de fournir une puissance pilotable en continu, indépendamment de la météo : contrairement à l'éolien et au solaire, il ne dépend ni du vent ni du soleil et occupe une empreinte au sol très faible par mégawatt produit. Fermer des réacteurs fonctionnels pour les remplacer par des renouvelables intermittents oblige, en l'absence de solution de stockage à grande échelle encore économiquement mature, à maintenir des centrales à gaz ou à charbon en réserve pour les jours sans vent ni soleil — ce qui explique pourquoi l'Allemagne, après sa sortie du nucléaire (Atomausstieg), a vu ses émissions de CO2 par kWh rester nettement supérieures à celles de la France, restée largement nucléaire.",
+    steelman:"Le coût de construction des nouveaux réacteurs a explosé et leurs délais de chantier dépassent systématiquement les prévisions (l'EPR de Flamanville en est l'exemple le plus documenté en France), alors que le coût du solaire et de l'éolien a chuté de plus de 80% en quinze ans et que leur délai d'installation est bien plus court ; miser sur un mix massivement renouvelable, couplé à des interconnexions européennes et à un développement rapide du stockage par batteries, serait donc plus rapide et moins risqué financièrement pour décarboner l'électricité que d'attendre des décennies la construction de nouveaux réacteurs.",
+    reponse:"Les deux constats chiffrés sont exacts et ne s'opposent pas frontalement : le coût et les délais du nucléaire neuf sont un vrai problème industriel à résoudre (standardisation des chantiers, retour d'expérience), mais cela ne rend pas obsolète le nucléaire existant, qui produit déjà une électricité bas-carbone et pilotable à un coût marginal bas une fois amorti. Le vrai désaccord rhétorique n'est donc pas « nucléaire contre renouvelables » — les deux sont bas-carbone et peuvent se compléter, le nucléaire assurant la base pilotable et les renouvelables une part variable — mais « faut-il fermer des réacteurs fonctionnels avant leur fin de vie technique, sur un calendrier politique plutôt que technique ». La réponse la plus solide défend un mix associant prolongation du parc existant, nouveaux réacteurs construits sans précipitation, et développement des renouvelables complémentaires, plutôt qu'un choix exclusif dans un sens ou dans l'autre.",
+    sophismes:["Éviter l'homme de paille « les écologistes veulent revenir à la bougie » : la plupart des positions favorables aux renouvelables défendent aussi le stockage et les interconnexions, pas l'intermittence pure et simple sans solution.", "Éviter le faux dilemme « tout nucléaire ou tout renouvelable » : le vrai débat porte sur le dosage et le calendrier de fermeture, pas sur l'exclusivité d'une seule source."],
+    qcm:[
+      {
+        q:"Pourquoi le nucléaire a-t-il un avantage structurel sur l'éolien et le solaire seuls pour décarboner l'électricité ?",
+        options:[
+          "Il est moins cher à construire",
+          "Il fournit une puissance pilotable en continu, indépendante de la météo, contrairement aux renouvelables intermittents",
+          "Il ne nécessite aucune réglementation de sécurité"
+        ],
+        correct:1,
+        feedback:"C'est l'argument de la pilotabilité : sans stockage massif, l'intermittence des renouvelables oblige à garder des centrales pilotables (souvent fossiles) en réserve."
+      },
+      {
+        q:"Quel est le vrai point de désaccord une fois le steelman sur les coûts et délais du nucléaire neuf pris en compte ?",
+        options:[
+          "Le choix exclusif entre 100% nucléaire ou 100% renouvelable",
+          "Faut-il fermer des réacteurs existants et fonctionnels sur un calendrier politique plutôt que technique, alors que nucléaire et renouvelables sont tous deux bas-carbone et complémentaires",
+          "Il n'y a aucun désaccord possible sur ce sujet"
+        ],
+        correct:1,
+        feedback:"Recentrer le débat sur le calendrier de fermeture plutôt que sur un choix exclusif entre les deux sources est la réponse la plus solide et la plus difficile à caricaturer."
+      }
+    ]
+  }
+];
+
+const med = [
+  {
+    id:"med-1", num:"6.1",
+    titre:"Concentration des médias : le problème est-il à sens unique ?",
+    these:"La concentration de médias classiques entre les mains d'un petit nombre de milliardaires (Xavier Niel, Vincent Bolloré, Bernard Arnault, Patrick Drahi) pose un problème réel et documenté de pluralisme : un propriétaire peut orienter la ligne éditoriale de ses rédactions, comme cela a été observé et documenté dans plusieurs cas de rachats de chaînes ou de journaux en France, réduisant de fait la diversité des points de vue accessibles au plus grand nombre via les canaux d'audience de masse.",
+    steelman:"Mais le raisonnement s'applique alors logiquement aussi aux médias en ligne présentés comme alternatifs : ils dépendent eux aussi de financements (dons, abonnements, parfois subventions ou mécénat) qui influencent leur ligne éditoriale et le choix des sujets traités, et leur audience, bien que réelle et croissante, reste également concentrée sur quelques titres dominants (Mediapart, Blast) qui ont chacun une ligne éditoriale identifiable et non neutre, comme n'importe quel média classique. Aucun média, quel que soit son mode de financement, n'est un canal neutre et sans point de vue.",
+    reponse:"C'est précisément le point aveugle à nommer en débat : critiquer la concentration capitalistique des médias classiques est cohérent, mais rester cohérent suppose d'appliquer la même grille de lecture aux médias jugés alternatifs plutôt que de leur accorder une présomption de neutralité qu'aucun média ne peut avoir. La réponse rhétoriquement solide n'est donc pas de nier le problème de concentration des médias classiques (réel et documenté), ni de prétendre que les médias alternatifs seraient au contraire neutres, mais de défendre le principe general : le pluralisme s'obtient en croisant des sources aux lignes éditoriales et aux modes de financement différents des deux côtés, jamais en substituant une source unique jugée fiable a priori à une autre — quel que soit le bord dont elle se réclame.",
+    sophismes:["Éviter l'appel à l'autorité inversé qui consisterait à traiter un média comme fiable simplement parce qu'il se présente comme « indépendant » ou « alternatif » : son financement et sa ligne éditoriale doivent être examinés avec la même rigueur qu'un média détenu par un grand groupe.", "Éviter la culpabilité par association qui disqualifierait un fait uniquement parce qu'il est rapporté par un média dont la ligne éditoriale déplaît, sans examiner le fait lui-même."],
+    qcm:[
+      {
+        q:"Quel est le problème de cohérence rhétorique pointé par la réponse à ce sujet ?",
+        options:[
+          "Il n'y en a aucun, les médias alternatifs sont neutres par définition",
+          "Critiquer la concentration capitalistique des médias classiques tout en accordant une présomption de neutralité aux médias alternatifs applique deux poids, deux mesures",
+          "Les médias classiques ont toujours raison sur le fond"
+        ],
+        correct:1,
+        feedback:"La cohérence exige d'appliquer la même exigence critique à toutes les sources, quel que soit leur mode de financement ou leur positionnement affiché."
+      },
+      {
+        q:"Quelle est la bonne pratique pour s'informer selon cette fiche ?",
+        options:[
+          "Se fier à une seule source jugée fiable a priori, qu'elle soit classique ou alternative",
+          "Croiser des sources aux lignes éditoriales et modes de financement différents, des deux côtés du spectre",
+          "Ignorer tous les médias et ne se fier qu'à ses propres intuitions"
+        ],
+        correct:1,
+        feedback:"Le pluralisme réel s'obtient par le croisement des sources, pas par la substitution d'une autorité par une autre présumée plus fiable."
+      }
+    ]
+  }
+];
+
+// ---------------------------------------------------------------
+// RENDER
+// ---------------------------------------------------------------
+
+let totalQuestions = 0;
+let answeredCorrect = 0;
+let answeredTotal = 0;
+
+function renderFiches(list, containerId){
+  const container = document.getElementById(containerId);
+  list.forEach(f => {
+    const el = document.createElement('div');
+    el.className = 'fiche';
+    el.id = f.id;
+
+    const sophismesHtml = f.sophismes && f.sophismes.length ? `
+      <div class="sophismes">
+        <div class="block-label">⚠ Sophismes à éviter soi-même</div>
+        <ul>${f.sophismes.map(s => `<li>${s}</li>`).join('')}</ul>
+      </div>` : '';
+
+    const qcmHtml = f.qcm.map((q, qi) => {
+      totalQuestions++;
+      const qid = `${f.id}-q${qi}`;
+      const optsHtml = q.options.map((opt, oi) => `
+        <div class="qcm-opt" data-qid="${qid}" data-oi="${oi}">
+          <span class="letter">${String.fromCharCode(65+oi)}</span>
+          <span>${opt}</span>
+        </div>`).join('');
+      return `
+        <div class="qcm">
+          <div class="qcm-q">${q.q}</div>
+          <div class="qcm-options" id="opts-${qid}">${optsHtml}</div>
+          <div class="qcm-feedback" id="fb-${qid}"></div>
+        </div>`;
+    }).join('');
+
+    el.innerHTML = `
+      <div class="fiche-head">
+        <div>
+          <div class="fiche-num">Fiche ${f.num}</div>
+          <h3>${f.titre}</h3>
+        </div>
+      </div>
+      <div class="fiche-body">
+        <div class="block these">
+          <div class="block-label">◆ Thèse</div>
+          <p>${f.these}</p>
+        </div>
+        <div class="block steelman">
+          <div class="block-label">◇ Objection la plus solide (steelman)</div>
+          <p>${f.steelman}</p>
+        </div>
+        <div class="block reponse">
+          <div class="block-label">✓ Réponse</div>
+          <p>${f.reponse}</p>
+        </div>
+        ${sophismesHtml}
+        <div class="qcm-wrap">
+          <div class="qcm-title">Entraînement — QCM</div>
+          ${qcmHtml}
+        </div>
+      </div>
+    `;
+    container.appendChild(el);
+  });
+}
+
+renderFiches(fondamentaux, 'fiches-fondamentaux');
+renderFiches(eco, 'fiches-eco');
+renderFiches(nat, 'fiches-nat');
+renderFiches(rac, 'fiches-rac');
+renderFiches(lib, 'fiches-lib');
+renderFiches(nrg, 'fiches-nrg');
+renderFiches(med, 'fiches-med');
+
+// build a lookup of question data by qid for feedback + correctness
+const allFiches = [...fondamentaux, ...eco, ...nat, ...rac, ...lib, ...nrg, ...med];
+const qLookup = {};
+allFiches.forEach(f => {
+  f.qcm.forEach((q, qi) => {
+    qLookup[`${f.id}-q${qi}`] = q;
+  });
+});
+
+function updateScoreboard(){
+  document.getElementById('sb-text').textContent = `${answeredCorrect} / ${answeredTotal} (sur ${totalQuestions})`;
+  const pct = totalQuestions ? (answeredTotal/totalQuestions)*100 : 0;
+  document.getElementById('sb-fill').style.width = pct + '%';
+}
+
+document.addEventListener('click', (e) => {
+  const opt = e.target.closest('.qcm-opt');
+  if(!opt) return;
+  const qid = opt.dataset.qid;
+  const oi = parseInt(opt.dataset.oi, 10);
+  const optsContainer = document.getElementById(`opts-${qid}`);
+  if(optsContainer.dataset.locked === 'true') return;
+
+  const qdata = qLookup[qid];
+  const isCorrect = oi === qdata.correct;
+
+  [...optsContainer.children].forEach((child, i) => {
+    child.classList.add('locked');
+    if(i === qdata.correct) child.classList.add('correct');
+    else if(i === oi) child.classList.add('incorrect');
+  });
+  optsContainer.dataset.locked = 'true';
+
+  const fb = document.getElementById(`fb-${qid}`);
+  fb.textContent = (isCorrect ? '✓ Exact. ' : '✗ Pas tout à fait. ') + qdata.feedback;
+  fb.className = 'qcm-feedback show ' + (isCorrect ? 'ok' : 'ko');
+
+  answeredTotal++;
+  if(isCorrect) answeredCorrect++;
+  updateScoreboard();
+});
+
+updateScoreboard();
+
+const chapterJump = document.getElementById('chapter-jump');
+chapterJump.addEventListener('change', () => {
+  const id = chapterJump.value;
+  if(!id) return;
+  const target = document.getElementById(id);
+  if(target) target.scrollIntoView({ behavior:'smooth', block:'start' });
+  chapterJump.selectedIndex = 0;
+});
+</script>
+
+<!-- Barre de démo hub-copyrighting -->
+<div style="position:fixed;left:0;right:0;bottom:0;z-index:2147483000;display:flex;align-items:center;gap:10px;justify-content:center;padding:10px 14px;background:rgba(20,20,30,.92);color:#fff;font:600 13px/1.2 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;backdrop-filter:blur(6px)"><span style="opacity:.7">Démo · étape 1/1</span><a href="espace-client/" style="background:#6c63ff;color:#fff;text-decoration:none;padding:8px 16px;border-radius:8px">Espace client →</a></div>
+</body>
+</html>
