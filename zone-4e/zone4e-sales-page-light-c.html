@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zone 4E — Entrez dans la Zone à volonté</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,700;1,900&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:#b8891e; --gold-lt:#fdf5e0; --gold-bd:#dfc98a;
+  --fire:#c84e1e; --fire-lt:#fdf0eb; --fire-bd:#e8b49a;
+  --wind:#1e6e9a; --wind-lt:#e8f3f9; --wind-bd:#90c4dc;
+  --earth:#4a7a2e; --earth-lt:#eef5e8; --earth-bd:#9dc87a;
+  --water:#1e4a9a; --water-lt:#e8eef9;
+  --zero:#6a3a8a; --zero-lt:#f3ecfa; --zero-bd:#c4a0d8;
+  --dark:#1a1814; --body:#3d3a34; --muted:#888;
+  --bg:#ffffff; --bg2:#f7f7f7; --line:#e5e0d8;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--body);font-family:'DM Sans',sans-serif;line-height:1.75;-webkit-font-smoothing:antialiased;}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--dark);color:#fff;text-align:center;padding:12px 20px;font-size:13px;font-weight:600;letter-spacing:0.04em;}
+.topbar em{color:var(--gold);font-style:normal;}
+
+/* ── NAV ── */
+.nav{background:#fff;border-bottom:1px solid var(--line);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+.nav-logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:var(--dark);letter-spacing:0.04em;}
+.nav-logo span{color:var(--gold);}
+.nav-cta{background:var(--gold);color:#fff;padding:9px 22px;border-radius:4px;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:0.06em;text-decoration:none;transition:background .15s;}
+.nav-cta:hover{background:#a07a16;}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(180deg,#f9f6f0 0%,#fff 100%);text-align:center;padding:80px 24px 60px;border-bottom:3px solid var(--gold);}
+.hero-eyebrow{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:20px;}
+.hero h1{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(38px,6vw,72px);line-height:1.05;color:var(--dark);margin-bottom:12px;letter-spacing:-0.01em;max-width:800px;margin-left:auto;margin-right:auto;}
+.hero h1 em{color:var(--gold);font-style:italic;}
+.hero h2{font-family:'Lora',serif;font-style:italic;font-size:clamp(16px,2.5vw,22px);color:var(--muted);margin-bottom:32px;max-width:620px;margin-left:auto;margin-right:auto;line-height:1.55;}
+.hero-badges{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:36px;}
+.hb{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:6px 14px;border-radius:100px;border:1.5px solid;}
+.hb-w{color:var(--wind);background:var(--wind-lt);border-color:var(--wind-bd);}
+.hb-f{color:var(--fire);background:var(--fire-lt);border-color:var(--fire-bd);}
+.hb-e{color:var(--earth);background:var(--earth-lt);border-color:var(--earth-bd);}
+.hb-a{color:var(--water);background:var(--water-lt);border-color:#90a8dc;}
+.hb-z{color:var(--zero);background:var(--zero-lt);border-color:var(--zero-bd);}
+
+.hero-img{width:100%;max-width:680px;height:360px;object-fit:cover;border-radius:8px;margin:0 auto 36px;display:block;background:linear-gradient(135deg,#1a1814,#2a2418);}
+
+.hero-feats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden;max-width:760px;margin:0 auto 36px;}
+.hf{background:#fff;padding:18px 14px;text-align:center;}
+.hf-icon{font-size:22px;margin-bottom:6px;}
+.hf-title{font-weight:700;font-size:13px;color:var(--dark);margin-bottom:3px;}
+.hf-desc{font-size:11px;color:var(--muted);line-height:1.4;}
+
+/* ── CITATION HERO ── */
+.big-quote{background:var(--dark);padding:52px 24px;text-align:center;}
+.bq-text{font-family:'Lora',serif;font-style:italic;font-size:clamp(17px,2.5vw,24px);color:#fff;max-width:700px;margin:0 auto 20px;line-height:1.65;}
+.bq-text::before{content:"\201C";color:var(--gold);font-size:1.4em;line-height:0;vertical-align:-0.3em;margin-right:4px;}
+.bq-text::after{content:"\201D";color:var(--gold);font-size:1.4em;line-height:0;vertical-align:-0.3em;margin-left:4px;}
+.bq-author{font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);}
+.bq-role{font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;}
+
+/* ── SECTIONS ── */
+.section{padding:72px 24px;}
+.section-alt{background:var(--bg2);}
+.w{max-width:780px;margin:0 auto;}
+.w-wide{max-width:960px;margin:0 auto;}
+.section-label{font-size:11px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.section-label::before,.section-label::after{content:'';width:20px;height:1px;background:var(--gold-bd);}
+.section-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(32px,5vw,56px);color:var(--dark);line-height:0.95;letter-spacing:-0.01em;margin-bottom:10px;text-align:center;}
+.section-title em{color:var(--gold);font-style:italic;}
+.section-sub{font-family:'Lora',serif;font-style:italic;font-size:16px;color:var(--muted);text-align:center;max-width:520px;margin:0 auto 36px;line-height:1.6;}
+
+/* ── BODY TEXT ── */
+.body-txt{font-size:15px;line-height:1.85;color:var(--body);}
+.body-txt p+p{margin-top:14px;}
+.body-txt strong{color:var(--dark);}
+.pull{padding:22px 28px;border-left:4px solid var(--gold);background:var(--gold-lt);font-family:'Lora',serif;font-style:italic;font-size:17px;color:var(--dark);line-height:1.65;margin:24px 0;border-radius:0 6px 6px 0;}
+.pull strong{font-style:normal;color:var(--fire);}
+
+/* ── CTA BUTTON ── */
+.cta-wrap{text-align:center;margin:32px 0;}
+.cta-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:18px 48px;background:var(--gold);border-radius:6px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:16px;letter-spacing:0.04em;text-transform:uppercase;color:#fff;text-decoration:none;transition:all .2s;box-shadow:0 4px 20px rgba(184,137,30,0.25);}
+.cta-btn:hover{background:#a07a16;transform:translateY(-1px);box-shadow:0 8px 32px rgba(184,137,30,0.3);}
+.cta-btn.big{padding:22px 56px;font-size:18px;}
+.cta-small{font-size:12px;color:var(--muted);margin-top:10px;text-align:center;}
+
+/* ── 3 PILIERS ── */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:32px;}
+.pillar{text-align:center;padding:28px 20px;}
+.pillar-icon{font-size:36px;margin-bottom:12px;}
+.pillar-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;color:var(--dark);margin-bottom:8px;letter-spacing:0.02em;}
+.pillar-text{font-size:14px;color:var(--muted);line-height:1.65;}
+
+/* ── BENEFITS LIST ── */
+.benefits{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px;}
+.bene{display:flex;gap:12px;align-items:flex-start;padding:16px 18px;background:#fff;border:1px solid var(--line);border-radius:6px;font-size:14px;color:var(--body);line-height:1.6;}
+.bene strong{color:var(--dark);}
+.bene-check{width:22px;height:22px;background:var(--earth-lt);border:1.5px solid var(--earth-bd);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--earth);flex-shrink:0;margin-top:1px;}
+
+/* ── ELEMENTS GRID ── */
+.elements{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:32px;}
+.el-cell{background:#fff;padding:28px 24px;}
+.el-cell.full{grid-column:1/-1;background:var(--gold-lt);}
+.ec-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;padding:4px 10px;border-radius:100px;border:1px solid;margin-bottom:10px;}
+.ec-wind{color:var(--wind);background:var(--wind-lt);border-color:var(--wind-bd);}
+.ec-fire{color:var(--fire);background:var(--fire-lt);border-color:var(--fire-bd);}
+.ec-earth{color:var(--earth);background:var(--earth-lt);border-color:var(--earth-bd);}
+.ec-water{color:var(--water);background:var(--water-lt);border-color:#90a8dc;}
+.ec-zero{color:var(--zero);background:var(--zero-lt);border-color:var(--zero-bd);}
+.ec-gold{color:var(--gold);background:var(--gold-lt);border-color:var(--gold-bd);}
+.ec-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;color:var(--dark);margin-bottom:6px;letter-spacing:0.02em;}
+.ec-desc{font-size:13px;color:var(--muted);line-height:1.65;}
+
+/* ── TÉMOIGNAGES ── */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px;}
+.testi{background:#fff;border:1px solid var(--line);border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:12px;}
+.testi-text{font-family:'Lora',serif;font-style:italic;font-size:14px;color:var(--body);line-height:1.7;flex:1;}
+.testi-author{font-weight:700;font-size:13px;color:var(--dark);}
+.testi-role{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
+.testi-stars{color:var(--gold);font-size:14px;letter-spacing:2px;}
+
+/* ── PROGRAMME SEMAINES ── */
+.weeks{display:flex;flex-direction:column;gap:2px;margin-top:28px;}
+.week-item{display:flex;gap:20px;align-items:flex-start;padding:20px 22px;background:#fff;border:1px solid var(--line);border-radius:6px;}
+.wi-num{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:36px;line-height:1;flex-shrink:0;width:50px;text-align:center;}
+.wi-title{font-weight:700;font-size:16px;color:var(--dark);margin-bottom:4px;}
+.wi-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* ── POUR QUI ── */
+.for-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px;}
+.for-col{}
+.fc-head{padding:14px 20px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border-radius:6px 6px 0 0;display:flex;align-items:center;gap:7px;}
+.fc-yes-head{background:var(--earth-lt);border:1px solid var(--earth-bd);color:var(--earth);}
+.fc-no-head{background:var(--fire-lt);border:1px solid var(--fire-bd);color:var(--fire);}
+.fc-items{display:flex;flex-direction:column;gap:1px;}
+.fc-item{display:flex;gap:10px;align-items:flex-start;padding:13px 18px;background:#fff;font-size:13px;color:var(--body);line-height:1.6;border:1px solid var(--line);border-top:none;}
+.fc-item:last-child{border-radius:0 0 6px 6px;}
+
+/* ── FAQ ── */
+.faq-list{display:flex;flex-direction:column;gap:2px;margin-top:28px;}
+.faq-item{border:1px solid var(--line);border-radius:4px;overflow:hidden;}
+.faq-q{padding:18px 20px;font-weight:700;font-size:14px;color:var(--dark);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fff;}
+.faq-q:hover{background:var(--bg2);}
+.faq-q .arr{font-size:18px;color:var(--gold);transition:transform .25s;flex-shrink:0;}
+.faq-item.open .faq-q .arr{transform:rotate(45deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease;}
+.faq-item.open .faq-a{max-height:300px;}
+.faq-a-inner{padding:4px 20px 18px;font-size:14px;color:var(--body);line-height:1.75;border-top:1px solid var(--line);}
+.faq-a-inner strong{color:var(--dark);}
+
+/* ── OFFRE FINALE ── */
+.offer-section{background:var(--dark);padding:88px 24px;text-align:center;}
+.os-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(38px,6vw,72px);color:#fff;line-height:0.95;letter-spacing:-0.01em;margin-bottom:10px;}
+.os-title em{color:var(--gold);font-style:italic;}
+.os-sub{font-family:'Lora',serif;font-style:italic;font-size:18px;color:rgba(255,255,255,0.5);margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto;}
+.offer-box{display:inline-block;background:rgba(255,255,255,0.06);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:36px 48px;margin-bottom:32px;text-align:left;}
+.ob-title{font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:14px;text-align:center;}
+.ob-product{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:24px;color:#fff;margin-bottom:4px;}
+.ob-bonus{font-size:13px;color:var(--gold);margin-bottom:18px;font-family:'Lora',serif;font-style:italic;}
+.ob-incs{display:flex;flex-direction:column;gap:7px;margin-bottom:22px;}
+.ob-inc{display:flex;gap:8px;font-size:13px;color:rgba(255,255,255,0.65);}
+.ob-inc::before{content:'✓';color:#78b850;font-weight:700;flex-shrink:0;}
+.ob-price{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:6px;}
+.ob-old{font-size:18px;color:rgba(255,255,255,0.3);text-decoration:line-through;}
+.ob-new{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:60px;color:var(--gold);line-height:1;}
+.ob-eco{font-size:11px;color:#78b850;font-weight:700;letter-spacing:0.06em;text-align:center;}
+.cta-big{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:20px 56px;background:var(--gold);border-radius:6px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:18px;letter-spacing:0.04em;text-transform:uppercase;color:#fff;text-decoration:none;transition:all .2s;}
+.cta-big:hover{background:#a07a16;transform:translateY(-2px);box-shadow:0 12px 48px rgba(184,137,30,0.3);}
+.offer-guarantees{display:flex;justify-content:center;gap:24px;margin-top:20px;flex-wrap:wrap;}
+.og{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.4);}
+
+/* ── GARANTIE ── */
+.garantie{background:var(--bg2);padding:52px 24px;text-align:center;}
+.g-badge{display:inline-flex;align-items:center;gap:14px;padding:20px 32px;background:#fff;border:2px solid var(--gold-bd);border-radius:8px;margin-bottom:18px;}
+.g-icon{font-size:40px;}
+.g-text{text-align:left;}
+.g-title{font-weight:700;font-size:16px;color:var(--dark);margin-bottom:3px;}
+.g-desc{font-size:13px;color:var(--muted);}
+
+/* ── SPORT IMAGES STRIP ── */
+.sport-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:0;}
+.ss-cell{height:100px;display:flex;align-items:center;justify-content:center;font-size:36px;position:relative;overflow:hidden;}
+.ss1{background:linear-gradient(135deg,var(--wind),#0a4a6a);}
+.ss2{background:linear-gradient(135deg,var(--fire),#8a2000);}
+.ss3{background:linear-gradient(135deg,var(--earth),#2a4a10);}
+.ss4{background:linear-gradient(135deg,var(--water),#0a2860);}
+.ss5{background:linear-gradient(135deg,var(--zero),#3a1060);}
+
+/* ── STATS BAND ── */
+.stats-band{background:var(--dark);padding:40px 24px;}
+.stats-inner{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.1);border-radius:6px;overflow:hidden;max-width:700px;margin:0 auto;}
+.stat{background:rgba(255,255,255,0.04);padding:28px 20px;text-align:center;}
+.stat-n{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:48px;color:var(--gold);line-height:1;margin-bottom:4px;}
+.stat-l{font-size:11px;color:rgba(255,255,255,0.45);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;line-height:1.5;}
+
+footer{padding:24px;text-align:center;font-size:11px;color:var(--muted);border-top:1px solid var(--line);background:#fff;line-height:2.5;}
+footer a{color:var(--muted);text-decoration:underline;}
+
+@media(max-width:640px){
+  .hero-feats,.pillars,.benefits,.elements,.testi-grid,.for-grid,.weeks{grid-template-columns:1fr;}
+  .el-cell.full{grid-column:auto;}
+  .offer-box{padding:22px 18px;}
+  .sport-strip{grid-template-columns:repeat(3,1fr);}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">🎯 Offre de lancement — <em>27€ au lieu de 47€</em> · Accès immédiat · Satisfait ou remboursé 30 jours</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">ZONE<span>4E</span> · Olympe Athlétique</div>
+  <a href="#commander" class="nav-cta">Accéder au programme →</a>
+</nav>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-eyebrow">Méthode Neurophysiologique · Performance Sportive</div>
+  <h1>Vous êtes sportif et vous voulez<br>être à votre <em>meilleur niveau</em><br>à chaque compétition ?</h1>
+  <h2>Il est temps de découvrir l'état de ZONE — et d'apprendre à y entrer à volonté.</h2>
+
+  <div class="hero-badges">
+    <span class="hb hb-w">🌬 VENT</span>
+    <span class="hb hb-f">🔥 FEU</span>
+    <span class="hb hb-e">🌍 TERRE</span>
+    <span class="hb hb-a">💧 EAU</span>
+    <span class="hb hb-z">✨ ZÉRØ</span>
+  </div>
+
+  <!-- Hero visual - athletic SVG -->
+  <svg viewBox="0 0 680 360" xmlns="http://www.w3.org/2000/svg" class="hero-img" style="height:300px;">
+    <defs>
+      <linearGradient id="hbg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#1a1814"/>
+        <stop offset="100%" stop-color="#2a2010"/>
+      </linearGradient>
+      <radialGradient id="hglow" cx="50%" cy="40%" r="45%">
+        <stop offset="0%" stop-color="#b8891e" stop-opacity="0.15"/>
+        <stop offset="100%" stop-color="#b8891e" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <rect width="680" height="360" fill="url(#hbg)"/>
+    <rect width="680" height="360" fill="url(#hglow)"/>
+    <!-- Ground line -->
+    <line x1="0" y1="310" x2="680" y2="310" stroke="rgba(184,137,30,0.2)" stroke-width="1"/>
+    <!-- Runner silhouette -->
+    <g transform="translate(340,280)" fill="rgba(255,255,255,0.15)">
+      <!-- body -->
+      <ellipse cx="0" cy="-80" rx="14" ry="20"/>
+      <!-- head -->
+      <circle cx="0" cy="-110" r="14"/>
+      <!-- arms -->
+      <line x1="-14" y1="-85" x2="-38" y2="-65" stroke="rgba(255,255,255,0.15)" stroke-width="10" stroke-linecap="round"/>
+      <line x1="14" y1="-85" x2="40" y2="-105" stroke="rgba(255,255,255,0.15)" stroke-width="10" stroke-linecap="round"/>
+      <!-- legs -->
+      <line x1="-4" y1="-60" x2="-30" y2="-20" stroke="rgba(255,255,255,0.15)" stroke-width="12" stroke-linecap="round"/>
+      <line x1="4" y1="-60" x2="20" y2="0" stroke="rgba(255,255,255,0.15)" stroke-width="12" stroke-linecap="round"/>
+    </g>
+    <!-- 4 element orbs -->
+    <circle cx="160" cy="120" r="36" fill="none" stroke="rgba(56,136,200,0.4)" stroke-width="2"/>
+    <text x="160" y="127" text-anchor="middle" font-size="22" fill="rgba(56,136,200,0.7)">🌬</text>
+    <circle cx="260" cy="80" r="36" fill="none" stroke="rgba(200,80,30,0.4)" stroke-width="2"/>
+    <text x="260" y="87" text-anchor="middle" font-size="22" fill="rgba(200,80,30,0.7)">🔥</text>
+    <circle cx="420" cy="80" r="36" fill="none" stroke="rgba(74,120,46,0.4)" stroke-width="2"/>
+    <text x="420" y="87" text-anchor="middle" font-size="22" fill="rgba(74,120,46,0.7)">🌍</text>
+    <circle cx="520" cy="120" r="36" fill="none" stroke="rgba(30,74,154,0.4)" stroke-width="2"/>
+    <text x="520" y="127" text-anchor="middle" font-size="22" fill="rgba(30,74,154,0.7)">💧</text>
+    <!-- Central zero -->
+    <circle cx="340" cy="160" r="50" fill="none" stroke="rgba(184,137,30,0.5)" stroke-width="2.5"/>
+    <circle cx="340" cy="160" r="38" fill="rgba(184,137,30,0.1)"/>
+    <text x="340" y="174" text-anchor="middle" font-family="Barlow Condensed" font-weight="900" font-size="32" fill="rgba(184,137,30,0.9)" letter-spacing="2">ZÉRØ</text>
+    <!-- Connecting lines -->
+    <g stroke="rgba(184,137,30,0.15)" stroke-width="1" stroke-dasharray="4,4">
+      <line x1="196" y1="120" x2="290" y2="160"/>
+      <line x1="224" y1="97" x2="300" y2="145"/>
+      <line x1="456" y1="97" x2="380" y2="145"/>
+      <line x1="484" y1="120" x2="390" y2="160"/>
+    </g>
+    <!-- Brand -->
+    <text x="340" y="340" text-anchor="middle" font-family="Barlow Condensed" font-weight="900" font-size="22" fill="rgba(184,137,30,0.6)" letter-spacing="3">ZONE 4E</text>
+  </svg>
+
+  <div class="hero-feats">
+    <div class="hf"><div class="hf-icon">📘</div><div class="hf-title">Ebook Complet</div><div class="hf-desc">Téléchargeable, accessible partout</div></div>
+    <div class="hf"><div class="hf-icon">⚡</div><div class="hf-title">Exercices Concrets</div><div class="hf-desc">Opérationnel immédiatement</div></div>
+    <div class="hf"><div class="hf-icon">🔐</div><div class="hf-title">3 Séquences ZÉRØ</div><div class="hf-desc">Les déclencheurs de Zone</div></div>
+    <div class="hf"><div class="hf-icon">📅</div><div class="hf-title">Programme 21J</div><div class="hf-desc">Offert en Order Bump</div></div>
+  </div>
+
+  <div class="cta-wrap">
+    <a href="#commander" class="cta-btn big">Oui, je veux entrer dans la Zone ! →</a>
+    <div class="cta-small">🔒 Paiement sécurisé · Accès immédiat · Remboursé si insatisfait</div>
+  </div>
+</div>
+
+<!-- ══ CITATION TIGER WOODS ══ -->
+<div class="big-quote">
+  <div class="bq-text">C'est comme si mon esprit et mon corps étaient parfaitement synchronisés. Je ne suis pas conscient de mes mouvements, ils viennent naturellement.</div>
+  <div class="bq-author">Tiger Woods</div>
+  <div class="bq-role">Golfeur · 15 fois champion du Grand Chelem</div>
+</div>
+
+<!-- ══ SPORT STRIP ══ -->
+<div class="sport-strip">
+  <div class="ss-cell ss1">⚽</div>
+  <div class="ss-cell ss2">🏃</div>
+  <div class="ss-cell ss3">🎾</div>
+  <div class="ss-cell ss4">🏊</div>
+  <div class="ss-cell ss5">🎯</div>
+</div>
+
+<!-- ══ QU'EST-CE QUE LA ZONE ══ -->
+<div class="section">
+  <div class="w">
+    <div class="section-label">Le flow — la science</div>
+    <h2 class="section-title">Vous pouvez vous programmer<br>pour entrer dans la <em>ZONE</em></h2>
+    <p class="section-sub">Ce n'est pas de la chance. Ce n'est pas un bon jour. C'est un état neurophysiologique précis — et il s'entraîne.</p>
+
+    <div class="body-txt">
+      <p>Le flow — ou Zone — est un état d'extrême concentration et de pleine immersion dans l'action. Les chercheurs en neurosciences l'ont identifié, mesuré et documenté. Il se caractérise par une activation simultanée du système sympathique (énergie, vitesse) et parasympathique (clarté, précision).</p>
+      <p>Les champions le connaissent. Mais ils ne savent pas toujours le reproduire. <strong>La Méthode Zone 4E change ça.</strong> Elle vous donne les 4 leviers neurophysiologiques qui créent les conditions du flow — et les 3 séquences pour l'activer avant, pendant et après la compétition.</p>
+    </div>
+
+    <div class="pull">Et fini les frustrations d'actions ratées, les déceptions d'occasions manquées, ce sentiment d'impuissance face à l'échec. <strong>Vous avez du niveau — apprenez à le montrer quand ça compte.</strong></div>
+  </div>
+</div>
+
+<!-- ══ STATS ══ -->
+<div class="stats-band">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-n">4</div><div class="stat-l">Leviers neurophysiologiques<br>pour déclencher le flow</div></div>
+    <div class="stat"><div class="stat-n">21</div><div class="stat-l">Jours pour transformer<br>la méthode en réflexe</div></div>
+    <div class="stat"><div class="stat-n">10"</div><div class="stat-l">Pour réinitialiser votre état<br>en pleine compétition</div></div>
+  </div>
+</div>
+
+<!-- ══ CE QUE VOUS ALLEZ APPRENDRE ══ -->
+<div class="section section-alt">
+  <div class="w">
+    <div class="section-label">Le programme</div>
+    <h2 class="section-title">4 éléments pour<br>changer votre <em>performance</em></h2>
+    <p class="section-sub">Avec les 4 techniques que vous maîtriserez, vous serez en mesure de :</p>
+
+    <div class="benefits">
+      <div class="bene"><div class="bene-check">✓</div><div><strong>Stabiliser votre système nerveux</strong> en 90 secondes — avant même d'entrer sur le terrain</div></div>
+      <div class="bene"><div class="bene-check">✓</div><div><strong>Neutraliser stress et frustration</strong> en 10 secondes discrètement, même en plein match</div></div>
+      <div class="bene"><div class="bene-check">✓</div><div><strong>Ancrer votre corps dans le présent</strong> — arrêter la surpensée, retrouver la fluidité</div></div>
+      <div class="bene"><div class="bene-check">✓</div><div><strong>Activer l'énergie juste</strong> — ni trop calme (amorphe), ni trop excité (crispé)</div></div>
+      <div class="bene"><div class="bene-check">✓</div><div><strong>Effacer une erreur en 15 secondes</strong> et repartir lucide, sans que ça sabote la suite</div></div>
+      <div class="bene"><div class="bene-check">✓</div><div><strong>Marquer le pénalty décisif</strong> — réussir votre birdie, viser le carreau à la pétanque</div></div>
+      <div class="bene"><div class="bene-check">✓</div><div><strong>Performer de façon régulière</strong> — pas seulement les "bons jours"</div></div>
+      <div class="bene"><div class="bene-check">✓</div><div><strong>Reconnaître la sensation</strong> "la Zone est disponible" — et l'activer sur signal</div></div>
+    </div>
+
+    <div class="cta-wrap" style="margin-top:36px;">
+      <a href="#commander" class="cta-btn">Je veux accéder à la ZONE →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LES 4 ÉLÉMENTS ══ -->
+<div class="section">
+  <div class="w-wide">
+    <div class="section-label">La méthode</div>
+    <h2 class="section-title">Les 4 Éléments <em>+ le ZÉRØ</em></h2>
+    <p class="section-sub">4 leviers neurophysiologiques. Utilisés ensemble dans l'ordre, ils ouvrent la Zone.</p>
+
+    <div class="elements">
+      <div class="el-cell">
+        <div class="ec-badge ec-wind">🌬 Élément 1</div>
+        <div class="ec-title">VENT — La Respiration</div>
+        <div class="ec-desc">Respirer par le nez stabilise le système nerveux, réduit l'amygdale (peur/stress) et optimise l'oxygénation. 90 secondes de 4-2-6 — et votre cerveau bascule vers le calme concentré. Protocole secret : la Chasse au Lapin.</div>
+      </div>
+      <div class="el-cell">
+        <div class="ec-badge ec-fire">🔥 Élément 2</div>
+        <div class="ec-title">FEU — La Régulation Émotionnelle</div>
+        <div class="ec-desc">Une émotion non régulée court-circuite tout. La TFT (Thought Field Therapy) de Roger Callahan coupe le signal d'alarme en secondes. Nommer une émotion réduit son intensité de 40-60% (IRMf). Protocole discret utilisable en plein match.</div>
+      </div>
+      <div class="el-cell">
+        <div class="ec-badge ec-earth">🌍 Élément 3</div>
+        <div class="ec-title">TERRE — L'Ancrage Corporel</div>
+        <div class="ec-desc">Votre posture dirige votre cerveau. La Salutation au Soleil synchronise souffle et mouvement — c'est le fondement neurologique du flow. Protocole secret : la Salutation au Soleil dans la tête, en 60 secondes, n'importe où.</div>
+      </div>
+      <div class="el-cell">
+        <div class="ec-badge ec-water">💧 Élément 4</div>
+        <div class="ec-title">EAU — L'Activation Contrôlée</div>
+        <div class="ec-desc">La Zone n'est pas un état relax — c'est activé ET régulé. L'eau froide libère dopamine et noradrénaline (+200-300%) — les neurotransmetteurs du flow. Elle crée aussi une mémoire sensorielle réactivable instantanément.</div>
+      </div>
+      <div class="el-cell full">
+        <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+          <div>
+            <div class="ec-badge ec-zero">✨ Le Cinquième État</div>
+            <div class="ec-title" style="font-size:24px;">ZÉRØ — La Zone Totale</div>
+            <div class="ec-desc" style="max-width:600px;">Quand les 4 éléments sont alignés, le cortex préfrontal (votre juge intérieur, le doute, l'autocritique) réduit son activité. Vos circuits moteurs se synchronisent. Vous ne pensez plus — vous jouez. Vous apprendrez <strong>3 séquences</strong> pour y accéder : Ø1 le matin du match, Ø2 dans le vestiaire, Ø3 en 10 secondes pendant la compétition.</div>
+          </div>
+          <div style="text-align:center;flex-shrink:0;">
+            <div style="font-family:'Barlow Condensed';font-weight:900;font-size:56px;color:var(--gold);line-height:1;">Ø1</div>
+            <div style="font-family:'Barlow Condensed';font-weight:900;font-size:56px;color:var(--gold);line-height:1;">Ø2</div>
+            <div style="font-family:'Barlow Condensed';font-weight:900;font-size:56px;color:var(--gold);line-height:1;">Ø3</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CITATION PELÉ ══ -->
+<div class="big-quote">
+  <div class="bq-text">Quand je suis en état de flow sur le terrain, c'est comme si le temps s'arrêtait et que j'étais totalement concentré. Je n'entendais plus les spectateurs, je ne pensais qu'à la prochaine action. C'est un moment où je me sens en harmonie avec le jeu et où je suis capable de donner le meilleur de moi-même.</div>
+  <div class="bq-author">Pelé</div>
+  <div class="bq-role">Triple champion du monde · Légende du football</div>
+</div>
+
+<!-- ══ POUR QUI ══ -->
+<div class="section section-alt">
+  <div class="w">
+    <div class="section-label">Pour tous les sportifs</div>
+    <h2 class="section-title">Ce programme est<br><em>fait pour vous</em> si…</h2>
+
+    <div class="body-txt" style="text-align:center;margin-bottom:28px;"><p>Nous avons conçu cette méthode pour être accessible à tous les sportifs, quel que soit votre niveau de départ. Du coureur occasionnel au professionnel, du footballeur amateur au pétanqueur du dimanche.</p></div>
+
+    <div class="for-grid">
+      <div class="for-col">
+        <div class="fc-head fc-yes-head">✅ Ce programme est pour vous si…</div>
+        <div class="fc-items">
+          <div class="fc-item"><span>→</span><span>Vous avez du niveau — mais vous ne le montrez pas quand ça compte vraiment</span></div>
+          <div class="fc-item"><span>→</span><span>Vous stressez avant les matchs et ça plombe vos performances</span></div>
+          <div class="fc-item"><span>→</span><span>Vous faites des erreurs en cascade parce que l'une vous a déstabilisé</span></div>
+          <div class="fc-item"><span>→</span><span>Vous avez déjà vécu "la Zone" une fois — et vous voulez y retourner à volonté</span></div>
+          <div class="fc-item"><span>→</span><span>Vous cherchez des outils concrets basés sur la science, pas de la motivation vide</span></div>
+          <div class="fc-item"><span>→</span><span>Vous êtes prêt à pratiquer 5 à 10 minutes par jour pour ancrer ces réflexes</span></div>
+        </div>
+      </div>
+      <div class="for-col">
+        <div class="fc-head fc-no-head">❌ Ce programme n'est pas pour vous si…</div>
+        <div class="fc-items">
+          <div class="fc-item"><span>→</span><span>Vous cherchez une solution magique sans pratique ni engagement personnel</span></div>
+          <div class="fc-item"><span>→</span><span>Vous êtes convaincu que vos performances dépendent uniquement de la chance</span></div>
+          <div class="fc-item"><span>→</span><span>Vous n'êtes pas prêt à tester des techniques qui peuvent sembler nouvelles au début</span></div>
+          <div class="fc-item"><span>→</span><span>Vous voulez juste du "positif thinking" — ici, on travaille sur le système nerveux</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-wrap">
+      <a href="#commander" class="cta-btn">Je rejoins le programme ZONE 4E →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TÉMOIGNAGES ══ -->
+<div class="section">
+  <div class="w-wide">
+    <div class="section-label">Ils ont suivi le programme</div>
+    <h2 class="section-title">Et sont devenus <em>addicts</em></h2>
+    <p class="section-sub">Des sportifs de tous niveaux — qui ont appris à performer quand ça compte.</p>
+
+    <div class="testi-grid">
+      <div class="testi">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">Les techniques m'ont permis de rester concentré dans les moments difficiles. Il s'agit de pratiquer régulièrement pour être en forme le jour J. Les 3 séquences ZÉRØ ont changé ma façon d'aborder mes courses.</div>
+        <div>
+          <div class="testi-author">Benjamin T.</div>
+          <div class="testi-role">Ultratrailer</div>
+        </div>
+      </div>
+      <div class="testi">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">En appliquant ces techniques, j'ai pu enlever mon appréhension d'avant match, grâce aux routines simples que j'ai apprises. La TFT m'a particulièrement surpris — ça marche vraiment en 10 secondes.</div>
+        <div>
+          <div class="testi-author">Noah C.</div>
+          <div class="testi-role">Basketeur professionnel</div>
+        </div>
+      </div>
+      <div class="testi">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">Contrairement à ce que j'avais pu appliquer dans ma carrière, je mets en pratique aujourd'hui ces techniques et je perçois une faculté à faire plus, mieux, en moins d'effort.</div>
+        <div>
+          <div class="testi-author">Bastien</div>
+          <div class="testi-role">Légionnaire retraité</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONTENU DE L'EBOOK ══ -->
+<div class="section section-alt">
+  <div class="w">
+    <div class="section-label">Ce que vous recevrez</div>
+    <h2 class="section-title">Un programme <em>complet</em><br>en 8 chapitres</h2>
+
+    <div class="weeks">
+      <div class="week-item">
+        <div class="wi-num" style="color:var(--muted);">Intro</div>
+        <div><div class="wi-title">Comprendre la Zone + La Science du Flow</div><div class="wi-desc">Ce qu'est vraiment la Zone (sans mystique), ce que disent les neurosciences — neurotransmetteurs, ondes alpha, système nerveux. Pourquoi votre plus grand ennemi, c'est vous-même.</div></div>
+      </div>
+      <div class="week-item">
+        <div class="wi-num" style="color:var(--wind);">04</div>
+        <div><div class="wi-title">Le VENT 🌬 — Maîtriser la Respiration</div><div class="wi-desc">Reset 4-2-6 · Respiration nasale en mouvement · Chasse au Lapin (Protocole Secret) — l'entraînement de la lucidité sous pression.</div></div>
+      </div>
+      <div class="week-item">
+        <div class="wi-num" style="color:var(--fire);">05</div>
+        <div><div class="wi-title">Le FEU 🔥 — Maîtriser les Émotions</div><div class="wi-desc">Protocole ONT (10 sec) · Cycle d'Inversion TFT complet (KC→SN→CH→MJ→CE→CB) · Version discrète en match · Renvoi vers l'ebook TFT Master pour aller plus loin.</div></div>
+      </div>
+      <div class="week-item">
+        <div class="wi-num" style="color:var(--earth);">06</div>
+        <div><div class="wi-title">La TERRE 🌍 — L'Ancrage Corporel</div><div class="wi-desc">Ancrage Basique · Triple Ancrage (10 sec) · Salutation au Soleil complète (12 postures) · Salutation au Soleil Mentale (Protocole Secret) — l'ancrage portable.</div></div>
+      </div>
+      <div class="week-item">
+        <div class="wi-num" style="color:var(--water);">07</div>
+        <div><div class="wi-title">L'EAU 💧 — L'Activation Contrôlée</div><div class="wi-desc">Activation Froide express (20 sec) · Bains froids progressifs sur 6 semaines · La mémoire du froid comme ancre neurologique vers la Zone.</div></div>
+      </div>
+      <div class="week-item" style="background:var(--gold-lt);border-color:var(--gold-bd);">
+        <div class="wi-num" style="color:var(--gold);">08</div>
+        <div><div class="wi-title" style="color:var(--dark);">✨ Les 3 Séquences ZÉRØ — Le Cœur de la Méthode</div><div class="wi-desc">Ø1 Ancrage du Jour J · Ø2 Le Vestiaire · Ø3 En Compétition (10-20 sec) · Teaser Programme 21 Jours. Le chapitre qui change tout.</div></div>
+      </div>
+    </div>
+
+    <div class="cta-wrap">
+      <a href="#commander" class="cta-btn">Cliquez ici pour accéder au programme →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CITATION F1 ══ -->
+<div class="big-quote">
+  <div class="bq-text">Quand je suis en train de rouler, il y a un moment où tout devient clair et où je me sens en harmonie avec la voiture. C'est un sentiment indescriptible — mais c'est à ce moment-là que je suis le plus rapide.</div>
+  <div class="bq-author">Ayrton Senna</div>
+  <div class="bq-role">Triple champion du monde de Formule 1</div>
+</div>
+
+<!-- ══ FAQ ══ -->
+<div class="section">
+  <div class="w">
+    <div class="section-label">Les questions fréquentes</div>
+    <h2 class="section-title">Ce que vous voulez <em>savoir</em></h2>
+
+    <div class="faq-list">
+      <div class="faq-item" id="f1">
+        <div class="faq-q" onclick="toggleFaq('f1')">Faut-il être sportif professionnel pour bénéficier de cette méthode ?<span class="arr">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">Absolument pas. Les mécanismes neurophysiologiques qui déclenchent la Zone sont universels. Du coureur occasionnel au professionnel, du golfeur amateur au pétanqueur. <strong>La Zone est accessible à tous les niveaux</strong> — ce qui change, c'est l'intensité des enjeux, pas la mécanique.</div></div>
+      </div>
+      <div class="faq-item" id="f2">
+        <div class="faq-q" onclick="toggleFaq('f2')">Est-ce que je peux suivre le programme à mon rythme ?<span class="arr">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">Oui. Vous avez un accès immédiat à l'ebook complet en PDF, lisible partout, sur tous vos appareils. Vous avancez à votre rythme — chaque chapitre contient des exercices pratiques que vous pouvez commencer immédiatement.</div></div>
+      </div>
+      <div class="faq-item" id="f3">
+        <div class="faq-q" onclick="toggleFaq('f3')">Est-ce que je verrai des résultats rapidement ?<span class="arr">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">Dès le premier protocole — la respiration 4-2-6 — vous sentirez une différence en 90 secondes. <strong>Certains effets sont immédiats</strong> (réduction du stress, clarté mentale, ancrage). La maîtrise complète des 3 Séquences ZÉRØ prend 21 jours de pratique régulière. 5 à 10 minutes par jour suffisent.</div></div>
+      </div>
+      <div class="faq-item" id="f4">
+        <div class="faq-q" onclick="toggleFaq('f4')">La TFT (tapotements) — est-ce que ça marche vraiment ?<span class="arr">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">La TFT (Thought Field Therapy) est fondée par le Dr Roger Callahan, validée par des études en neurosciences. Elle agit directement sur les circuits neuro-émotionnels. <strong>Ce n'est pas une question de foi</strong> — mesurez l'intensité d'une émotion avant et après. Les données ne mentent pas.</div></div>
+      </div>
+      <div class="faq-item" id="f5">
+        <div class="faq-q" onclick="toggleFaq('f5')">Comment se déroule concrètement le programme ?<span class="arr">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">Chaque chapitre contient : une description fonctionnelle, une explication scientifique, des protocoles pratiques avec étapes précises, un résumé clair, et un protocole secret avancé. Vous avez 8 chapitres correspondant aux 4 éléments + les 3 Séquences ZÉRØ. <strong>Opérationnel dès la première lecture.</strong></div></div>
+      </div>
+      <div class="faq-item" id="f6">
+        <div class="faq-q" onclick="toggleFaq('f6')">J'ai déjà lu des livres sur la préparation mentale sans résultat. Pourquoi celui-ci serait différent ?<span class="arr">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">La plupart des livres de préparation mentale travaillent sur les croyances et le dialogue interne — utile, mais ça reste dans la tête. Zone 4E travaille sur le <strong>système nerveux autonome</strong> — les mécanismes qui régulent votre état avant même que vous ayez le temps de penser. C'est pour ça que ça fonctionne sous pression maximale.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ OFFRE ══ -->
+<div class="offer-section" id="commander">
+  <div class="section-label" style="color:rgba(201,168,76,0.6);justify-content:center;">Votre investissement · Tout compris</div>
+  <h2 class="os-title">Profitez du <em>Tarif Lancement</em></h2>
+  <p class="os-sub">Une seule fois. Un accès à vie. Changez votre performance pour toujours.</p>
+
+  <div class="offer-box">
+    <div class="ob-title">Votre commande inclut</div>
+    <div class="ob-product">Zone 4E — Ebook Complet</div>
+    <div class="ob-bonus">+ Le Programme 21 Jours offert en Order Bump</div>
+    <div class="ob-incs">
+      <div class="ob-inc">Ebook Zone 4E — 8 chapitres · 4 éléments · 3 Séquences ZÉRØ</div>
+      <div class="ob-inc">Tous les protocoles : secrets inclus (Chasse au Lapin · TFT · Salutation Mentale)</div>
+      <div class="ob-inc">Le Rituel complet du Jour de Match</div>
+      <div class="ob-inc">Accès immédiat · PDF · Tous supports · À vie</div>
+    </div>
+    <div class="ob-price">
+      <div class="ob-old">47€</div>
+      <div class="ob-new">27€</div>
+    </div>
+    <div class="ob-eco">→ Vous économisez 20€ · Offre de lancement limitée</div>
+  </div>
+
+  <div>
+    <a href="#" class="cta-big">Oui je veux démarrer — 27€ →</a>
+  </div>
+  <div class="offer-guarantees">
+    <span class="og">🔒 Paiement 100% sécurisé</span>
+    <span class="og">📥 Accès immédiat</span>
+    <span class="og">↩ Remboursé si insatisfait 30j</span>
+  </div>
+
+  <div style="margin-top:48px;">
+    <div style="font-family:'Lora';font-style:italic;font-size:17px;color:rgba(255,255,255,0.5);max-width:520px;margin:0 auto 6px;line-height:1.65;">Décuplez votre potentiel lors de votre pratique sportive. Libérez-vous des tensions et du stress avant et pendant une compétition. Devenez plus zen et calme dans votre vie.</div>
+  </div>
+</div>
+
+<!-- ══ GARANTIE ══ -->
+<div class="garantie">
+  <div class="section-label">Testez avant d'acheter</div>
+  <h2 class="section-title" style="margin-bottom:24px;">Vous n'avez<br><em>plus d'excuses</em></h2>
+  <div class="g-badge">
+    <div class="g-icon">🛡️</div>
+    <div class="g-text">
+      <div class="g-title">Satisfait ou Remboursé — 30 jours</div>
+      <div class="g-desc">Si vous n'êtes pas absolument satisfait de vos progrès,<br>demandez votre remboursement intégral par simple email.</div>
+    </div>
+  </div>
+  <div class="body-txt" style="max-width:520px;margin:16px auto 0;text-align:center;font-size:14px;color:var(--muted);">Vous avez accès à l'ensemble du programme pour constater à quel point Zone 4E améliore votre potentiel. Aucun risque. Aucune question posée.</div>
+  <div class="cta-wrap">
+    <a href="#commander" class="cta-btn">OK, je commence le programme ZONE 4E →</a>
+  </div>
+</div>
+
+<footer>
+  <div>© 2025 Zone 4E · Olympe Athlétique · Par [Votre Prénom] · Coach Sportif & Préparateur Mental</div>
+  <div style="margin-top:6px;"><a href="#">Mentions légales</a> · <a href="#">CGV</a> · <a href="#">Contact</a></div>
+</footer>
+
+<script>
+function toggleFaq(id){
+  const item=document.getElementById(id);
+  const wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen)item.classList.add('open');
+}
+</script>
+
+<!-- Barre de démo hub-copyrighting -->
+<div style="position:fixed;left:0;right:0;bottom:0;z-index:2147483000;display:flex;align-items:center;gap:10px;justify-content:center;padding:10px 14px;background:rgba(20,20,30,.92);color:#fff;font:600 13px/1.2 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;backdrop-filter:blur(6px)"><span style="opacity:.7">Démo · étape 1/4</span><a href="tunnel-2-order-bump.html" style="background:#6c63ff;color:#fff;text-decoration:none;padding:8px 16px;border-radius:8px">Page suivante →</a></div>
+</body>
+</html>

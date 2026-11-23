@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Une seule offre — La Collection Complète à prix unique</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,700;1,800&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf8f4;--white:#fff;--dark:#18150e;--black:#0e0b06;
+  --body:#4a4438;--muted:#9a9080;--line:#e0dbd0;
+  --gold:#c49a20;--gold-bg:#fdf5e0;--gold-bd:#e0c870;
+  --fire:#d95020;--fire-bg:#fef2ec;--fire-bd:#f0b898;
+  --tft:#8a3870;--tft-bg:#faeef5;--tft-bd:#d4a0c4;
+  --psych:#4a3888;--psych-bg:#eeeafa;--psych-bd:#b4a8d8;
+  --earth:#5a8830;--earth-bg:#f0f7e8;--earth-bd:#b0d888;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{background:var(--dark);color:#fff;font-family:'DM Sans',sans-serif;line-height:1.75;}
+
+.w{max-width:760px;margin:0 auto;padding:0 24px;}
+
+/* PROGRESS */
+.progress-band{background:#0a0806;padding:16px 24px;}
+.pb-labels{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.2);display:flex;justify-content:space-between;margin-bottom:8px;}
+.pb-bar{height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;}
+.pb-fill{height:100%;background:linear-gradient(90deg,var(--fire),var(--gold));width:66%;border-radius:2px;}
+.pb-labels span.done{color:rgba(255,255,255,0.45);}
+.pb-labels span.now{color:var(--gold);}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#0e0a06,#160e08);padding:72px 24px 60px;border-bottom:1px solid rgba(255,255,255,0.05);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(196,154,32,0.08) 0%,transparent 70%);pointer-events:none;}
+.h-tag{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);padding:5px 14px;border:1px solid rgba(201,168,32,0.3);border-radius:100px;background:rgba(201,168,32,0.06);margin-bottom:20px;}
+.h-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(48px,8vw,88px);line-height:0.9;letter-spacing:-0.01em;margin-bottom:20px;color:#fff;}
+.h-title em{color:var(--gold);font-style:italic;}
+.h-sub{font-family:'Lora',serif;font-style:italic;font-size:18px;color:rgba(255,255,255,0.45);max-width:540px;line-height:1.65;margin-bottom:32px;}
+
+/* RÉCAP PURCHASE */
+.receipt{background:rgba(90,136,48,0.08);border:1px solid rgba(90,136,48,0.2);border-radius:6px;padding:18px 24px;margin:28px 0;display:flex;align-items:center;gap:12px;}
+.rec-icon{font-size:24px;flex-shrink:0;}
+.rec-text{font-size:14px;color:rgba(255,255,255,0.7);line-height:1.55;}
+.rec-text strong{color:#fff;}
+
+/* TRANSITION */
+.trans-section{padding:52px 24px;background:#0e0c08;}
+
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.eyebrow::before{content:'';width:16px;height:1.5px;background:var(--gold);}
+.display{font-family:'Barlow Condensed',sans-serif;font-weight:900;letter-spacing:-0.01em;line-height:0.92;color:#fff;}
+.body-txt{font-size:15px;line-height:1.85;color:rgba(255,255,255,0.65);}
+.body-txt p+p{margin-top:14px;}
+.body-txt strong{color:#fff;}
+.pull{margin:28px 0;padding:20px 28px;border-left:4px solid var(--gold);background:rgba(201,168,32,0.06);font-family:'Lora',serif;font-style:italic;font-size:18px;color:rgba(255,255,255,0.75);line-height:1.65;}
+.pull strong{font-style:normal;color:var(--gold);}
+
+/* 3 EBOOKS */
+.ebooks-grid{display:flex;flex-direction:column;gap:2px;margin:32px 0;}
+.ebook-card{border:1px solid rgba(255,255,255,0.07);border-radius:6px;overflow:hidden;transition:border-color .2s;}
+.ebook-card:hover{border-color:rgba(255,255,255,0.15);}
+.ec-head{padding:22px 26px;display:flex;align-items:center;gap:18px;}
+.ec-cover{width:60px;height:86px;border-radius:2px 6px 6px 2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.ec-cover::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:rgba(0,0,0,0.3);}
+.ec-cover-txt{font-family:'Barlow Condensed',sans-serif;font-weight:900;line-height:0.9;text-align:center;padding-left:5px;font-size:13px;}
+.ec-info{flex:1;}
+.ec-num{font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:4px;}
+.ec-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;color:#fff;letter-spacing:0.02em;line-height:1.1;margin-bottom:6px;}
+.ec-desc{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.55;}
+.ec-price{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
+.ec-price-old{font-size:13px;color:rgba(255,255,255,0.2);text-decoration:line-through;}
+.ec-price-incl{font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;border:1px solid;}
+.ec-body{padding:0 26px 22px;display:none;}
+.ebook-card.expanded .ec-body{display:block;}
+.ec-features{display:flex;flex-direction:column;gap:7px;}
+.ec-feat{display:flex;gap:9px;font-size:13px;color:rgba(255,255,255,0.6);line-height:1.5;align-items:flex-start;}
+.ec-feat .mk{flex-shrink:0;margin-top:2px;}
+
+/* TOTAL VISUAL */
+.total-visual{margin:32px 0;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:28px 32px;}
+.tv-rows{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
+.tv-row{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:rgba(255,255,255,0.55);padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);}
+.tv-row:last-child{border-bottom:none;}
+.tv-row-name{display:flex;align-items:center;gap:8px;}
+.tv-row-check{color:var(--earth);}
+.tv-row-price{color:rgba(255,255,255,0.3);text-decoration:line-through;}
+.tv-row.included .tv-row-price{text-decoration:none;color:var(--gold);font-weight:700;}
+.tv-divider{height:2px;background:linear-gradient(90deg,var(--fire),var(--gold),var(--earth));border-radius:1px;margin:18px 0;}
+.tv-total-row{display:flex;justify-content:space-between;align-items:center;}
+.tv-total-label{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;color:#fff;letter-spacing:0.04em;text-transform:uppercase;}
+.tv-total-price{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:52px;color:var(--gold);line-height:1;}
+.tv-saving{text-align:center;font-size:13px;font-weight:700;color:var(--earth);background:rgba(90,136,48,0.12);border:1px solid rgba(90,136,48,0.22);padding:8px 20px;border-radius:100px;margin-top:14px;}
+
+/* OFFER HERO */
+.offer-section{padding:60px 24px;background:#0a0806;}
+.offer-box{border:2px solid rgba(196,154,32,0.4);border-radius:10px;overflow:hidden;position:relative;}
+.offer-box::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--tft),var(--psych),var(--gold),var(--earth));}
+.ob-head{background:linear-gradient(160deg,#120a06,#1a1008);padding:44px 44px 32px;text-align:center;}
+.ob-label{font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.ob-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(24px,4vw,40px);color:#fff;letter-spacing:0.03em;text-transform:uppercase;line-height:1.05;}
+.ob-sub{font-size:13px;color:rgba(255,255,255,0.3);margin-top:8px;line-height:1.6;}
+.ob-list{background:rgba(255,255,255,0.02);padding:28px 44px;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;gap:11px;}
+.ob-item{display:flex;gap:12px;font-size:15px;color:rgba(255,255,255,0.7);align-items:flex-start;line-height:1.5;}
+.ob-item .ck{color:var(--gold);font-size:16px;flex-shrink:0;margin-top:1px;}
+.ob-price{padding:36px 44px;display:flex;flex-direction:column;align-items:center;gap:18px;background:rgba(201,168,32,0.03);}
+.obp-row{display:flex;align-items:baseline;gap:14px;}
+.obp-old{font-size:22px;color:rgba(255,255,255,0.25);text-decoration:line-through;}
+.obp-new{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:76px;color:var(--gold);line-height:1;}
+.obp-eur{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:32px;color:var(--gold);align-self:flex-start;margin-top:10px;}
+.obp-total{font-size:14px;color:rgba(255,255,255,0.35);text-align:center;line-height:1.6;}
+.obp-total strong{color:rgba(255,255,255,0.6);}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;letter-spacing:0.03em;padding:20px 44px;border-radius:3px;text-decoration:none;cursor:pointer;border:none;transition:all .2s;text-transform:uppercase;}
+.btn-gold{background:var(--gold);color:var(--dark);}
+.btn-gold:hover{background:#a8821e;transform:translateY(-2px);box-shadow:0 10px 36px rgba(196,154,32,0.4);}
+.btn-ghost{background:transparent;color:rgba(255,255,255,0.3);border:1px solid rgba(255,255,255,0.1);font-size:12px;padding:11px 22px;}
+.btn-ghost:hover{color:rgba(255,255,255,0.5);}
+.btn-xl{font-size:17px;padding:22px 52px;}
+.btn-pulse{animation:pulse 2.4s ease-in-out infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(196,154,32,0.3);}50%{box-shadow:0 0 0 16px rgba(196,154,32,0);}}
+.btn-arrow{transition:transform .2s;}
+.btn:hover .btn-arrow{transform:translateX(5px);}
+
+/* TESTIMONIALS */
+.testi-row{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.06);border-radius:6px;overflow:hidden;margin:32px 0;}
+.testi{background:rgba(255,255,255,0.03);padding:24px;display:flex;flex-direction:column;gap:12px;}
+.testi-stars{color:var(--gold);letter-spacing:2px;font-size:13px;}
+.testi-q{font-family:'Lora',serif;font-style:italic;font-size:14px;color:rgba(255,255,255,0.65);line-height:1.8;flex:1;}
+.testi-auth .name{font-weight:700;font-size:13px;color:#fff;}
+.testi-auth .role{font-size:11px;color:rgba(255,255,255,0.3);margin-top:2px;}
+
+/* GUARANTEE */
+.guarantee{margin:24px 0;padding:24px 28px;background:rgba(90,136,48,0.07);border:1px solid rgba(90,136,48,0.18);border-radius:6px;display:flex;gap:14px;align-items:flex-start;}
+.g-icon{font-size:36px;flex-shrink:0;}
+.g-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;color:#5a8830;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:5px;}
+.g-text{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.7;}
+
+@media(max-width:600px){
+  .testi-row{grid-template-columns:1fr;}
+  .ob-head,.ob-list,.ob-price{padding-left:22px;padding-right:22px;}
+  .ec-head{flex-direction:column;align-items:flex-start;}
+  .ec-price{align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+
+<!-- PROGRESS -->
+<div class="progress-band">
+  <div class="w">
+    <div class="pb-labels">
+      <span class="done">Zone 4E ✓</span>
+      <span class="done">Programme 21J ✓</span>
+      <span class="now">→ Pack Complet</span>
+    </div>
+    <div class="pb-bar"><div class="pb-fill"></div></div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="w">
+    <div class="h-tag">🎯 Offre unique — disponible ici seulement</div>
+    <h1 class="h-title">
+      Tu as la méthode.<br>
+      Tu as les 21 jours.<br>
+      <em>Il manque encore<br>3 pièces.</em>
+    </h1>
+    <p class="h-sub">TFT Master. Reprogrammer. L'Athlète Durable. Les trois ebooks qui complètent ton système Zone 4E — disponibles ensemble, ici, une seule fois, au prix le plus bas possible.</p>
+
+    <div class="receipt">
+      <div class="rec-icon">✅</div>
+      <div class="rec-text"><strong>Zone 4E + Programme 21 Jours sont sécurisés.</strong> Ce que tu vas découvrir maintenant est le complément naturel — les 3 dimensions que la méthode principale ne couvre pas en profondeur : les émotions en détail, le mental de fond, et le corps qui dure.</div>
+    </div>
+  </div>
+</div>
+
+<!-- TRANSITION — LE GAP -->
+<div class="trans-section">
+  <div class="w">
+    <div class="eyebrow">Ce qui manque encore</div>
+    <h2 class="display" style="font-size:clamp(32px,5vw,52px);margin-bottom:20px;">
+      Zone 4E t'ouvre la porte.<br>
+      <span style="color:var(--gold);">Mais la Zone a 3 étages.</span>
+    </h2>
+    <div class="body-txt">
+      <p>La méthode Zone 4E couvre les 4 éléments. Le Programme 21 Jours les ancre comme compétences inconscientes. C'est la fondation.</p>
+      <p>Mais si tu veux aller au niveau suivant — celui où tu ne perfomes pas juste mieux, mais où tu te transformes en athlète différent — il reste trois dimensions à travailler :</p>
+    </div>
+    <div class="pull">
+      <strong>1. Tes émotions en profondeur.</strong> Les 14 points TFT, les 7 séquences sportives, la désensibilisation des traumatismes. <strong>2. L'image que tu as de toi-même.</strong> Le thermostat de performance qui te ramène toujours à ton "niveau habituel". <strong>3. Ton corps qui dure.</strong> Les 3 zones critiques, les 5 patterns, les 10 minutes par jour qui font la différence sur 20 ans.
+    </div>
+  </div>
+</div>
+
+<!-- LES 3 EBOOKS -->
+<div style="padding:52px 24px;background:#0a0806;">
+  <div class="w">
+    <div class="eyebrow">Les 3 ebooks du Pack</div>
+    <h2 class="display" style="font-size:clamp(30px,4vw,48px);margin-bottom:28px;">Trois ebooks.<br>Un système complet.</h2>
+
+    <div class="ebooks-grid">
+
+      <!-- TFT -->
+      <div class="ebook-card" onclick="toggleBook(this)">
+        <div class="ec-head">
+          <div class="ec-cover" style="background:linear-gradient(150deg,#2a0a2a,#1a0818);">
+            <div class="ec-cover-txt" style="color:#c4a0d8;">TFT<br>MAS-<br>TER</div>
+          </div>
+          <div class="ec-info">
+            <div class="ec-num" style="color:rgba(196,160,216,0.7);">Ebook 3 · Émotions approfondies</div>
+            <div class="ec-title">TFT Master</div>
+            <div class="ec-desc">Neutraliser n'importe quelle émotion parasite en 60 secondes — 14 points, 7 séquences sportives</div>
+          </div>
+          <div class="ec-price">
+            <div class="ec-price-old">17€</div>
+            <div class="ec-price-incl" style="color:#c4a0d8;background:rgba(138,56,112,0.15);border-color:rgba(196,160,216,0.3);">✓ Inclus</div>
+          </div>
+        </div>
+        <div class="ec-body">
+          <div class="ec-features">
+            <div class="ec-feat"><span class="mk" style="color:#c4a0d8;">→</span><span>14 points de tapping avec localisation précise et méridien associé</span></div>
+            <div class="ec-feat"><span class="mk" style="color:#c4a0d8;">→</span><span>7 séquences spécifiques : peur de rater, frustration post-erreur, anxiété précompétitive, colère arbitrale, manque de confiance, traumatisme sportif, fatigue mentale</span></div>
+            <div class="ec-feat"><span class="mk" style="color:#c4a0d8;">→</span><span>La procédure des 9 Gamuts pour approfondir la décharge émotionnelle</span></div>
+            <div class="ec-feat"><span class="mk" style="color:#c4a0d8;">→</span><span>Versions discrètes utilisables pendant la compétition (cuisse, hanche, poignet)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REPROGRAMMER -->
+      <div class="ebook-card" onclick="toggleBook(this)">
+        <div class="ec-head">
+          <div class="ec-cover" style="background:linear-gradient(150deg,#180e2a,#0e0818);">
+            <div class="ec-cover-txt" style="color:#8a7ad8;font-size:11px;">REPRO-<br>GRAM-<br><span style="color:rgba(201,168,76,0.9);">MER</span></div>
+          </div>
+          <div class="ec-info">
+            <div class="ec-num" style="color:rgba(138,122,216,0.7);">Ebook 4 · Mental de fond</div>
+            <div class="ec-title">Reprogrammer</div>
+            <div class="ec-desc">La Psycho-Cybernétique du Sportif — l'image mentale qui libère ton vrai niveau</div>
+          </div>
+          <div class="ec-price">
+            <div class="ec-price-old">17€</div>
+            <div class="ec-price-incl" style="color:#8a7ad8;background:rgba(74,56,136,0.15);border-color:rgba(138,122,216,0.3);">✓ Inclus</div>
+          </div>
+        </div>
+        <div class="ec-body">
+          <div class="ec-features">
+            <div class="ec-feat"><span class="mk" style="color:#8a7ad8;">→</span><span>Le servo-mécanisme de Maltz appliqué à la performance sportive</span></div>
+            <div class="ec-feat"><span class="mk" style="color:#8a7ad8;">→</span><span>8 croyances limitantes les plus fréquentes chez les sportifs — avec leur version habilitante face à face</span></div>
+            <div class="ec-feat"><span class="mk" style="color:#8a7ad8;">→</span><span>Visualisation de performance en 7 étapes — la méthode exacte validée par les neurosciences</span></div>
+            <div class="ec-feat"><span class="mk" style="color:#8a7ad8;">→</span><span>Protocole pré-compétition de 7 minutes — 3 scènes pour programmer ton cerveau avant le match</span></div>
+            <div class="ec-feat"><span class="mk" style="color:#8a7ad8;">→</span><span>Construire l'identité "Athlète de Zone" par accumulation de preuves</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ATHLÈTE DURABLE -->
+      <div class="ebook-card" onclick="toggleBook(this)">
+        <div class="ec-head">
+          <div class="ec-cover" style="background:linear-gradient(150deg,#081408,#0e1e0e);">
+            <div class="ec-cover-txt" style="color:#4a7a2e;font-size:11px;">L'ATH-<br>LÈTE<br><span style="font-style:italic;">DU-<br>RABLE</span></div>
+          </div>
+          <div class="ec-info">
+            <div class="ec-num" style="color:rgba(74,122,46,0.7);">Ebook 5 · Corps qui dure</div>
+            <div class="ec-title">L'Athlète Durable</div>
+            <div class="ec-desc">Fonctionnel &amp; Fort pour 20 ans — mobilité, gainage profond, récupération intelligente</div>
+          </div>
+          <div class="ec-price">
+            <div class="ec-price-old">17€</div>
+            <div class="ec-price-incl" style="color:#4a7a2e;background:rgba(74,122,46,0.15);border-color:rgba(74,122,46,0.3);">✓ Inclus</div>
+          </div>
+        </div>
+        <div class="ec-body">
+          <div class="ec-features">
+            <div class="ec-feat"><span class="mk" style="color:#4a7a2e;">→</span><span>Mobilité fonctionnelle vs souplesse passive — la différence qui prévient 80% des blessures</span></div>
+            <div class="ec-feat"><span class="mk" style="color:#4a7a2e;">→</span><span>Les 5 patterns moteurs fondamentaux — le cadre universel de tout mouvement athlétique</span></div>
+            <div class="ec-feat"><span class="mk" style="color:#4a7a2e;">→</span><span>Les 3 zones critiques : hanches, épaules, chevilles — protocole 3-5 min pour chacune</span></div>
+            <div class="ec-feat"><span class="mk" style="color:#4a7a2e;">→</span><span>Gainage profond réel — Dead Bug, Bear Crawl, Hollow Body — pas les abdos Instagram</span></div>
+            <div class="ec-feat"><span class="mk" style="color:#4a7a2e;">→</span><span>Le lien stress chronique → fragilisation articulaire → pourquoi Zone 4E protège aussi physiquement</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TOTAL CALCUL -->
+    <div class="total-visual">
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:16px;">Récapitulatif de ta collection complète</div>
+      <div class="tv-rows">
+        <div class="tv-row">
+          <div class="tv-row-name"><span class="tv-row-check">✓</span> Zone 4E</div>
+          <div class="tv-row-price" style="text-decoration:none;color:rgba(255,255,255,0.4);">27€ — déjà payé</div>
+        </div>
+        <div class="tv-row">
+          <div class="tv-row-name"><span class="tv-row-check">✓</span> Programme 21 Jours</div>
+          <div class="tv-row-price" style="text-decoration:none;color:rgba(255,255,255,0.4);">+9€ — déjà payé</div>
+        </div>
+        <div class="tv-row included">
+          <div class="tv-row-name"><span class="tv-row-check">+</span> TFT Master</div>
+          <div class="tv-row-price">17€</div>
+        </div>
+        <div class="tv-row included">
+          <div class="tv-row-name"><span class="tv-row-check">+</span> Reprogrammer</div>
+          <div class="tv-row-price">17€</div>
+        </div>
+        <div class="tv-row included">
+          <div class="tv-row-name"><span class="tv-row-check">+</span> L'Athlète Durable</div>
+          <div class="tv-row-price">17€</div>
+        </div>
+      </div>
+      <div class="tv-divider"></div>
+      <div class="tv-total-row">
+        <div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:4px;">Valeur totale collection</div>
+          <div class="tv-total-label">5 Ebooks Zone 4E</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:16px;color:rgba(255,255,255,0.25);text-decoration:line-through;margin-bottom:2px;">95€</div>
+          <div class="tv-total-price">57€</div>
+        </div>
+      </div>
+      <div class="tv-saving">🎉 Les 3 ebooks du pack aujourd'hui pour seulement 30€ de plus — économie de 21€ supplémentaires</div>
+    </div>
+  </div>
+</div>
+
+<!-- TÉMOIGNAGES -->
+<div style="padding:40px 24px;background:#0e0c08;">
+  <div class="w">
+    <div class="testi-row">
+      <div class="testi">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-q">"Le chapitre sur l'image de soi m'a retourné. Je réalisais que ce n'était pas mon niveau qui plafonnait — c'était la conviction que j'avais de ce niveau. Reprogrammer m'a donné les outils pour changer ça."</div>
+        <div class="testi-auth"><div class="name">Camille B.</div><div class="role">Rugbywoman</div></div>
+      </div>
+      <div class="testi">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-q">"Mon genou craquait depuis 2 ans. Le chapitre sur les 3 zones critiques m'a expliqué en 5 minutes ce que personne ne m'avait dit. C'était les hanches. Pas le genou."</div>
+        <div class="testi-auth"><div class="name">Frédéric M.</div><div class="role">Triathlète</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OFFRE -->
+<div class="offer-section">
+  <div class="w">
+    <div style="text-align:center;margin-bottom:36px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;"><span style="width:16px;height:1.5px;background:var(--gold);display:block;"></span>Maintenant ou jamais<span style="width:16px;height:1.5px;background:var(--gold);display:block;"></span></div>
+      <h2 class="display" style="font-size:clamp(28px,4vw,46px);margin-bottom:8px;">Complète ta collection.<br>Ce soir.</h2>
+      <p style="font-family:'Lora',serif;font-style:italic;font-size:15px;color:rgba(255,255,255,0.35);">Cette offre groupée n'est disponible que sur cette page — une seule fois dans ton parcours.</p>
+    </div>
+
+    <div class="offer-box">
+      <div class="ob-head">
+        <div class="ob-label">Pack Complet — 3 Ebooks</div>
+        <div class="ob-title">TFT Master + Reprogrammer<br>+ L'Athlète Durable</div>
+        <div class="ob-sub">Ajouté à ta commande · Accès immédiat aux 3 ebooks</div>
+      </div>
+      <div class="ob-list">
+        <div class="ob-item"><span class="ck">✦</span><span><strong style="color:#fff;">TFT Master</strong> — 14 points, 7 séquences émotionnelles sportives, versions discrètes en match</span></div>
+        <div class="ob-item"><span class="ck">✦</span><span><strong style="color:#fff;">Reprogrammer</strong> — Psycho-Cybernétique de Maltz, 8 croyances, visualisation 7 étapes, identité Athlète de Zone</span></div>
+        <div class="ob-item"><span class="ck">✦</span><span><strong style="color:#fff;">L'Athlète Durable</strong> — 5 patterns moteurs, 3 zones critiques, gainage profond, 10 min/jour pour 20 ans</span></div>
+        <div class="ob-item"><span class="ck">✦</span><span>Collection complète : <strong style="color:#fff;">5 ebooks Zone 4E</strong> pour un total de 57€ — valeur réelle 95€</span></div>
+      </div>
+      <div class="ob-price">
+        <div class="obp-row">
+          <div class="obp-old">51€</div>
+          <div style="display:flex;align-items:flex-start;gap:2px;">
+            <div class="obp-eur">€</div>
+            <div class="obp-new">30</div>
+          </div>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:var(--earth);background:rgba(90,136,48,0.12);border:1px solid rgba(90,136,48,0.22);padding:5px 14px;border-radius:100px;">3 ebooks · Accès immédiat · Total collection : 57€</div>
+        <div class="obp-total">Au lieu de 51€ séparément · <strong>Tu économises 21€ supplémentaires</strong><br>Total de ta commande complète : 27 + 9 + 30 = <strong>57€</strong> au lieu de 95€</div>
+        <a href="#" class="btn btn-gold btn-xl btn-pulse" style="width:100%;">
+          ✅ Oui — Je complète ma collection pour +30€
+          <span class="btn-arrow">→</span>
+        </a>
+        <a href="#" class="btn btn-ghost" style="width:100%;margin-top:4px;">
+          Non merci, je me contente de Zone 4E et du Programme 21J
+        </a>
+      </div>
+    </div>
+
+    <div class="guarantee">
+      <div class="g-icon">🛡️</div>
+      <div>
+        <div class="g-title">Garantie 30 Jours — Sans Question</div>
+        <div class="g-text">Comme pour tout ce que tu as acheté aujourd'hui — si tu n'es pas satisfait des 3 ebooks du pack, je te rembourse les 30€. Sans question. La confiance est mutuelle.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="padding:24px;text-align:center;background:#060402;font-size:11px;color:rgba(255,255,255,0.18);line-height:2.2;">
+  © 2025 Zone 4E · Tous droits réservés · Par [Votre Prénom]<br>
+  <a href="#" style="color:rgba(255,255,255,0.18);text-decoration:underline;">Mentions légales</a> · <a href="#" style="color:rgba(255,255,255,0.18);text-decoration:underline;">CGV</a> · <a href="#" style="color:rgba(255,255,255,0.18);text-decoration:underline;">Contact</a>
+</div>
+
+<script>
+function toggleBook(card){
+  const wasOpen=card.classList.contains('expanded');
+  document.querySelectorAll('.ebook-card').forEach(c=>c.classList.remove('expanded'));
+  if(!wasOpen)card.classList.add('expanded');
+}
+</script>
+
+<!-- Barre de démo hub-copyrighting -->
+<div style="position:fixed;left:0;right:0;bottom:0;z-index:2147483000;display:flex;align-items:center;gap:10px;justify-content:center;padding:10px 14px;background:rgba(20,20,30,.92);color:#fff;font:600 13px/1.2 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;backdrop-filter:blur(6px)"><span style="opacity:.7">Démo · étape 3/4</span><a href="tunnel-2-order-bump.html" style="color:#fff;opacity:.8;text-decoration:none;padding:6px 10px">← Précédent</a><a href="tunnel-4-thankyou.html" style="background:#6c63ff;color:#fff;text-decoration:none;padding:8px 16px;border-radius:8px">Page suivante →</a></div>
+</body>
+</html>

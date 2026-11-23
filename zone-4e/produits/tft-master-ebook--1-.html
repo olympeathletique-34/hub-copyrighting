@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TFT Master — Neutraliser n'importe quelle émotion en 60 secondes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,700;1,800&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --page:#fff; --bg:#f8f6f2; --bg2:#f2efe9; --line:#e2ddd5; --line2:#ccc8be;
+  --muted:#9a9488; --body:#3d3a34; --dark:#1a1814; --black:#0e0d0a;
+  --gold:#b8891e; --gold-lt:#f5edd6; --gold-bd:#dfc98a;
+  --fire:#c84e1e; --fire-lt:#fdf0eb; --fire-bd:#e8b49a;
+  --wind:#1e6e9a; --wind-lt:#e8f3f9; --wind-bd:#90c4dc;
+  --earth:#4a7a2e; --earth-lt:#eef5e8; --earth-bd:#9dc87a;
+  --water:#1e4a9a; --water-lt:#e8eef9; --water-bd:#90a8dc;
+  --tft:#8a3a6a; --tft-lt:#faeef5; --tft-bd:#d4a0c4;
+  --pw:780px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;}
+body{background:var(--bg);color:var(--body);font-family:'DM Sans',sans-serif;line-height:1.75;-webkit-font-smoothing:antialiased;}
+.book{max-width:var(--pw);margin:40px auto;display:flex;flex-direction:column;}
+.page{background:var(--page);border:1px solid var(--line);position:relative;overflow:hidden;}
+@media screen{.page{box-shadow:0 4px 32px rgba(0,0,0,0.08);margin-bottom:2px;}}
+@media print{body{background:#fff;}.book{margin:0;max-width:none;}.page{border:none;}.chapter-opener,.chapter-content,.cover,.toc-page{page-break-after:always;}@page{size:A4;margin:0;}}
+
+/* COVER */
+.cover{min-height:980px;display:grid;grid-template-rows:1fr auto;}
+.cover-rule{height:5px;background:linear-gradient(90deg,var(--tft),var(--fire),var(--gold));}
+.cover-footer{padding:22px 72px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);}
+
+/* PILLS */
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:5px 13px;border-radius:100px;border:1.5px solid;}
+.pill.tft{color:var(--tft);background:var(--tft-lt);border-color:var(--tft-bd);}
+.pill.fire{color:var(--fire);background:var(--fire-lt);border-color:var(--fire-bd);}
+.pill.gold{color:var(--gold);background:var(--gold-lt);border-color:var(--gold-bd);}
+.pill.wind{color:var(--wind);background:var(--wind-lt);border-color:var(--wind-bd);}
+.pill.earth{color:var(--earth);background:var(--earth-lt);border-color:var(--earth-bd);}
+
+/* TOC */
+.toc-page{padding:72px;}
+.toc-header{margin-bottom:44px;padding-bottom:18px;border-bottom:2px solid var(--dark);}
+.toc-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:40px;color:var(--black);}
+.toc-item{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line);}
+.toc-item:last-child{border-bottom:none;}
+.toc-num{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;color:var(--muted);}
+.toc-name{font-size:15px;font-weight:600;color:var(--dark);line-height:1.3;}
+.toc-name span{display:block;font-size:12px;font-weight:400;color:var(--muted);margin-top:2px;}
+.tb{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;border:1px solid;white-space:nowrap;}
+.tb-tft{color:var(--tft);background:var(--tft-lt);border-color:var(--tft-bd);}
+.tb-fire{color:var(--fire);background:var(--fire-lt);border-color:var(--fire-bd);}
+.tb-th{color:var(--dark);background:var(--bg2);border-color:var(--line2);}
+
+/* OPENERS */
+.chapter-opener{padding:0;min-height:400px;display:grid;grid-template-rows:auto 1fr;}
+.o-rule{height:5px;}
+.o-rule.tft{background:linear-gradient(90deg,var(--tft),#a04a84);}
+.o-rule.fire{background:var(--fire);}
+.o-rule.dark{background:var(--dark);}
+.o-rule.gold{background:var(--gold);}
+.o-rule.wind{background:var(--wind);}
+.o-body{padding:52px 72px 60px;display:flex;flex-direction:column;justify-content:flex-end;}
+.o-big{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:110px;line-height:1;color:var(--bg2);position:absolute;top:20px;right:52px;pointer-events:none;user-select:none;}
+.o-label{font-size:10px;font-weight:700;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.o-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:58px;line-height:0.92;color:var(--black);letter-spacing:-0.01em;margin-bottom:18px;}
+.o-title em{font-style:italic;display:block;}
+.o-sub{font-family:'Lora',serif;font-style:italic;font-size:16px;color:var(--muted);max-width:500px;line-height:1.6;}
+.o-badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:6px 16px;border-radius:100px;border:1.5px solid;margin-bottom:24px;align-self:flex-start;}
+.ob-tft{color:var(--tft);background:var(--tft-lt);border-color:var(--tft-bd);}
+.ob-fire{color:var(--fire);background:var(--fire-lt);border-color:var(--fire-bd);}
+.ob-th{color:var(--dark);background:var(--bg2);border-color:var(--line2);}
+.ob-gold{color:var(--gold);background:var(--gold-lt);border-color:var(--gold-bd);}
+
+/* CONTENT */
+.chapter-content{padding:60px 72px;}
+.rh{display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;margin-bottom:44px;border-bottom:1px solid var(--line);}
+.rh-t{font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);}
+.rh-n{font-size:10px;font-weight:600;color:var(--line2);}
+
+/* TYPOGRAPHY */
+.sh{display:flex;gap:14px;align-items:flex-start;margin:36px 0 14px;}
+.sh-bar{width:3px;min-height:26px;flex-shrink:0;border-radius:2px;margin-top:4px;}
+.sh-bar.tft{background:var(--tft);}
+.sh-bar.fire{background:var(--fire);}
+.sh-bar.dark{background:var(--dark);}
+.sh-bar.gold{background:var(--gold);}
+.sh-bar.wind{background:var(--wind);}
+.sh-bar.earth{background:var(--earth);}
+.sh-t{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:24px;color:var(--black);letter-spacing:0.02em;line-height:1.05;}
+.bt{font-size:15px;line-height:1.85;color:var(--body);}
+.bt p+p{margin-top:13px;}
+.bt strong{color:var(--dark);font-weight:700;}
+.lead{font-family:'Lora',serif;font-size:18px;line-height:1.7;color:var(--dark);margin-bottom:26px;}
+.pull{margin:32px 0;padding:22px 30px;border-left:3px solid var(--tft);background:var(--tft-lt);border-radius:0 4px 4px 0;font-family:'Lora',serif;font-style:italic;font-size:17px;color:var(--dark);line-height:1.65;}
+.pull strong{font-style:normal;color:var(--fire);}
+.hl{background:var(--gold-lt);border-bottom:1.5px solid var(--gold-bd);padding:0 3px;border-radius:2px;}
+
+/* BOOK QUOTE */
+.bq{margin:24px 0;padding:24px 28px;background:var(--dark);border-radius:6px;position:relative;}
+.bq::before{content:'"';position:absolute;top:-10px;left:24px;font-size:68px;color:var(--tft);opacity:0.35;font-family:'Lora',serif;line-height:1;}
+.bq-text{font-family:'Lora',serif;font-style:italic;font-size:16px;color:rgba(255,255,255,0.85);line-height:1.7;}
+.bq-src{margin-top:12px;font-size:11px;color:rgba(255,255,255,0.32);letter-spacing:0.06em;}
+
+/* BODY MAP — points tapping */
+.body-map{margin:20px 0;background:var(--tft-lt);border:1.5px solid var(--tft-bd);border-radius:8px;padding:28px 32px;}
+.body-map-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;color:var(--tft);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.body-map-title::before{content:'◆';font-size:12px;}
+.points-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.point-item{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;background:var(--page);border-radius:4px;border:1px solid var(--tft-bd);}
+.point-code{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:var(--tft);line-height:1;flex-shrink:0;width:36px;}
+.point-name{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:3px;}
+.point-loc{font-size:12px;color:var(--muted);line-height:1.5;}
+.point-note{font-size:11px;color:var(--tft);margin-top:4px;font-style:italic;}
+
+/* EMOTION SEQUENCE CARD */
+.emotion-card{margin:24px 0;border:2px solid var(--tft-bd);border-radius:8px;overflow:hidden;}
+.emotion-header{padding:20px 28px;display:flex;align-items:center;gap:16px;background:var(--tft);}
+.emotion-icon{font-size:32px;}
+.emotion-name{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:26px;color:#fff;letter-spacing:0.03em;line-height:1;}
+.emotion-sub{font-size:12px;color:rgba(255,255,255,0.55);margin-top:3px;letter-spacing:0.05em;}
+.emotion-intensity{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;padding:4px 12px;border-radius:100px;border:1.5px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.8);margin-left:auto;white-space:nowrap;}
+.emotion-body{padding:24px 28px;background:var(--page);}
+.emotion-body.alt{background:var(--bg);}
+.emotion-desc{font-size:14px;color:var(--body);line-height:1.7;margin-bottom:16px;}
+.emotion-signal{display:flex;flex-direction:column;gap:6px;margin-bottom:20px;}
+.emotion-signal-title{font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--tft);margin-bottom:4px;}
+.emotion-signal-item{display:flex;gap:10px;font-size:13px;color:var(--body);line-height:1.5;align-items:flex-start;}
+.emotion-signal-item::before{content:'→';color:var(--tft);flex-shrink:0;font-weight:700;}
+
+/* TAP SEQUENCE */
+.tap-sequence{background:var(--tft-lt);border:1.5px solid var(--tft-bd);border-radius:6px;padding:18px 20px;margin-bottom:16px;}
+.tap-seq-title{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--tft);margin-bottom:12px;}
+.tap-steps{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+.tap-point{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;background:var(--page);border:1.5px solid var(--tft-bd);border-radius:100px;font-size:12px;font-weight:700;color:var(--tft);}
+.tap-point .tap-reps{font-size:10px;color:var(--muted);font-weight:400;}
+.tap-arrow{color:var(--muted);font-size:14px;}
+
+/* AFFIRMATION BOX */
+.affirmation{margin:12px 0;padding:14px 18px;background:var(--gold-lt);border:1px solid var(--gold-bd);border-radius:4px;}
+.affirmation-label{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.affirmation-text{font-family:'Lora',serif;font-style:italic;font-size:15px;color:var(--dark);line-height:1.6;}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:9px;margin:12px 0;}
+.step{display:grid;grid-template-columns:26px 1fr;gap:11px;align-items:flex-start;}
+.sn{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;color:#fff;}
+.sn.tft{background:var(--tft);}
+.sn.fire{background:var(--fire);}
+.sn.dark{background:var(--dark);}
+.sn.gold{background:var(--gold);}
+.sn.wind{background:var(--wind);}
+.st{font-size:13px;line-height:1.7;color:var(--body);padding-top:3px;}
+.st strong{color:var(--dark);}
+
+/* LISTS */
+.clist{list-style:none;display:flex;flex-direction:column;gap:7px;margin:12px 0;}
+.clist li{display:flex;gap:10px;font-size:14px;line-height:1.65;align-items:flex-start;}
+.ck{flex-shrink:0;font-size:13px;margin-top:2px;}
+.blist{list-style:none;display:flex;flex-direction:column;gap:7px;margin:12px 0;}
+.blist li{display:flex;gap:10px;font-size:14px;line-height:1.65;color:var(--body);}
+.blist li::before{content:'—';color:var(--muted);flex-shrink:0;}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1.5px solid var(--line);border-radius:6px;overflow:hidden;margin:16px 0;}
+.tc{background:var(--page);padding:20px 22px;}
+.tc-head{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;padding-bottom:10px;margin-bottom:12px;border-bottom:2px solid;}
+.tc-head.tft{color:var(--tft);border-color:var(--tft);}
+.tc-head.fire{color:var(--fire);border-color:var(--fire);}
+.tc-head.dark{color:var(--dark);border-color:var(--dark);}
+.tc-head.gold{color:var(--gold);border-color:var(--gold);}
+
+/* SEQUENCE */
+.seq{display:flex;flex-direction:column;gap:2px;margin:14px 0;border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+.seq-r{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:center;padding:11px 15px;background:var(--page);border-bottom:1px solid var(--line);}
+.seq-r:last-child{border-bottom:none;}
+.seq-icon{font-size:17px;text-align:center;}
+.seq-name{font-size:14px;font-weight:700;color:var(--dark);}
+.seq-desc{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* GAMUT BOX */
+.gamut-box{margin:16px 0;padding:20px 24px;background:var(--dark);border-radius:6px;}
+.gamut-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;color:var(--gold);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:14px;}
+.gamut-steps{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.gamut-step{display:flex;gap:8px;align-items:flex-start;font-size:12px;color:rgba(255,255,255,0.75);line-height:1.5;}
+.gamut-step .gn{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;color:var(--gold);flex-shrink:0;width:20px;}
+
+/* SUMMARY */
+.sumbox{margin:32px 0 0;padding:22px 26px;background:var(--bg2);border:1px solid var(--line);border-radius:6px;}
+.sumbox-t{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;letter-spacing:0.06em;text-transform:uppercase;color:var(--black);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sumbox-t::before{content:'⭐';font-size:13px;}
+
+/* BENEFIT GRID */
+.benefit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1.5px solid var(--line);border-radius:8px;overflow:hidden;margin:20px 0;}
+.benefit-cell{background:var(--page);padding:22px 20px;text-align:center;}
+.benefit-icon{font-size:28px;margin-bottom:8px;}
+.benefit-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;color:var(--black);margin-bottom:6px;letter-spacing:0.02em;}
+.benefit-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+
+/* SCIENCE BLOCK */
+.science-block{margin:20px 0;padding:24px 28px;background:var(--bg2);border:1px solid var(--line);border-radius:6px;}
+.science-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;color:var(--tft);letter-spacing:0.04em;margin-bottom:12px;}
+.science-text{font-size:14px;color:var(--body);line-height:1.8;}
+.science-text p+p{margin-top:10px;}
+
+/* INVERSION BLOCK */
+.inversion-block{margin:20px 0;padding:22px 26px;background:var(--fire-lt);border:1.5px solid var(--fire-bd);border-radius:6px;}
+.inversion-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;color:var(--fire);letter-spacing:0.04em;margin-bottom:10px;}
+
+/* PROTOCOL MASTER */
+.protocol-master{border:2px solid var(--tft-bd);border-radius:8px;overflow:hidden;margin:20px 0;}
+.pm-header{background:var(--tft);padding:18px 24px;display:flex;align-items:center;gap:12px;}
+.pm-icon{font-size:24px;}
+.pm-label{font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.6);}
+.pm-name{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;color:#fff;letter-spacing:0.03em;}
+.pm-body{padding:22px 24px;background:var(--page);}
+
+/* DOSAGE TABLE */
+.dosage-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;}
+.dosage-table th{padding:9px 12px;background:var(--dark);color:rgba(255,255,255,0.7);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;text-align:left;}
+.dosage-table td{padding:10px 12px;border-bottom:1px solid var(--line);color:var(--body);vertical-align:top;line-height:1.5;}
+.dosage-table tr:last-child td{border-bottom:none;}
+.dosage-table tr:nth-child(even) td{background:var(--bg);}
+.dosage-table .em{color:var(--tft);font-weight:700;}
+
+/* QUICK REF */
+.quick-ref{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1.5px solid var(--line);border-radius:6px;overflow:hidden;margin:20px 0;}
+.qr-cell{background:var(--page);padding:16px 20px;}
+.qr-head{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--tft);margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--tft-bd);}
+.qr-item{display:flex;gap:10px;font-size:13px;color:var(--body);line-height:1.5;margin-bottom:6px;align-items:flex-start;}
+.qr-item .arrow{color:var(--tft);flex-shrink:0;font-weight:700;}
+
+/* WARNING BOX */
+.warning{margin:16px 0;padding:16px 20px;background:var(--fire-lt);border-left:3px solid var(--fire);border-radius:0 4px 4px 0;}
+.warning-title{font-size:12px;font-weight:700;color:var(--fire);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:6px;}
+.warning-text{font-size:13px;color:var(--body);line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- ══ COVER ══ -->
+<div class="page cover">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:68px 72px 44px;">
+    <div style="display:grid;grid-template-columns:1fr 160px;gap:44px;align-items:end;">
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.28em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:10px;"><span style="width:22px;height:1.5px;background:var(--muted);display:block;"></span>Collection Zone 4E · Mini-Ebook #2</div>
+        <div style="font-family:'Barlow Condensed';font-weight:900;font-size:100px;line-height:0.88;color:var(--black);letter-spacing:-0.02em;margin-bottom:6px;">TFT</div>
+        <div style="font-family:'Barlow Condensed';font-weight:900;font-size:100px;line-height:0.88;color:var(--tft);letter-spacing:-0.02em;margin-bottom:20px;">MASTER</div>
+        <div style="width:80px;height:3px;background:linear-gradient(90deg,var(--tft),var(--fire),var(--gold));margin-bottom:24px;"></div>
+        <div style="font-family:'Lora';font-style:italic;font-size:22px;color:var(--body);line-height:1.45;max-width:480px;margin-bottom:12px;">Neutraliser n'importe quelle émotion parasite en 60 secondes</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.6;max-width:420px;margin-bottom:36px;">La Thought Field Therapy complète pour le sportif — séquences détaillées par émotion, science des points, pratique avancée.</div>
+        <div style="display:flex;gap:7px;flex-wrap:wrap;">
+          <span class="pill tft">Tapping Complet</span>
+          <span class="pill fire">Émotions Sport</span>
+          <span class="pill gold">Séquences Avancées</span>
+          <span class="pill wind">Science Validée</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;padding-bottom:4px;">
+        <div style="width:2px;flex:1;background:linear-gradient(to bottom,transparent,var(--tft-bd));min-height:180px;margin-right:20px;"></div>
+        <div style="font-family:'Barlow Condensed';font-weight:900;font-size:10px;letter-spacing:0.28em;color:var(--muted);writing-mode:vertical-rl;text-transform:uppercase;margin-right:16px;margin-bottom:6px;">Dr Roger Callahan · Thought Field Therapy</div>
+      </div>
+    </div>
+  </div>
+  <div class="cover-rule"></div>
+  <div class="cover-footer">
+    <div style="font-size:13px;font-weight:600;color:var(--muted);">Par [Votre Prénom] · Coach sportif &amp; Préparateur mental</div>
+    <div style="font-size:11px;color:var(--line2);letter-spacing:0.08em;">Édition 2025 · Collection Zone 4E</div>
+  </div>
+</div>
+
+<!-- ══ TOC ══ -->
+<div class="page toc-page">
+  <div class="toc-header">
+    <div style="font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--tft);margin-bottom:7px;">Sommaire</div>
+    <div class="toc-title">Table des matières</div>
+  </div>
+  <div class="toc-item"><div class="toc-num">Intro</div><div class="toc-name">Pourquoi le Tapping ?<span>L'outil le plus sous-estimé de la préparation mentale</span></div><div class="tb tb-th">Fondation</div></div>
+  <div class="toc-item"><div class="toc-num">01</div><div class="toc-name">La science derrière le TFT<span>Callahan, méridiens, neurosciences — ce que dit vraiment la recherche</span></div><div class="tb tb-th">Science</div></div>
+  <div class="toc-item"><div class="toc-num">02</div><div class="toc-name">Les bénéfices pour le sportif<span>Ce que le tapping change concrètement dans vos performances</span></div><div class="tb tb-tft">Bénéfices</div></div>
+  <div class="toc-item"><div class="toc-num">03</div><div class="toc-name">Les 14 points de tapping<span>Localisation précise, rôle, ordre — la carte complète</span></div><div class="tb tb-tft">Fondations</div></div>
+  <div class="toc-item"><div class="toc-num">04</div><div class="toc-name">Les fondations d'une bonne pratique<span>Évaluation SUD, inversions, gamuts — ce que la plupart ratent</span></div><div class="tb tb-tft">Technique</div></div>
+  <div class="toc-item"><div class="toc-num">05</div><div class="toc-name">Séquence 1 — La peur de rater<span>L'émotion numéro 1 qui bloque les sportifs sous pression</span></div><div class="tb tb-fire">Séquence</div></div>
+  <div class="toc-item"><div class="toc-num">06</div><div class="toc-name">Séquence 2 — La frustration post-erreur<span>Neutraliser la spirale en 30 secondes</span></div><div class="tb tb-fire">Séquence</div></div>
+  <div class="toc-item"><div class="toc-num">07</div><div class="toc-name">Séquence 3 — L'anxiété précompétitive<span>Transformer le nœud dans le ventre en énergie</span></div><div class="tb tb-fire">Séquence</div></div>
+  <div class="toc-item"><div class="toc-num">08</div><div class="toc-name">Séquence 4 — La colère et la frustration arbitrale<span>Rester lucide après une injustice perçue</span></div><div class="tb tb-fire">Séquence</div></div>
+  <div class="toc-item"><div class="toc-num">09</div><div class="toc-name">Séquence 5 — Le manque de confiance<span>Neutraliser le doute chronique</span></div><div class="tb tb-fire">Séquence</div></div>
+  <div class="toc-item"><div class="toc-num">10</div><div class="toc-name">Séquence 6 — Le traumatisme sportif<span>Blessure passée, souvenir d'échec, blocage mental</span></div><div class="tb tb-fire">Séquence</div></div>
+  <div class="toc-item"><div class="toc-num">11</div><div class="toc-name">Séquence 7 — Le manque d'énergie et la fatigue mentale<span>Réactiver la vitalité entre deux efforts</span></div><div class="tb tb-fire">Séquence</div></div>
+  <div class="toc-item"><div class="toc-num">12</div><div class="toc-name">Le TFT en match — protocoles express<span>Versions discrètes utilisables pendant la compétition</span></div><div class="tb tb-tft">Pratique</div></div>
+  <div class="toc-item"><div class="toc-num">—</div><div class="toc-name">Construire sa pratique TFT<span>Routine quotidienne et intégration dans Zone 4E</span></div><div class="tb tb-th">Conclusion</div></div>
+</div>
+
+<!-- ══ INTRO ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule tft"></div>
+  <div class="o-body">
+    <div class="o-big">Intro</div>
+    <div class="o-badge ob-th">Introduction</div>
+    <div class="o-title">Pourquoi<br><em>le Tapping ?</em></div>
+    <div class="o-sub">L'outil le plus puissant et le plus sous-estimé de la préparation mentale sportive.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Introduction — Pourquoi le Tapping</div><div class="rh-n">TFT Master</div></div>
+  <p class="lead">Il y a quelque chose d'étrange avec le tapping. Ceux qui ne l'ont jamais essayé trouvent ça bizarre. Ceux qui l'ont vraiment pratiqué ne peuvent plus s'en passer.</p>
+  <div class="bt">
+    <p>La Thought Field Therapy — TFT — a été développée dans les années 1980 par le Dr Roger Callahan, psychologue clinicien américain. En travaillant avec une patiente souffrant d'une phobie de l'eau depuis l'enfance, il a expérimenté des tapotements sur un point d'acupuncture tout en lui demandant de penser à sa peur. En quelques minutes, la phobie avait disparu. Après des années de thérapie traditionnelle sans résultat.</p>
+    <p>Callahan a passé les décennies suivantes à cartographier les points, à identifier les séquences, à comprendre pourquoi ça fonctionnait. Aujourd'hui, la TFT compte des milliers de praticiens dans le monde et une littérature scientifique croissante.</p>
+    <p>Dans le sport, c'est encore confidentiel. Et c'est précisément pour ça que ceux qui l'utilisent ont un avantage.</p>
+  </div>
+  <div class="pull">Le tapping ne remplace pas la préparation physique ou technique. Il fait quelque chose que rien d'autre ne fait aussi vite : <strong>il coupe la connexion entre un déclencheur émotionnel et la réponse de stress que votre corps produit automatiquement.</strong></div>
+  <div class="bt">
+    <p>Vous n'avez pas besoin de croire que ça marche pour que ça marche. Vous avez juste besoin de l'appliquer correctement. Ce livre vous donne les outils pour le faire — avec précision, avec contexte scientifique, et avec des séquences spécifiques aux émotions que vous vivez réellement sur le terrain.</p>
+  </div>
+  <div class="sumbox"><div class="sumbox-t">Ce que vous allez apprendre</div>
+    <ul class="clist">
+      <li><span class="ck" style="color:var(--tft);">✓</span><span>La science complète derrière le TFT — pourquoi ça fonctionne</span></li>
+      <li><span class="ck" style="color:var(--tft);">✓</span><span>Les 14 points de tapping et leur localisation précise</span></li>
+      <li><span class="ck" style="color:var(--tft);">✓</span><span>Les fondations d'une pratique efficace (ce que la plupart ratent)</span></li>
+      <li><span class="ck" style="color:var(--tft);">✓</span><span>7 séquences spécifiques aux émotions sportives</span></li>
+      <li><span class="ck" style="color:var(--tft);">✓</span><span>Les protocoles express utilisables en pleine compétition</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ CH1 — SCIENCE ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule tft"></div>
+  <div class="o-body">
+    <div class="o-big">01</div>
+    <div class="o-badge ob-th">Science</div>
+    <div class="o-title">La science<br><em>derrière le TFT</em></div>
+    <div class="o-sub">Callahan, méridiens, neurosciences — ce que dit vraiment la recherche sur le tapping.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Chapitre 1 — La science derrière le TFT</div><div class="rh-n">TFT Master</div></div>
+  <p class="lead">Le tapping a longtemps été catégorisé comme "médecine alternative". Les neurosciences contemporaines commencent à lui donner raison — avec des mécanismes mesurables.</p>
+
+  <div class="sh"><div class="sh-bar tft"></div><div class="sh-t">Le modèle de Callahan</div></div>
+  <div class="bt">
+    <p>Callahan part d'un principe simple : les émotions perturbantes ont une composante <strong>énergétique</strong> qui circule dans des champs spécifiques du corps. Quand une émotion est "bloquée" — soit parce qu'elle est trop intense, soit parce qu'elle n'a pas pu être traitée — elle crée une perturbation dans ce champ.</p>
+    <p>Le tapping sur des points précis envoie un signal vibratoire qui "débloque" cette perturbation. L'émotion peut alors se traiter normalement — et son intensité chute rapidement.</p>
+    <p>Ce modèle est inspiré de la médecine traditionnelle chinoise (les méridiens d'acupuncture) — mais Callahan l'a opérationnalisé de façon très concrète, avec des séquences reproductibles et mesurables.</p>
+  </div>
+
+  <div class="sh"><div class="sh-bar tft"></div><div class="sh-t">Ce que disent les neurosciences</div></div>
+  <div class="science-block">
+    <div class="science-title">3 mécanismes neurologiques validés</div>
+    <div class="science-text">
+      <p><strong>1. Désensibilisation de l'amygdale.</strong> Des études en IRMf montrent que le tapping réduit l'activation de l'amygdale — la zone cérébrale qui produit la réponse de peur et de stress. Le même effet prend des mois en thérapie cognitive classique.</p>
+      <p><strong>2. Réduction du cortisol.</strong> Une étude de Church et al. (2012) mesure une réduction de 24% du cortisol salivaire après une séance de tapping. Le cortisol est l'hormone du stress chronique — c'est elle qui "verrouille" les automatismes négatifs.</p>
+      <p><strong>3. Régulation du système nerveux autonome.</strong> Le tapping active le système parasympathique (calme) tout en maintenant une vigilance adaptée. C'est exactement l'équilibre que la Zone requiert.</p>
+    </div>
+  </div>
+
+  <div class="bq">
+    <div class="bq-text">"Les résultats de nos études indiquent que les techniques de tapping produisent des effets statistiquement significatifs sur l'anxiété, la dépression, le PTSD et la douleur — souvent en une fraction du temps des thérapies conventionnelles."</div>
+    <div class="bq-src">Dr Dawson Church — The EFT Manual, 3ème édition, 2018</div>
+  </div>
+
+  <div class="sh"><div class="sh-bar tft"></div><div class="sh-t">Pourquoi le tapping fonctionne si vite</div></div>
+  <div class="bt">
+    <p>La thérapie cognitive traditionnelle travaille "de haut en bas" — elle essaie de changer les pensées pour modifier les émotions. C'est lent, parce que les émotions ne sont pas stockées dans le cortex préfrontal (pensée consciente) — elles sont stockées dans le système limbique (réponses automatiques).</p>
+    <p>Le tapping travaille "de bas en haut" — il accède directement au système limbique via les stimulations sensorielles des points méridiens. Il n'y a pas besoin de "comprendre" l'émotion pour la neutraliser. Il suffit de penser à elle pendant qu'on tape.</p>
+    <p><strong>C'est pourquoi 30 à 60 secondes de tapping peuvent faire ce que 6 mois de thérapie par la parole n'ont pas accompli.</strong></p>
+  </div>
+
+  <div class="sh"><div class="sh-bar tft"></div><div class="sh-t">TFT vs EFT — quelle différence ?</div></div>
+  <div class="two-col">
+    <div class="tc" style="border-right:1px solid var(--line);">
+      <div class="tc-head tft">TFT — Thought Field Therapy</div>
+      <ul class="blist">
+        <li>Séquences spécifiques par émotion</li>
+        <li>Ordre des points précis et non interchangeable</li>
+        <li>Plus complexe à apprendre, plus ciblée</li>
+        <li>Protocole d'inversion psychologique intégré</li>
+        <li>Résultats souvent plus rapides sur des émotions spécifiques</li>
+      </ul>
+    </div>
+    <div class="tc">
+      <div class="tc-head dark">EFT — Emotional Freedom Technique</div>
+      <ul class="blist">
+        <li>Séquence unique pour toutes les émotions</li>
+        <li>Ordre des points moins strict</li>
+        <li>Plus simple à mémoriser</li>
+        <li>Affirmations verbales intégrées</li>
+        <li>Résultats bons sur les émotions générales</li>
+      </ul>
+    </div>
+  </div>
+  <div class="bt"><p>Dans ce livre, nous utilisons principalement le TFT pour sa précision et son efficacité sur les émotions sportives spécifiques. Vous trouverez également des éléments d'EFT dans les affirmations de setup.</p></div>
+
+  <div class="sumbox"><div class="sumbox-t">Résumé du chapitre</div>
+    <ul class="clist">
+      <li><span class="ck" style="color:var(--tft);">✓</span><span>Le TFT agit sur le système limbique — pas sur les pensées conscientes</span></li>
+      <li><span class="ck" style="color:var(--tft);">✓</span><span>3 mécanismes validés : désensibilisation amygdale, réduction cortisol, régulation SNA</span></li>
+      <li><span class="ck" style="color:var(--tft);">✓</span><span>Le tapping travaille "de bas en haut" — d'où sa rapidité</span></li>
+      <li><span class="ck" style="color:var(--tft);">✓</span><span>TFT = séquences spécifiques par émotion — plus ciblé que l'EFT</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ CH2 — BÉNÉFICES ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule tft"></div>
+  <div class="o-body">
+    <div class="o-big">02</div>
+    <div class="o-badge ob-tft">Bénéfices</div>
+    <div class="o-title">Les bénéfices<br><em>pour le sportif</em></div>
+    <div class="o-sub">Ce que le tapping change concrètement dans vos performances — avant, pendant et après la compétition.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Chapitre 2 — Les bénéfices pour le sportif</div><div class="rh-n">TFT Master</div></div>
+  <p class="lead">Le TFT ne rend pas un mauvais sportif bon. Il permet à un bon sportif de performer à son vrai niveau — sans que ses émotions sabotent ce qu'il sait faire.</p>
+
+  <div class="benefit-grid">
+    <div class="benefit-cell">
+      <div class="benefit-icon">⚡</div>
+      <div class="benefit-title">Récupération ultra-rapide</div>
+      <div class="benefit-desc">30 à 60 sec pour neutraliser une émotion perturbante — contre plusieurs minutes de rumination</div>
+    </div>
+    <div class="benefit-cell">
+      <div class="benefit-icon">🎯</div>
+      <div class="benefit-title">Précision sous pression</div>
+      <div class="benefit-desc">Quand le stress baisse, la précision motrice remonte. Les gestes que vous maîtrisez redeviennent disponibles</div>
+    </div>
+    <div class="benefit-cell">
+      <div class="benefit-icon">🔄</div>
+      <div class="benefit-title">Coupure de la spirale</div>
+      <div class="benefit-desc">Une erreur → tapping → retour à la lucidité. La spirale négative ne démarre plus</div>
+    </div>
+    <div class="benefit-cell">
+      <div class="benefit-icon">🧠</div>
+      <div class="benefit-title">Clarté décisionnelle</div>
+      <div class="benefit-desc">Amygdale désactivée = cortex préfrontal libéré = meilleures décisions tactiques</div>
+    </div>
+    <div class="benefit-cell">
+      <div class="benefit-icon">💤</div>
+      <div class="benefit-title">Récupération post-match</div>
+      <div class="benefit-desc">Décharger les émotions accumulées après un match intense accélère la récupération nerveuse</div>
+    </div>
+    <div class="benefit-cell">
+      <div class="benefit-icon">🌙</div>
+      <div class="benefit-title">Qualité du sommeil</div>
+      <div class="benefit-desc">Le tapping avant de dormir la veille d'une compétition réduit l'anxiété anticipatoire</div>
+    </div>
+  </div>
+
+  <div class="sh"><div class="sh-bar tft"></div><div class="sh-t">Avant la compétition</div></div>
+  <div class="bt"><p>L'anxiété précompétitive est le saboteur numéro 1 des sportifs amateurs. La nuit avant, le matin du match, dans les vestiaires — les pensées s'emballent, le corps se contracte, l'énergie monte dans le mauvais sens.</p><p>Le tapping travaille sur cette anxiété <strong>avant qu'elle ne s'installe</strong>. Une séance de 5 à 10 minutes la veille ou le matin du match peut transformer radicalement l'état d'entrée en compétition.</p></div>
+
+  <div class="sh"><div class="sh-bar tft"></div><div class="sh-t">Pendant la compétition</div></div>
+  <div class="bt"><p>C'est là que le TFT est le plus puissant — et le plus sous-utilisé. En version discrète (tapping sur la cuisse, la hanche, le poignet), il permet de :</p></div>
+  <ul class="clist">
+    <li><span class="ck" style="color:var(--tft);">→</span><span>Neutraliser une frustration après une erreur en 20 secondes</span></li>
+    <li><span class="ck" style="color:var(--tft);">→</span><span>Calmer une colère post-arbitrale avant qu'elle ne sabote la suite</span></li>
+    <li><span class="ck" style="color:var(--tft);">→</span><span>Relancer le niveau d'énergie en milieu de match</span></li>
+    <li><span class="ck" style="color:var(--tft);">→</span><span>Couper un doute qui s'installe sur un geste technique</span></li>
+  </ul>
+
+  <div class="sh"><div class="sh-bar tft"></div><div class="sh-t">Après la compétition</div></div>
+  <div class="bt"><p>Un match intense laisse des traces émotionnelles. Victoire ou défaite — le système nerveux a accumulé des charges qu'il faut "vider". Sans décharge, ces charges restent stockées et influencent les matchs suivants.</p><p>Une séquence TFT complète de 10 minutes après un match important est l'une des meilleures pratiques de récupération mentale qui existe. <strong>Moins chère qu'un massage. Plus rapide qu'une thérapie. Disponible n'importe où.</strong></p></div>
+
+  <div class="sh"><div class="sh-bar tft"></div><div class="sh-t">Le travail de fond — entre les matchs</div></div>
+  <div class="bt"><p>Le TFT peut aussi travailler sur des patterns plus profonds : une peur ancienne liée à une blessure, un souvenir d'échec qui revient systématiquement dans des situations similaires, un manque de confiance chronique sur un geste spécifique.</p><p>Ces charges émotionnelles profondes nécessitent des séquences plus longues et répétées. Mais elles cèdent aussi — souvent à la surprise du sportif qui n'y croyait plus.</p></div>
+
+  <div class="sumbox"><div class="sumbox-t">Résumé du chapitre</div>
+    <ul class="clist">
+      <li><span class="ck" style="color:var(--tft);">✓</span><span>Avant : réduire l'anxiété précompétitive</span></li>
+      <li><span class="ck" style="color:var(--tft);">✓</span><span>Pendant : neutraliser les émotions en temps réel (version discrète)</span></li>
+      <li><span class="ck" style="color:var(--tft);">✓</span><span>Après : décharger les émotions accumulées pour récupérer vite</span></li>
+      <li><span class="ck" style="color:var(--tft);">✓</span><span>En fond : traiter les patterns émotionnels profonds qui sabotent régulièrement</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ CH3 — LES 14 POINTS ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule tft"></div>
+  <div class="o-body">
+    <div class="o-big">03</div>
+    <div class="o-badge ob-tft">Fondations</div>
+    <div class="o-title">Les 14 points<br><em>de tapping</em></div>
+    <div class="o-sub">Localisation précise, rôle de chaque point, ordre d'utilisation — la carte complète.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Chapitre 3 — Les 14 Points de Tapping</div><div class="rh-n">TFT Master</div></div>
+  <p class="lead">Chaque point correspond à un méridien d'acupuncture. Chaque méridien est associé à un organe et à des émotions spécifiques. Connaître leur rôle vous aide à comprendre pourquoi certaines séquences fonctionnent mieux pour certaines émotions.</p>
+
+  <div class="sh"><div class="sh-bar tft"></div><div class="sh-t">Règles générales de tapping</div></div>
+  <ul class="clist">
+    <li><span class="ck" style="color:var(--tft);">→</span><span><strong>Intensité :</strong> tapotements fermes mais pas douloureux — environ l'intensité d'un test de réflexe</span></li>
+    <li><span class="ck" style="color:var(--tft);">→</span><span><strong>Doigts :</strong> index et majeur ensemble, ou juste l'index</span></li>
+    <li><span class="ck" style="color:var(--tft);">→</span><span><strong>Rythme :</strong> environ 1 tapotement par seconde</span></li>
+    <li><span class="ck" style="color:var(--tft);">→</span><span><strong>Nombre :</strong> 7 tapotements par point dans les séquences standard (KC : 20-30)</span></li>
+    <li><span class="ck" style="color:var(--tft);">→</span><span><strong>Côté :</strong> indifférent — gauche ou droite, les méridiens sont bilatéraux</span></li>
+    <li><span class="ck" style="color:var(--tft);">→</span><span><strong>Concentration :</strong> pensez à l'émotion pendant que vous tapez — ne fuyez pas la sensation</span></li>
+  </ul>
+
+  <div class="body-map">
+    <div class="body-map-title">Carte des 14 points — Localisation &amp; Rôle</div>
+    <div class="points-grid">
+      <div class="point-item">
+        <div class="point-code">KC</div>
+        <div>
+          <div class="point-name">Karate Chop</div>
+          <div class="point-loc">Tranchant charnu de la main, côté petit doigt, entre le poignet et la base du petit doigt</div>
+          <div class="point-note">Point de réinitialisation — toujours en premier</div>
+        </div>
+      </div>
+      <div class="point-item">
+        <div class="point-code">TH</div>
+        <div>
+          <div class="point-name">Top of Head (Sommet du crâne)</div>
+          <div class="point-loc">Sommet du crâne, ligne médiane — point central entre les deux oreilles</div>
+          <div class="point-note">Gouverneur général — ancrage et clarté mentale</div>
+        </div>
+      </div>
+      <div class="point-item">
+        <div class="point-code">EB</div>
+        <div>
+          <div class="point-name">Eyebrow (Début du sourcil)</div>
+          <div class="point-loc">À l'intérieur du sourcil, juste au-dessus et à côté du nez</div>
+          <div class="point-note">Méridien de la Vessie · traumatisme, frustration</div>
+        </div>
+      </div>
+      <div class="point-item">
+        <div class="point-code">SE</div>
+        <div>
+          <div class="point-name">Side of Eye (Coin externe de l'œil)</div>
+          <div class="point-loc">Coin extérieur de l'œil, sur l'os de l'orbite — pas sur la tempe</div>
+          <div class="point-note">Méridien de la Vésicule Biliaire · colère, rage</div>
+        </div>
+      </div>
+      <div class="point-item">
+        <div class="point-code">UE</div>
+        <div>
+          <div class="point-name">Under Eye (Sous l'œil)</div>
+          <div class="point-loc">Sur l'os malaire, directement sous la pupille, environ 2cm sous l'œil</div>
+          <div class="point-note">Méridien de l'Estomac · anxiété, peur, nervosité</div>
+        </div>
+      </div>
+      <div class="point-item">
+        <div class="point-code">UN</div>
+        <div>
+          <div class="point-name">Under Nose (Sous le nez)</div>
+          <div class="point-loc">Dans le creux entre le bas du nez et la lèvre supérieure</div>
+          <div class="point-note">Méridien du Gouverneur · embarras, honte, culpabilité</div>
+        </div>
+      </div>
+      <div class="point-item">
+        <div class="point-code">CH</div>
+        <div>
+          <div class="point-name">Chin (Menton)</div>
+          <div class="point-loc">Dans le creux entre la lèvre inférieure et le menton</div>
+          <div class="point-note">Méridien du Vaisseau Conception · confusion, incertitude</div>
+        </div>
+      </div>
+      <div class="point-item">
+        <div class="point-code">CB</div>
+        <div>
+          <div class="point-name">Collarbone (Clavicule)</div>
+          <div class="point-loc">Coin intérieur sous la clavicule, à environ 3cm du sternum</div>
+          <div class="point-note">Méridien du Rein · peur profonde, anxiété, insécurité</div>
+        </div>
+      </div>
+      <div class="point-item">
+        <div class="point-code">UA</div>
+        <div>
+          <div class="point-name">Under Arm (Sous l'aisselle)</div>
+          <div class="point-loc">10cm sous l'aisselle, sur les côtes — à hauteur du mamelon</div>
+          <div class="point-note">Méridien de la Rate · inquiétude, obsession, doute</div>
+        </div>
+      </div>
+      <div class="point-item">
+        <div class="point-code">BN</div>
+        <div>
+          <div class="point-name">Below Nipple (Sous le mamelon)</div>
+          <div class="point-loc">2cm sous le mamelon — point souvent omis mais puissant</div>
+          <div class="point-note">Méridien de l'Estomac · frustration, dégoût</div>
+        </div>
+      </div>
+      <div class="point-item">
+        <div class="point-code">TH2</div>
+        <div>
+          <div class="point-name">Pouce (Thumb)</div>
+          <div class="point-loc">Côté extérieur du pouce, à la base de l'ongle</div>
+          <div class="point-note">Méridien du Poumon · deuil, tristesse, découragement</div>
+        </div>
+      </div>
+      <div class="point-item">
+        <div class="point-code">IF</div>
+        <div>
+          <div class="point-name">Index Finger</div>
+          <div class="point-loc">Côté pouce de l'index, à la base de l'ongle</div>
+          <div class="point-note">Méridien du Gros Intestin · culpabilité, regret</div>
+        </div>
+      </div>
+      <div class="point-item">
+        <div class="point-code">MF</div>
+        <div>
+          <div class="point-name">Middle Finger (Majeur)</div>
+          <div class="point-loc">Côté index du majeur, à la base de l'ongle</div>
+          <div class="point-note">Méridien du Péricarde · jalousie, contrôle, perfectionnisme</div>
+        </div>
+      </div>
+      <div class="point-item">
+        <div class="point-code">BF</div>
+        <div>
+          <div class="point-name">Baby Finger (Auriculaire)</div>
+          <div class="point-loc">Côté annulaire de l'auriculaire, à la base de l'ongle</div>
+          <div class="point-note">Méridien du Cœur · colère profonde, tristesse, honte</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sh"><div class="sh-bar tft"></div><div class="sh-t">Le point Gamut — la procédure 9 Gamuts</div></div>
+  <div class="gamut-box">
+    <div class="gamut-title">Le Point Gamut + La Procédure 9 Gamuts</div>
+    <div class="bt" style="color:rgba(255,255,255,0.7);font-size:14px;margin-bottom:16px;"><p>Le point Gamut se trouve sur le dos de la main, dans le creux entre l'auriculaire et l'annulaire, à environ 1cm de la jointure. Tapotez en continu sur ce point pendant toute la procédure 9 Gamuts.</p></div>
+    <div class="gamut-steps">
+      <div class="gamut-step"><div class="gn">1</div><span>Fermez les yeux</span></div>
+      <div class="gamut-step"><div class="gn">2</div><span>Ouvrez les yeux</span></div>
+      <div class="gamut-step"><div class="gn">3</div><span>Regardez en bas à gauche (sans bouger la tête)</span></div>
+      <div class="gamut-step"><div class="gn">4</div><span>Regardez en bas à droite</span></div>
+      <div class="gamut-step"><div class="gn">5</div><span>Roulez les yeux dans le sens horaire</span></div>
+      <div class="gamut-step"><div class="gn">6</div><span>Roulez les yeux dans le sens anti-horaire</span></div>
+      <div class="gamut-step"><div class="gn">7</div><span>Fredonnez 2 secondes (n'importe quelle mélodie)</span></div>
+      <div class="gamut-step"><div class="gn">8</div><span>Comptez à voix haute : 1 - 2 - 3 - 4 - 5</span></div>
+      <div class="gamut-step"><div class="gn">9</div><span>Fredonnez à nouveau 2 secondes</span></div>
+    </div>
+    <div style="margin-top:14px;font-size:12px;color:rgba(255,255,255,0.45);font-style:italic;">Cette procédure calibre les deux hémisphères cérébraux et approfondit la décharge émotionnelle. Elle est utilisée entre les deux séquences principales de tapping.</div>
+  </div>
+</div>
+
+<!-- ══ CH4 — FONDATIONS ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule tft"></div>
+  <div class="o-body">
+    <div class="o-big">04</div>
+    <div class="o-badge ob-tft">Technique</div>
+    <div class="o-title">Les fondations<br><em>d'une bonne pratique</em></div>
+    <div class="o-sub">L'échelle SUD, les inversions psychologiques, la procédure complète — ce que la plupart des gens ratent.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Chapitre 4 — Fondations d'une bonne pratique</div><div class="rh-n">TFT Master</div></div>
+  <p class="lead">La plupart des gens qui essaient le tapping et "trouvent que ça ne marche pas" font des erreurs de base qui sont facilement corrigeables. Ce chapitre vous les évite toutes.</p>
+
+  <div class="sh"><div class="sh-bar tft"></div><div class="sh-t">1. L'Échelle SUD — Mesurer pour progresser</div></div>
+  <div class="bt"><p>SUD = Subjective Units of Distress. Une échelle simple de 0 à 10 pour mesurer l'intensité d'une émotion avant et après tapping.</p></div>
+  <div class="two-col">
+    <div class="tc" style="border-right:1px solid var(--line);">
+      <div class="tc-head tft">Comment l'utiliser</div>
+      <div class="bt" style="font-size:13px;">
+        <p>Avant chaque séquence : "Sur une échelle de 0 à 10, à combien est cette émotion en ce moment ?" Notez le chiffre.</p>
+        <p>Après chaque séquence : réévaluez. L'objectif est de descendre en dessous de 3. Si vous êtes à 0-2, l'émotion est neutralisée.</p>
+      </div>
+    </div>
+    <div class="tc">
+      <div class="tc-head dark">Interprétation</div>
+      <ul class="blist" style="font-size:13px;">
+        <li>8-10 : émotion très intense — commencez par le Cycle d'Inversion</li>
+        <li>5-7 : émotion modérée — séquence standard</li>
+        <li>3-4 : résidu — séquence de finition courte</li>
+        <li>0-2 : neutralisé — ancrez avec une respiration</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sh"><div class="sh-bar fire"></div><div class="sh-t">2. L'Inversion Psychologique — Le blocage invisible</div></div>
+  <div class="inversion-block">
+    <div class="inversion-title">🚧 Qu'est-ce qu'une inversion psychologique ?</div>
+    <div class="bt" style="font-size:14px;">
+      <p>C'est quand une partie de vous résiste inconsciemment au changement — même quand vous voulez consciemment changer. Votre énergie est "inversée" : le signal qui devrait aller vers le soulagement va vers le maintien du problème.</p>
+      <p><strong>Signes d'inversion :</strong> vous tapez, mais le score SUD ne descend pas. Vous savez que vous devriez vous calmer mais vous n'y arrivez pas. Vous avez essayé le tapping plusieurs fois sans résultat.</p>
+      <p><strong>La solution :</strong> toujours commencer par le Cycle d'Inversion (Karate Chop 20-30 fois) avant toute séquence. C'est le "reset" qui débloque le système.</p>
+    </div>
+  </div>
+
+  <div class="sh"><div class="sh-bar tft"></div><div class="sh-t">3. La procédure TFT complète — Structure type</div></div>
+  <div class="protocol-master">
+    <div class="pm-header">
+      <div class="pm-icon">⚡</div>
+      <div>
+        <div class="pm-label">Protocole Standard</div>
+        <div class="pm-name">La Séquence TFT Complète — Structure type</div>
+      </div>
+    </div>
+    <div class="pm-body">
+      <div class="steps">
+        <div class="step">
+          <div class="sn tft">0</div>
+          <div class="st"><strong>Évaluation SUD</strong> — Évaluez l'intensité de 0 à 10. Restez focalisé sur l'émotion. Ne la fuyez pas.</div>
+        </div>
+        <div class="step">
+          <div class="sn tft">1</div>
+          <div class="st"><strong>Affirmation de Setup (KC)</strong> — Tapotez KC 20-30 fois en disant mentalement ou à voix basse : <em>"Même si je ressens [émotion], je m'accepte profondément et complètement."</em></div>
+        </div>
+        <div class="step">
+          <div class="sn tft">2</div>
+          <div class="st"><strong>Séquence principale</strong> — Tapotez les points dans l'ordre spécifique à l'émotion (7 tap./point). Pensez à l'émotion pendant tout le tapping.</div>
+        </div>
+        <div class="step">
+          <div class="sn tft">3</div>
+          <div class="st"><strong>Procédure 9 Gamuts</strong> — Tapotez le point Gamut en continu pendant toute la procédure (voir chapitre 3).</div>
+        </div>
+        <div class="step">
+          <div class="sn tft">4</div>
+          <div class="st"><strong>Répétez la séquence principale</strong> — Même ordre, même intensité. Cette répétition ancre la décharge.</div>
+        </div>
+        <div class="step">
+          <div class="sn tft">5</div>
+          <div class="st"><strong>Réévaluation SUD</strong> — Évaluez à nouveau. Si &gt;3 : recommencez depuis l'étape 1. Si &lt;3 : ancrez avec une respiration nasale et un mot d'intention positif.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sh"><div class="sh-bar tft"></div><div class="sh-t">4. Les erreurs les plus fréquentes</div></div>
+  <table class="dosage-table">
+    <tr><th>Erreur</th><th>Pourquoi ça bloque</th><th>Correction</th></tr>
+    <tr><td class="em">Penser à autre chose pendant le tapping</td><td>Le cerveau doit être focalisé sur l'émotion pour que la décharge fonctionne</td><td>Nommez l'émotion à voix basse pendant chaque point</td></tr>
+    <tr><td class="em">Arrêter trop tôt (SUD à 4)</td><td>Le résidu émotionnel suffit à relancer la spirale</td><td>Continuez jusqu'à 0-2 sur l'échelle SUD</td></tr>
+    <tr><td class="em">Sauter le Cycle d'Inversion</td><td>Si le système est inversé, la séquence ne fait rien</td><td>Toujours commencer par 20-30 KC</td></tr>
+    <tr><td class="em">Tapper trop vite</td><td>Le cerveau n'a pas le temps de traiter entre les points</td><td>1 tap/seconde, régulier et intentionnel</td></tr>
+    <tr><td class="em">Éviter l'émotion pendant le tapping</td><td>Le TFT travaille sur l'émotion active — pas sur son absence</td><td>Maintenez le contact avec la sensation pendant tout le protocole</td></tr>
+  </table>
+
+  <div class="warning">
+    <div class="warning-title">⚠️ Note importante</div>
+    <div class="warning-text">Le TFT est un outil de régulation émotionnelle pour la performance sportive. Il ne remplace pas un suivi psychologique professionnel pour des traumatismes sévères, des états dépressifs majeurs ou des troubles anxieux diagnostiqués. En cas de doute, consultez un professionnel de santé.</div>
+  </div>
+</div>
+
+<!-- ══ CH5 — PEUR DE RATER ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule fire"></div>
+  <div class="o-body">
+    <div class="o-big">05</div>
+    <div class="o-badge ob-fire">Séquence 1</div>
+    <div class="o-title">La Peur<br><em>de Rater</em></div>
+    <div class="o-sub">L'émotion numéro 1 qui bloque les sportifs — et la séquence exacte pour la neutraliser.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Séquence 1 — La Peur de Rater</div><div class="rh-n">TFT Master</div></div>
+
+  <div class="emotion-card">
+    <div class="emotion-header">
+      <div class="emotion-icon">😰</div>
+      <div>
+        <div class="emotion-name">LA PEUR DE RATER</div>
+        <div class="emotion-sub">Atychiphobie sportive · Anxiété de performance · Peur du jugement</div>
+      </div>
+      <div class="emotion-intensity">SUD cible : 0-2</div>
+    </div>
+    <div class="emotion-body">
+      <div class="emotion-desc">La peur de rater n'est pas de la faiblesse. C'est une réponse normale d'un cerveau qui a appris à associer l'erreur à un danger (honte, rejet, perte de statut). Le problème : en match, cette peur paralyse exactement les systèmes dont vous avez besoin pour performer.</div>
+
+      <div class="emotion-signal">
+        <div class="emotion-signal-title">Signaux physiques typiques</div>
+        <div class="emotion-signal-item">Muscles qui se contractent avant le geste</div>
+        <div class="emotion-signal-item">Respiration qui se bloque ou s'accélère</div>
+        <div class="emotion-signal-item">Pensées de type "et si je rate" en boucle</div>
+        <div class="emotion-signal-item">Sensation de "vide" ou de "plomb" dans le ventre</div>
+        <div class="emotion-signal-item">Gestes qui deviennent mécaniques et perdent leur fluidité</div>
+      </div>
+
+      <div class="affirmation">
+        <div class="affirmation-label">Affirmation de Setup (à répéter pendant KC)</div>
+        <div class="affirmation-text">"Même si j'ai peur de rater, je m'accepte profondément et complètement, et je choisis de lâcher cette peur maintenant."</div>
+      </div>
+
+      <div class="tap-sequence">
+        <div class="tap-seq-title">Séquence de tapping — 7 tapotements par point</div>
+        <div class="tap-steps">
+          <div class="tap-point">KC <span class="tap-reps">×25</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">TH <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">EB <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">UE <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">CB <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">UA <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <span style="color:var(--tft);font-size:12px;font-weight:700;">9 GAMUTS</span>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">Répéter EB→UE→CB→UA</div>
+        </div>
+      </div>
+
+      <div class="bt"><p><strong>Mot d'ancrage final (après retour à SUD 0-2) :</strong> "Je suis libre de jouer. Je suis libre de rater. Je suis libre de gagner."</p><p><strong>Utilisation recommandée :</strong> 2-3 jours avant une compétition importante + le matin du match + dans les vestiaires juste avant.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CH6 — FRUSTRATION ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule fire"></div>
+  <div class="o-body">
+    <div class="o-big">06</div>
+    <div class="o-badge ob-fire">Séquence 2</div>
+    <div class="o-title">La Frustration<br><em>post-erreur</em></div>
+    <div class="o-sub">Neutraliser la spirale négative en 30 secondes — la séquence la plus utilisée en match.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Séquence 2 — La Frustration Post-Erreur</div><div class="rh-n">TFT Master</div></div>
+
+  <div class="emotion-card">
+    <div class="emotion-header">
+      <div class="emotion-icon">😤</div>
+      <div>
+        <div class="emotion-name">FRUSTRATION POST-ERREUR</div>
+        <div class="emotion-sub">Colère intérieure · Autocritique · Rumination immédiate</div>
+      </div>
+      <div class="emotion-intensity">SUD cible : 0-2</div>
+    </div>
+    <div class="emotion-body">
+      <div class="emotion-desc">La frustration post-erreur est la plus destructrice des émotions sportives — non pas parce qu'elle est intense, mais parce qu'elle s'installe vite et sabote les actions suivantes. Une erreur + 30 secondes de frustration non régulée = souvent 2 à 3 autres erreurs en cascade.</div>
+
+      <div class="emotion-signal">
+        <div class="emotion-signal-title">Signaux physiques typiques</div>
+        <div class="emotion-signal-item">Chaleur dans le visage ou le torse</div>
+        <div class="emotion-signal-item">Gestes qui deviennent brusques et forcés</div>
+        <div class="emotion-signal-item">Dialogue interne négatif : "nul", "encore", "pourquoi"</div>
+        <div class="emotion-signal-item">Vision qui se rétrécit — on ne voit plus le jeu global</div>
+      </div>
+
+      <div class="affirmation">
+        <div class="affirmation-label">Affirmation de Setup (KC)</div>
+        <div class="affirmation-text">"Même si je suis frustré(e) par cette erreur, je m'accepte profondément et je choisis de passer à la suite maintenant."</div>
+      </div>
+
+      <div class="tap-sequence">
+        <div class="tap-seq-title">Séquence standard (version complète)</div>
+        <div class="tap-steps">
+          <div class="tap-point">KC <span class="tap-reps">×25</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">SE <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">UE <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">UN <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">CB <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">BF <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <span style="color:var(--tft);font-size:12px;font-weight:700;">9 GAMUTS</span>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">Répéter SE→CB→BF</div>
+        </div>
+      </div>
+
+      <div class="tap-sequence" style="background:var(--fire-lt);border-color:var(--fire-bd);">
+        <div class="tap-seq-title" style="color:var(--fire);">Version EXPRESS en match (discrète — 20 secondes)</div>
+        <div class="tap-steps">
+          <div class="tap-point" style="border-color:var(--fire-bd);color:var(--fire);">KC cuisse <span class="tap-reps">×15</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point" style="border-color:var(--fire-bd);color:var(--fire);">SE <span class="tap-reps">×5</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point" style="border-color:var(--fire-bd);color:var(--fire);">CB <span class="tap-reps">×5</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point" style="border-color:var(--fire-bd);color:var(--fire);">1 respiration nasale</div>
+        </div>
+      </div>
+
+      <div class="bt"><p><strong>Mot d'ancrage final :</strong> "Prochaine action." Puis regardez vers l'avant — pas vers l'erreur.</p><p><strong>Utilisation recommandée :</strong> dans les 10 secondes qui suivent l'erreur. Plus vous attendez, plus l'émotion s'installe.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CH7 — ANXIÉTÉ PRÉCOMPÉTITIVE ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule fire"></div>
+  <div class="o-body">
+    <div class="o-big">07</div>
+    <div class="o-badge ob-fire">Séquence 3</div>
+    <div class="o-title">L'Anxiété<br><em>Précompétitive</em></div>
+    <div class="o-sub">Transformer le nœud dans le ventre en énergie utilisable — la séquence du matin de match.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Séquence 3 — L'Anxiété Précompétitive</div><div class="rh-n">TFT Master</div></div>
+
+  <div class="emotion-card">
+    <div class="emotion-header">
+      <div class="emotion-icon">🌀</div>
+      <div>
+        <div class="emotion-name">ANXIÉTÉ PRÉCOMPÉTITIVE</div>
+        <div class="emotion-sub">Stress anticipatoire · Nœud dans le ventre · Pensées "et si"</div>
+      </div>
+      <div class="emotion-intensity">SUD cible : 0-2</div>
+    </div>
+    <div class="emotion-body">
+      <div class="emotion-desc">L'anxiété précompétitive est différente de la peur de rater — elle est plus diffuse, plus chronique. Elle commence souvent la veille, s'intensifie au réveil, monte dans le transport, et culmine dans les vestiaires. Elle consomme de l'énergie nerveuse dont vous aurez besoin en match.</div>
+
+      <div class="emotion-signal">
+        <div class="emotion-signal-title">Signaux physiques typiques</div>
+        <div class="emotion-signal-item">Nœud dans l'estomac — tension digestive</div>
+        <div class="emotion-signal-item">Sommeil perturbé la nuit précédente</div>
+        <div class="emotion-signal-item">Pensées en boucle sur le match à venir</div>
+        <div class="emotion-signal-item">Hyperactivité mentale, difficulté à rester présent</div>
+        <div class="emotion-signal-item">Envie d'uriner fréquente — réponse sympathique</div>
+      </div>
+
+      <div class="affirmation">
+        <div class="affirmation-label">Affirmation de Setup (KC) — à utiliser en 2 temps</div>
+        <div class="affirmation-text">Temps 1 : "Même si je ressens cette anxiété pour le match de ce soir, je m'accepte profondément et complètement."<br><br>Temps 2 (après première séquence) : "Je choisis de transformer cette énergie en concentration et en présence."</div>
+      </div>
+
+      <div class="tap-sequence">
+        <div class="tap-seq-title">Séquence complète (à faire 2 fois si SUD &gt; 6)</div>
+        <div class="tap-steps">
+          <div class="tap-point">KC <span class="tap-reps">×25</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">TH <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">EB <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">UE <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">CB <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">UA <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">IF <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <span style="color:var(--tft);font-size:12px;font-weight:700;">9 GAMUTS</span>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">Répéter EB→UE→CB→UA</div>
+        </div>
+      </div>
+
+      <div class="bt"><p><strong>Timing idéal :</strong> la veille au coucher (10 min) + le matin du match au réveil (5 min) + dans les vestiaires 30 min avant.</p><p><strong>Mot d'ancrage final :</strong> "Je suis prêt(e). Mon énergie est disponible. Je joue."</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CH8 — COLÈRE ARBITRALE ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule fire"></div>
+  <div class="o-body">
+    <div class="o-big">08</div>
+    <div class="o-badge ob-fire">Séquence 4</div>
+    <div class="o-title">La Colère<br><em>et la Frustration Arbitrale</em></div>
+    <div class="o-sub">Rester lucide après une injustice perçue — l'une des situations les plus difficiles à gérer en match.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Séquence 4 — Colère et Frustration Arbitrale</div><div class="rh-n">TFT Master</div></div>
+
+  <div class="emotion-card">
+    <div class="emotion-header">
+      <div class="emotion-icon">🔴</div>
+      <div>
+        <div class="emotion-name">COLÈRE ARBITRALE</div>
+        <div class="emotion-sub">Injustice perçue · Rage · Perte de contrôle · Impuissance</div>
+      </div>
+      <div class="emotion-intensity">SUD cible : 0-2</div>
+    </div>
+    <div class="emotion-body">
+      <div class="emotion-desc">La colère après une décision arbitrale est particulièrement piégeuse parce qu'elle est "justifiée". Votre cerveau a raison d'être en colère — la décision était peut-être vraiment mauvaise. Mais cette justification est exactement ce qui rend l'émotion difficile à lâcher. Le tapping ne dit pas que l'arbitre avait raison. Il libère juste votre corps de la charge émotionnelle.</div>
+
+      <div class="emotion-signal">
+        <div class="emotion-signal-title">Signaux physiques typiques</div>
+        <div class="emotion-signal-item">Chaleur intense dans le visage, le cou, la poitrine</div>
+        <div class="emotion-signal-item">Tension musculaire généralisée — poings serrés</div>
+        <div class="emotion-signal-item">Vision tunnel — vous ne voyez plus que l'injustice</div>
+        <div class="emotion-signal-item">Impulsivité — envie de réagir, de protester</div>
+      </div>
+
+      <div class="affirmation">
+        <div class="affirmation-label">Affirmation de Setup (KC)</div>
+        <div class="affirmation-text">"Même si je suis en colère contre cette décision et que j'ai le droit de l'être, je choisis de libérer cette colère de mon corps maintenant pour continuer à jouer au meilleur de moi-même."</div>
+      </div>
+
+      <div class="tap-sequence">
+        <div class="tap-seq-title">Séquence ciblée — méridiens de la colère</div>
+        <div class="tap-steps">
+          <div class="tap-point">KC <span class="tap-reps">×25</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">SE <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">TH <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">BF <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">MF <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">CB <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <span style="color:var(--tft);font-size:12px;font-weight:700;">9 GAMUTS</span>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">Répéter SE→BF→CB</div>
+        </div>
+      </div>
+
+      <div class="tap-sequence" style="background:var(--fire-lt);border-color:var(--fire-bd);">
+        <div class="tap-seq-title" style="color:var(--fire);">Version EXPRESS discrète (15 secondes)</div>
+        <div class="tap-steps">
+          <div class="tap-point" style="border-color:var(--fire-bd);color:var(--fire);">KC cuisse <span class="tap-reps">×15</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point" style="border-color:var(--fire-bd);color:var(--fire);">SE <span class="tap-reps">×5</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point" style="border-color:var(--fire-bd);color:var(--fire);">BF <span class="tap-reps">×5</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point" style="border-color:var(--fire-bd);color:var(--fire);">Expire nasal</div>
+        </div>
+      </div>
+
+      <div class="bt"><p><strong>Mot d'ancrage final :</strong> "C'est passé. Ma mission continue." Puis réengagez-vous dans le jeu immédiatement — le mouvement coupe la rumination.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CH9 — MANQUE DE CONFIANCE ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule fire"></div>
+  <div class="o-body">
+    <div class="o-big">09</div>
+    <div class="o-badge ob-fire">Séquence 5</div>
+    <div class="o-title">Le Manque<br><em>de Confiance</em></div>
+    <div class="o-sub">Neutraliser le doute chronique — la séquence de fond pour reconstruire l'estime sportive.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Séquence 5 — Le Manque de Confiance</div><div class="rh-n">TFT Master</div></div>
+
+  <div class="emotion-card">
+    <div class="emotion-header">
+      <div class="emotion-icon">😔</div>
+      <div>
+        <div class="emotion-name">MANQUE DE CONFIANCE</div>
+        <div class="emotion-sub">Doute chronique · Auto-sabotage · "Je ne suis pas assez bon"</div>
+      </div>
+      <div class="emotion-intensity">Travail de fond — quotidien</div>
+    </div>
+    <div class="emotion-body">
+      <div class="emotion-desc">Le manque de confiance chronique est une construction — une accumulation de petites expériences négatives qui ont créé un pattern de pensée automatique. "Je ne suis pas assez bon" n'est pas une vérité. C'est une émotion stockée, répétée jusqu'à devenir une croyance. Elle se traite différemment des émotions aiguës — avec de la régularité plutôt que de l'intensité.</div>
+
+      <div class="affirmation">
+        <div class="affirmation-label">Affirmation de Setup — personnalisée à votre contexte</div>
+        <div class="affirmation-text">"Même si je doute de moi en [situation spécifique : tir au but / service / dernier quart-temps...], je m'accepte profondément et je choisis de faire confiance à ce que mon corps sait faire."</div>
+      </div>
+
+      <div class="tap-sequence">
+        <div class="tap-seq-title">Séquence de fond — à pratiquer 5 à 10 min par jour pendant 2 semaines</div>
+        <div class="tap-steps">
+          <div class="tap-point">KC <span class="tap-reps">×25</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">TH <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">EB <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">UE <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">UN <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">CB <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">UA <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">MF <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <span style="color:var(--tft);font-size:12px;font-weight:700;">9 GAMUTS</span>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">Répéter TH→EB→UE→CB</div>
+        </div>
+      </div>
+
+      <div class="affirmation" style="background:var(--earth-lt);border-color:var(--earth-bd);">
+        <div class="affirmation-label" style="color:var(--earth);">Affirmation positive finale (après SUD à 0-2)</div>
+        <div class="affirmation-text">"Mon corps sait quoi faire. Je lui fais confiance. J'ai le droit de jouer pleinement."</div>
+      </div>
+
+      <div class="bt"><p><strong>Important :</strong> pour le manque de confiance chronique, une seule séance ne suffit pas. C'est un travail de fond sur 2 à 4 semaines. Notez votre SUD au départ — souvent 7-8. Après 2 semaines de pratique quotidienne, il descend typiquement à 2-3 et reste bas.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CH10 — TRAUMATISME SPORTIF ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule fire"></div>
+  <div class="o-body">
+    <div class="o-big">10</div>
+    <div class="o-badge ob-fire">Séquence 6</div>
+    <div class="o-title">Le Traumatisme<br><em>Sportif</em></div>
+    <div class="o-sub">Blessure passée, souvenir d'échec, blocage mental — libérer ce que le corps a gardé en mémoire.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Séquence 6 — Le Traumatisme Sportif</div><div class="rh-n">TFT Master</div></div>
+
+  <div class="emotion-card">
+    <div class="emotion-header">
+      <div class="emotion-icon">🩹</div>
+      <div>
+        <div class="emotion-name">TRAUMATISME SPORTIF</div>
+        <div class="emotion-sub">Blessure mémorisée · Souvenir d'échec · Blocage sur geste spécifique</div>
+      </div>
+      <div class="emotion-intensity">Travail approfondi — plusieurs séances</div>
+    </div>
+    <div class="emotion-body">
+      <div class="emotion-desc">Le traumatisme sportif peut prendre plusieurs formes. Une blessure grave dont la mémoire revient au moment de reproduire le même geste. Un match perdu dans des circonstances particulièrement douloureuses qui revient systématiquement. Un blocage technique qui résiste à tous les entraînements parce qu'il est émotionnel, pas technique. Dans tous les cas : le corps a stocké un souvenir associé à du danger. Le TFT permet de désassocier le geste du danger.</div>
+
+      <div class="affirmation">
+        <div class="affirmation-label">Affirmation de Setup — spécifique à l'événement</div>
+        <div class="affirmation-text">"Même si je ressens encore [douleur / peur / honte] liée à [événement spécifique], je m'accepte profondément. Cet événement est passé. Mon corps peut aller de l'avant."</div>
+      </div>
+
+      <div class="tap-sequence">
+        <div class="tap-seq-title">Séquence traumatisme — protocole allongé</div>
+        <div class="tap-steps">
+          <div class="tap-point">KC <span class="tap-reps">×30</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">TH <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">EB <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">SE <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">UE <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">UN <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">CH <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">CB <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">UA <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">TH2 <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">IF <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">BF <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <span style="color:var(--tft);font-size:12px;font-weight:700;">9 GAMUTS</span>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">Répéter intégralité</div>
+        </div>
+      </div>
+
+      <div class="bt">
+        <p><strong>Protocole sur plusieurs séances :</strong> travaillez 1 à 2 fois par semaine sur cet événement spécifique. Notez votre SUD au début de chaque séance. Quand il reste stable à 0-1 sur 3 séances consécutives, le traumatisme est désensibilisé.</p>
+        <p><strong>Technique de la "fenêtre" :</strong> si le souvenir est trop douloureux pour y rester, pensez-y de façon périphérique — comme si vous regardiez la scène depuis loin, à travers une vitre. Cette distance permet quand même au tapping de travailler.</p>
+      </div>
+
+      <div class="warning">
+        <div class="warning-title">Note importante</div>
+        <div class="warning-text">Pour des traumatismes sévères (accident grave, traumatisme psychologique profond), travaillez avec un praticien TFT certifié. Le self-tapping est approprié pour les traumatismes sportifs modérés.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CH11 — FATIGUE MENTALE ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule fire"></div>
+  <div class="o-body">
+    <div class="o-big">11</div>
+    <div class="o-badge ob-fire">Séquence 7</div>
+    <div class="o-title">Fatigue Mentale<br><em>&amp; Manque d'Énergie</em></div>
+    <div class="o-sub">Réactiver la vitalité et la présence entre deux efforts — le booster naturel.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Séquence 7 — Fatigue Mentale &amp; Manque d'Énergie</div><div class="rh-n">TFT Master</div></div>
+
+  <div class="emotion-card">
+    <div class="emotion-header">
+      <div class="emotion-icon">🔋</div>
+      <div>
+        <div class="emotion-name">FATIGUE MENTALE</div>
+        <div class="emotion-sub">Manque d'énergie · Baisse de présence · Déconnexion en milieu de match</div>
+      </div>
+      <div class="emotion-intensity">SUD cible : vitalité à 7+</div>
+    </div>
+    <div class="emotion-body">
+      <div class="emotion-desc">La fatigue mentale en sport n'est pas toujours physique. Elle est souvent émotionnelle — la charge de concentration soutenue, les décisions répétées, la gestion des pressions vide les ressources nerveuses. Le résultat : une déconnexion progressive, des décisions moins nettes, une présence qui s'efface. Le tapping peut réactiver ces ressources en quelques minutes.</div>
+
+      <div class="emotion-signal">
+        <div class="emotion-signal-title">Signaux typiques de fatigue mentale</div>
+        <div class="emotion-signal-item">Difficulté à rester concentré sur l'action en cours</div>
+        <div class="emotion-signal-item">Décisions automatiques — le pilote automatique a pris le relais</div>
+        <div class="emotion-signal-item">Corps présent, esprit absent</div>
+        <div class="emotion-signal-item">Manque de motivation à s'engager dans l'effort</div>
+      </div>
+
+      <div class="affirmation">
+        <div class="affirmation-label">Affirmation de Setup — orientée vers la vitalité</div>
+        <div class="affirmation-text">"Même si je me sens fatigué(e) et moins présent(e), je m'accepte complètement et je choisis de retrouver mon énergie et ma présence maintenant."</div>
+      </div>
+
+      <div class="tap-sequence">
+        <div class="tap-seq-title">Séquence de réactivation — rapide et efficace</div>
+        <div class="tap-steps">
+          <div class="tap-point">KC <span class="tap-reps">×20</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">TH <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">CB <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">UA <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">TH2 <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">IF <span class="tap-reps">×7</span></div>
+          <span class="tap-arrow">→</span>
+          <span style="color:var(--tft);font-size:12px;font-weight:700;">9 GAMUTS</span>
+          <span class="tap-arrow">→</span>
+          <div class="tap-point">Répéter TH→CB→UA</div>
+        </div>
+      </div>
+
+      <div class="affirmation" style="background:var(--earth-lt);border-color:var(--earth-bd);">
+        <div class="affirmation-label" style="color:var(--earth);">Ancrage final de réactivation</div>
+        <div class="affirmation-text">"Je suis ici. Je suis présent(e). Mon énergie est là. Je joue maintenant."</div>
+      </div>
+
+      <div class="bt"><p><strong>Combinaison recommandée :</strong> séquence TFT (3 min) + Triple Ancrage TERRE (30 sec) + Activation Tonique EAU (30 sec). La combinaison des trois produit un effet de réactivation nettement supérieur à chaque technique isolée.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CH12 — TFT EN MATCH ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule tft"></div>
+  <div class="o-body">
+    <div class="o-big">12</div>
+    <div class="o-badge ob-tft">Pratique Match</div>
+    <div class="o-title">Le TFT<br><em>en Match</em></div>
+    <div class="o-sub">Protocoles express discrets utilisables pendant la compétition — sans que personne ne le remarque.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Chapitre 12 — Le TFT en Match</div><div class="rh-n">TFT Master</div></div>
+  <p class="lead">Le tapping le plus utile est celui que vous pouvez faire en pleine compétition — discrètement, rapidement, sans interrompre le jeu.</p>
+
+  <div class="sh"><div class="sh-bar tft"></div><div class="sh-t">Les points discrets — utilisables en match</div></div>
+  <div class="two-col">
+    <div class="tc" style="border-right:1px solid var(--line);">
+      <div class="tc-head tft">Points très discrets</div>
+      <ul class="blist" style="font-size:13px;">
+        <li><strong>KC cuisse :</strong> le tranchant de la main sur la cuisse ou la hanche — geste naturel</li>
+        <li><strong>KC poignet :</strong> le pouce qui frotte le tranchant de l'autre main</li>
+        <li><strong>CB :</strong> main posée sur la poitrine, pression légère sur le point</li>
+        <li><strong>UA :</strong> main qui croise le torse — geste sportif naturel</li>
+      </ul>
+    </div>
+    <div class="tc">
+      <div class="tc-head dark">Points visibles mais acceptables</div>
+      <ul class="blist" style="font-size:13px;">
+        <li><strong>TH :</strong> main sur la tête (geste de frustration normal)</li>
+        <li><strong>SE/UE :</strong> frotter le visage — geste de concentration</li>
+        <li><strong>EB :</strong> masser le sourcil — geste de réflexion</li>
+        <li><strong>CB :</strong> main sur la poitrine — geste d'engagement</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sh"><div class="sh-bar tft"></div><div class="sh-t">Protocoles express par situation</div></div>
+
+  <div class="quick-ref">
+    <div class="qr-cell" style="border-right:1px solid var(--line);">
+      <div class="qr-head">Après une erreur (15 sec)</div>
+      <div class="qr-item"><div class="arrow">→</div><div>KC cuisse ×15 + nommez l'émotion</div></div>
+      <div class="qr-item"><div class="arrow">→</div><div>SE ou CB ×7</div></div>
+      <div class="qr-item"><div class="arrow">→</div><div>1 expiration nasale longue</div></div>
+      <div class="qr-item"><div class="arrow">→</div><div>"Prochaine action"</div></div>
+    </div>
+    <div class="qr-cell">
+      <div class="qr-head">Avant un geste décisif (10 sec)</div>
+      <div class="qr-item"><div class="arrow">→</div><div>KC cuisse ×10</div></div>
+      <div class="qr-item"><div class="arrow">→</div><div>CB ×5 (main sur poitrine)</div></div>
+      <div class="qr-item"><div class="arrow">→</div><div>1 inspiration nasale</div></div>
+      <div class="qr-item"><div class="arrow">→</div><div>"Je suis prêt(e)"</div></div>
+    </div>
+    <div class="qr-cell" style="border-right:1px solid var(--line);">
+      <div class="qr-head">Colère montante (20 sec)</div>
+      <div class="qr-item"><div class="arrow">→</div><div>KC cuisse ×20</div></div>
+      <div class="qr-item"><div class="arrow">→</div><div>SE ×7 (coin externe œil)</div></div>
+      <div class="qr-item"><div class="arrow">→</div><div>BF ×5 (auriculaire, discret)</div></div>
+      <div class="qr-item"><div class="arrow">→</div><div>Expiration longue par le nez</div></div>
+    </div>
+    <div class="qr-cell">
+      <div class="qr-head">Baisse d'énergie (20 sec)</div>
+      <div class="qr-item"><div class="arrow">→</div><div>KC poignet ×15</div></div>
+      <div class="qr-item"><div class="arrow">→</div><div>TH (main sur tête) ×7</div></div>
+      <div class="qr-item"><div class="arrow">→</div><div>CB ×7</div></div>
+      <div class="qr-item"><div class="arrow">→</div><div>"Je suis là. Je joue."</div></div>
+    </div>
+    <div class="qr-cell" style="border-right:1px solid var(--line);">
+      <div class="qr-head">Pendant un temps mort</div>
+      <div class="qr-item"><div class="arrow">→</div><div>KC complet ×25</div></div>
+      <div class="qr-item"><div class="arrow">→</div><div>Séquence selon l'émotion dominante</div></div>
+      <div class="qr-item"><div class="arrow">→</div><div>3 cycles 4-2-6</div></div>
+      <div class="qr-item"><div class="arrow">→</div><div>Ancre personnelle</div></div>
+    </div>
+    <div class="qr-cell">
+      <div class="qr-head">Pendant une mi-temps</div>
+      <div class="qr-item"><div class="arrow">→</div><div>Séquence complète sur l'émotion principale (3-4 min)</div></div>
+      <div class="qr-item"><div class="arrow">→</div><div>Respiration 4-2-6 (6 cycles)</div></div>
+      <div class="qr-item"><div class="arrow">→</div><div>Intention pour la seconde mi-temps</div></div>
+    </div>
+  </div>
+
+  <div class="pull">La version discrète du TFT est aussi efficace que la version complète — à condition que la compétence soit une automatisme. <strong>C'est pour ça que vous pratiquez la version complète à l'entraînement.</strong> Pour que la version express soit disponible en match.</div>
+</div>
+
+<!-- ══ CONCLUSION ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule gold"></div>
+  <div class="o-body">
+    <div class="o-label">Conclusion</div>
+    <div class="o-title">Construire<br><em>sa pratique TFT</em></div>
+    <div class="o-sub">Routine quotidienne, intégration dans Zone 4E, et la prochaine étape.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Conclusion — Construire sa pratique TFT</div><div class="rh-n">TFT Master</div></div>
+  <p class="lead">Le TFT ne devient vraiment puissant qu'avec la régularité. Comme pour tout ce qui touche au système nerveux — c'est la répétition intentionnelle qui crée la maîtrise.</p>
+
+  <div class="sh"><div class="sh-bar gold"></div><div class="sh-t">Routine quotidienne recommandée — 10 minutes</div></div>
+  <div class="seq">
+    <div class="seq-r"><div class="seq-icon">🌅</div><div><div class="seq-name">Matin — 5 minutes</div><div class="seq-desc">Cycle d'Inversion (KC ×25) + séquence sur l'émotion dominante du moment + affirmation positive. Idéal au réveil avant le téléphone.</div></div></div>
+    <div class="seq-r"><div class="seq-icon">🏋️</div><div><div class="seq-name">Avant l'entraînement — 3 minutes</div><div class="seq-desc">Séquence anxiété/pression si présente. Sinon : KC ×20 + TH ×7 + CB ×7 + respiration. Prépare le système nerveux.</div></div></div>
+    <div class="seq-r"><div class="seq-icon">🌙</div><div><div class="seq-name">Soir — 2 minutes</div><div class="seq-desc">Décharge post-journée. KC ×20 + séquence courte sur les émotions résiduelles. Améliore la qualité du sommeil.</div></div></div>
+    <div class="seq-r"><div class="seq-icon">📅</div><div><div class="seq-name">Semaine de compétition</div><div class="seq-desc">Ajoutez la séquence peur/anxiété précompétitive 2-3 jours avant. Doublez la durée des séances. Notez votre SUD quotidien.</div></div></div>
+  </div>
+
+  <div class="sh"><div class="sh-bar gold"></div><div class="sh-t">Intégration dans Zone 4E</div></div>
+  <div class="bt">
+    <p>Le TFT Master est le complément naturel du chapitre FEU de Zone 4E. Dans Zone 4E, vous avez le Cycle d'Inversion et le protocole ONT. Ici, vous avez la version complète — 14 points, 7 séquences spécifiques, protocoles express.</p>
+    <p><strong>Comment les utiliser ensemble :</strong> Zone 4E en pratique quotidienne (5 min). TFT Master en travail de fond sur une émotion spécifique (10 min, 3-4x/semaine). La version discrète TFT intégrée dans le Protocole ZÉRØ Secret.</p>
+  </div>
+
+  <div style="margin-top:44px;padding:44px;background:var(--dark);border-radius:6px;text-align:center;">
+    <div style="font-family:'Barlow Condensed';font-weight:900;font-size:40px;color:#fff;line-height:1;margin-bottom:14px;">Vos émotions ne<br>vous contrôlent plus.<br><span style="color:var(--tft);">Vous les pilotez.</span></div>
+    <div style="font-family:'Lora';font-style:italic;font-size:16px;color:rgba(255,255,255,0.45);line-height:1.7;max-width:400px;margin:0 auto 24px;">30 à 60 secondes. N'importe où. N'importe quand.<br>C'est votre superpouvour silencieux.</div>
+    <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;">
+      <span class="pill tft">TFT Master</span>
+      <span class="pill fire">Zone 4E</span>
+      <span class="pill gold">Performance Mentale</span>
+    </div>
+  </div>
+
+  <div style="margin-top:44px;padding-top:22px;border-top:1px solid var(--line);text-align:center;font-size:11px;color:var(--muted);letter-spacing:0.1em;line-height:2;">
+    © 2025 Zone 4E · TFT Master · Tous droits réservés<br>
+    Par [Votre Prénom] · Coach sportif &amp; Préparateur mental · Collection Zone 4E
+  </div>
+</div>
+
+</div><!-- /book -->
+</body>
+</html>

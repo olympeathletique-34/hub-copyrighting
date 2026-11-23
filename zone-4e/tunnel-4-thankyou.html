@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bienvenue dans la Zone — Accès à tes ebooks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,700;1,800&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --dark:#12100c;--black:#0a0806;
+  --gold:#c49a20;--gold-light:#fdf5e0;
+  --earth:#5a8830;--fire:#d95020;
+  --wind:#2878aa;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;}
+body{background:var(--dark);color:#fff;font-family:'DM Sans',sans-serif;min-height:100vh;}
+.w{max-width:720px;margin:0 auto;padding:0 24px;}
+
+/* CONFETTI HEADER */
+.confetti-top{height:4px;background:linear-gradient(90deg,var(--wind),var(--fire),var(--gold),var(--earth),#8a3870,#4a3888);}
+
+/* HERO */
+.hero{padding:72px 24px 56px;text-align:center;background:linear-gradient(180deg,#0a0806 0%,var(--dark) 100%);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(201,168,32,0.1) 0%,transparent 70%);pointer-events:none;}
+.hero-emoji{font-size:64px;margin-bottom:20px;display:block;animation:pop .5s cubic-bezier(.175,.885,.32,1.275);}
+@keyframes pop{from{transform:scale(0);}to{transform:scale(1);}}
+.hero-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(44px,7vw,80px);line-height:0.9;letter-spacing:-0.01em;margin-bottom:16px;}
+.hero-title em{color:var(--gold);font-style:italic;}
+.hero-sub{font-family:'Lora',serif;font-style:italic;font-size:18px;color:rgba(255,255,255,0.45);max-width:480px;margin:0 auto;line-height:1.65;}
+
+/* ORDER RECAP */
+.order-recap{margin:40px 0;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden;}
+.or-head{padding:18px 24px;background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;align-items:center;}
+.or-head-title{font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.or-total{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:24px;color:var(--gold);}
+.or-items{padding:6px 0;}
+.or-item{display:flex;align-items:center;gap:14px;padding:14px 24px;border-bottom:1px solid rgba(255,255,255,0.05);}
+.or-item:last-child{border-bottom:none;}
+.or-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.or-name{flex:1;font-size:14px;color:rgba(255,255,255,0.7);}
+.or-name strong{color:#fff;display:block;font-size:15px;margin-bottom:2px;}
+.or-price{font-size:13px;color:rgba(255,255,255,0.35);}
+
+/* EMAIL NOTE */
+.email-note{padding:18px 24px;background:rgba(90,136,48,0.08);border:1px solid rgba(90,136,48,0.2);border-radius:6px;margin:24px 0;display:flex;gap:12px;align-items:flex-start;}
+.en-icon{font-size:22px;flex-shrink:0;}
+.en-text{font-size:14px;color:rgba(255,255,255,0.65);line-height:1.6;}
+.en-text strong{color:#fff;}
+
+/* DOWNLOAD SECTION */
+.downloads{margin:40px 0;}
+.dl-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;color:#fff;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.dl-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08);}
+
+.dl-grid{display:flex;flex-direction:column;gap:10px;}
+.dl-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:18px 22px;display:flex;align-items:center;gap:16px;transition:border-color .2s,background .2s;}
+.dl-card:hover{border-color:rgba(255,255,255,0.18);background:rgba(255,255,255,0.06);}
+.dl-cover{width:48px;height:68px;border-radius:2px 5px 5px 2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.dl-cover::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:rgba(0,0,0,0.3);}
+.dl-cover-txt{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:11px;line-height:0.9;text-align:center;padding-left:5px;}
+.dl-info{flex:1;}
+.dl-name{font-weight:700;font-size:15px;color:#fff;margin-bottom:3px;}
+.dl-meta{font-size:12px;color:rgba(255,255,255,0.35);}
+.dl-btn{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--dark);background:var(--gold);padding:9px 18px;border-radius:3px;text-decoration:none;transition:all .15s;flex-shrink:0;}
+.dl-btn:hover{background:#a8821e;transform:translateY(-1px);}
+.dl-btn.locked{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.3);cursor:not-allowed;}
+.dl-btn.locked:hover{transform:none;}
+
+/* NEXT STEPS */
+.next-steps{margin:48px 0;}
+.ns-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;color:#fff;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:24px;display:flex;align-items:center;gap:10px;}
+.ns-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08);}
+.ns-steps{display:flex;flex-direction:column;gap:2px;}
+.ns-step{display:grid;grid-template-columns:48px 1fr;gap:16px;align-items:flex-start;padding:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:6px;transition:background .15s;}
+.ns-step:hover{background:rgba(255,255,255,0.05);}
+.ns-num{width:48px;height:48px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:var(--dark);flex-shrink:0;}
+.ns-content-title{font-weight:700;font-size:16px;color:#fff;margin-bottom:4px;}
+.ns-content-desc{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.65;}
+.ns-content-tip{margin-top:8px;font-size:12px;color:var(--gold);font-family:'Lora',serif;font-style:italic;}
+
+/* QUICK PROTOCOL */
+.quick-proto{margin:40px 0;background:rgba(201,168,32,0.06);border:1px solid rgba(201,168,32,0.18);border-radius:8px;padding:28px 32px;}
+.qp-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;color:var(--gold);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:6px;}
+.qp-sub{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:20px;font-family:'Lora',serif;font-style:italic;}
+.qp-steps{display:flex;flex-direction:column;gap:10px;}
+.qp-step{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:rgba(255,255,255,0.7);line-height:1.5;}
+.qp-icon{font-size:18px;flex-shrink:0;}
+
+/* COMMUNITY / SHARE */
+.share-section{margin:40px 0;padding:28px 32px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;text-align:center;}
+.ss-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;color:#fff;letter-spacing:0.04em;margin-bottom:8px;}
+.ss-sub{font-size:14px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:20px;font-family:'Lora',serif;font-style:italic;}
+.share-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.share-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:10px 20px;border-radius:3px;text-decoration:none;transition:all .15s;}
+.share-fb{background:#1877f2;color:#fff;}
+.share-fb:hover{background:#1465d0;}
+
+/* SIGNATURE */
+.signature{margin:48px 0;padding:32px;background:linear-gradient(135deg,rgba(255,255,255,0.03),rgba(201,168,32,0.04));border:1px solid rgba(255,255,255,0.07);border-radius:8px;display:flex;gap:20px;align-items:flex-start;}
+.sig-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1a1612,#2a2010);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;color:var(--gold);flex-shrink:0;border:1.5px solid rgba(201,168,32,0.3);}
+.sig-text{font-size:14px;color:rgba(255,255,255,0.6);line-height:1.75;}
+.sig-text strong{color:#fff;display:block;margin-bottom:4px;font-size:16px;}
+.sig-name{font-size:12px;color:rgba(255,255,255,0.25);margin-top:8px;letter-spacing:0.06em;}
+
+footer{padding:28px 24px;text-align:center;font-size:11px;color:rgba(255,255,255,0.18);line-height:2.2;border-top:1px solid rgba(255,255,255,0.05);}
+footer a{color:rgba(255,255,255,0.18);text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<div class="confetti-top"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="w">
+    <span class="hero-emoji">🎉</span>
+    <h1 class="hero-title">
+      Bienvenue<br>
+      dans la <em>Zone.</em>
+    </h1>
+    <p class="hero-sub">Ta commande est confirmée. Tes ebooks sont prêts. Le reste commence maintenant.</p>
+  </div>
+</div>
+
+<!-- BODY -->
+<div style="padding:48px 24px;">
+  <div class="w">
+
+    <!-- ORDER RECAP -->
+    <div class="order-recap">
+      <div class="or-head">
+        <div class="or-head-title">Récapitulatif de commande</div>
+        <div class="or-total">57€ ✓</div>
+      </div>
+      <div class="or-items">
+        <div class="or-item">
+          <div class="or-dot" style="background:#c9a84c;"></div>
+          <div class="or-name"><strong>Zone 4E</strong>La méthode neurophysiologique complète · 11 chapitres</div>
+          <div class="or-price">27€</div>
+        </div>
+        <div class="or-item">
+          <div class="or-dot" style="background:#1e6e9a;"></div>
+          <div class="or-name"><strong>Programme 21 Jours + Protocole ZÉRØ Secret</strong>21 jours guidés · Pratique délibérée · ZÉRØ</div>
+          <div class="or-price">+9€</div>
+        </div>
+        <div class="or-item">
+          <div class="or-dot" style="background:#c4a0d8;"></div>
+          <div class="or-name"><strong>TFT Master</strong>14 points · 7 séquences émotionnelles sportives</div>
+          <div class="or-price">+10€</div>
+        </div>
+        <div class="or-item">
+          <div class="or-dot" style="background:#8a7ad8;"></div>
+          <div class="or-name"><strong>Reprogrammer</strong>Psycho-Cybernétique · Visualisation · Identité Athlète</div>
+          <div class="or-price">+10€</div>
+        </div>
+        <div class="or-item">
+          <div class="or-dot" style="background:#4a7a2e;"></div>
+          <div class="or-name"><strong>L'Athlète Durable</strong>5 patterns · 3 zones · Gainage · 10 min/jour</div>
+          <div class="or-price">+10€</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMAIL NOTE -->
+    <div class="email-note">
+      <div class="en-icon">📩</div>
+      <div class="en-text">Tu vas recevoir <strong>un email de confirmation</strong> dans les prochaines minutes à l'adresse que tu as fournie. Il contient tous les liens de téléchargement. Vérifie tes spams si tu ne vois rien dans 5 minutes.</div>
+    </div>
+
+    <!-- DOWNLOADS -->
+    <div class="downloads">
+      <div class="dl-title">Tes ebooks ↓</div>
+      <div class="dl-grid">
+
+        <div class="dl-card">
+          <div class="dl-cover" style="background:linear-gradient(160deg,#1a1814,#2a2418);">
+            <div class="dl-cover-txt" style="color:#c9a84c;">ZONE<br>4E</div>
+          </div>
+          <div class="dl-info">
+            <div class="dl-name">Zone 4E</div>
+            <div class="dl-meta">PDF · 11 chapitres · VENT · FEU · TERRE · EAU · ZÉRØ</div>
+          </div>
+          <a href="#" class="dl-btn">⬇ Télécharger</a>
+        </div>
+
+        <div class="dl-card">
+          <div class="dl-cover" style="background:linear-gradient(155deg,#1a1814,#0e1a2a);">
+            <div class="dl-cover-txt" style="color:#1e6e9a;font-size:18px;">21<br><span style="font-size:9px;color:rgba(255,255,255,0.4);">JOURS</span></div>
+          </div>
+          <div class="dl-info">
+            <div class="dl-name">Programme 21 Jours</div>
+            <div class="dl-meta">PDF · Protocole ZÉRØ Secret inclus · Tracker quotidien</div>
+          </div>
+          <a href="#" class="dl-btn">⬇ Télécharger</a>
+        </div>
+
+        <div class="dl-card">
+          <div class="dl-cover" style="background:linear-gradient(150deg,#2a0a2a,#1a0818);">
+            <div class="dl-cover-txt" style="color:#c4a0d8;">TFT<br>MAS-<br>TER</div>
+          </div>
+          <div class="dl-info">
+            <div class="dl-name">TFT Master</div>
+            <div class="dl-meta">PDF · 14 points · 7 séquences sportives · Versions discrètes</div>
+          </div>
+          <a href="#" class="dl-btn">⬇ Télécharger</a>
+        </div>
+
+        <div class="dl-card">
+          <div class="dl-cover" style="background:linear-gradient(150deg,#180e2a,#0e0818);">
+            <div class="dl-cover-txt" style="color:#8a7ad8;font-size:10px;">REPRO-<br>GRAM-<br>MER</div>
+          </div>
+          <div class="dl-info">
+            <div class="dl-name">Reprogrammer</div>
+            <div class="dl-meta">PDF · Psycho-Cybernétique · 8 croyances · Visualisation 7 étapes</div>
+          </div>
+          <a href="#" class="dl-btn">⬇ Télécharger</a>
+        </div>
+
+        <div class="dl-card">
+          <div class="dl-cover" style="background:linear-gradient(150deg,#081408,#0e1e0e);">
+            <div class="dl-cover-txt" style="color:#4a7a2e;font-size:10px;">L'ATH-<br>LÈTE<br>DUR.</div>
+          </div>
+          <div class="dl-info">
+            <div class="dl-name">L'Athlète Durable</div>
+            <div class="dl-meta">PDF · 5 patterns · 3 zones · Gainage · Plan semaine</div>
+          </div>
+          <a href="#" class="dl-btn">⬇ Télécharger</a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- NEXT STEPS -->
+    <div class="next-steps">
+      <div class="ns-title">Par où commencer</div>
+      <div class="ns-steps">
+        <div class="ns-step">
+          <div class="ns-num">1</div>
+          <div>
+            <div class="ns-content-title">Ce soir — Lis l'Introduction et le Chapitre 1 de Zone 4E</div>
+            <div class="ns-content-desc">Comprends ce qu'est la Zone neurophysiologiquement. Ça changera ta façon de penser ta prochaine performance avant même d'avoir pratiqué quoi que ce soit.</div>
+            <div class="ns-content-tip">⏱ 20 à 25 minutes de lecture</div>
+          </div>
+        </div>
+        <div class="ns-step">
+          <div class="ns-num">2</div>
+          <div>
+            <div class="ns-content-title">Demain matin — Pratique le Protocole VENT pendant 5 minutes</div>
+            <div class="ns-content-desc">La respiration 4-2-6 × 6 cycles. Debout. Avant le téléphone. Avant le café. C'est ton premier entraînement du système nerveux. Note ce que tu ressens après.</div>
+            <div class="ns-content-tip">⏱ 5 minutes · Avant toute autre chose</div>
+          </div>
+        </div>
+        <div class="ns-step">
+          <div class="ns-num">3</div>
+          <div>
+            <div class="ns-content-title">Jour 1 du Programme 21 Jours — Démarre la semaine 1</div>
+            <div class="ns-content-desc">Ouvre le Programme 21 Jours. Lis le chapitre sur la pratique délibérée de Colvin. Puis suis le protocole Jour 1. La transformation commence par la régularité — pas l'intensité.</div>
+            <div class="ns-content-tip">⏱ 30 min de lecture + 5 min de pratique</div>
+          </div>
+        </div>
+        <div class="ns-step">
+          <div class="ns-num">4</div>
+          <div>
+            <div class="ns-content-title">Avant ton prochain match — Le Protocole 4E Pré-Performance</div>
+            <div class="ns-content-desc">5 minutes avant d'entrer. VENT → FEU → TERRE → EAU. Chapitre 7 de Zone 4E. Pour la première fois, tu vas choisir ton état avant de jouer — pas le subir.</div>
+            <div class="ns-content-tip">⏱ 5 minutes · Une seule fois · Tu verras la différence</div>
+          </div>
+        </div>
+        <div class="ns-step">
+          <div class="ns-num">5</div>
+          <div>
+            <div class="ns-content-title">Jour 21 — Le Protocole ZÉRØ Secret</div>
+            <div class="ns-content-desc">Après 20 jours de pratique délibérée, tes 4 éléments sont des compétences inconscientes. Le Jour 21, tu déverrouillerais la séquence de 20 secondes qui condense tout. Ton déclencheur de Zone.</div>
+            <div class="ns-content-tip">🔐 Disponible dans le Programme 21 Jours · Jour 21</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK PROTOCOL -->
+    <div class="quick-proto">
+      <div class="qp-title">Ton premier protocole — maintenant</div>
+      <div class="qp-sub">Avant de fermer cette page. Un seul cycle. Pour que ton corps sache déjà.</div>
+      <div class="qp-steps">
+        <div class="qp-step"><div class="qp-icon">🌬</div><span><strong style="color:#fff;">Inspire par le nez — 4 secondes.</strong> Sens l'air entrer. Le ventre se gonfle avant la poitrine.</span></div>
+        <div class="qp-step"><div class="qp-icon">⏸</div><span><strong style="color:#fff;">Retiens — 2 secondes.</strong> Pas de tension. Juste une pause.</span></div>
+        <div class="qp-step"><div class="qp-icon">💨</div><span><strong style="color:#fff;">Expire par le nez — 6 secondes.</strong> Plus lentement que l'inspiration. Laisse les épaules descendre.</span></div>
+        <div class="qp-step"><div class="qp-icon">✨</div><span><strong style="color:var(--gold);">Répète 5 fois.</strong> Puis note l'état. C'est ça, le début de la Zone.</span></div>
+      </div>
+    </div>
+
+    <!-- SHARE -->
+    <div class="share-section">
+      <div class="ss-title">Tu connais un sportif qui en a besoin ?</div>
+      <div class="ss-sub">Un coéquipier. Un ami. Quelqu'un qui perd ses moyens sous pression et qui mérite de jouer à son vrai niveau.</div>
+      <div class="share-btns">
+        <a href="#" class="share-btn share-fb">📘 Partager sur Facebook</a>
+      </div>
+    </div>
+
+    <!-- SIGNATURE -->
+    <div class="signature">
+      <div class="sig-avatar">Z4</div>
+      <div class="sig-text">
+        <strong>Un mot de [Votre Prénom]</strong>
+        Tu viens de prendre une décision que peu de sportifs prennent jamais. Pas acheter un ebook. Décider de travailler ton système interne avec le même sérieux que ton physique. Cette décision — si tu suis ce que tu as maintenant — va changer quelque chose de permanent dans ta façon de performer.<br><br>
+        Je suis là si tu as des questions. Réponds simplement à l'email de confirmation.
+        <div class="sig-name">— [Votre Prénom] · Coach Sportif · Préparateur Mental · Zone 4E</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div>© 2025 Zone 4E · Tous droits réservés</div>
+  <div><a href="#">Mentions légales</a> · <a href="#">CGV</a> · <a href="#">Confidentialité</a> · <a href="#">Contact</a></div>
+  <div style="margin-top:8px;max-width:480px;margin-left:auto;margin-right:auto;opacity:0.6;font-size:10px;line-height:1.8;">Les liens de téléchargement ci-dessus sont à titre indicatif — tu recevras les vrais liens par email. En cas de problème, contacte-nous.</div>
+</footer>
+
+
+<!-- Barre de démo hub-copyrighting -->
+<div style="position:fixed;left:0;right:0;bottom:0;z-index:2147483000;display:flex;align-items:center;gap:10px;justify-content:center;padding:10px 14px;background:rgba(20,20,30,.92);color:#fff;font:600 13px/1.2 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;backdrop-filter:blur(6px)"><span style="opacity:.7">Démo · étape 4/4</span><a href="tunnel-3-upsell.html" style="color:#fff;opacity:.8;text-decoration:none;padding:6px 10px">← Précédent</a><a href="espace-client/" style="background:#6c63ff;color:#fff;text-decoration:none;padding:8px 16px;border-radius:8px">Espace client →</a></div>
+</body>
+</html>

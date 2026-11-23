@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reprogrammer — La Psycho-Cybernétique du Sportif</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,700;1,800&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --page:#fff; --bg:#f8f6f2; --bg2:#f2efe9; --line:#e2ddd5; --line2:#ccc8be;
+  --muted:#9a9488; --body:#3d3a34; --dark:#1a1814; --black:#0e0d0a;
+  --gold:#b8891e; --gold-lt:#f5edd6; --gold-bd:#dfc98a;
+  --fire:#c84e1e; --fire-lt:#fdf0eb; --fire-bd:#e8b49a;
+  --wind:#1e6e9a; --wind-lt:#e8f3f9; --wind-bd:#90c4dc;
+  --earth:#4a7a2e; --earth-lt:#eef5e8; --earth-bd:#9dc87a;
+  --psych:#4a3a8a; --psych-lt:#eeeafa; --psych-bd:#b4a8d8;
+  --mind:#8a4a2a; --mind-lt:#f9ede8; --mind-bd:#d4a890;
+  --pw:780px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;}
+body{background:var(--bg);color:var(--body);font-family:'DM Sans',sans-serif;line-height:1.75;-webkit-font-smoothing:antialiased;}
+.book{max-width:var(--pw);margin:40px auto;display:flex;flex-direction:column;}
+.page{background:var(--page);border:1px solid var(--line);position:relative;overflow:hidden;}
+@media screen{.page{box-shadow:0 4px 32px rgba(0,0,0,0.08);margin-bottom:2px;}}
+@media print{body{background:#fff;}.book{margin:0;max-width:none;}.page{border:none;}.chapter-opener,.chapter-content,.cover,.toc-page{page-break-after:always;}@page{size:A4;margin:0;}}
+
+/* COVER */
+.cover{min-height:980px;display:grid;grid-template-rows:1fr auto;}
+.cover-rule{height:5px;background:linear-gradient(90deg,var(--psych),var(--mind),var(--gold));}
+.cover-footer{padding:22px 72px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);}
+
+/* PILLS */
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:5px 13px;border-radius:100px;border:1.5px solid;}
+.pill.psych{color:var(--psych);background:var(--psych-lt);border-color:var(--psych-bd);}
+.pill.mind{color:var(--mind);background:var(--mind-lt);border-color:var(--mind-bd);}
+.pill.gold{color:var(--gold);background:var(--gold-lt);border-color:var(--gold-bd);}
+.pill.earth{color:var(--earth);background:var(--earth-lt);border-color:var(--earth-bd);}
+
+/* TOC */
+.toc-page{padding:72px;}
+.toc-header{margin-bottom:44px;padding-bottom:18px;border-bottom:2px solid var(--dark);}
+.toc-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:40px;color:var(--black);}
+.toc-item{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line);}
+.toc-item:last-child{border-bottom:none;}
+.toc-num{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;color:var(--muted);}
+.toc-name{font-size:15px;font-weight:600;color:var(--dark);line-height:1.3;}
+.toc-name span{display:block;font-size:12px;font-weight:400;color:var(--muted);margin-top:2px;}
+.tb{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;border:1px solid;white-space:nowrap;}
+.tb-p{color:var(--psych);background:var(--psych-lt);border-color:var(--psych-bd);}
+.tb-m{color:var(--mind);background:var(--mind-lt);border-color:var(--mind-bd);}
+.tb-g{color:var(--gold);background:var(--gold-lt);border-color:var(--gold-bd);}
+.tb-th{color:var(--dark);background:var(--bg2);border-color:var(--line2);}
+
+/* OPENERS */
+.chapter-opener{padding:0;min-height:400px;display:grid;grid-template-rows:auto 1fr;}
+.o-rule{height:5px;}
+.o-rule.psych{background:linear-gradient(90deg,var(--psych),#6a4aaa);}
+.o-rule.mind{background:linear-gradient(90deg,var(--mind),#aa6a4a);}
+.o-rule.gold{background:var(--gold);}
+.o-rule.dark{background:var(--dark);}
+.o-rule.earth{background:var(--earth);}
+.o-body{padding:52px 72px 60px;display:flex;flex-direction:column;justify-content:flex-end;}
+.o-big{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:110px;line-height:1;color:var(--bg2);position:absolute;top:20px;right:52px;pointer-events:none;user-select:none;}
+.o-label{font-size:10px;font-weight:700;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.o-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:58px;line-height:0.92;color:var(--black);letter-spacing:-0.01em;margin-bottom:18px;}
+.o-title em{font-style:italic;display:block;}
+.o-sub{font-family:'Lora',serif;font-style:italic;font-size:16px;color:var(--muted);max-width:500px;line-height:1.6;}
+.o-badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:6px 16px;border-radius:100px;border:1.5px solid;margin-bottom:24px;align-self:flex-start;}
+.ob-p{color:var(--psych);background:var(--psych-lt);border-color:var(--psych-bd);}
+.ob-m{color:var(--mind);background:var(--mind-lt);border-color:var(--mind-bd);}
+.ob-g{color:var(--gold);background:var(--gold-lt);border-color:var(--gold-bd);}
+.ob-th{color:var(--dark);background:var(--bg2);border-color:var(--line2);}
+
+/* CONTENT */
+.chapter-content{padding:60px 72px;}
+.rh{display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;margin-bottom:44px;border-bottom:1px solid var(--line);}
+.rh-t{font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);}
+.rh-n{font-size:10px;font-weight:600;color:var(--line2);}
+
+/* TYPOGRAPHY */
+.sh{display:flex;gap:14px;align-items:flex-start;margin:36px 0 14px;}
+.sh-bar{width:3px;min-height:26px;flex-shrink:0;border-radius:2px;margin-top:4px;}
+.sh-bar.psych{background:var(--psych);}
+.sh-bar.mind{background:var(--mind);}
+.sh-bar.gold{background:var(--gold);}
+.sh-bar.dark{background:var(--dark);}
+.sh-bar.earth{background:var(--earth);}
+.sh-t{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:24px;color:var(--black);letter-spacing:0.02em;line-height:1.05;}
+.bt{font-size:15px;line-height:1.85;color:var(--body);}
+.bt p+p{margin-top:13px;}
+.bt strong{color:var(--dark);font-weight:700;}
+.lead{font-family:'Lora',serif;font-size:18px;line-height:1.7;color:var(--dark);margin-bottom:26px;}
+.pull{margin:32px 0;padding:22px 30px;border-left:3px solid var(--psych);background:var(--psych-lt);border-radius:0 4px 4px 0;font-family:'Lora',serif;font-style:italic;font-size:17px;color:var(--dark);line-height:1.65;}
+.pull strong{font-style:normal;color:var(--mind);}
+.pull.gold{border-left-color:var(--gold);background:var(--gold-lt);}
+.pull.gold strong{color:var(--fire);}
+.hl{background:var(--gold-lt);border-bottom:1.5px solid var(--gold-bd);padding:0 3px;border-radius:2px;}
+
+/* BOOK QUOTE */
+.bq{margin:24px 0;padding:24px 28px;background:var(--dark);border-radius:6px;position:relative;}
+.bq::before{content:'"';position:absolute;top:-10px;left:24px;font-size:68px;color:var(--psych);opacity:0.35;font-family:'Lora',serif;line-height:1;}
+.bq-text{font-family:'Lora',serif;font-style:italic;font-size:16px;color:rgba(255,255,255,0.85);line-height:1.7;}
+.bq-src{margin-top:12px;font-size:11px;color:rgba(255,255,255,0.32);letter-spacing:0.06em;}
+
+/* LISTS */
+.clist{list-style:none;display:flex;flex-direction:column;gap:7px;margin:12px 0;}
+.clist li{display:flex;gap:10px;font-size:14px;line-height:1.65;align-items:flex-start;}
+.ck{flex-shrink:0;font-size:13px;margin-top:2px;}
+.blist{list-style:none;display:flex;flex-direction:column;gap:7px;margin:12px 0;}
+.blist li{display:flex;gap:10px;font-size:14px;line-height:1.65;color:var(--body);}
+.blist li::before{content:'—';color:var(--muted);flex-shrink:0;}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1.5px solid var(--line);border-radius:6px;overflow:hidden;margin:16px 0;}
+.tc{background:var(--page);padding:20px 22px;}
+.tc-head{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;padding-bottom:10px;margin-bottom:12px;border-bottom:2px solid;}
+.tc-head.psych{color:var(--psych);border-color:var(--psych);}
+.tc-head.mind{color:var(--mind);border-color:var(--mind);}
+.tc-head.dark{color:var(--dark);border-color:var(--dark);}
+.tc-head.gold{color:var(--gold);border-color:var(--gold);}
+.tc-head.fire{color:var(--fire);border-color:var(--fire);}
+.tc-head.earth{color:var(--earth);border-color:var(--earth);}
+
+/* SEQUENCE */
+.seq{display:flex;flex-direction:column;gap:2px;margin:14px 0;border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+.seq-r{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:center;padding:11px 15px;background:var(--page);border-bottom:1px solid var(--line);}
+.seq-r:last-child{border-bottom:none;}
+.seq-icon{font-size:17px;text-align:center;}
+.seq-name{font-size:14px;font-weight:700;color:var(--dark);}
+.seq-desc{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:9px;margin:12px 0;}
+.step{display:grid;grid-template-columns:26px 1fr;gap:11px;align-items:flex-start;}
+.sn{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;color:#fff;}
+.sn.psych{background:var(--psych);}
+.sn.mind{background:var(--mind);}
+.sn.gold{background:var(--gold);}
+.sn.dark{background:var(--dark);}
+.sn.earth{background:var(--earth);}
+.st{font-size:13px;line-height:1.7;color:var(--body);padding-top:3px;}
+.st strong{color:var(--dark);}
+
+/* BELIEF CARD */
+.belief-card{margin:12px 0;border:1.5px solid var(--line);border-radius:6px;overflow:hidden;}
+.belief-header{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);}
+.belief-col{padding:14px 18px;}
+.belief-col.bad{background:var(--mind-lt);}
+.belief-col.good{background:var(--earth-lt);}
+.belief-col-title{font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;}
+.belief-col.bad .belief-col-title{color:var(--mind);}
+.belief-col.good .belief-col-title{color:var(--earth);}
+.belief-text{font-family:'Lora',serif;font-style:italic;font-size:14px;line-height:1.6;}
+.belief-col.bad .belief-text{color:var(--dark);}
+.belief-col.good .belief-text{color:var(--dark);}
+
+/* PROTOCOL BOX */
+.proto-box{margin:20px 0;border:2px solid var(--psych-bd);border-radius:8px;overflow:hidden;}
+.proto-head{padding:16px 22px;display:flex;align-items:center;gap:12px;background:var(--psych);}
+.proto-icon{font-size:22px;}
+.proto-label{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.6);}
+.proto-name{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;color:#fff;letter-spacing:0.03em;}
+.proto-body{padding:22px;background:var(--page);}
+
+/* VISUALIZATION STEPS */
+.viz-steps{display:flex;flex-direction:column;gap:2px;border:1px solid var(--psych-bd);border-radius:6px;overflow:hidden;margin:16px 0;}
+.viz-step{display:grid;grid-template-columns:48px 1fr;gap:0;border-bottom:1px solid var(--psych-bd);}
+.viz-step:last-child{border-bottom:none;}
+.viz-num{background:var(--psych);color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;display:flex;align-items:center;justify-content:center;}
+.viz-content{padding:14px 18px;background:var(--psych-lt);}
+.viz-title{font-weight:700;font-size:14px;color:var(--psych);margin-bottom:4px;}
+.viz-desc{font-size:13px;color:var(--body);line-height:1.65;}
+.viz-tip{font-size:11px;color:var(--psych);font-style:italic;margin-top:6px;}
+
+/* IDENTITY BLOCK */
+.identity-block{margin:20px 0;padding:28px 32px;background:linear-gradient(135deg,var(--psych-lt),var(--page));border:2px solid var(--psych-bd);border-radius:8px;}
+.identity-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:var(--psych);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:16px;}
+.identity-list{display:flex;flex-direction:column;gap:10px;}
+.identity-item{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.6;color:var(--dark);}
+.identity-item .arrow{color:var(--psych);font-weight:700;flex-shrink:0;}
+
+/* INNER DIALOGUE TABLE */
+.dialogue-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px;}
+.dialogue-table th{padding:9px 12px;background:var(--dark);color:rgba(255,255,255,0.7);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;text-align:left;}
+.dialogue-table td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6;}
+.dialogue-table tr:last-child td{border-bottom:none;}
+.dialogue-table tr:nth-child(even) td{background:var(--bg);}
+.dt-destroy{color:var(--fire);font-style:italic;}
+.dt-build{color:var(--earth);font-weight:600;}
+.dt-pattern{color:var(--psych);font-weight:700;}
+
+/* SELF IMAGE METER */
+.sim-meter{margin:20px 0;border:1.5px solid var(--line);border-radius:6px;overflow:hidden;}
+.sim-row{display:grid;grid-template-columns:160px 1fr 100px;gap:0;border-bottom:1px solid var(--line);}
+.sim-row:last-child{border-bottom:none;}
+.sim-row:first-child{background:var(--dark);}
+.sim-label{padding:11px 16px;font-size:13px;color:var(--body);border-right:1px solid var(--line);}
+.sim-row:first-child .sim-label{font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.65);}
+.sim-bar-wrap{padding:11px 16px;display:flex;align-items:center;border-right:1px solid var(--line);}
+.sim-bar{height:8px;border-radius:100px;min-width:20px;}
+.sim-score{padding:11px 16px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;color:var(--psych);text-align:center;}
+.sim-row:first-child .sim-score{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.65);}
+
+/* SUMMARY */
+.sumbox{margin:32px 0 0;padding:22px 26px;background:var(--bg2);border:1px solid var(--line);border-radius:6px;}
+.sumbox-t{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;letter-spacing:0.06em;text-transform:uppercase;color:var(--black);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sumbox-t::before{content:'⭐';font-size:13px;}
+
+/* AFFIRMATION */
+.affirmation{margin:14px 0;padding:16px 20px;background:var(--gold-lt);border:1.5px solid var(--gold-bd);border-radius:6px;}
+.affirmation-label{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;}
+.affirmation-text{font-family:'Lora',serif;font-style:italic;font-size:15px;color:var(--dark);line-height:1.65;}
+
+/* SCIENCE BLOCK */
+.science-block{margin:20px 0;padding:24px 28px;background:var(--bg2);border:1px solid var(--line);border-radius:6px;}
+.science-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;color:var(--psych);letter-spacing:0.04em;margin-bottom:12px;}
+
+/* DAY PLAN */
+.day-plan{border:1.5px solid var(--psych-bd);border-radius:6px;overflow:hidden;margin:16px 0;}
+.dp-head{background:var(--psych);padding:12px 20px;display:flex;align-items:center;gap:12px;}
+.dp-day{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;color:#fff;line-height:1;}
+.dp-title{font-weight:700;font-size:14px;color:#fff;margin-bottom:2px;}
+.dp-sub{font-size:11px;color:rgba(255,255,255,0.55);}
+.dp-body{padding:16px 20px;background:var(--psych-lt);}
+.dp-item{display:flex;gap:10px;font-size:13px;color:var(--body);line-height:1.6;margin-bottom:7px;align-items:flex-start;}
+.dp-item::before{content:'→';color:var(--psych);font-weight:700;flex-shrink:0;}
+.dp-focus{margin-top:10px;padding:9px 13px;background:var(--page);border-radius:4px;font-size:12px;color:var(--psych);border:1px solid var(--psych-bd);}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- ══ COVER ══ -->
+<div class="page cover">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:68px 72px 44px;">
+    <div style="display:grid;grid-template-columns:1fr 160px;gap:44px;align-items:end;">
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.28em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:10px;"><span style="width:22px;height:1.5px;background:var(--muted);display:block;"></span>Collection Zone 4E · Mini-Ebook #3</div>
+        <div style="font-family:'Barlow Condensed';font-weight:900;font-size:88px;line-height:0.88;color:var(--black);letter-spacing:-0.02em;margin-bottom:6px;">REPRO-</div>
+        <div style="font-family:'Barlow Condensed';font-weight:900;font-size:88px;line-height:0.88;color:var(--psych);letter-spacing:-0.02em;margin-bottom:20px;">GRAMMER</div>
+        <div style="width:80px;height:3px;background:linear-gradient(90deg,var(--psych),var(--mind),var(--gold));margin-bottom:24px;"></div>
+        <div style="font-family:'Lora';font-style:italic;font-size:20px;color:var(--body);line-height:1.45;max-width:480px;margin-bottom:12px;">La Psycho-Cybernétique du Sportif — l'image mentale qui libère votre vrai niveau</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.6;max-width:440px;margin-bottom:36px;">Basé sur les travaux de Maxwell Maltz, Colvin, et les neurosciences de la performance — pour le sportif qui veut enfin jouer à son vrai niveau.</div>
+        <div style="display:flex;gap:7px;flex-wrap:wrap;">
+          <span class="pill psych">Image de Soi</span>
+          <span class="pill mind">Croyances Limitantes</span>
+          <span class="pill gold">Visualisation</span>
+          <span class="pill earth">Identité d'Athlète</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;padding-bottom:4px;">
+        <div style="width:2px;flex:1;background:linear-gradient(to bottom,transparent,var(--psych-bd));min-height:180px;margin-right:20px;"></div>
+        <div style="font-family:'Barlow Condensed';font-weight:900;font-size:10px;letter-spacing:0.28em;color:var(--muted);writing-mode:vertical-rl;text-transform:uppercase;margin-right:16px;margin-bottom:6px;">Maxwell Maltz · Psycho-Cybernetics · Neuroplasticité</div>
+      </div>
+    </div>
+  </div>
+  <div class="cover-rule"></div>
+  <div class="cover-footer">
+    <div style="font-size:13px;font-weight:600;color:var(--muted);">Par [Votre Prénom] · Coach sportif &amp; Préparateur mental</div>
+    <div style="font-size:11px;color:var(--line2);letter-spacing:0.08em;">Édition 2025 · Collection Zone 4E</div>
+  </div>
+</div>
+
+<!-- ══ TOC ══ -->
+<div class="page toc-page">
+  <div class="toc-header">
+    <div style="font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--psych);margin-bottom:7px;">Sommaire</div>
+    <div class="toc-title">Table des matières</div>
+  </div>
+  <div class="toc-item"><div class="toc-num">Intro</div><div class="toc-name">Le miroir intérieur<span>Pourquoi vos croyances sur vous-même définissent votre plafond de performance</span></div><div class="tb tb-th">Fondation</div></div>
+  <div class="toc-item"><div class="toc-num">01</div><div class="toc-name">La Psycho-Cybernétique — le modèle de Maltz<span>Le servo-mécanisme de réussite et comment le reprogrammer</span></div><div class="tb tb-p">Science</div></div>
+  <div class="toc-item"><div class="toc-num">02</div><div class="toc-name">L'image de soi comme plafond<span>Comment votre cerveau sabote vos performances pour rester "cohérent"</span></div><div class="tb tb-p">Mécanisme</div></div>
+  <div class="toc-item"><div class="toc-num">03</div><div class="toc-name">Le cerveau ne distingue pas la réalité de l'imagination<span>La découverte qui change tout — et comment en profiter</span></div><div class="tb tb-p">Neurosciences</div></div>
+  <div class="toc-item"><div class="toc-num">04</div><div class="toc-name">Identifier vos croyances limitantes sportives<span>Les 8 patterns les plus destructeurs — et comment les repérer en vous</span></div><div class="tb tb-m">Diagnostic</div></div>
+  <div class="toc-item"><div class="toc-num">05</div><div class="toc-name">Le dialogue interne de l'athlète<span>Ce que vous vous dites en match — et comment le transformer</span></div><div class="tb tb-m">Pratique</div></div>
+  <div class="toc-item"><div class="toc-num">06</div><div class="toc-name">La visualisation de performance — la méthode exacte<span>7 étapes pour programmer votre cerveau à performer avant même de jouer</span></div><div class="tb tb-g">Protocole</div></div>
+  <div class="toc-item"><div class="toc-num">07</div><div class="toc-name">Construire l'identité "Athlète de Zone"<span>Devenir intérieurement le joueur que vous voulez être extérieurement</span></div><div class="tb tb-g">Identité</div></div>
+  <div class="toc-item"><div class="toc-num">08</div><div class="toc-name">Le protocole de visualisation pré-compétition<span>7 minutes, 3 scènes — la routine complète pour le jour de match</span></div><div class="tb tb-g">Protocole</div></div>
+  <div class="toc-item"><div class="toc-num">—</div><div class="toc-name">Programme 21 jours de reprogrammation<span>Intégrer la psycho-cybernétique dans votre pratique quotidienne</span></div><div class="tb tb-th">Programme</div></div>
+</div>
+
+<!-- ══ INTRO ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule psych"></div>
+  <div class="o-body">
+    <div class="o-big">Intro</div>
+    <div class="o-badge ob-th">Introduction</div>
+    <div class="o-title">Le miroir<br><em>intérieur</em></div>
+    <div class="o-sub">Pourquoi vos croyances sur vous-même définissent votre plafond de performance — et comment changer ce plafond.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Introduction — Le miroir intérieur</div><div class="rh-n">Reprogrammer · Zone 4E</div></div>
+  <p class="lead">Il y a une chose que tous les sportifs qui n'atteignent pas leur potentiel ont en commun. Ce n'est pas le manque de talent. Ce n'est pas le manque de travail. C'est l'image qu'ils ont d'eux-mêmes.</p>
+  <div class="bt">
+    <p>Vous avez probablement déjà vécu ça. Une période où tout coule, où vous performez avec fluidité, où vous vous surprenez vous-même. Et une période — souvent plus longue — où quelque chose résiste. Où vous jouez "prudemment". Où vous hésitez au moment de prendre des risques que vous prenez à l'entraînement les yeux fermés.</p>
+    <p>La différence entre ces deux états n'est presque jamais physique ou technique. <strong>Elle est dans le film que vous passez intérieurement sur vous-même.</strong></p>
+    <p>Maxwell Maltz a découvert ce mécanisme en 1960 en opérant des visages. Des patients qui avaient subi des cicatrices défigurant leur visage — après la chirurgie qui corrigeait leur apparence, ils continuaient à se comporter comme s'ils étaient encore défigurés. Leur image intérieure n'avait pas changé. Et c'était cette image intérieure, pas leur visage réel, qui dirigeait leur vie.</p>
+    <p>Ce livre applique cette découverte au sport. <strong>Votre image de vous-même en tant que sportif est votre servo-mécanisme de performance. Il vous ramène toujours vers votre "niveau habituel" — même si votre vrai niveau est bien au-dessus.</strong></p>
+  </div>
+  <div class="pull">Ce que vous allez apprendre ici n'est pas de la pensée positive. C'est quelque chose de beaucoup plus profond et de beaucoup plus efficace : <strong>comment reprogrammer l'image que votre cerveau a de vous en tant qu'athlète.</strong></div>
+  <div class="sumbox"><div class="sumbox-t">Ce que vous allez apprendre</div>
+    <ul class="clist">
+      <li><span class="ck" style="color:var(--psych);">✓</span><span>Pourquoi votre image de vous-même plafonne vos performances — et le mécanisme exact</span></li>
+      <li><span class="ck" style="color:var(--psych);">✓</span><span>Comment votre cerveau confond imagination et réalité — et comment en profiter</span></li>
+      <li><span class="ck" style="color:var(--psych);">✓</span><span>Les 8 croyances limitantes les plus fréquentes chez les sportifs</span></li>
+      <li><span class="ck" style="color:var(--psych);">✓</span><span>La méthode de visualisation en 7 étapes validée scientifiquement</span></li>
+      <li><span class="ck" style="color:var(--psych);">✓</span><span>Comment construire l'identité "Athlète de Zone" progressivement</span></li>
+      <li><span class="ck" style="color:var(--psych);">✓</span><span>Le protocole complet de visualisation pré-compétition en 7 minutes</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ CH1 — PSYCHO-CYBERNÉTIQUE ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule psych"></div>
+  <div class="o-body">
+    <div class="o-big">01</div>
+    <div class="o-badge ob-p">Science</div>
+    <div class="o-title">La Psycho-<br><em>Cybernétique</em></div>
+    <div class="o-sub">Le servo-mécanisme de réussite de Maxwell Maltz — et comment il s'applique à votre performance sportive.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Chapitre 1 — La Psycho-Cybernétique</div><div class="rh-n">Reprogrammer · Zone 4E</div></div>
+  <p class="lead">En 1960, Maxwell Maltz publie Psycho-Cybernetics. Le livre se vend à 35 millions d'exemplaires. Il est encore aujourd'hui l'un des ouvrages de psychologie de la performance les plus influents jamais écrits.</p>
+
+  <div class="sh"><div class="sh-bar psych"></div><div class="sh-t">Le concept central : le servo-mécanisme</div></div>
+  <div class="bt">
+    <p>La cybernétique est la science des systèmes autorégulés — les missiles qui corrigent leur trajectoire automatiquement pour atteindre leur cible. Maltz a eu l'intuition que le cerveau humain fonctionne exactement de la même façon.</p>
+    <p>Votre cerveau est un servo-mécanisme sophistiqué. Il prend une <strong>image cible</strong> — l'image que vous avez de vous-même — et il dirige automatiquement tous vos comportements, vos décisions, vos performances pour rester cohérent avec cette image.</p>
+    <p>Si votre image de vous-même est "je suis quelqu'un qui perd ses moyens sous pression" — votre cerveau va s'arranger pour que vous perdiez effectivement vos moyens sous pression. Non pas par malveillance. Mais parce qu'il est programmé pour maintenir la cohérence.</p>
+  </div>
+
+  <div class="bq">
+    <div class="bq-text">"L'image que vous avez de vous-même est la prémisse, la fondation sur laquelle toute votre personnalité, votre comportement et même vos circonstances sont construits. Changez l'image et vous changez la personnalité et les circonstances."</div>
+    <div class="bq-src">Maxwell Maltz — Psycho-Cybernetics, 1960</div>
+  </div>
+
+  <div class="sh"><div class="sh-bar psych"></div><div class="sh-t">Ce que ça signifie concrètement en sport</div></div>
+  <div class="bt">
+    <p>Votre niveau habituel de performance n'est pas votre niveau réel. C'est votre niveau "cohérent avec votre image de vous-même". Il y a souvent un écart significatif entre les deux.</p>
+    <p>Vous l'avez peut-être vécu à l'envers aussi : une période où vous jouiez "au-dessus de votre niveau" — et où quelque chose vous a ramené vers le bas. Votre servo-mécanisme a corrigé la trajectoire pour revenir vers l'image habituelle. <strong>Pas parce que vous n'étiez pas capable. Parce que votre image ne suivait pas.</strong></p>
+  </div>
+
+  <div class="science-block">
+    <div class="science-title">La neuroplasticité confirme Maltz</div>
+    <div class="bt" style="font-size:14px;">
+      <p>Les neurosciences contemporaines donnent raison à Maltz. Le cerveau est plastique — il se modifie physiquement en réponse aux expériences répétées. Les circuits nerveux qui sous-tendent une croyance ("je suis un joueur qui perd ses moyens") se renforcent chaque fois que cette croyance est activée.</p>
+      <p>Mais — et c'est la clé — ces mêmes circuits peuvent être modifiés par des expériences répétées différentes. Réelles <em>ou imaginées</em>. C'est ce que vous allez apprendre à faire dans ce livre.</p>
+    </div>
+  </div>
+
+  <div class="sh"><div class="sh-bar psych"></div><div class="sh-t">Les 3 composantes de l'image de soi sportive</div></div>
+  <div class="two-col" style="grid-template-columns:1fr 1fr 1fr;">
+    <div class="tc" style="border-right:1px solid var(--line);">
+      <div class="tc-head psych">Ce que je crois être</div>
+      <div style="font-size:13px;color:var(--body);line-height:1.65;">"Je suis le type de joueur qui..." · Vos étiquettes automatiques · Votre identité sportive profonde</div>
+    </div>
+    <div class="tc" style="border-right:1px solid var(--line);">
+      <div class="tc-head mind">Ce que je crois mériter</div>
+      <div style="font-size:13px;color:var(--body);line-height:1.65;">"Un joueur comme moi mérite de..." · Votre niveau "autorisé" · Votre thermostat de succès</div>
+    </div>
+    <div class="tc">
+      <div class="tc-head gold">Ce que je crois être capable</div>
+      <div style="font-size:13px;color:var(--body);line-height:1.65;">"Je peux / je ne peux pas..." · Vos limites auto-imposées · Vos zones d'impossibilité</div>
+    </div>
+  </div>
+
+  <div class="pull">Le vrai travail de préparation mentale n'est pas de "penser positif" par-dessus des croyances négatives. C'est de <strong>modifier les croyances elles-mêmes</strong> — en reprogrammant les images que votre cerveau utilise comme cible.</div>
+
+  <div class="sumbox"><div class="sumbox-t">Résumé du chapitre</div>
+    <ul class="clist">
+      <li><span class="ck" style="color:var(--psych);">✓</span><span>Votre cerveau est un servo-mécanisme — il cible l'image que vous avez de vous-même</span></li>
+      <li><span class="ck" style="color:var(--psych);">✓</span><span>Votre niveau habituel = niveau cohérent avec votre image, pas votre vrai niveau</span></li>
+      <li><span class="ck" style="color:var(--psych);">✓</span><span>La neuroplasticité confirme : les images répétées modifient physiquement le cerveau</span></li>
+      <li><span class="ck" style="color:var(--psych);">✓</span><span>3 composantes à reprogrammer : ce que je crois être, mériter, pouvoir faire</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ CH2 — PLAFOND ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule psych"></div>
+  <div class="o-body">
+    <div class="o-big">02</div>
+    <div class="o-badge ob-p">Mécanisme</div>
+    <div class="o-title">L'image de soi<br><em>comme plafond</em></div>
+    <div class="o-sub">Comment votre cerveau sabote vos performances pour maintenir la "cohérence" — et le thermostat de succès.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Chapitre 2 — L'Image de Soi comme Plafond</div><div class="rh-n">Reprogrammer · Zone 4E</div></div>
+  <p class="lead">Votre cerveau ne veut pas vous voir échouer. Mais il ne veut pas non plus vous voir "dépasser" votre image de vous-même. Les deux lui semblent également dangereux.</p>
+
+  <div class="sh"><div class="sh-bar psych"></div><div class="sh-t">Le thermostat de performance</div></div>
+  <div class="bt">
+    <p>Pensez à un thermostat. Il maintient la température à un niveau défini. Si la pièce devient trop froide — il active le chauffage. Si elle devient trop chaude — il coupe le chauffage. Son seul objectif : maintenir la cohérence avec la température cible.</p>
+    <p>Votre image de vous-même fonctionne exactement comme ça. Elle définit un "niveau habituel" de performance. Quand vous jouez en dessous — votre cerveau active des mécanismes pour remonter (motivation, effort). Quand vous jouez au-dessus — il active des mécanismes pour redescendre.</p>
+    <p><strong>Ces mécanismes de redescente, c'est ce que vous appelez "manque de confiance", "pression", "jouer prudemment", "avoir peur de gagner".</strong> Ce n'est pas une faiblesse. C'est votre thermostat qui fait son travail.</p>
+  </div>
+
+  <div class="sim-meter">
+    <div class="sim-row">
+      <div class="sim-label">Situation</div>
+      <div class="sim-bar-wrap">Niveau perçu</div>
+      <div class="sim-score">Réaction</div>
+    </div>
+    <div class="sim-row">
+      <div class="sim-label" style="color:var(--earth);font-weight:600;">Periode de confiance</div>
+      <div class="sim-bar-wrap"><div class="sim-bar" style="width:85%;background:var(--earth);"></div></div>
+      <div class="sim-score" style="color:var(--earth);">Coule</div>
+    </div>
+    <div class="sim-row">
+      <div class="sim-label">Niveau "image de soi"</div>
+      <div class="sim-bar-wrap"><div class="sim-bar" style="width:60%;background:var(--psych);"></div></div>
+      <div class="sim-score">Référence</div>
+    </div>
+    <div class="sim-row">
+      <div class="sim-label" style="color:var(--fire);font-weight:600;">Trop au-dessus → peur</div>
+      <div class="sim-bar-wrap"><div class="sim-bar" style="width:80%;background:var(--fire);opacity:0.5;"></div></div>
+      <div class="sim-score" style="color:var(--fire);">Frein</div>
+    </div>
+    <div class="sim-row">
+      <div class="sim-label" style="color:var(--muted);">Mauvaise période</div>
+      <div class="sim-bar-wrap"><div class="sim-bar" style="width:35%;background:var(--muted);"></div></div>
+      <div class="sim-score" style="color:var(--muted);">Remontée</div>
+    </div>
+  </div>
+
+  <div class="sh"><div class="sh-bar psych"></div><div class="sh-t">Les 5 mécanismes de sabotage automatique</div></div>
+  <div class="bt"><p>Voici comment votre servo-mécanisme vous ramène vers votre "niveau habituel" quand vous jouez au-dessus :</p></div>
+  <div class="seq">
+    <div class="seq-r"><div class="seq-icon">1️⃣</div><div><div class="seq-name">L'auto-sabotage inconscient</div><div class="seq-desc">Une erreur "bizarre" qui arrive juste au moment où la victoire est à portée. Ce n'est pas la malchance — c'est le thermostat.</div></div></div>
+    <div class="seq-r"><div class="seq-icon">2️⃣</div><div><div class="seq-name">La prudence excessive</div><div class="seq-desc">Vous commencez à "gérer" au lieu de jouer. Vous protégez ce que vous avez au lieu de continuer à jouer librement.</div></div></div>
+    <div class="seq-r"><div class="seq-icon">3️⃣</div><div><div class="seq-name">La pensée disqualifiante</div><div class="seq-desc">"C'est trop beau pour durer." "Je ne mérite pas de gagner contre eux." "Il va forcément me rattraper."</div></div></div>
+    <div class="seq-r"><div class="seq-icon">4️⃣</div><div><div class="seq-name">Le sur-effort contreproductif</div><div class="seq-desc">Vous commencez à forcer pour "tenir" le niveau — et vous perdez exactement la fluidité qui vous avait amené là.</div></div></div>
+    <div class="seq-r"><div class="seq-icon">5️⃣</div><div><div class="seq-name">L'analyse paralysante</div><div class="seq-desc">"Qu'est-ce que je fais de juste ? Il faut que je comprenne." Et en voulant comprendre, vous brisez ce qui coulait naturellement.</div></div></div>
+  </div>
+
+  <div class="pull gold">La solution n'est pas de "résister" à ces mécanismes. C'est de <strong>remonter le thermostat</strong> — changer l'image de référence pour que votre nouveau niveau de performance soit le niveau "normal".</div>
+
+  <div class="sumbox"><div class="sumbox-t">Résumé du chapitre</div>
+    <ul class="clist">
+      <li><span class="ck" style="color:var(--psych);">✓</span><span>Votre image de vous-même fonctionne comme un thermostat de performance</span></li>
+      <li><span class="ck" style="color:var(--psych);">✓</span><span>5 mécanismes automatiques vous ramènent vers votre niveau "cohérent"</span></li>
+      <li><span class="ck" style="color:var(--psych);">✓</span><span>La solution : remonter le thermostat en reprogrammant l'image de référence</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ CH3 — CERVEAU & IMAGINATION ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule psych"></div>
+  <div class="o-body">
+    <div class="o-big">03</div>
+    <div class="o-badge ob-p">Neurosciences</div>
+    <div class="o-title">Le cerveau ne distingue<br><em>pas la réalité<br>de l'imagination</em></div>
+    <div class="o-sub">La découverte qui change tout — et comment l'utiliser pour vous entraîner sans bouger.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Chapitre 3 — Cerveau, Réalité et Imagination</div><div class="rh-n">Reprogrammer · Zone 4E</div></div>
+  <p class="lead">C'est probablement la découverte la plus puissante de la psychologie de la performance — et la moins bien comprise.</p>
+
+  <div class="sh"><div class="sh-bar psych"></div><div class="sh-t">L'expérience qui a tout changé</div></div>
+  <div class="bt">
+    <p>Dans les années 1960, le Dr Maxwell Maltz compile des expériences troublantes. Des patients qui pensent à bouger leur bras activent les mêmes circuits moteurs que ceux qui bougent réellement leur bras. Des pianistes qui répètent mentalement une partition progressent presque autant que ceux qui la répètent physiquement.</p>
+    <p>Plus récemment, Alvaro Pascual-Leone, neurochirurgien à Harvard, conduit une expérience devenue célèbre. Deux groupes apprennent une séquence au piano. Le premier groupe pratique physiquement. Le second ne fait que <strong>visualiser</strong> la pratique — mentalement, sans toucher un piano.</p>
+    <p>Après 5 jours : les deux groupes montrent des changements quasi identiques dans les cartes corticales motrices. <strong>Le cerveau avait appris sans que les doigts bougent.</strong></p>
+  </div>
+
+  <div class="bq">
+    <div class="bq-text">"Le système nerveux humain ne peut pas distinguer une expérience réelle d'une expérience imaginée avec précision et détail. Il réagit de façon appropriée à ce que vous imaginez ou pensez être vrai."</div>
+    <div class="bq-src">Maxwell Maltz — Psycho-Cybernetics, 1960</div>
+  </div>
+
+  <div class="sh"><div class="sh-bar psych"></div><div class="sh-t">Ce que ça signifie pour vous</div></div>
+  <div class="bt">
+    <p>Quand vous visualisez un geste technique avec précision — votre cerveau enregistre cette expérience comme réelle. Les mêmes circuits s'activent. Les mêmes connexions synaptiques se renforcent.</p>
+    <p>Mais — et c'est crucial — cela fonctionne dans les deux sens. <strong>Quand vous rejouez mentalement une erreur en boucle, vous l'entraînez autant que si vous la reproduisiez physiquement.</strong></p>
+    <p>La rumination post-erreur n'est pas juste inconfortable. Elle est contre-productive neurologiquement. Elle programme votre cerveau à reproduire l'erreur.</p>
+  </div>
+
+  <div class="two-col">
+    <div class="tc" style="border-right:1px solid var(--line);">
+      <div class="tc-head fire">Ce que vous visualisez sans le savoir</div>
+      <ul class="blist" style="font-size:13px;">
+        <li>Rejouer l'erreur mentalement après le match</li>
+        <li>Imaginer le pire avant une situation difficile</li>
+        <li>Voir dans votre tête comment vous allez "foirer"</li>
+        <li>Anticiper la déception des autres</li>
+        <li>Revenir sur un match perdu en imaginant ce qui aurait pu être</li>
+      </ul>
+    </div>
+    <div class="tc">
+      <div class="tc-head earth">Ce que vous allez visualiser délibérément</div>
+      <ul class="blist" style="font-size:13px;">
+        <li>Voir votre entrée en compétition avec fluidité</li>
+        <li>Revivre mentalement vos meilleures performances</li>
+        <li>Visualiser un moment difficile surmonté avec calme</li>
+        <li>Voir le geste réussi dans le détail sensoriel</li>
+        <li>Construire l'image d'un athlète de Zone en action</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="science-block">
+    <div class="science-title">3 conditions pour que la visualisation soit efficace</div>
+    <div class="bt" style="font-size:14px;">
+      <p><strong>1. La précision sensorielle.</strong> Plus vous activez de sens (visuel, kinesthésique, auditif), plus le cerveau traite l'image comme réelle. Une image floue produit peu d'effet. Une image vécue dans le corps produit un effet puissant.</p>
+      <p><strong>2. La perspective interne.</strong> Visualiser à la première personne (voir à travers vos yeux) active les zones motrices. Visualiser à la troisième personne (vous voir depuis l'extérieur) active les zones analytiques. Pour la performance : première personne.</p>
+      <p><strong>3. L'état émotionnel positif.</strong> La visualisation couplée à une émotion positive est infiniment plus efficace que la visualisation "neutre". Le cerveau mémorise prioritairement les expériences émotionnellement chargées.</p>
+    </div>
+  </div>
+
+  <div class="sumbox"><div class="sumbox-t">Résumé du chapitre</div>
+    <ul class="clist">
+      <li><span class="ck" style="color:var(--psych);">✓</span><span>Le cerveau ne distingue pas réalité et imagination précise — validé par les neurosciences</span></li>
+      <li><span class="ck" style="color:var(--psych);">✓</span><span>La rumination programme l'erreur — la visualisation positive programme la réussite</span></li>
+      <li><span class="ck" style="color:var(--psych);">✓</span><span>3 conditions d'efficacité : précision sensorielle, perspective 1ère personne, émotion positive</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ CH4 — CROYANCES LIMITANTES ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule mind"></div>
+  <div class="o-body">
+    <div class="o-big">04</div>
+    <div class="o-badge ob-m">Diagnostic</div>
+    <div class="o-title">Les croyances<br><em>limitantes sportives</em></div>
+    <div class="o-sub">Les 8 patterns les plus destructeurs — et comment les identifier précisément en vous.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Chapitre 4 — Les Croyances Limitantes Sportives</div><div class="rh-n">Reprogrammer · Zone 4E</div></div>
+  <p class="lead">Une croyance limitante n'est pas une pensée. C'est une certitude. Vous n'y croyez pas — vous la savez. C'est cette différence qui la rend si difficile à changer avec des techniques superficielles.</p>
+
+  <div class="sh"><div class="sh-bar mind"></div><div class="sh-t">Comment se forment les croyances limitantes</div></div>
+  <div class="bt">
+    <p>Une croyance limitante se forme par accumulation d'expériences interprétées dans le même sens. Trois échecs dans des situations similaires, interprétés comme "je ne suis pas capable de X" — et votre cerveau crée un schéma. Quelques répétitions supplémentaires — et ce schéma devient une certitude.</p>
+    <p>Le problème : une fois installée, la croyance crée les preuves de sa validité. Vous croyez que vous perdez vos moyens sous pression → vous perdez vos moyens sous pression → votre croyance est "prouvée". C'est une prophétie auto-réalisatrice neuronale.</p>
+  </div>
+
+  <div class="sh"><div class="sh-bar mind"></div><div class="sh-t">Les 8 croyances limitantes les plus fréquentes chez les sportifs</div></div>
+
+  <div class="belief-card">
+    <div class="belief-header">
+      <div class="belief-col bad"><div class="belief-col-title">Croyance limitante</div><div class="belief-text">"Je perds toujours mes moyens quand ça compte vraiment."</div></div>
+      <div class="belief-col good"><div class="belief-col-title">Croyance habilitante</div><div class="belief-text">"La pression active mes ressources. Je suis fait pour les moments importants."</div></div>
+    </div>
+  </div>
+
+  <div class="belief-card">
+    <div class="belief-header">
+      <div class="belief-col bad"><div class="belief-col-title">Croyance limitante</div><div class="belief-text">"Je ne suis pas au niveau de ces joueurs / de cette compétition."</div></div>
+      <div class="belief-col good"><div class="belief-col-title">Croyance habilitante</div><div class="belief-text">"Je mérite d'être ici. Mon travail m'a amené ici pour une raison."</div></div>
+    </div>
+  </div>
+
+  <div class="belief-card">
+    <div class="belief-header">
+      <div class="belief-col bad"><div class="belief-col-title">Croyance limitante</div><div class="belief-text">"Quand je joue bien, ça ne dure jamais. C'est forcément temporaire."</div></div>
+      <div class="belief-col good"><div class="belief-col-title">Croyance habilitante</div><div class="belief-text">"Mon vrai niveau est élevé. Il m'appartient. Il devient de plus en plus stable."</div></div>
+    </div>
+  </div>
+
+  <div class="belief-card">
+    <div class="belief-header">
+      <div class="belief-col bad"><div class="belief-col-title">Croyance limitante</div><div class="belief-text">"Je suis capable à l'entraînement mais pas en compétition."</div></div>
+      <div class="belief-col good"><div class="belief-col-title">Croyance habilitante</div><div class="belief-text">"La compétition libère ce que l'entraînement prépare. Je performe mieux quand ça compte."</div></div>
+    </div>
+  </div>
+
+  <div class="belief-card">
+    <div class="belief-header">
+      <div class="belief-col bad"><div class="belief-col-title">Croyance limitante</div><div class="belief-text">"Après une erreur, je ne peux plus m'en sortir. Je m'effondre."</div></div>
+      <div class="belief-col good"><div class="belief-col-title">Croyance habilitante</div><div class="belief-text">"Les erreurs font partie du jeu. Je sais y revenir plus vite que la plupart."</div></div>
+    </div>
+  </div>
+
+  <div class="belief-card">
+    <div class="belief-header">
+      <div class="belief-col bad"><div class="belief-col-title">Croyance limitante</div><div class="belief-text">"Je n'ai pas le mental. Ce n'est pas pour moi."</div></div>
+      <div class="belief-col good"><div class="belief-col-title">Croyance habilitante</div><div class="belief-text">"Le mental s'entraîne. Je construis mon mental délibérément."</div></div>
+    </div>
+  </div>
+
+  <div class="belief-card">
+    <div class="belief-header">
+      <div class="belief-col bad"><div class="belief-col-title">Croyance limitante</div><div class="belief-text">"Les autres sportifs sont naturellement doués. Moi je dois tout forcer."</div></div>
+      <div class="belief-col good"><div class="belief-col-title">Croyance habilitante</div><div class="belief-text">"La fluidité que je vois chez les autres est le résultat de leur préparation. La mienne aussi s'installe."</div></div>
+    </div>
+  </div>
+
+  <div class="belief-card">
+    <div class="belief-header">
+      <div class="belief-col bad"><div class="belief-col-title">Croyance limitante</div><div class="belief-text">"Je ne peux pas être constant. Je suis soit très bon soit très mauvais."</div></div>
+      <div class="belief-col good"><div class="belief-col-title">Croyance habilitante</div><div class="belief-text">"Ma régularité augmente avec ma pratique mentale. Je construis la constance."</div></div>
+    </div>
+  </div>
+
+  <div class="sh"><div class="sh-bar mind"></div><div class="sh-t">Votre diagnostic personnel</div></div>
+  <div class="bt"><p>Parmi ces 8 croyances, laquelle vous touche le plus ? Celle qui provoque une légère résistance intérieure à la croyance habilitante — c'est souvent la bonne. Notez-la. C'est votre cible prioritaire de reprogrammation.</p></div>
+
+  <div class="affirmation">
+    <div class="affirmation-label">Exercice immédiat</div>
+    <div class="affirmation-text">Écrivez votre croyance limitante principale. Ensuite écrivez sa version habilitante. Lisez la version habilitante à voix haute trois fois. Notez la résistance intérieure que vous ressentez — c'est exactement là que la reprogrammation doit travailler.</div>
+  </div>
+
+  <div class="sumbox"><div class="sumbox-t">Résumé du chapitre</div>
+    <ul class="clist">
+      <li><span class="ck" style="color:var(--mind);">✓</span><span>8 croyances limitantes sportives identifiées et transformables</span></li>
+      <li><span class="ck" style="color:var(--mind);">✓</span><span>Une croyance limitante crée les preuves de sa validité — prophétie auto-réalisatrice</span></li>
+      <li><span class="ck" style="color:var(--mind);">✓</span><span>Votre cible : identifier votre croyance principale et construire sa version habilitante</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ CH5 — DIALOGUE INTERNE ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule mind"></div>
+  <div class="o-body">
+    <div class="o-big">05</div>
+    <div class="o-badge ob-m">Pratique</div>
+    <div class="o-title">Le dialogue<br><em>interne de l'athlète</em></div>
+    <div class="o-sub">Ce que vous vous dites en match — les patterns les plus destructeurs et comment les transformer.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Chapitre 5 — Le Dialogue Interne</div><div class="rh-n">Reprogrammer · Zone 4E</div></div>
+  <p class="lead">Votre dialogue interne est la voix en temps réel de votre image de vous-même. C'est le canal par lequel votre servo-mécanisme communique avec votre performance.</p>
+
+  <div class="sh"><div class="sh-bar mind"></div><div class="sh-t">Les 3 voix de l'athlète</div></div>
+  <div class="bt">
+    <p>Tout sportif a trois voix intérieures distinctes — même s'il n'en est pas toujours conscient :</p>
+  </div>
+  <div class="two-col" style="grid-template-columns:1fr 1fr 1fr;">
+    <div class="tc" style="border-right:1px solid var(--line);">
+      <div class="tc-head fire">Le Juge</div>
+      <div style="font-size:13px;color:var(--body);line-height:1.65;">"Nul. Encore. Tu fais exprès ou quoi ?" · Autocritique, comparaison, punition</div>
+    </div>
+    <div class="tc" style="border-right:1px solid var(--line);">
+      <div class="tc-head psych">Le Stratège</div>
+      <div style="font-size:13px;color:var(--body);line-height:1.65;">"Analyse, comprends, ajuste." · Suranalyse, hypercontrôle, perte de fluidité</div>
+    </div>
+    <div class="tc">
+      <div class="tc-head earth">Le Joueur</div>
+      <div style="font-size:13px;color:var(--body);line-height:1.65;">"Joue. Là. Maintenant." · Présence, instinct, fluidité, Zone</div>
+    </div>
+  </div>
+  <div class="bt"><p>La Zone apparaît quand <strong>Le Joueur</strong> est aux commandes. Le Juge et le Stratège — même bien intentionnés — en sortent systématiquement. Votre travail : reconnaître quelle voix parle, et apprendre à passer la main au Joueur.</p></div>
+
+  <div class="sh"><div class="sh-bar mind"></div><div class="sh-t">Les patterns de dialogue qui détruisent la Zone</div></div>
+  <div class="dialogue-table">
+    <tr><th>Pattern</th><th>Exemple en match</th><th>Effet neurologique</th><th>Alternative</th></tr>
+    <tr>
+      <td class="dt-pattern">Généralisation négative</td>
+      <td class="dt-destroy">"Je rate toujours dans ces moments-là"</td>
+      <td>Programme l'erreur future via mémorisation émotionnelle</td>
+      <td class="dt-build">"Cette action est passée. Prochaine."</td>
+    </tr>
+    <tr>
+      <td class="dt-pattern">Catastrophisation</td>
+      <td class="dt-destroy">"Si je rate ça, tout est foutu"</td>
+      <td>Active l'amygdale → blocage système exécutif</td>
+      <td class="dt-build">"Une action à la fois. Celle-ci."</td>
+    </tr>
+    <tr>
+      <td class="dt-pattern">Comparaison dévalorisante</td>
+      <td class="dt-destroy">"Il est tellement meilleur que moi"</td>
+      <td>Réduit le cortisol de confiance, augmente le cortisol de stress</td>
+      <td class="dt-build">"Mon jeu. Mon plan. Mon match."</td>
+    </tr>
+    <tr>
+      <td class="dt-pattern">Interdiction</td>
+      <td class="dt-destroy">"Ne rate pas ce tir. Ne rate pas."</td>
+      <td>Le cerveau ignore le "ne pas" — programme l'erreur</td>
+      <td class="dt-build">"Geste fluide. Confiant. Maintenant."</td>
+    </tr>
+    <tr>
+      <td class="dt-pattern">Jugement immédiat</td>
+      <td class="dt-destroy">"Nul. Vraiment nul."</td>
+      <td>Active le système de menace → fermeture des ressources cognitives</td>
+      <td class="dt-build">"OK. Ajuste. Continuons."</td>
+    </tr>
+    <tr>
+      <td class="dt-pattern">Anticipation négative</td>
+      <td class="dt-destroy">"Ça va se terminer mal de toute façon"</td>
+      <td>Programme la fin avant qu'elle arrive — zone d'impossibilité créée</td>
+      <td class="dt-build">"Maintenant. Rien d'autre n'existe."</td>
+    </tr>
+  </div>
+
+  <div class="sh"><div class="sh-bar mind"></div><div class="sh-t">Construire vos mots d'ancrage personnels</div></div>
+  <div class="bt"><p>Les mots d'ancrage sont des mots courts, chargés de sens personnel, qui activent rapidement l'état mental souhaité. Ils remplacent le dialogue négatif automatique par un signal délibéré.</p></div>
+  <div class="two-col">
+    <div class="tc" style="border-right:1px solid var(--line);">
+      <div class="tc-head psych">Mots de recentrage</div>
+      <ul class="blist" style="font-size:13px;">
+        <li>"Maintenant" — revenir au présent</li>
+        <li>"Ici" — ancrage spatial</li>
+        <li>"Prochaine action" — couper la rumination</li>
+        <li>"Respire" — reset nerveux immédiat</li>
+        <li>"Je joue" — permission de lâcher</li>
+      </ul>
+    </div>
+    <div class="tc">
+      <div class="tc-head gold">Mots d'activation</div>
+      <ul class="blist" style="font-size:13px;">
+        <li>"Décidé" — engagement total</li>
+        <li>"Fluide" — rappel de l'état cible</li>
+        <li>"Calme agressif" — énergie juste</li>
+        <li>"Ma Zone" — connexion à l'état optimal</li>
+        <li>"Confiant" — signal de permission</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="affirmation">
+    <div class="affirmation-label">Votre travail cette semaine</div>
+    <div class="affirmation-text">Choisissez 3 mots d'ancrage. Votre mot de recentrage, votre mot d'activation, votre mot de Zone. Pratiquez-les à voix haute 10 fois le matin pendant 7 jours. Votre cerveau les associera à des états précis — et ils deviendront des déclencheurs puissants.</div>
+  </div>
+
+  <div class="sumbox"><div class="sumbox-t">Résumé du chapitre</div>
+    <ul class="clist">
+      <li><span class="ck" style="color:var(--mind);">✓</span><span>3 voix intérieures : Le Juge, Le Stratège, Le Joueur — seul Le Joueur mène à la Zone</span></li>
+      <li><span class="ck" style="color:var(--mind);">✓</span><span>6 patterns de dialogue destructeurs identifiés avec leurs alternatives</span></li>
+      <li><span class="ck" style="color:var(--mind);">✓</span><span>Vos mots d'ancrage personnels : les déclencheurs rapides vers l'état optimal</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ CH6 — VISUALISATION ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule gold"></div>
+  <div class="o-body">
+    <div class="o-big">06</div>
+    <div class="o-badge ob-g">Protocole</div>
+    <div class="o-title">La visualisation<br><em>de performance</em></div>
+    <div class="o-sub">La méthode exacte en 7 étapes — programmer votre cerveau à performer avant même de jouer.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Chapitre 6 — La Visualisation de Performance</div><div class="rh-n">Reprogrammer · Zone 4E</div></div>
+  <p class="lead">La visualisation n'est pas de la rêverie. C'est un entraînement neurologique. Et comme tout entraînement, elle a une technique précise qui fait toute la différence entre ce qui marche et ce qui ne marche pas.</p>
+
+  <div class="sh"><div class="sh-bar gold"></div><div class="sh-t">Avant de commencer — les conditions optimales</div></div>
+  <ul class="clist">
+    <li><span class="ck gold">→</span><span><strong>État physique :</strong> assis ou allongé confortablement. Corps détendu. 3 cycles de respiration 4-6 pour entrer dans un état réceptif.</span></li>
+    <li><span class="ck gold">→</span><span><strong>Environnement :</strong> calme, sans interruption. 5 à 10 minutes minimum.</span></li>
+    <li><span class="ck gold">→</span><span><strong>Perspective :</strong> première personne — vous voyez à travers vos yeux, pas depuis l'extérieur.</span></li>
+    <li><span class="ck gold">→</span><span><strong>État émotionnel :</strong> cherchez à ressentir des émotions positives pendant la visualisation — confiance, fluidité, plaisir de jouer.</span></li>
+  </ul>
+
+  <div class="proto-box">
+    <div class="proto-head">
+      <div class="proto-icon">🎯</div>
+      <div>
+        <div class="proto-label">La Méthode Complète</div>
+        <div class="proto-name">Visualisation de Performance en 7 Étapes</div>
+      </div>
+    </div>
+    <div class="proto-body">
+      <div class="viz-steps">
+        <div class="viz-step">
+          <div class="viz-num">1</div>
+          <div class="viz-content">
+            <div class="viz-title">L'Ancrage — Entrez dans l'état</div>
+            <div class="viz-desc">3 respirations nasales profondes. Relâchez le corps. Fermez les yeux. Permettez-vous d'entrer dans un état de détente vigilante — ni endormi, ni trop actif.</div>
+            <div class="viz-tip">Durée : 30 à 60 secondes</div>
+          </div>
+        </div>
+        <div class="viz-step">
+          <div class="viz-num">2</div>
+          <div class="viz-content">
+            <div class="viz-title">Le Contexte — Placez-vous dans la scène</div>
+            <div class="viz-desc">Visualisez l'environnement de la compétition avec précision. Le terrain, la salle, le bruit de la foule, l'odeur de l'herbe ou du parquet, la lumière. Plus le contexte est réel, plus votre cerveau traite la visualisation comme une expérience réelle.</div>
+            <div class="viz-tip">Activez les 5 sens — pas seulement le visuel</div>
+          </div>
+        </div>
+        <div class="viz-step">
+          <div class="viz-num">3</div>
+          <div class="viz-content">
+            <div class="viz-title">L'État Physique — Ressentez votre corps</div>
+            <div class="viz-desc">Dans cette visualisation, comment se sent votre corps ? Pieds ancrés, épaules décontractées, respiration fluide, mains légères. Visualisez un corps prêt — tonicité sans crispation. Restez dans cette sensation corporelle pendant 20 à 30 secondes.</div>
+            <div class="viz-tip">Ce sont les sensations physiques qui ancrent la visualisation dans le système nerveux</div>
+          </div>
+        </div>
+        <div class="viz-step">
+          <div class="viz-num">4</div>
+          <div class="viz-content">
+            <div class="viz-title">La Scène de Réussite — Visualisez le geste parfait</div>
+            <div class="viz-desc">Choisissez une action spécifique — un geste technique, une décision tactique, une situation de pression. Visualisez-la réussie, avec fluidité, à la première personne. Ressentez le geste dans votre corps. Entendez le son — la balle, les pas, la foule. Voyez le résultat.</div>
+            <div class="viz-tip">Répétez ce moment 3 à 5 fois — comme des répétitions à l'entraînement</div>
+          </div>
+        </div>
+        <div class="viz-step">
+          <div class="viz-num">5</div>
+          <div class="viz-content">
+            <div class="viz-title">La Scène Difficile — Visualisez la résilience</div>
+            <div class="viz-desc">Visualisez maintenant un moment difficile — une erreur, une pression, un retard au score. Mais cette fois, visualisez votre réponse idéale. Le tapping discret. La respiration. Le retour à la lucidité. Vous gérez, vous ajustez, vous continuez. C'est une répétition de votre résilience.</div>
+            <div class="viz-tip">Cette étape est souvent omise — c'est pourtant l'une des plus importantes</div>
+          </div>
+        </div>
+        <div class="viz-step">
+          <div class="viz-num">6</div>
+          <div class="viz-content">
+            <div class="viz-title">L'État Final — Ressentez la Zone</div>
+            <div class="viz-desc">Visualisez-vous en Zone complète. Fluidité. Lucidité. Confiance automatique. Le geste qui devance la pensée. Le plaisir pur de jouer. Ressentez cet état dans tout votre corps — pas juste visualisez-le. Restez dans cette sensation 30 à 60 secondes.</div>
+            <div class="viz-tip">C'est l'état que votre cerveau "mémorisera" comme cible</div>
+          </div>
+        </div>
+        <div class="viz-step">
+          <div class="viz-num">7</div>
+          <div class="viz-content">
+            <div class="viz-title">L'Ancrage Final — Verrouillez l'état</div>
+            <div class="viz-desc">Une inspiration nasale profonde. Expirez lentement. Dites intérieurement votre mot d'ancrage Zone — "Ma Zone", "Fluide", "Je suis prêt(e)". Ouvrez les yeux lentement. Restez dans cet état quelques instants avant de reprendre vos activités.</div>
+            <div class="viz-tip">L'ancrage verbal verrouille l'état et crée un déclencheur pour le retrouver en match</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sumbox"><div class="sumbox-t">Résumé du chapitre</div>
+    <ul class="clist">
+      <li><span class="ck gold">✓</span><span>7 étapes précises pour une visualisation neurologiquement efficace</span></li>
+      <li><span class="ck gold">✓</span><span>5 sens activés + perspective 1ère personne + état émotionnel positif = efficacité maximale</span></li>
+      <li><span class="ck gold">✓</span><span>La scène difficile surmontée est aussi importante que la scène de réussite</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ CH7 — IDENTITÉ ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule gold"></div>
+  <div class="o-body">
+    <div class="o-big">07</div>
+    <div class="o-badge ob-g">Identité</div>
+    <div class="o-title">Construire<br><em>l'identité Athlète de Zone</em></div>
+    <div class="o-sub">Devenir intérieurement le joueur que vous voulez être extérieurement — étape par étape.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Chapitre 7 — L'Identité Athlète de Zone</div><div class="rh-n">Reprogrammer · Zone 4E</div></div>
+  <p class="lead">L'identité précède le comportement. Vous ne devenez pas un athlète de Zone en performant mieux — vous performez mieux en devenant intérieurement un athlète de Zone.</p>
+
+  <div class="sh"><div class="sh-bar gold"></div><div class="sh-t">Le principe d'identité de James Clear</div></div>
+  <div class="bq">
+    <div class="bq-text">"La forme la plus efficace de changement intrinsèque est le changement d'identité. Ce n'est pas 'je veux ça', c'est 'je suis quelqu'un qui fait ça.'"</div>
+    <div class="bq-src">James Clear — Atomic Habits, 2018</div>
+  </div>
+  <div class="bt">
+    <p>Un sportif qui se dit "j'essaie de mieux gérer ma pression" a une identité de quelqu'un qui lutte. Un sportif qui se dit "je suis quelqu'un qui sait rester calme sous pression" a une identité différente — et son cerveau va organiser ses comportements autour de cette identité.</p>
+    <p>La différence n'est pas dans l'affirmation. Elle est dans la conviction profonde. Et cette conviction se construit — pas par la volonté, mais par l'accumulation d'expériences cohérentes.</p>
+  </div>
+
+  <div class="sh"><div class="sh-bar gold"></div><div class="sh-t">Les piliers de l'identité Athlète de Zone</div></div>
+  <div class="identity-block">
+    <div class="identity-title">Je suis un Athlète de Zone. Ce que ça signifie :</div>
+    <div class="identity-list">
+      <div class="identity-item"><div class="arrow">→</div><div><strong>Je prépare mon état interne</strong> avec le même sérieux que mon physique et ma technique. Les 4 éléments ne sont pas optionnels — ils font partie de mon entraînement.</div></div>
+      <div class="identity-item"><div class="arrow">→</div><div><strong>Je ne subis pas mes émotions</strong> en compétition. Je les reconnais, je les nomme, je les traverse. Je sais comment revenir à la lucidité rapidement.</div></div>
+      <div class="identity-item"><div class="arrow">→</div><div><strong>Les erreurs font partie de mon jeu.</strong> Je ne m'effondre pas dessus. Je les intègre et je passe à l'action suivante. Ma spirale dure secondes, pas minutes.</div></div>
+      <div class="identity-item"><div class="arrow">→</div><div><strong>Je joue librement</strong> parce que je sais que j'ai préparé ce moment. La pression me confirme que c'est important — pas que je vais échouer.</div></div>
+      <div class="identity-item"><div class="arrow">→</div><div><strong>Je mérite d'être à ce niveau.</strong> Mon travail m'a amené ici. Cette place est la mienne — je n'ai pas besoin de la justifier.</div></div>
+      <div class="identity-item"><div class="arrow">→</div><div><strong>Ma Zone est accessible.</strong> Je sais comment en créer les conditions. Ce n'est plus un accident — c'est une compétence.</div></div>
+    </div>
+  </div>
+
+  <div class="sh"><div class="sh-bar gold"></div><div class="sh-t">Comment construire cette identité progressivement</div></div>
+  <div class="bt"><p>L'identité se construit par accumulation de preuves. Chaque fois que vous agissez comme un Athlète de Zone — même imparfaitement — votre cerveau enregistre une preuve. Voici comment accumuler ces preuves délibérément :</p></div>
+  <div class="seq">
+    <div class="seq-r"><div class="seq-icon">1️⃣</div><div><div class="seq-name">La déclaration d'identité quotidienne</div><div class="seq-desc">Chaque matin, lisez à voix haute les piliers de l'identité Athlète de Zone. 60 secondes. Votre cerveau commence à les traiter comme vrais.</div></div></div>
+    <div class="seq-r"><div class="seq-icon">2️⃣</div><div><div class="seq-name">Le journal de preuves</div><div class="seq-desc">Chaque soir, notez 1 moment dans la journée où vous avez agi comme un Athlète de Zone. Même petit. Même partiel. L'accumulation crée la conviction.</div></div></div>
+    <div class="seq-r"><div class="seq-icon">3️⃣</div><div><div class="seq-name">La question d'identité</div><div class="seq-desc">Avant chaque décision difficile en match : "Qu'est-ce qu'un Athlète de Zone ferait dans cette situation ?" Puis faites-le.</div></div></div>
+    <div class="seq-r"><div class="seq-icon">4️⃣</div><div><div class="seq-name">La visualisation d'identité</div><div class="seq-desc">Dans votre visualisation quotidienne : voyez-vous agir comme un Athlète de Zone dans 3 situations de votre prochaine compétition. Pas le résultat — le comportement.</div></div></div>
+  </div>
+
+  <div class="sumbox"><div class="sumbox-t">Résumé du chapitre</div>
+    <ul class="clist">
+      <li><span class="ck gold">✓</span><span>L'identité précède le comportement — devenez intérieurement l'athlète que vous voulez être</span></li>
+      <li><span class="ck gold">✓</span><span>6 piliers de l'identité Athlète de Zone définis et activables</span></li>
+      <li><span class="ck gold">✓</span><span>4 pratiques pour construire cette identité par accumulation de preuves</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ CH8 — PROTOCOLE PRÉ-COMPÉTITION ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule gold"></div>
+  <div class="o-body">
+    <div class="o-big">08</div>
+    <div class="o-badge ob-g">Protocole Final</div>
+    <div class="o-title">Le protocole<br><em>pré-compétition</em></div>
+    <div class="o-sub">7 minutes, 3 scènes — la routine complète pour programmer votre cerveau le jour du match.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Chapitre 8 — Protocole de Visualisation Pré-Compétition</div><div class="rh-n">Reprogrammer · Zone 4E</div></div>
+  <p class="lead">Ce protocole condense tout ce que vous avez appris en 7 minutes reproductibles. À pratiquer 30 à 60 minutes avant chaque compétition importante.</p>
+
+  <div class="proto-box">
+    <div class="proto-head">
+      <div class="proto-icon">⚡</div>
+      <div>
+        <div class="proto-label">Protocole complet</div>
+        <div class="proto-name">Visualisation Pré-Compétition — 7 minutes</div>
+      </div>
+    </div>
+    <div class="proto-body">
+      <div class="steps">
+        <div class="step">
+          <div class="sn psych">1</div>
+          <div class="st"><strong>Ancrage et détente (1 min)</strong> — 6 cycles respiration 4-6. Corps qui se relâche progressivement. Triple Ancrage Zone 4E (pieds, épaules, souffle). Vous êtes présent.</div>
+        </div>
+        <div class="step">
+          <div class="sn gold">2</div>
+          <div class="st"><strong>Scène 1 — Votre entrée (2 min)</strong> — Visualisez votre arrivée sur le terrain ou dans la compétition. Votre état physique : ancré, fluide, prêt. Votre dialogue interne : "Je suis ici. C'est le moment." Ressentez la confiance dans votre corps. Répétez 3 fois.</div>
+        </div>
+        <div class="step">
+          <div class="sn gold">3</div>
+          <div class="st"><strong>Scène 2 — Le moment difficile maîtrisé (2 min)</strong> — Visualisez une situation de pression ou une erreur potentielle. Puis visualisez votre réponse idéale : le tapping discret, la respiration, le retour à la lucidité en 15 secondes. "Je gère ça. Prochaine action." Répétez 2 fois.</div>
+        </div>
+        <div class="step">
+          <div class="sn gold">4</div>
+          <div class="st"><strong>Scène 3 — Votre meilleur geste (1 min)</strong> — Visualisez votre geste technique signature réussi avec fluidité. À la première personne, dans le détail sensoriel complet. Ressentez la fluidité dans votre corps. Répétez 3 fois rapidement.</div>
+        </div>
+        <div class="step">
+          <div class="sn psych">5</div>
+          <div class="st"><strong>L'identité finale (1 min)</strong> — "Je suis un Athlète de Zone. Je suis prêt(e). Ma Zone est accessible." Ressentez cet état dans tout votre corps. Votre mot d'ancrage. Une expiration longue. Ouvrez les yeux.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pull gold">Ce protocole ne vous "motive" pas artificiellement. Il <strong>programme votre cerveau à reconnaître la compétition comme un terrain familier</strong> — un endroit où vous savez qui vous êtes et quoi faire.</div>
+
+  <div class="sh"><div class="sh-bar gold"></div><div class="sh-t">Intégration avec Zone 4E</div></div>
+  <div class="bt">
+    <p>Ce protocole s'intègre naturellement dans le Rituel du Jour de Match de Zone 4E — il constitue la <strong>phase de préparation mentale</strong> (2 à 4h avant le match), juste après la marche en respiration nasale.</p>
+  </div>
+  <div class="seq">
+    <div class="seq-r"><div class="seq-icon">🌬</div><div><div class="seq-name">Marche en respiration nasale (15 min)</div><div class="seq-desc">Baisse du cortisol, lucidité, ancrage · Zone 4E — VENT</div></div></div>
+    <div class="seq-r"><div class="seq-icon">🧠</div><div><div class="seq-name">Visualisation Pré-Compétition (7 min)</div><div class="seq-desc">Programmation de l'image de soi et des 3 scènes · Ce chapitre</div></div></div>
+    <div class="seq-r"><div class="seq-icon">🔥</div><div><div class="seq-name">Repos + musique calme</div><div class="seq-desc">Maintien de l'état · Zone 4E — entre FEU et TERRE</div></div></div>
+    <div class="seq-r"><div class="seq-icon">⚡</div><div><div class="seq-name">Protocole 4E Pré-Performance (5 min)</div><div class="seq-desc">Activation finale · Zone 4E — VENT + FEU + TERRE + EAU</div></div></div>
+  </div>
+</div>
+
+<!-- ══ PROGRAMME 21 JOURS ══ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="o-rule earth"></div>
+  <div class="o-body">
+    <div class="o-label">Programme de reprogrammation</div>
+    <div class="o-title">21 jours pour<br><em>changer l'image</em></div>
+    <div class="o-sub">La routine quotidienne pour intégrer la psycho-cybernétique dans votre vie de sportif.</div>
+  </div>
+</div>
+<div class="page chapter-content">
+  <div class="rh"><div class="rh-t">Programme 21 Jours de Reprogrammation</div><div class="rh-n">Reprogrammer · Zone 4E</div></div>
+  <p class="lead">L'image de soi ne change pas en une nuit. Elle change par l'accumulation délibérée d'expériences répétées — réelles et imaginées — qui pointent dans la même direction.</p>
+
+  <div class="sh"><div class="sh-bar earth"></div><div class="sh-t">La structure des 3 semaines</div></div>
+
+  <div class="day-plan">
+    <div class="dp-head">
+      <div><div style="font-family:'Barlow Condensed';font-weight:900;font-size:18px;color:#fff;letter-spacing:0.05em;">SEMAINE 1</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">Jours 1–7 · Identifier et nettoyer</div></div>
+    </div>
+    <div class="dp-body">
+      <div class="dp-item">Matin (5 min) : Déclaration d'identité Athlète de Zone à voix haute</div>
+      <div class="dp-item">Midi ou soir (10 min) : Visualisation de performance — Étapes 1 à 4 seulement</div>
+      <div class="dp-item">Soir (2 min) : Journal de preuves — 1 moment où vous avez agi comme un Athlète de Zone</div>
+      <div class="dp-item">Objectif spécifique semaine 1 : Identifier votre croyance limitante principale et sa version habilitante</div>
+      <div class="dp-focus"><strong>Focus délibéré :</strong> observer vos patterns de dialogue interne sans les juger. Simplement les noter.</div>
+    </div>
+  </div>
+
+  <div class="day-plan">
+    <div class="dp-head" style="background:var(--mind);">
+      <div><div style="font-family:'Barlow Condensed';font-weight:900;font-size:18px;color:#fff;letter-spacing:0.05em;">SEMAINE 2</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">Jours 8–14 · Transformer le dialogue</div></div>
+    </div>
+    <div class="dp-body" style="background:var(--mind-lt);">
+      <div class="dp-item">Matin (5 min) : Déclaration d'identité + 3 mots d'ancrage personnels dits 5 fois chacun</div>
+      <div class="dp-item">Entraînement : Appliquer la substitution de dialogue — chaque pensée négative remplacée consciemment</div>
+      <div class="dp-item">Soir (10 min) : Visualisation complète en 7 étapes</div>
+      <div class="dp-item">Soir (2 min) : Journal — 1 moment de dialogue transformé + 1 preuve d'identité</div>
+      <div class="dp-focus" style="color:var(--mind);border-color:var(--mind-bd);"><strong>Focus délibéré :</strong> attraper le dialogue automatique en temps réel. La vitesse de détection est la compétence clé.</div>
+    </div>
+  </div>
+
+  <div class="day-plan">
+    <div class="dp-head" style="background:var(--gold);">
+      <div><div style="font-family:'Barlow Condensed';font-weight:900;font-size:18px;color:#fff;letter-spacing:0.05em;">SEMAINE 3</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">Jours 15–21 · Ancrer l'identité</div></div>
+    </div>
+    <div class="dp-body" style="background:var(--gold-lt);">
+      <div class="dp-item">Matin (5 min) : Déclaration d'identité + visualisation express 3 minutes (scènes 2 et 5 uniquement)</div>
+      <div class="dp-item">Avant entraînement : Protocole pré-compétition complet (7 min)</div>
+      <div class="dp-item">Soir (2 min) : Journal de preuves — 2 moments cette semaine</div>
+      <div class="dp-item">Jour 21 : Bilan complet — relisez votre journal. Comparez votre dialogue interne à J1. Mesurez la distance parcourue.</div>
+      <div class="dp-focus" style="color:var(--gold);border-color:var(--gold-bd);"><strong>Focus délibéré :</strong> ne plus "observer" le dialogue — le choisir délibérément avant même qu'il arrive. C'est la maîtrise.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:44px;padding:44px;background:var(--dark);border-radius:6px;text-align:center;">
+    <div style="font-family:'Barlow Condensed';font-weight:900;font-size:42px;color:#fff;line-height:1;margin-bottom:14px;">
+      Vous n'espérez plus<br>bien jouer.<br>
+      <span style="color:var(--psych);">Vous le savez.</span>
+    </div>
+    <div style="font-family:'Lora';font-style:italic;font-size:16px;color:rgba(255,255,255,0.45);line-height:1.7;max-width:420px;margin:0 auto 24px;">"L'image que vous avez de vous-même est la prémisse.<br>Changez l'image — changez les performances."<br><span style="font-size:12px;">Maxwell Maltz</span></div>
+    <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;">
+      <span class="pill psych">Psycho-Cybernetics</span>
+      <span class="pill gold">Zone 4E</span>
+      <span class="pill earth">Identité d'Athlète</span>
+    </div>
+  </div>
+
+  <div style="margin-top:44px;padding-top:22px;border-top:1px solid var(--line);text-align:center;font-size:11px;color:var(--muted);letter-spacing:0.1em;line-height:2;">
+    © 2025 Zone 4E · Reprogrammer · Tous droits réservés<br>
+    Par [Votre Prénom] · Coach sportif &amp; Préparateur mental · Collection Zone 4E
+  </div>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attends — Une offre exclusive pour toi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,700;1,800&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f8f6f0;--white:#fff;--dark:#1a1612;--black:#0e0c08;
+  --body:#4a4438;--muted:#9a9080;--line:#e0dbd0;
+  --gold:#c49a20;--gold-bg:#fdf5e0;--gold-bd:#e0c870;
+  --fire:#d95020;--fire-bg:#fef2ec;--fire-bd:#f0b898;
+  --wind:#2878aa;--wind-bg:#eaf4fb;--wind-bd:#a0cceb;
+  --blue:#1a4aaa;--blue-bg:#e8eefb;--blue-bd:#98b0e8;
+  --secret:#6a3888;--secret-bg:#f3ecfa;--secret-bd:#c4a0d8;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{background:var(--dark);color:#fff;font-family:'DM Sans',sans-serif;line-height:1.75;}
+
+.w{max-width:720px;margin:0 auto;padding:0 24px;}
+
+/* HERO BAND */
+.hero-band{background:linear-gradient(135deg,#0a0808,#141008);padding:60px 24px 48px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:center;position:relative;overflow:hidden;}
+.hero-band::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(201,168,32,0.06) 0%,transparent 70%);pointer-events:none;}
+.hb-tag{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;padding:5px 14px;border:1px solid rgba(201,168,32,0.3);border-radius:100px;background:rgba(201,168,32,0.06);}
+.hb-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(44px,7vw,80px);line-height:0.9;letter-spacing:-0.01em;margin-bottom:18px;}
+.hb-title em{color:var(--gold);font-style:italic;}
+.hb-sub{font-family:'Lora',serif;font-style:italic;font-size:18px;color:rgba(255,255,255,0.5);max-width:540px;margin:0 auto;line-height:1.65;}
+
+/* CONGRATS */
+.congrats{background:rgba(90,136,48,0.1);border:1px solid rgba(90,136,48,0.25);border-radius:6px;padding:20px 28px;margin:32px 0;display:flex;align-items:center;gap:14px;}
+.cg-icon{font-size:32px;flex-shrink:0;}
+.cg-text{font-size:15px;color:rgba(255,255,255,0.75);line-height:1.65;}
+.cg-text strong{color:#fff;}
+
+/* CONTENT SECTIONS */
+.section{padding:52px 24px;}
+.section.cream{background:#fff;color:var(--body);}
+.section.dark{background:#111009;}
+
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.eyebrow::before{content:'';width:16px;height:1.5px;background:var(--gold);}
+.display{font-family:'Barlow Condensed',sans-serif;font-weight:900;letter-spacing:-0.01em;line-height:0.92;}
+.body-txt{font-size:15px;line-height:1.85;}
+.body-txt p+p{margin-top:14px;}
+.body-txt strong{font-weight:700;}
+.lora-italic{font-family:'Lora',serif;font-style:italic;}
+.pull{margin:28px 0;padding:20px 28px;border-left:4px solid var(--gold);font-family:'Lora',serif;font-style:italic;font-size:18px;line-height:1.65;}
+
+/* WEEK CARDS */
+.week-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:6px;overflow:hidden;margin:28px 0;}
+.wk{padding:24px 20px;}
+.wk-num{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:40px;line-height:1;margin-bottom:6px;}
+.wk-label{font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:8px;}
+.wk-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:17px;color:#fff;letter-spacing:0.03em;margin-bottom:8px;}
+.wk-desc{font-size:12px;color:rgba(255,255,255,0.45);line-height:1.6;}
+
+/* ZERO SECRET BOX */
+.zero-box{margin:28px 0;border:2px solid rgba(106,56,136,0.5);border-radius:8px;overflow:hidden;}
+.zb-head{background:linear-gradient(135deg,#2a0e3a,#1a0828);padding:28px 32px;display:flex;align-items:center;gap:16px;}
+.zb-icon{font-size:32px;}
+.zb-label{font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(196,160,216,0.6);margin-bottom:4px;}
+.zb-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:24px;color:#fff;letter-spacing:0.04em;}
+.zb-body{padding:24px 32px;background:rgba(106,56,136,0.08);}
+.zb-steps{display:flex;flex-direction:column;gap:10px;margin-top:14px;}
+.zb-step{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:rgba(255,255,255,0.7);line-height:1.55;}
+.zb-step-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+
+/* DAY GRID */
+.day-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:24px 0;}
+.dg-day{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:4px;padding:10px 6px;text-align:center;}
+.dg-num{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;line-height:1;}
+.dg-label{font-size:9px;color:rgba(255,255,255,0.3);margin-top:3px;line-height:1.3;}
+.dg-day.w1{border-top:3px solid var(--wind);}
+.dg-day.w2{border-top:3px solid var(--fire);}
+.dg-day.w3{border-top:3px solid var(--gold);}
+.dg-day.z{border-top:3px solid var(--secret);background:rgba(106,56,136,0.15);}
+
+/* BUMP BOX */
+.bump-box{border:3px solid var(--gold-bd);border-radius:10px;overflow:hidden;max-width:620px;margin:0 auto;}
+.bb-head{background:var(--dark);padding:36px 40px 28px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.08);}
+.bb-label{font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.bb-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(22px,4vw,34px);color:#fff;letter-spacing:0.04em;text-transform:uppercase;line-height:1.05;}
+.bb-sub{font-size:13px;color:rgba(255,255,255,0.35);margin-top:6px;}
+.bb-list{background:rgba(255,255,255,0.03);padding:24px 40px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;gap:10px;}
+.bb-item{display:flex;gap:10px;font-size:14px;color:rgba(255,255,255,0.7);align-items:flex-start;line-height:1.5;}
+.bb-item .ck{color:var(--gold);flex-shrink:0;margin-top:1px;}
+.bb-price{padding:28px 40px 36px;display:flex;flex-direction:column;align-items:center;gap:16px;background:rgba(201,168,32,0.04);}
+.bbp-row{display:flex;align-items:baseline;gap:12px;}
+.bbp-old{font-size:18px;color:rgba(255,255,255,0.3);text-decoration:line-through;}
+.bbp-new{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:64px;color:var(--gold);line-height:1;}
+.bbp-eur{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:26px;color:var(--gold);align-self:flex-start;margin-top:8px;}
+.bbp-note{font-size:12px;color:rgba(255,255,255,0.3);text-align:center;line-height:1.6;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;letter-spacing:0.03em;padding:18px 40px;border-radius:3px;text-decoration:none;cursor:pointer;border:none;transition:all .2s;text-transform:uppercase;}
+.btn-gold{background:var(--gold);color:var(--dark);}
+.btn-gold:hover{background:#a8821e;transform:translateY(-2px);box-shadow:0 10px 36px rgba(196,154,32,0.4);}
+.btn-ghost{background:transparent;color:rgba(255,255,255,0.35);border:1px solid rgba(255,255,255,0.12);font-size:13px;padding:12px 24px;}
+.btn-ghost:hover{color:rgba(255,255,255,0.6);border-color:rgba(255,255,255,0.2);}
+.btn-xl{font-size:17px;padding:22px 52px;}
+.btn-pulse{animation:pulse 2.4s ease-in-out infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(196,154,32,0.3);}50%{box-shadow:0 0 0 16px rgba(196,154,32,0);}}
+.btn-arrow{transition:transform .2s;}
+.btn:hover .btn-arrow{transform:translateX(4px);}
+
+/* COLVIN / MALTZ QUOTES */
+.book-quote{margin:24px 0;padding:22px 28px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;position:relative;}
+.book-quote::before{content:'"';position:absolute;top:-8px;left:22px;font-size:60px;opacity:0.15;font-family:'Lora',serif;line-height:1;color:var(--gold);}
+.bq-text{font-family:'Lora',serif;font-style:italic;font-size:15px;color:rgba(255,255,255,0.7);line-height:1.75;}
+.bq-src{font-size:11px;color:rgba(255,255,255,0.28);margin-top:10px;letter-spacing:0.06em;}
+
+/* PROGRESS BAR */
+.progress-bar{height:4px;background:rgba(255,255,255,0.08);border-radius:2px;margin:0 0 32px;overflow:hidden;}
+.pb-fill{height:100%;background:linear-gradient(90deg,var(--fire),var(--gold));width:33%;border-radius:2px;}
+.progress-label{font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:8px;display:flex;justify-content:space-between;}
+
+@media(max-width:600px){
+  .week-cards{grid-template-columns:1fr;}
+  .day-grid{grid-template-columns:repeat(4,1fr);}
+  .bb-head,.bb-list,.bb-price{padding-left:22px;padding-right:22px;}
+}
+</style>
+</head>
+<body>
+
+<!-- PROGRESS -->
+<div style="background:#0a0908;padding:16px 24px;">
+  <div class="w">
+    <div class="progress-label">
+      <span>Zone 4E — Acheté ✓</span>
+      <span>Programme 21J</span>
+      <span>Pack Upsell</span>
+    </div>
+    <div class="progress-bar"><div class="pb-fill"></div></div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero-band">
+  <div class="w">
+    <div class="hb-tag">⚡ Offre exclusive — Une seule fois</div>
+    <h1 class="hb-title">
+      Attends.<br>
+      Avant d'accéder<br>
+      à <em>Zone 4E</em>…
+    </h1>
+    <p class="hb-sub">Tu viens de prendre la meilleure décision pour ta performance. Ce qui suit va la rendre dix fois plus puissante.</p>
+  </div>
+</div>
+
+<!-- CONGRATS -->
+<div style="padding:32px 24px 0;">
+  <div class="w">
+    <div class="congrats">
+      <div class="cg-icon">🎉</div>
+      <div class="cg-text"><strong>Félicitations — Zone 4E est à toi.</strong> Tu vas recevoir ton accès dans les secondes qui suivent. Mais avant ça, lis ce qui suit — c'est important et ça ne durera que cette page.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PONT -->
+<div class="section dark">
+  <div class="w">
+    <div class="eyebrow">La question qui change tout</div>
+    <h2 class="display" style="font-size:clamp(34px,5vw,56px);margin-bottom:20px;color:#fff;">
+      Zone 4E te donne<br>les protocoles.<br>
+      <span style="color:var(--gold);">Mais qui va les intégrer ?</span>
+    </h2>
+    <div class="body-txt" style="color:rgba(255,255,255,0.65);">
+      <p>Il y a une différence entre un sportif qui <em>connaît</em> un protocole — et un sportif dont le protocole est un <strong style="color:#fff;">automatisme inconscient</strong>.</p>
+      <p>Le premier doit y penser. Le second le fait — même sous pression, même après une erreur, même dans les 10 secondes qui suivent un coup dur. Parce que c'est ancré dans son système nerveux.</p>
+      <p>Zone 4E t'a donné le <strong style="color:#fff;">système</strong>. Ce que je te propose maintenant, c'est la <strong style="color:var(--gold);">transformation</strong>.</p>
+    </div>
+
+    <div class="pull" style="background:rgba(201,168,32,0.07);border-color:var(--gold);color:rgba(255,255,255,0.8);">
+      Geoffrey Colvin l'a prouvé dans <em>Talent Is Overrated</em> : <strong style="color:#fff;">ce n'est pas la quantité de pratique qui crée la maîtrise. C'est la qualité de pratique — répétée avec intention, sur 21 jours minimum.</strong>
+    </div>
+
+    <div class="book-quote">
+      <div class="bq-text">"Ce n'est pas la pratique qui rend parfait. C'est la pratique parfaite qui rend parfait. Et la pratique délibérée est l'unique chemin vers la compétence inconsciente."</div>
+      <div class="bq-src">Geoffrey Colvin — Talent Is Overrated, 2008</div>
+    </div>
+
+    <div class="book-quote">
+      <div class="bq-text">"L'image que vous avez de vous-même est la prémisse sur laquelle toute votre performance est construite. Et cette image se grave par la répétition — réelle ou imaginée."</div>
+      <div class="bq-src">Maxwell Maltz — Psycho-Cybernetics, 1960</div>
+    </div>
+  </div>
+</div>
+
+<!-- LES 21 JOURS -->
+<div class="section" style="background:#0e0c08;padding:52px 24px;">
+  <div class="w">
+    <div class="eyebrow">Le Programme</div>
+    <h2 class="display" style="font-size:clamp(32px,5vw,54px);margin-bottom:20px;color:#fff;">
+      21 jours.<br>
+      4 éléments.<br>
+      <span style="color:var(--gold);">1 compétence inconsciente.</span>
+    </h2>
+    <div class="body-txt" style="color:rgba(255,255,255,0.6);margin-bottom:24px;">
+      <p>Le Programme 21 Jours est la suite logique de Zone 4E. Il transforme ce que tu as lu en réflexes — grâce à la pratique délibérée structurée semaine par semaine.</p>
+    </div>
+
+    <div class="week-cards">
+      <div class="wk">
+        <div class="wk-num" style="color:var(--wind);">S1</div>
+        <div class="wk-label" style="color:rgba(30,110,154,0.7);">Jours 1–7</div>
+        <div class="wk-title">Le Corps Calme</div>
+        <div class="wk-desc">VENT + TERRE. Respiration et ancrage deviennent automatiques. La base sur laquelle tout le reste tient.</div>
+      </div>
+      <div class="wk">
+        <div class="wk-num" style="color:var(--fire);">S2</div>
+        <div class="wk-label" style="color:rgba(217,80,32,0.7);">Jours 8–14</div>
+        <div class="wk-title">L'Émotion Maîtrisée</div>
+        <div class="wk-desc">FEU. TFT en profondeur. La spirale émotionnelle ne démarre plus. Le tapping devient un réflexe de 15 secondes.</div>
+      </div>
+      <div class="wk">
+        <div class="wk-num" style="color:var(--gold);">S3</div>
+        <div class="wk-label" style="color:rgba(196,154,32,0.7);">Jours 15–20</div>
+        <div class="wk-title">L'Activation &amp; le ZÉRØ</div>
+        <div class="wk-desc">EAU + ZÉRØ. Bains froids. Activation instinctive. Les 4 éléments convergent. La Zone devient accessible sur signal.</div>
+      </div>
+    </div>
+
+    <div class="day-grid">
+      <div class="dg-day w1"><div class="dg-num" style="color:var(--wind);">J1</div><div class="dg-label">Resp. nasale</div></div>
+      <div class="dg-day w1"><div class="dg-num" style="color:var(--wind);">J2</div><div class="dg-label">Ancrage</div></div>
+      <div class="dg-day w1"><div class="dg-num" style="color:var(--wind);">J3</div><div class="dg-label">Salutation</div></div>
+      <div class="dg-day w1"><div class="dg-num" style="color:var(--wind);">J4</div><div class="dg-label">Scan</div></div>
+      <div class="dg-day w1"><div class="dg-num" style="color:var(--wind);">J5</div><div class="dg-label">🔐 Lapin</div></div>
+      <div class="dg-day w1"><div class="dg-num" style="color:var(--wind);">J6</div><div class="dg-label">🔐 Mental</div></div>
+      <div class="dg-day w1"><div class="dg-num" style="color:var(--wind);">J7</div><div class="dg-label">Bilan</div></div>
+      <div class="dg-day w2"><div class="dg-num" style="color:var(--fire);">J8</div><div class="dg-label">TFT base</div></div>
+      <div class="dg-day w2"><div class="dg-num" style="color:var(--fire);">J9</div><div class="dg-label">ONT</div></div>
+      <div class="dg-day w2"><div class="dg-num" style="color:var(--fire);">J10</div><div class="dg-label">🔐 TFT</div></div>
+      <div class="dg-day w2"><div class="dg-num" style="color:var(--fire);">J11</div><div class="dg-label">Reframe</div></div>
+      <div class="dg-day w2"><div class="dg-num" style="color:var(--fire);">J12</div><div class="dg-label">FEU+TERRE</div></div>
+      <div class="dg-day w2"><div class="dg-num" style="color:var(--fire);">J13</div><div class="dg-label">Match sim.</div></div>
+      <div class="dg-day w2"><div class="dg-num" style="color:var(--fire);">J14</div><div class="dg-label">Bilan</div></div>
+      <div class="dg-day w3"><div class="dg-num" style="color:var(--gold);">J15</div><div class="dg-label">🔐 Froid</div></div>
+      <div class="dg-day w3"><div class="dg-num" style="color:var(--gold);">J16</div><div class="dg-label">Activ.</div></div>
+      <div class="dg-day w3"><div class="dg-num" style="color:var(--gold);">J17</div><div class="dg-label">🔐 Ancrage</div></div>
+      <div class="dg-day w3"><div class="dg-num" style="color:var(--gold);">J18</div><div class="dg-label">Instinct</div></div>
+      <div class="dg-day w3"><div class="dg-num" style="color:var(--gold);">J19</div><div class="dg-label">Vision</div></div>
+      <div class="dg-day w3"><div class="dg-num" style="color:var(--gold);">J20</div><div class="dg-label">4E complet</div></div>
+      <div class="dg-day z"><div class="dg-num" style="color:#c4a0d8;">J21</div><div class="dg-label" style="color:#c4a0d8;">🔐 ZÉRØ</div></div>
+    </div>
+
+    <!-- ZERO SECRET -->
+    <div class="zero-box">
+      <div class="zb-head">
+        <div class="zb-icon">🔐</div>
+        <div>
+          <div class="zb-label">Jour 21 — Exclusif Programme</div>
+          <div class="zb-title">Le Protocole ZÉRØ Secret</div>
+        </div>
+      </div>
+      <div class="zb-body">
+        <div class="body-txt" style="color:rgba(255,255,255,0.6);font-size:14px;margin-bottom:14px;">
+          <p>Le Jour 21 déverrouille une séquence de <strong style="color:#fff;">20 secondes</strong> qui condense les 4 éléments en 4 ancres déclenchables sur signal. C'est le déclencheur ultime — utilisable juste avant d'entrer sur le terrain, après une erreur, pendant un temps mort.</p>
+        </div>
+        <div class="zb-steps">
+          <div class="zb-step"><div class="zb-step-icon">🌍</div><span><strong style="color:#fff;">Ancre TERRE</strong> — Salutation Mentale raccourcie · 5 sec · Ancrage corporel immédiat</span></div>
+          <div class="zb-step"><div class="zb-step-icon">🔥</div><span><strong style="color:#fff;">Ancre FEU</strong> — Tapping discret cuisse · 5 sec · Décharge émotionnelle instantanée</span></div>
+          <div class="zb-step"><div class="zb-step-icon">💧</div><span><strong style="color:#fff;">Ancre EAU</strong> — Connexion mentale au froid · 5 sec · Activation noradrénaline</span></div>
+          <div class="zb-step"><div class="zb-step-icon">🌬</div><span><strong style="color:#fff;">Ancre VENT</strong> — Inspiration nasale + <span style="color:#c4a0d8;font-style:italic;">"ZONE — ZÉRØ"</span> · 5 sec · Déclencheur du flow</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER BUMP OFFER -->
+<div style="background:linear-gradient(180deg,#0e0c08,#060504);padding:60px 24px;">
+  <div class="w">
+    <div style="text-align:center;margin-bottom:36px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;"><span style="width:16px;height:1.5px;background:var(--gold);display:block;"></span>Ajoute à ta commande<span style="width:16px;height:1.5px;background:var(--gold);display:block;"></span></div>
+      <h2 class="display" style="font-size:clamp(30px,4vw,48px);color:#fff;margin-bottom:8px;">Une seule décision. Maintenant.</h2>
+      <p style="font-family:'Lora',serif;font-style:italic;font-size:15px;color:rgba(255,255,255,0.4);">Cette offre n'est disponible que sur cette page — et une seule fois.</p>
+    </div>
+
+    <div class="bump-box">
+      <div class="bb-head">
+        <div class="bb-label">Programme Complet Zone 4E</div>
+        <div class="bb-title">Programme 21 Jours<br>+ Protocole ZÉRØ Secret</div>
+        <div class="bb-sub">Le complément indispensable de Zone 4E</div>
+      </div>
+      <div class="bb-list">
+        <div class="bb-item"><span class="ck">✦</span><span><strong style="color:#fff;">21 jours guidés</strong> — protocole précis jour par jour, objectif d'attention pour chaque séance</span></div>
+        <div class="bb-item"><span class="ck">✦</span><span><strong style="color:#fff;">Pratique délibérée</strong> — basée sur Colvin et Maltz — pour transformer la connaissance en réflexe</span></div>
+        <div class="bb-item"><span class="ck">✦</span><span><strong style="color:#fff;">Tracker quotidien</strong> — mesure ta progression sur les 21 jours</span></div>
+        <div class="bb-item"><span class="ck">✦</span><span><strong style="color:#fff;">Protocoles secrets</strong> — Chasse au Lapin, Salutation Mentale, Ancrage au Froid</span></div>
+        <div class="bb-item"><span class="ck">✦</span><span><strong style="color:#fff;">🔐 Protocole ZÉRØ Secret</strong> — la séquence de 20 secondes du Jour 21</span></div>
+      </div>
+      <div class="bb-price">
+        <div class="bbp-row">
+          <div class="bbp-old">17€</div>
+          <div style="display:flex;align-items:flex-start;gap:2px;">
+            <div class="bbp-eur">€</div>
+            <div class="bbp-new">9</div>
+          </div>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:#5a8830;background:rgba(90,136,48,0.12);border:1px solid rgba(90,136,48,0.25);padding:4px 12px;border-radius:100px;">+ seulement 9€ ajoutés à ta commande</div>
+        <div class="bbp-note">Ajouté directement à ta commande Zone 4E · Accès immédiat</div>
+        <a href="#" class="btn btn-gold btn-xl btn-pulse" style="width:100%;">
+          ✅ Oui — Ajouter le Programme 21J pour +9€
+          <span class="btn-arrow">→</span>
+        </a>
+        <a href="#" class="btn btn-ghost" style="width:100%;margin-top:4px;">
+          Non merci, je préfère travailler seul sans structure guidée
+        </a>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;padding:20px 24px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:6px;display:flex;gap:14px;align-items:flex-start;">
+      <div style="font-size:28px;flex-shrink:0;">🛡️</div>
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;color:#5a8830;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:4px;">Garanti 30 jours</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.45);line-height:1.65;">Comme pour Zone 4E — si tu n'es pas satisfait du Programme 21 Jours, je te rembourse les 9€ sans question. Tu ne prends aucun risque.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="padding:24px;text-align:center;background:#060504;font-size:11px;color:rgba(255,255,255,0.2);line-height:2;">
+  © 2025 Zone 4E · Tous droits réservés<br>
+  <a href="#" style="color:rgba(255,255,255,0.2);text-decoration:underline;">Mentions légales</a> · <a href="#" style="color:rgba(255,255,255,0.2);text-decoration:underline;">CGV</a> · <a href="#" style="color:rgba(255,255,255,0.2);text-decoration:underline;">Contact</a>
+</div>
+
+
+<!-- Barre de démo hub-copyrighting -->
+<div style="position:fixed;left:0;right:0;bottom:0;z-index:2147483000;display:flex;align-items:center;gap:10px;justify-content:center;padding:10px 14px;background:rgba(20,20,30,.92);color:#fff;font:600 13px/1.2 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;backdrop-filter:blur(6px)"><span style="opacity:.7">Démo · étape 2/4</span><a href="zone4e-sales-page-light.html" style="color:#fff;opacity:.8;text-decoration:none;padding:6px 10px">← Précédent</a><a href="tunnel-3-upsell.html" style="background:#6c63ff;color:#fff;text-decoration:none;padding:8px 16px;border-radius:8px">Page suivante →</a></div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Espace client — zone 4E</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f5f7;min-height:100vh;color:#1c1c28}
+.header{background:linear-gradient(135deg,#6c63ff,#ff6584);color:#fff;padding:28px 32px}.header h1{font-size:22px}.header p{opacity:.85;margin-top:4px;font-size:14px}
+.wrap{max-width:720px;margin:28px auto;padding:0 18px}.demo{background:#fff8e1;border:1px solid #ffe08a;color:#7a5b00;border-radius:12px;padding:10px 14px;font-size:13px;margin-bottom:16px}
+.card{background:#fff;border-radius:16px;padding:16px 18px;margin-bottom:12px;box-shadow:0 2px 14px rgba(0,0,0,.07);display:flex;align-items:center;gap:14px}
+.ico{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,#6c63ff,#8f88ff);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.info{flex:1;min-width:0}.info h3{font-size:15px;margin-bottom:3px}.info p{color:#888;font-size:13px}.role{display:inline-block;font-size:11px;font-weight:600;color:#6c63ff;background:rgba(108,99,255,.1);border-radius:6px;padding:1px 7px;margin-bottom:3px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;background:#6c63ff;color:#fff;border:none;border-radius:10px;font-weight:600;font-size:13px;white-space:nowrap;cursor:pointer;text-decoration:none}.btn:hover{background:#5a52d5}
+#v{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:99;flex-direction:column}#vb{background:#1a1d27;color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}
+#vb button{background:rgba(255,255,255,.15);border:none;color:#fff;padding:7px 16px;border-radius:8px;cursor:pointer}#vf{flex:1;border:none;background:#fff}
+.foot{text-align:center;color:#aaa;font-size:12px;padding:28px 0}.foot a{color:#6c63ff}
+</style>
+</head>
+<body>
+<div id="v"><div id="vb"><span id="vt"></span><button onclick="cfClose()">Fermer ✕</button></div><iframe id="vf"></iframe></div>
+<div class="header"><h1>zone 4E</h1><p>Espace client</p></div>
+<div class="wrap">
+<div class="demo">Mode démonstration : accès libre, sans achat.</div>
+<div class="card"><div class="ico">🌐</div><div class="info"><h3>Zone 4E — Pratique Quotidienne</h3></div><button class="btn" onclick="cfOpen(&quot;../produits/pratique-quotidienne.html&quot;,&quot;Zone 4E — Pratique Quotidienne&quot;)">🌐 Ouvrir</button></div>
+<div class="card"><div class="ico">📄</div><div class="info"><h3>Zone 4E - Le protocole pour accéder à la zone à volonter</h3></div><button class="btn" onclick="cfOpen(&quot;https://olympeathletique.com/zone-4e/produits/ENTRER-DANS-LA-ZONE-Presentation.pdf&quot;,&quot;Zone 4E - Le protocole pour accéder à la zone à volonter&quot;)">📄 Lire</button></div>
+<div class="card"><div class="ico">🌐</div><div class="info"><h3>Zone 4E - La méthode</h3></div><button class="btn" onclick="cfOpen(&quot;../produits/zone4e-enrichi-v2.html&quot;,&quot;Zone 4E - La méthode&quot;)">🌐 Ouvrir</button></div>
+<div class="card"><div class="ico">🌐</div><div class="info"><h3>Zone 4E - Le programme de 21 jours pour maîtriser les éléments</h3></div></div>
+<div class="card"><div class="ico">🌐</div><div class="info"><h3>TFT Master</h3></div><button class="btn" onclick="cfOpen(&quot;../produits/tft-master-ebook--1-.html&quot;,&quot;TFT Master&quot;)">🌐 Ouvrir</button></div>
+<div class="card"><div class="ico">🌐</div><div class="info"><h3>Programmation mental Psycho cybernetique sportif</h3></div><button class="btn" onclick="cfOpen(&quot;../produits/psycho-cybernetique-sportif--1-.html&quot;,&quot;Programmation mental Psycho cybernetique sportif&quot;)">🌐 Ouvrir</button></div>
+<div class="foot"><a href="../zone4e-sales-page-light.html">← Revoir le tunnel</a></div>
+</div>
+<script>function cfOpen(u,t){document.getElementById("vt").textContent=t;document.getElementById("vf").src=u;document.getElementById("v").style.display="flex";document.body.style.overflow="hidden"}function cfClose(){document.getElementById("v").style.display="none";document.getElementById("vf").src="";document.body.style.overflow=""}document.addEventListener("keydown",function(e){if(e.key==="Escape")cfClose()});</script>
+</body>
+</html>

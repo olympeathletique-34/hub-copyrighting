@@ -1,0 +1,1140 @@
+<!DOCTYPE html><html lang="fr" style=""><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zone 4E — Méthode Complète &amp; Enrichie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,700;1,800&amp;family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&amp;family=DM+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+:root {
+  --page:#ffffff; --bg:#f8f6f2; --bg2:#f2efe9; --line:#e2ddd5; --line2:#ccc8be;
+  --muted:#9a9488; --body:#3d3a34; --dark:#1a1814; --black:#0e0d0a;
+  --gold:#b8891e; --gold-lt:#f5edd6; --gold-bd:#dfc98a;
+  --fire:#c84e1e; --fire-lt:#fdf0eb; --fire-bd:#e8b49a;
+  --wind:#1e6e9a; --wind-lt:#e8f3f9; --wind-bd:#90c4dc;
+  --earth:#4a7a2e; --earth-lt:#eef5e8; --earth-bd:#9dc87a;
+  --water:#1e4a9a; --water-lt:#e8eef9; --water-bd:#90a8dc;
+  --secret:#6a3a8a; --secret-lt:#f3ecfa; --secret-bd:#c4a0d8;
+  --pw:780px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;}
+body{background:var(--bg);color:var(--body);font-family:'DM Sans',sans-serif;font-weight:400;line-height:1.75;-webkit-font-smoothing:antialiased;}
+.book{max-width:var(--pw);margin:40px auto;display:flex;flex-direction:column;gap:0;}
+.page{background:var(--page);border:1px solid var(--line);position:relative;overflow:hidden;}
+.t-display{font-family:'Barlow Condensed',sans-serif;font-weight:900;line-height:0.93;letter-spacing:-0.01em;color:var(--black);}
+.t-label{font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);}
+
+/* COVER */
+.cover{min-height:1000px;display:grid;grid-template-rows:1fr auto;padding:0;background:var(--page);}
+.cover-top{padding:72px 72px 0;display:flex;flex-direction:column;justify-content:flex-end;}
+.cover-rule{width:100%;height:3px;background:linear-gradient(90deg,var(--fire),var(--gold),var(--earth));}
+.cover-footer{padding:24px 72px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);}
+.cover-author{font-size:13px;font-weight:600;color:var(--muted);}
+.cover-edition{font-size:11px;color:var(--line2);letter-spacing:0.08em;}
+.cover-el{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:5px 14px;border-radius:100px;border:1.5px solid;}
+.cover-el.wind{color:var(--wind);background:var(--wind-lt);border-color:var(--wind-bd);}
+.cover-el.fire{color:var(--fire);background:var(--fire-lt);border-color:var(--fire-bd);}
+.cover-el.earth{color:var(--earth);background:var(--earth-lt);border-color:var(--earth-bd);}
+.cover-el.water{color:var(--water);background:var(--water-lt);border-color:var(--water-bd);}
+.cover-el.zero{color:var(--gold);background:var(--gold-lt);border-color:var(--gold-bd);}
+.cover-el.secret{color:var(--secret);background:var(--secret-lt);border-color:var(--secret-bd);}
+
+/* TOC */
+.toc-page{padding:72px;}
+.toc-header{margin-bottom:48px;padding-bottom:20px;border-bottom:2px solid var(--dark);}
+.toc-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:40px;color:var(--black);letter-spacing:0.02em;}
+.toc-list{display:flex;flex-direction:column;gap:0;}
+.toc-item{display:grid;grid-template-columns:36px 1fr auto;gap:16px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--line);}
+.toc-item:last-child{border-bottom:none;}
+.toc-num{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;color:var(--muted);letter-spacing:0.08em;}
+.toc-name{font-size:15px;font-weight:600;color:var(--dark);line-height:1.3;}
+.toc-name span{display:block;font-size:12px;font-weight:400;color:var(--muted);margin-top:2px;}
+.toc-name.secret-entry{color:var(--secret);}
+.toc-el{font-size:16px;}
+
+/* CHAPTER OPENER */
+.chapter-opener{padding:0;min-height:440px;display:grid;grid-template-rows:auto 1fr;}
+.opener-rule{height:5px;}
+.opener-rule.wind{background:var(--wind);}
+.opener-rule.fire{background:var(--fire);}
+.opener-rule.earth{background:var(--earth);}
+.opener-rule.water{background:var(--water);}
+.opener-rule.gold{background:var(--gold);}
+.opener-rule.dark{background:var(--dark);}
+.opener-rule.secret{background:linear-gradient(90deg,var(--secret),var(--gold));}
+.opener-body{padding:56px 72px 64px;display:flex;flex-direction:column;justify-content:flex-end;}
+.opener-number{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:120px;line-height:1;color:var(--bg2);position:absolute;top:24px;right:56px;pointer-events:none;user-select:none;}
+.opener-chapter-label{font-size:10px;font-weight:700;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+.opener-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:60px;line-height:0.92;color:var(--black);letter-spacing:-0.01em;margin-bottom:20px;}
+.opener-title em{font-style:italic;display:block;}
+.opener-sub{font-family:'Lora',serif;font-style:italic;font-size:17px;color:var(--muted);max-width:520px;line-height:1.6;}
+.opener-el-badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:6px 16px;border-radius:100px;border:1.5px solid;margin-bottom:28px;align-self:flex-start;}
+.opener-el-badge.wind{color:var(--wind);background:var(--wind-lt);border-color:var(--wind-bd);}
+.opener-el-badge.fire{color:var(--fire);background:var(--fire-lt);border-color:var(--fire-bd);}
+.opener-el-badge.earth{color:var(--earth);background:var(--earth-lt);border-color:var(--earth-bd);}
+.opener-el-badge.water{color:var(--water);background:var(--water-lt);border-color:var(--water-bd);}
+.opener-el-badge.zero{color:var(--gold);background:var(--gold-lt);border-color:var(--gold-bd);}
+.opener-el-badge.secret{color:var(--secret);background:var(--secret-lt);border-color:var(--secret-bd);}
+
+/* CHAPTER CONTENT */
+.chapter-content{padding:64px 72px;}
+.running-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;margin-bottom:48px;border-bottom:1px solid var(--line);}
+.running-title{font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);}
+.running-num{font-size:10px;font-weight:600;color:var(--line2);letter-spacing:0.1em;}
+
+/* SECTION HEADINGS */
+.s-head{display:flex;gap:16px;align-items:flex-start;margin:40px 0 16px;}
+.s-head-marker{width:3px;min-height:28px;flex-shrink:0;border-radius:2px;margin-top:4px;}
+.s-head-marker.wind{background:var(--wind);}
+.s-head-marker.fire{background:var(--fire);}
+.s-head-marker.earth{background:var(--earth);}
+.s-head-marker.water{background:var(--water);}
+.s-head-marker.gold{background:var(--gold);}
+.s-head-marker.dark{background:var(--dark);}
+.s-head-marker.secret{background:var(--secret);}
+.s-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:26px;color:var(--black);letter-spacing:0.02em;line-height:1.05;}
+
+/* BODY */
+.body-text{font-size:15px;line-height:1.85;color:var(--body);}
+.body-text p+p{margin-top:14px;}
+.body-text strong{color:var(--dark);font-weight:700;}
+.lead{font-family:'Lora',serif;font-size:18px;line-height:1.7;color:var(--dark);margin-bottom:28px;}
+.pull{margin:36px 0;padding:24px 32px;border-left:3px solid var(--gold);background:var(--gold-lt);border-radius:0 4px 4px 0;font-family:'Lora',serif;font-style:italic;font-size:18px;color:var(--dark);line-height:1.65;}
+.pull strong{font-style:normal;color:var(--fire);}
+.hl{background:var(--gold-lt);border-bottom:1.5px solid var(--gold-bd);padding:0 3px;border-radius:2px;}
+
+/* SECRET BOX — nouvelle couleur violette */
+.secret-box{margin:32px 0;border:2px solid var(--secret-bd);border-radius:6px;overflow:hidden;}
+.secret-header{padding:14px 24px;display:flex;align-items:center;gap:10px;background:var(--secret);border-bottom:2px solid var(--secret-bd);}
+.secret-header .protocol-icon{font-size:20px;}
+.secret-header .protocol-label{font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.7);}
+.secret-header .protocol-name{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;color:#fff;letter-spacing:0.03em;}
+.secret-body{padding:20px 24px;background:var(--secret-lt);}
+
+/* PROTOCOL BOX */
+.protocol-box{margin:32px 0;border:1.5px solid var(--line);border-radius:6px;overflow:hidden;}
+.protocol-header{padding:14px 24px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);}
+.protocol-header.wind{background:var(--wind-lt);border-bottom-color:var(--wind-bd);}
+.protocol-header.fire{background:var(--fire-lt);border-bottom-color:var(--fire-bd);}
+.protocol-header.earth{background:var(--earth-lt);border-bottom-color:var(--earth-bd);}
+.protocol-header.water{background:var(--water-lt);border-bottom-color:var(--water-bd);}
+.protocol-header.gold{background:var(--gold-lt);border-bottom-color:var(--gold-bd);}
+.protocol-header.dark{background:var(--dark);border-bottom-color:transparent;}
+.protocol-icon{font-size:20px;}
+.protocol-label{font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;}
+.protocol-header.wind .protocol-label{color:var(--wind);}
+.protocol-header.fire .protocol-label{color:var(--fire);}
+.protocol-header.earth .protocol-label{color:var(--earth);}
+.protocol-header.water .protocol-label{color:var(--water);}
+.protocol-header.gold .protocol-label{color:var(--gold);}
+.protocol-header.dark .protocol-label{color:var(--gold);}
+.protocol-name{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;color:var(--black);letter-spacing:0.03em;}
+.protocol-header.dark .protocol-name{color:#fff;}
+.protocol-body{padding:20px 24px;background:var(--page);}
+.protocol-body .body-text{font-size:14px;}
+
+/* STEPS */
+.steps{margin:16px 0;display:flex;flex-direction:column;gap:10px;}
+.step{display:grid;grid-template-columns:28px 1fr;gap:14px;align-items:flex-start;}
+.step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;color:#fff;}
+.step-num.wind{background:var(--wind);}
+.step-num.fire{background:var(--fire);}
+.step-num.earth{background:var(--earth);}
+.step-num.water{background:var(--water);}
+.step-num.gold{background:var(--gold);}
+.step-num.dark{background:var(--dark);}
+.step-num.secret{background:var(--secret);}
+.step-text{font-size:14px;line-height:1.7;color:var(--body);padding-top:4px;}
+.step-text strong{color:var(--dark);}
+
+/* TAPPING DIAGRAM — spécial TFT */
+.tapping-diagram{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1.5px solid var(--fire-bd);border-radius:6px;overflow:hidden;margin:20px 0;}
+.tap-cell{background:var(--page);padding:18px 20px;display:flex;gap:12px;align-items:flex-start;}
+.tap-num{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:32px;color:var(--fire);line-height:1;flex-shrink:0;width:36px;text-align:center;}
+.tap-point{font-weight:700;font-size:13px;color:var(--dark);margin-bottom:3px;}
+.tap-desc{font-size:12px;color:var(--muted);line-height:1.5;}
+.tap-reps{display:inline-block;font-size:11px;font-weight:700;color:var(--fire);background:var(--fire-lt);border:1px solid var(--fire-bd);padding:1px 8px;border-radius:100px;margin-top:4px;}
+
+/* BODY DIAGRAM — silhouette tapping */
+.body-map{margin:20px 0;padding:24px;background:var(--fire-lt);border:1.5px solid var(--fire-bd);border-radius:6px;text-align:center;}
+.body-map-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;color:var(--fire);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:16px;}
+
+/* SUN SALUTATION FLOW */
+.sun-flow{display:flex;flex-direction:column;gap:2px;margin:20px 0;border:1.5px solid var(--earth-bd);border-radius:6px;overflow:hidden;}
+.sun-step{display:grid;grid-template-columns:48px 1fr 80px;gap:16px;align-items:center;padding:14px 20px;background:var(--page);border-bottom:1px solid var(--line);}
+.sun-step:last-child{border-bottom:none;}
+.sun-step:nth-child(odd){background:var(--earth-lt);}
+.sun-icon{font-size:24px;text-align:center;}
+.sun-name{font-weight:700;font-size:14px;color:var(--dark);}
+.sun-breath{font-size:11px;color:var(--muted);margin-top:2px;}
+.sun-action{font-size:11px;font-weight:700;padding:3px 8px;border-radius:100px;text-align:center;}
+.sun-action.inspire{color:var(--wind);background:var(--wind-lt);border:1px solid var(--wind-bd);}
+.sun-action.expire{color:var(--earth);background:var(--earth-lt);border:1px solid var(--earth-bd);}
+.sun-action.hold{color:var(--gold);background:var(--gold-lt);border:1px solid var(--gold-bd);}
+
+/* COLD BATH PROGRESSION */
+.cold-progression{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1.5px solid var(--water-bd);border-radius:6px;overflow:hidden;margin:20px 0;}
+.cold-row{display:grid;grid-template-columns:80px 1fr auto;gap:16px;align-items:center;padding:14px 20px;background:var(--page);border-bottom:1px solid var(--line);}
+.cold-row:last-child{border-bottom:none;}
+.cold-week{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;color:var(--water);letter-spacing:0.05em;}
+.cold-desc{font-size:13px;color:var(--body);line-height:1.5;}
+.cold-temp{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;color:var(--water);}
+
+/* LISTS */
+.blist{list-style:none;display:flex;flex-direction:column;gap:8px;margin:16px 0;}
+.blist li{display:flex;gap:12px;font-size:14px;line-height:1.65;color:var(--body);align-items:flex-start;}
+.blist li::before{content:'—';color:var(--muted);flex-shrink:0;font-weight:300;}
+.clist{list-style:none;display:flex;flex-direction:column;gap:8px;margin:16px 0;}
+.clist li{display:flex;gap:12px;font-size:14px;line-height:1.65;align-items:flex-start;}
+.clist .ck{flex-shrink:0;font-size:13px;margin-top:2px;}
+
+/* GRIDS */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin:20px 0;}
+.two-col-cell{background:var(--page);padding:20px 24px;}
+.two-col-head{font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;padding-bottom:10px;margin-bottom:14px;border-bottom:2px solid;}
+.two-col-head.fire{color:var(--fire);border-color:var(--fire);}
+.two-col-head.earth{color:var(--earth);border-color:var(--earth);}
+
+.breath-diagram{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin:20px 0;}
+.breath-cell{background:var(--page);padding:20px;text-align:center;}
+.breath-num{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:52px;line-height:1;margin-bottom:4px;}
+.breath-cell:nth-child(1) .breath-num{color:var(--wind);}
+.breath-cell:nth-child(2) .breath-num{color:var(--gold);}
+.breath-cell:nth-child(3) .breath-num{color:var(--earth);}
+.breath-unit{font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.breath-action{font-size:13px;color:var(--body);}
+
+/* SUMMARY */
+.summary-box{margin:36px 0 0;padding:24px 28px;background:var(--bg2);border:1px solid var(--line);border-radius:6px;}
+.summary-box-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;letter-spacing:0.06em;text-transform:uppercase;color:var(--black);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.summary-box-title::before{content:'⭐';font-size:14px;}
+
+/* SEQUENCE */
+.sequence{display:flex;flex-direction:column;gap:2px;margin:20px 0;border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+.seq-step{display:grid;grid-template-columns:40px 1fr auto;gap:16px;align-items:center;padding:14px 20px;background:var(--page);border-bottom:1px solid var(--line);}
+.seq-step:last-child{border-bottom:none;}
+.seq-el{font-size:20px;text-align:center;}
+.seq-name{font-size:14px;font-weight:700;color:var(--dark);}
+.seq-desc{font-size:12px;color:var(--muted);margin-top:2px;}
+.seq-time{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;color:var(--muted);white-space:nowrap;}
+
+/* ZERO PROTOCOL SECRET */
+.zero-secret{margin:32px 0;border:2px solid var(--gold-bd);border-radius:8px;overflow:hidden;background:var(--gold-lt);}
+.zero-secret-header{background:linear-gradient(135deg,var(--dark),#2a2418);padding:20px 28px;display:flex;align-items:center;gap:14px;}
+.zero-secret-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:#fff;letter-spacing:0.03em;}
+.zero-secret-sub{font-size:12px;color:rgba(255,255,255,0.45);margin-top:2px;letter-spacing:0.05em;}
+.zero-secret-body{padding:24px 28px;}
+
+/* PRINT */
+@media print{
+  body{background:white;}
+  .book{margin:0;max-width:none;}
+  .page{border:none;}
+  .chapter-opener{page-break-before:always;}
+  .chapter-content{page-break-after:always;}
+  .cover,.toc-page{page-break-after:always;}
+  @page{size:A4;margin:0;}
+}
+@media screen{.page{box-shadow:0 4px 32px rgba(0,0,0,0.08);margin-bottom:2px;}}
+</style>
+</head>
+<body style="">
+<div class="book" style="">
+
+<!-- COVER -->
+<div class="page cover">
+  <div class="cover-top" style="">
+    <div style="flex: 1 1 0%; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 48px;">
+      <div style="display: grid; grid-template-columns: 1fr 200px; gap: 48px; align-items: end;">
+        <div style="">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;display:flex;align-items:center;gap:10px;">
+            <span style="width:24px;height:1.5px;background:var(--muted);display:block;"></span>
+            Méthode de performance mentale — Édition enrichie
+          </div>
+          <div style="font-family:'Barlow Condensed';font-weight:900;font-size:108px;line-height:0.88;color:var(--black);letter-spacing:-0.02em;">ZONE</div>
+          <div style="font-family: &quot;Barlow Condensed&quot;; font-weight: 900; font-size: 108px; line-height: 0.88; color: var(--black); letter-spacing: -0.02em; margin-bottom: 16px;">4<span style="color:var(--gold);">E</span></div>
+          <div style="font-family: Lora; font-style: italic; font-size: 22px; color: var(--muted); line-height: 1.4; max-width: 420px; margin-bottom: 40px;">
+            Entrer dans la Zone à volonté —<br>la méthode neurophysiologique complète avec protocoles secrets
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span class="cover-el wind">🌬 Vent</span>
+            <span class="cover-el fire" style="">🔥 Feu</span>
+            <span class="cover-el earth" style="">🌍 Terre</span>
+            <span class="cover-el water">💧 Eau</span>
+            <span class="cover-el zero" style="">✨ Zérø</span>
+            <span class="cover-el secret" style="">🔐 Protocoles Secrets</span>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; padding-bottom: 4px;">
+          <div style="width:2px;flex:1;background:linear-gradient(to bottom,transparent,var(--line));min-height:200px;margin-right:24px;"></div>
+          <div style="font-family: &quot;Barlow Condensed&quot;; font-weight: 900; font-size: 11px; letter-spacing: 0.3em; color: var(--muted); writing-mode: vertical-rl; text-orientation: mixed; text-transform: uppercase; margin-right: 20px; margin-bottom: 8px;">11 Chapitres · Protocoles Secrets ·</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cover-rule" style=""></div>
+  <div class="cover-footer" style="">
+    <div class="cover-author" style="">Par [Votre Prénom] · Coach sportif &amp; Préparateur mental</div>
+    <div class="cover-edition">Édition Enrichie 2025 · V6</div>
+  </div>
+</div>
+
+<!-- TABLE DES MATIÈRES -->
+<div class="page toc-page" style="">
+  <div class="toc-header" style="">
+    <div class="t-label" style="margin-bottom:8px;">Sommaire</div>
+    <div class="toc-title" style="">Table des matières</div>
+  </div>
+  <div class="toc-list">
+    <div class="toc-item"><div class="toc-num">Intro</div><div class="toc-name" style="">Introduction<span style="">Entrer dans la Zone, à volonté</span></div><div class="toc-el"></div></div>
+    <div class="toc-item"><div class="toc-num">01</div><div class="toc-name" style="">Comprendre la Zone<span>L'état où vous jouez enfin à votre vrai niveau</span></div><div class="toc-el"></div></div>
+    <div class="toc-item" style=""><div class="toc-num">02</div><div class="toc-name">La science de la Zone<span style="">Ce qui se passe réellement dans votre cerveau</span></div><div class="toc-el"></div></div>
+    <div class="toc-item" style=""><div class="toc-num">03</div><div class="toc-name" style="">La Zone, une compétence<span>Pourquoi certains y accèdent — et comment vous pouvez faire pareil</span></div><div class="toc-el"></div></div>
+    <div class="toc-item"><div class="toc-num">04</div><div class="toc-name">Le VENT 🌬<span style="">Respiration + Protocole Secret : La Chasse au Lapin</span></div><div class="toc-el">🌬</div></div>
+    <div class="toc-item"><div class="toc-num">05</div><div class="toc-name">Le FEU 🔥<span>TFT Séquence Complète de Tapping + Protocole Secret</span></div><div class="toc-el">🔥</div></div>
+    <div class="toc-item"><div class="toc-num">06</div><div class="toc-name">La TERRE 🌍<span>Salutation au Soleil complète + Protocole Secret Mental</span></div><div class="toc-el">🌍</div></div>
+    <div class="toc-item"><div class="toc-num">07</div><div class="toc-name">L'EAU 💧<span>Bains froids progressifs + Protocole Secret Ancrage au Froid</span></div><div class="toc-el">💧</div></div>
+    <div class="toc-item"><div class="toc-num">08</div><div class="toc-name">Les Protocoles 4E assemblés<span>Pré-match · En-match · Quotidien · Urgence</span></div><div class="toc-el">⚡</div></div>
+    <div class="toc-item" style=""><div class="toc-num">09</div><div class="toc-name" style="">Le Rituel du Jour de Match<span style="">De réveil → Zone → Performance → Récupération</span></div><div class="toc-el">🗓️</div></div>
+    <div class="toc-item" style=""><div class="toc-num">10</div><div class="toc-name" style="">Le ZÉRØ — La connexion mentale<span style="">Des compétences inconscientes à l'accès instantané à la Zone</span></div><div class="toc-el">✨</div></div>
+    <div class="toc-item" style=""><div class="toc-num">—</div><div class="toc-name" style="">Conclusion<span style="">Devenir un Athlète de la Zone</span></div><div class="toc-el"></div></div>
+    <div class="toc-item" style=""><div class="toc-num">+</div><div class="toc-name toc-name secret-entry">🔐 Pour aller plus loin<span>Le Programme 21 Jours &amp; le Protocole ZÉRØ Secret — disponibles en Order Bump</span></div><div class="toc-el">🔐</div></div>
+  </div>
+</div>
+
+<!-- INTRO -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="opener-rule dark" style=""></div>
+  <div class="opener-body" style="">
+    <div class="opener-number">Intro</div>
+    <div class="opener-chapter-label">Introduction</div>
+    <div class="opener-title" style="">Entrer dans la Zone,<br><em>à volonté.</em></div>
+    <div class="opener-sub" style="">Ce que la plupart ignorent : la Zone n'a rien d'un accident. Elle peut être entraînée — et activée volontairement.</div>
+  </div>
+</div>
+<div class="page chapter-content" style="">
+  <div class="running-header" style=""><div class="running-title">Introduction</div><div class="running-num">Zone 4E</div></div>
+  <p class="lead">Il existe des moments rares où tout devient simple. Vous bougez avec fluidité. Votre esprit est calme, mais vif. Les décisions s'enchaînent, évidentes. Le doute disparaît.</p>
+  <div class="body-text">
+    <p>Ces instants portent un nom : <strong>la Zone.</strong> Certains sportifs la décrivent comme un état de grâce. D'autres comme un tunnel. D'autres encore comme une énergie intérieure qui se déploie exactement au bon moment. Mais tous s'accordent : quand vous êtes dans la Zone, vous jouez au sommet de vos capacités.</p>
+    <p>Ce que la plupart ignorent, c'est que cet état n'a rien d'un accident. Il ne dépend pas du hasard, ni d'une "bonne journée", ni d'un alignement cosmique.</p>
+  </div>
+  <div class="pull">La Zone est un état neurophysiologique précis. Une attention focalisée, un niveau d'émotion juste, un corps disponible, une respiration stable, une activation nerveuse optimale. <strong>Autrement dit : la Zone peut être entraînée — et activée volontairement.</strong></div>
+  <div class="body-text">
+    <p>Pendant plus de cinq ans, j'ai étudié, testé et adapté les pratiques qui favorisent l'accès au flow : neurosciences, préparation mentale, régulation émotionnelle, yoga dynamique, respiration, exposition au froid.</p>
+    <p>J'ai construit la <strong>Méthode Zone 4E</strong> — quatre leviers physiologiques fondamentaux, chacun accompagné de son protocole secret avancé :</p>
+  </div>
+  <div class="two-col" style="margin-top:24px;">
+    <div class="two-col-cell" style="border-right:1px solid var(--line);">
+      <ul class="clist">
+        <li><span class="ck" style="color:var(--wind);">🌬</span><span><strong>VENT</strong> — Stabiliser le système nerveux par la respiration</span></li>
+        <li><span class="ck" style="color:var(--fire);">🔥</span><span><strong>FEU</strong> — Neutraliser les émotions parasites</span></li>
+      </ul>
+    </div>
+    <div class="two-col-cell">
+      <ul class="clist">
+        <li><span class="ck" style="color:var(--earth);">🌍</span><span><strong>TERRE</strong> — Ancrer le corps et l'esprit</span></li>
+        <li><span class="ck" style="color:var(--water);">💧</span><span><strong>EAU</strong> — Créer l'activation optimale</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="body-text" style="margin-top:20px;">
+    <p>Lorsque ces quatre éléments sont maîtrisés en tant que <strong>compétences inconscientes</strong>, un cinquième émerge naturellement : le ZÉRØ — l'état de fluidité totale où vous jouez à votre vrai niveau, sans effort conscient.</p>
+    <p><strong>Ce n'est pas un livre à lire passivement.</strong> C'est un programme expérientiel. Chaque chapitre contient des protocoles concrets — et les protocoles secrets qui accélèrent la transformation.</p>
+  </div>
+  <div class="summary-box" style=""><div class="summary-box-title" style="">Prêt ?</div><div class="body-text" style="font-size:14px;">On commence.</div></div>
+</div>
+
+<!-- CHAPITRE 1 -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="opener-rule dark"></div>
+  <div class="opener-body" style="">
+    <div class="opener-number">01</div>
+    <div class="opener-chapter-label">Chapitre 1</div>
+    <div class="opener-title">Comprendre<br><em>la Zone</em></div>
+    <div class="opener-sub">L'état où vous jouez enfin à votre vrai niveau — sans mystique, sans exagération.</div>
+  </div>
+</div>
+<div class="page chapter-content" style="">
+  <div class="running-header" style=""><div class="running-title">Chapitre 1 — Comprendre la Zone</div><div class="running-num">Zone 4E</div></div>
+  <p class="lead">La Zone est un état de performance optimale : attention focalisée, pensées parasites absentes, émotions stables, corps fluide, temps qui change de texture, décisions naturelles et immédiates.</p>
+  <div class="s-head"><div class="s-head-marker dark"></div><div class="s-title">Ce n'est pas de la magie — c'est de la neurophysiologie</div></div>
+  <div class="body-text"><p>Ce n'est pas un état "magique". C'est un <strong>état neurophysiologique précis</strong>, associé à une coordination optimale entre votre système nerveux, votre respiration, vos émotions, votre posture et la qualité de votre mouvement. Les champions l'utilisent — mais elle n'est pas réservée à l'élite.</p></div>
+  <div class="s-head" style=""><div class="s-head-marker dark"></div><div class="s-title" style="">Les 5 conditions de Csikszentmihalyi</div></div>
+  <div class="sequence">
+    <div class="seq-step" style=""><div class="seq-el" style="font-family:'Barlow Condensed';font-weight:900;font-size:22px;color:var(--dark);">1</div><div><div class="seq-name" style="">Un défi légèrement supérieur à votre niveau</div><div class="seq-desc" style="">Pas trop facile (ennui), pas trop dur (stress) — juste au-dessus pour une concentration maximale</div></div></div>
+    <div class="seq-step" style=""><div class="seq-el" style="font-family:'Barlow Condensed';font-weight:900;font-size:22px;color:var(--dark);">2</div><div><div class="seq-name" style="">Des objectifs clairs</div><div class="seq-desc" style="">Vous savez exactement ce que vous devez accomplir, ici et maintenant</div></div></div>
+    <div class="seq-step" style=""><div class="seq-el" style="font-family:'Barlow Condensed';font-weight:900;font-size:22px;color:var(--dark);">3</div><div><div class="seq-name" style="">Un feedback immédiat</div><div class="seq-desc" style="">Chaque mouvement vous renseigne instantanément</div></div></div>
+    <div class="seq-step" style=""><div class="seq-el" style="font-family:'Barlow Condensed';font-weight:900;font-size:22px;color:var(--dark);">4</div><div><div class="seq-name">Une attention focalisée</div><div class="seq-desc">Votre esprit cesse de se disperser</div></div></div>
+    <div class="seq-step"><div class="seq-el" style="font-family:'Barlow Condensed';font-weight:900;font-size:22px;color:var(--dark);">5</div><div><div class="seq-name">Absence d'enjeu émotionnel parasite</div><div class="seq-desc">Moins vous ressentez de peur, plus la Zone se déclenche</div></div></div>
+  </div>
+  <div class="pull" style="">La Zone ne vient pas quand vous forcez. Elle apparaît quand les bons signaux sont présents — et que les mauvais disparaissent. <strong style="">Votre rôle : apprendre à créer ces signaux volontairement.</strong></div>
+  <div class="summary-box" style=""><div class="summary-box-title" style="">Résumé du chapitre</div>
+    <ul class="clist" style="">
+      <li style=""><span class="ck gold">✓</span><span style="">La Zone est un état naturel, accessible à tous les niveaux</span></li>
+      <li><span class="ck gold">✓</span><span style="">5 conditions déclenchent naturellement le flow</span></li>
+      <li><span class="ck gold">✓</span><span>Votre plus gros frein : les parasites internes, pas le talent</span></li>
+      <li><span class="ck gold">✓</span><span style="">La Zone peut devenir une compétence entraînable</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- CHAPITRE 2 -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="opener-rule dark"></div>
+  <div class="opener-body">
+    <div class="opener-number">02</div>
+    <div class="opener-chapter-label">Chapitre 2</div>
+    <div class="opener-title">La science<br><em style="">de la Zone</em></div>
+    <div class="opener-sub">Ce qui se passe réellement dans votre cerveau et votre corps — sans jargon inutile.</div>
+  </div>
+</div>
+<div class="page chapter-content" style="">
+  <div class="running-header"><div class="running-title">Chapitre 2 — La science de la Zone</div><div class="running-num">Zone 4E</div></div>
+  <p class="lead">La Zone n'est pas un mystère. C'est un état neurophysiologique identifiable, dans lequel cerveau, système nerveux et corps se synchronisent pour optimiser votre performance.</p>
+  <div class="s-head"><div class="s-head-marker dark"></div><div class="s-title">Les 3 neurotransmetteurs du flow</div></div>
+  <div class="two-col" style="grid-template-columns: 1fr 1fr 1fr;">
+    <div class="two-col-cell" style="border-right: 1px solid var(--line); text-align: center; padding: 20px 16px;"><div style="font-family: &quot;Barlow Condensed&quot;; font-weight: 900; font-size: 20px; color: var(--fire); margin-bottom: 8px;">DOPAMINE</div><div style="font-size: 12px; color: var(--muted); line-height: 1.6;">Précision · Motivation · Focus visuel · Timing · Fluidité</div></div>
+    <div class="two-col-cell" style="border-right: 1px solid var(--line); text-align: center; padding: 20px 16px;"><div style="font-family:'Barlow Condensed';font-weight:900;font-size:20px;color:var(--wind);margin-bottom:8px;">NORADRÉNALINE</div><div style="font-size:12px;color:var(--muted);line-height:1.6;">Réactivité · Vigilance · Anticipation · Vitesse</div></div>
+    <div class="two-col-cell" style="text-align:center;padding:20px 16px;"><div style="font-family:'Barlow Condensed';font-weight:900;font-size:20px;color:var(--earth);margin-bottom:8px;">SÉROTONINE</div><div style="font-size:12px;color:var(--muted);line-height:1.6;">Stabilité · Calme · Confiance · Anti-impulsivité</div></div>
+  </div>
+  <div class="s-head"><div class="s-head-marker dark"></div><div class="s-title" style="">Ondes cérébrales et système nerveux</div></div>
+  <div class="body-text"><p style="">La Zone est un mélange d'<strong style="">ondes alpha + bêta bas</strong> : calme concentré, réactivité dirigée, ni trop excité ni trop détendu. Le système nerveux autonome active <em>simultanément</em> ses deux branches — sympathique (énergie) et parasympathique (clarté) — dans un équilibre parfait.</p><p style="">Les 4 éléments agissent directement sur cet équilibre : VENT active le parasympathique · FEU régule les émotions · TERRE ancre la cohérence nerveuse · EAU active le sympathique intelligemment.</p></div>
+  <div class="summary-box" style=""><div class="summary-box-title" style="">Résumé du chapitre</div>
+    <ul class="clist" style="">
+      <li><span class="ck gold">✓</span><span>3 neurotransmetteurs clés : dopamine, noradrénaline, sérotonine</span></li>
+      <li><span class="ck gold">✓</span><span>Ondes alpha + bêta bas = état de calme concentré</span></li>
+      <li><span class="ck gold">✓</span><span>Le système nerveux est la clé centrale — et il s'entraîne</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- CHAPITRE 3 -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="opener-rule dark" style=""></div>
+  <div class="opener-body" style="">
+    <div class="opener-number">03</div>
+    <div class="opener-chapter-label">Chapitre 3</div>
+    <div class="opener-title" style="">La Zone n'est<br>pas un accident :<br><em style="">c'est une compétence</em></div>
+    <div class="opener-sub">Pourquoi certains y accèdent souvent — et comment transformer les protocoles en réflexes inconscients.</div>
+  </div>
+</div>
+<div class="page chapter-content" style="">
+  <div class="running-header"><div class="running-title">Chapitre 3 — La Zone, une compétence</div><div class="running-num">Zone 4E</div></div>
+  <p class="lead">La Zone n'est pas un événement magique — c'est un état optimisé du système nerveux. Elle peut être entraînée. Elle peut être activée volontairement.</p>
+  <div class="s-head" style=""><div class="s-head-marker dark"></div><div class="s-title">Les 3 saboteurs du flow</div></div>
+  <div class="sequence">
+    <div class="seq-step"><div class="seq-el">🧠</div><div><div class="seq-name">Le mental qui bavarde trop</div><div class="seq-desc">Suranalyse, ruminations, peur du regard des autres — le cerveau n'a plus d'espace pour l'instinct</div></div></div>
+    <div class="seq-step"><div class="seq-el">🔥</div><div><div class="seq-name">Les émotions mal gérées</div><div class="seq-desc">Stress, colère, frustration — elles saturent le système nerveux et bloquent la fluidité</div></div></div>
+    <div class="seq-step"><div class="seq-el">💪</div><div><div class="seq-name">Le corps mal régulé</div><div class="seq-desc" style="">Respiration trop rapide, tension musculaire, posture contractée — impossible d'être précis</div></div></div>
+  </div>
+  <div class="s-head"><div class="s-head-marker dark"></div><div class="s-title">De la compétence consciente à la compétence inconsciente</div></div>
+  <div class="body-text">
+    <p style="">Voici le secret de l'accès durable à la Zone : les protocoles doivent devenir des <strong>compétences inconscientes</strong>. Au début, vous appliquez chaque étape consciemment — c'est normal et nécessaire. Mais avec la pratique répétée, quelque chose se transforme.</p>
+    <p style="">Votre système nerveux mémorise les séquences. Les circuits nerveux se renforcent. Et un jour — vous n'avez plus besoin de "penser" au protocole. Il s'active tout seul, sur un simple signal.</p>
+    <p style="">C'est exactement ce que le Programme 21 Jours (disponible en complément) est conçu à créer. Et c'est ce qui rend le <strong>Protocole ZÉRØ Secret</strong> aussi puissant : quand les 4 éléments sont des automatismes, un simple déclencheur suffit pour entrer en Zone instantanément.</p>
+  </div>
+  <div class="pull" style=""><strong>La neuroplasticité est votre alliée.</strong> Chaque répétition renforce les circuits nerveux qui mènent à la Zone. Ce qui était difficile devient facile. Ce qui était conscient devient automatique. Ce qui était rare devient régulier.</div>
+  <div class="summary-box"><div class="summary-box-title">Résumé du chapitre</div>
+    <ul class="clist">
+      <li><span class="ck gold">✓</span><span>3 saboteurs identifiés et neutralisables</span></li>
+      <li><span class="ck gold">✓</span><span>Les protocoles doivent devenir des compétences inconscientes</span></li>
+      <li><span class="ck gold">✓</span><span>La répétition crée les autoroutes nerveuses vers la Zone</span></li>
+      <li><span class="ck gold">✓</span><span>Quand les 4E sont automatiques, le ZÉRØ devient accessible sur signal</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- CHAPITRE 4 — VENT -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="opener-rule wind"></div>
+  <div class="opener-body" style="">
+    <div class="opener-number">04</div>
+    <span class="opener-el-badge wind">🌬 Élément 1 — Vent</span>
+    <div class="opener-title">Le VENT</div>
+    <div class="opener-sub">La respiration qui stabilise le cerveau et ouvre la porte à la Zone — avec le protocole secret de la Chasse au Lapin.</div>
+  </div>
+</div>
+<div class="page chapter-content" style="">
+  <div class="running-header"><div class="running-title">Chapitre 4 — Le VENT 🌬</div><div class="running-num">Zone 4E</div></div>
+  <p class="lead" style="">La respiration est la seule fonction du corps à la fois automatique et volontaire. Elle influence directement votre système nerveux autonome — et c'est votre levier le plus rapide vers la Zone.</p>
+  <div class="body-text"><p style="">Respirer par le nez active le parasympathique : calme, clarté, fluidité. Respirer par la bouche sous pression active le stress, augmente la tension musculaire, fragmente l'attention. <strong style="">Un seul changement de respiration peut transformer votre état en 90 secondes.</strong></p></div>
+
+  <div class="s-head"><div class="s-head-marker wind"></div><div class="s-title" style="color: var(--wind);">Protocole 1 — Le Reset 4-2-6</div></div>
+  <div class="body-text"><p style="">Votre base. Utilisable avant un match, pendant un temps mort, après une erreur, dès que la pression monte.</p></div>
+  <div class="breath-diagram" style="">
+    <div class="breath-cell"><div class="breath-num">4</div><div class="breath-unit">Secondes</div><div class="breath-action">Inspirez par le nez</div></div>
+    <div class="breath-cell" style=""><div class="breath-num">2</div><div class="breath-unit">Secondes</div><div class="breath-action" style="">Gardez l'air</div></div>
+    <div class="breath-cell" style=""><div class="breath-num">6</div><div class="breath-unit">Secondes</div><div class="breath-action" style="">Expirez par le nez</div></div>
+  </div>
+  <div class="body-text"><p style=""><strong>6 cycles.</strong> Effets : calme immédiat · recul mental · diminution de la tension musculaire · recentrage sur le présent.</p></div>
+
+  <div class="s-head" style=""><div class="s-head-marker wind"></div><div class="s-title" style="color: var(--wind);">Protocole 2 — Respiration nasale en mouvement</div></div>
+  <div class="protocol-box" style="">
+    <div class="protocol-header wind" style="">
+      <div class="protocol-icon">🌬</div>
+      <div><div class="protocol-label">Protocole 2 — Vent</div><div class="protocol-name">Sortie nasale contrôlée</div></div>
+    </div>
+    <div class="protocol-body" style="">
+      <div class="body-text"><p style="">3 fois par semaine, 20 à 30 minutes d'activité simple (marche rapide, footing léger, vélo) — <strong style="">uniquement en respirant par le nez.</strong></p></div>
+      <div class="steps" style="">
+        <div class="step"><div class="step-num wind">1</div><div class="step-text" style="">Respirez <strong style="">uniquement par le nez</strong> pendant toute la séance</div></div>
+        <div class="step"><div class="step-num wind">2</div><div class="step-text" style="">Si trop difficile : <strong style="">ralentissez</strong>, mais ne basculez pas en bouche</div></div>
+        <div class="step"><div class="step-num wind">3</div><div class="step-text">Après 2-3 semaines : stabilité respiratoire accrue, calme interne plus accessible en match</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROTOCOLE SECRET VENT -->
+  <div class="s-head" style=""><div class="s-head-marker wind"></div><div class="s-title" style="color: var(--wind);">🔐 Protocole Secret VENT — La Chasse au Lapin</div></div>
+  <div class="secret-box">
+    <div class="secret-header">
+      <div class="protocol-icon">🔐</div>
+      <div><div class="protocol-label">Protocole Secret</div><div class="protocol-name">La Chasse au Lapin — Haute Intensité Nasale</div><div class="zero-secret-sub">Le pont direct entre l'effort physique intense et la Zone</div></div>
+    </div>
+    <div class="secret-body" style="">
+      <div class="body-text"><p style="">Ce protocole développe la capacité la plus rare et la plus précieuse : <strong>rester calme et lucide pendant un effort intense.</strong> C'est exactement ce qui se passe dans les moments décisifs d'un match.</p><p style="">En forçant votre système respiratoire à rester nasal sous haute intensité, vous entraînez votre cerveau à maintenir le calme même quand le corps souffre. C'est l'entraînement direct à la Zone sous pression.</p></div>
+      <div class="steps" style="margin-top: 16px;">
+        <div class="step"><div class="step-num wind">1</div><div class="step-text"><strong>6 minutes de course lente</strong> — respiration nasale uniquement, rythme conversationnel</div></div>
+        <div class="step"><div class="step-num wind">2</div><div class="step-text"><strong>10m montées de genoux + 10m talons-fesses</strong> — nasale, sans concession</div></div>
+        <div class="step"><div class="step-num wind">3</div><div class="step-text"><strong>4 × 1 minute rapide / 1 minute lente</strong> — nasale aussi longtemps que possible pendant les phases rapides</div></div>
+        <div class="step"><div class="step-num wind">4</div><div class="step-text"><strong>3 minutes de récupération</strong> — nasale, retour au calme conscient</div></div>
+      </div>
+      <div class="pull" style="margin-top: 16px; border-left-color: var(--wind); background: var(--wind-lt);">
+        <strong>La règle d'or :</strong> chaque semaine, repoussez d'une minute le moment où vous craquez vers la bouche. Notez-le. Comparez. La progression est mesurable — et elle se transfère directement en lucidité de match.
+      </div>
+      <div class="body-text"><p style="">Ce que développe ce protocole : tolérance au CO₂ · endurance respiratoire · lucidité sous pression · résistance mentale · <strong style="">entrée en flow par l'effort.</strong></p></div>
+    </div>
+  </div>
+
+  <div class="summary-box"><div class="summary-box-title" style="">Résumé du chapitre</div>
+    <ul class="clist" style="">
+      <li><span class="ck wind">✓</span><span>Reset 4-2-6 : 90 secondes pour basculer l'état interne</span></li>
+      <li style=""><span class="ck wind">✓</span><span style="">Respiration nasale en mouvement : l'entraînement de fond</span></li>
+      <li><span class="ck wind">✓</span><span style="">Chasse au Lapin : la lucidité sous pression — compétence inconsciente clé</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- CHAPITRE 5 — FEU -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="opener-rule fire"></div>
+  <div class="opener-body" style="">
+    <div class="opener-number">05</div>
+    <span class="opener-el-badge fire">🔥 Élément 2 — Feu</span>
+    <div class="opener-title" style="">Le FEU</div>
+    <div class="opener-sub" style="">La séquence TFT complète — et le protocole secret pour neutraliser n'importe quelle émotion parasite en 30 secondes.</div>
+  </div>
+</div>
+<div class="page chapter-content" style="">
+  <div class="running-header"><div class="running-title">Chapitre 5 — Le FEU 🔥</div><div class="running-num">Zone 4E</div></div>
+  <p class="lead" style="">Une émotion non régulée commande tout le système nerveux. Elle court-circuite la Zone. Mais une émotion bien maîtrisée devient un carburant surpuissant.</p>
+  <div class="body-text"><p style="">Le problème n'est jamais l'émotion elle-même. C'est quand elle <strong>déborde</strong>. Le FEU vous apprend à maintenir l'émotion dans son juste dosage : ni étouffée, ni explosive.</p></div>
+
+  <div class="s-head"><div class="s-head-marker fire"></div><div class="s-title" style="color: var(--fire);">Protocole ONT — Observe, Nomme, Transforme (10 sec)</div></div>
+  <div class="protocol-box">
+    <div class="protocol-header fire" style="">
+      <div class="protocol-icon">🔥</div>
+      <div><div class="protocol-label">Protocole FEU</div><div class="protocol-name" style="">Observe — Nomme — Transforme</div></div>
+    </div>
+    <div class="protocol-body" style="">
+      <div class="steps" style="">
+        <div class="step"><div class="step-num fire">1</div><div class="step-text" style=""><strong>OBSERVE</strong> — Repérez une sensation physique : tension épaules, gorge serrée, chaleur, respiration cassée. Cela coupe la réaction automatique.</div></div>
+        <div class="step"><div class="step-num fire">2</div><div class="step-text" style=""><strong>NOMMES</strong> — Identifiez l'émotion : "Stress" · "Frustration" · "Colère" · "Pression". Nommer réduit l'intensité de <span class="hl" style="">40 à 60%</span>.</div></div>
+        <div class="step"><div class="step-num fire">3</div><div class="step-text" style=""><strong>TRANSFORME</strong> — Mot d'ancrage : "Prochaine action" · "Calme agressif" · "Focus" · "Je joue"</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="s-head"><div class="s-head-marker fire"></div><div class="s-title" style="color:var(--fire);">🔐 Protocole Secret FEU — La Séquence TFT Complète</div></div>
+  <div class="secret-box" style="">
+    <div class="secret-header" style="">
+      <div class="protocol-icon">🔐</div>
+      <div><div class="protocol-label" style="">Protocole Secret — TFT Complète</div><div class="protocol-name" style="">La Séquence de Tapping Intégrale</div><div class="zero-secret-sub">Neutraliser n'importe quelle charge émotionnelle en 60 secondes</div></div>
+    </div>
+    <div class="secret-body" style="">
+      <div class="body-text" style=""><p style="">La TFT (Thought Field Therapy) du Dr Roger Callahan agit directement sur les circuits neuro-émotionnels. Ces points de tapping correspondent aux méridiens d'acupuncture — et les tapotements envoient un signal de désactivation au système limbique.</p><p><strong>Avant de commencer :</strong> évaluez l'intensité de l'émotion de 0 à 10. L'objectif est de descendre en dessous de 3 en une séquence.</p></div>
+
+      <div class="body-map" style="">
+        <div class="body-map-title" style="">Carte des points de tapping</div>
+        <div style="font-size: 13px; color: var(--body); line-height: 2;">
+          🖐️ <strong>KC</strong> — Karate Chop (tranchant de la main) &nbsp;·&nbsp;
+          👆 <strong>EB</strong> — Début du sourcil &nbsp;·&nbsp;
+          👁️ <strong style="">SE</strong> — Coin externe de l'œil<br>
+          😢 <strong>UE</strong> — Sous l'œil (os malaire) &nbsp;·&nbsp;
+          👃 <strong style="">UN</strong> — Sous le nez &nbsp;·&nbsp;
+          😬 <strong>CH</strong> — Menton (creux)<br>
+          🫁 <strong>CB</strong> — Clavicule (coin intérieur) &nbsp;·&nbsp;
+          💪 <strong>UA</strong> — Sous l'aisselle (10cm)
+        </div>
+      </div>
+
+      <div class="body-text" style="margin-top:16px;"><p style=""><strong style="">Étape 0 — Cycle d'Inversion (toujours en premier)</strong></p></div>
+      <div class="tapping-diagram" style="">
+        <div class="tap-cell" style="grid-column: 1 / -1; background: var(--fire-lt); border-bottom: 1px solid var(--fire-bd);">
+          <div style="font-family:'Barlow Condensed';font-weight:900;font-size:20px;color:var(--fire);margin-right:16px;flex-shrink:0;">0</div>
+          <div style="">
+            <div class="tap-point" style="">Karate Chop — Réinitialisation système</div>
+            <div class="tap-desc" style="">Tapotez le tranchant charnu de la main (côté petit doigt). Pendant ce temps : observez les sensations physiques dans votre corps, reconnaissez la charge émotionnelle active sans la combattre.</div>
+            <span class="tap-reps" style="">20 à 30 tapotements</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="body-text" style="margin-top:16px;"><p style=""><strong style="">Étape 1 — Séquence principale de tapping</strong> (7 tapotements par point)</p></div>
+      <div class="tapping-diagram" style="">
+        <div class="tap-cell" style="">
+          <div class="tap-num">1</div>
+          <div style="">
+            <div class="tap-point" style="">EB — Début du sourcil</div>
+            <div class="tap-desc" style="">Point intérieur, à la base du sourcil, près du nez</div>
+            <span class="tap-reps" style="">7 tapotements</span>
+          </div>
+        </div>
+        <div class="tap-cell" style="">
+          <div class="tap-num">2</div>
+          <div>
+            <div class="tap-point" style="">SE — Coin externe de l'œil</div>
+            <div class="tap-desc" style="">Coin extérieur de l'orbite, sur l'os</div>
+            <span class="tap-reps" style="">7 tapotements</span>
+          </div>
+        </div>
+        <div class="tap-cell" style="">
+          <div class="tap-num">3</div>
+          <div style="">
+            <div class="tap-point" style="">UE — Sous l'œil</div>
+            <div class="tap-desc" style="">Sur l'os malaire, directement sous la pupille</div>
+            <span class="tap-reps" style="">7 tapotements</span>
+          </div>
+        </div>
+        <div class="tap-cell" style="">
+          <div class="tap-num">4</div>
+          <div>
+            <div class="tap-point">UN — Sous le nez</div>
+            <div class="tap-desc">Dans le creux entre nez et lèvre supérieure</div>
+            <span class="tap-reps" style="">7 tapotements</span>
+          </div>
+        </div>
+        <div class="tap-cell" style="">
+          <div class="tap-num">5</div>
+          <div style="">
+            <div class="tap-point" style="">CH — Menton</div>
+            <div class="tap-desc">Dans le creux entre lèvre inférieure et menton</div>
+            <span class="tap-reps">7 tapotements</span>
+          </div>
+        </div>
+        <div class="tap-cell">
+          <div class="tap-num">6</div>
+          <div>
+            <div class="tap-point">CB — Clavicule</div>
+            <div class="tap-desc">Coin intérieur sous la clavicule — point puissant</div>
+            <span class="tap-reps">7 tapotements</span>
+          </div>
+        </div>
+        <div class="tap-cell" style="">
+          <div class="tap-num">7</div>
+          <div style="">
+            <div class="tap-point">UA — Sous l'aisselle</div>
+            <div class="tap-desc" style="">10 cm sous l'aisselle, sur les côtes</div>
+            <span class="tap-reps">7 tapotements</span>
+          </div>
+        </div>
+        <div class="tap-cell">
+          <div class="tap-num">8</div>
+          <div>
+            <div class="tap-point">EB — Retour sourcil</div>
+            <div class="tap-desc">Clôture la boucle, ancre la décharge</div>
+            <span class="tap-reps">7 tapotements</span></div></div></div>
+
+      <div class="body-text" style="margin-top: 16px;"><p style=""><strong style="">Étape 2 — Répétez la séquence principale</strong> (points 1 à 8, même ordre)</p><p style="">Évaluez à nouveau l'intensité (0-10). Si &gt; 3 : répétez depuis l'étape 0. Si &lt; 3 : <strong style="">la charge est neutralisée.</strong></p></div>
+
+      <div class="pull" style="border-left-color: var(--fire); background: var(--fire-lt);">
+        <strong>Version discrète en match :</strong> Karate Chop sur la cuisse (hanche) 20 fois en tapotant avec les doigts. Nommez l'émotion mentalement. Respirez par le nez. Personne ne voit rien — vous venez de couper la spirale.
+      </div>
+    </div>
+  </div>
+
+  <div class="summary-box" style=""><div class="summary-box-title" style="">Résumé du chapitre</div>
+    <ul class="clist" style="">
+      <li style=""><span class="ck fire">✓</span><span style="">ONT (10 sec) : neutralisation émotionnelle express</span></li>
+      <li style=""><span class="ck fire">✓</span><span style="">Cycle d'Inversion : réinitialisation du système nerveux bloqué</span></li>
+      <li style=""><span class="ck fire">✓</span><span style="">Version discrète cuisse : utilisable en plein match sans que personne ne le voie</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- CHAPITRE 6 — TERRE -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="opener-rule earth"></div>
+  <div class="opener-body">
+    <div class="opener-number">06</div>
+    <span class="opener-el-badge earth">🌍 Élément 3 — Terre</span>
+    <div class="opener-title">La TERRE</div>
+    <div class="opener-sub">La Salutation au Soleil complète + le protocole secret : pratiquer la salutation dans sa tête.</div>
+  </div>
+</div>
+<div class="page chapter-content" style="">
+  <div class="running-header"><div class="running-title">Chapitre 6 — La TERRE 🌍</div><div class="running-num">Zone 4E</div></div>
+  <p class="lead">Votre posture dirige votre cerveau. Un corps crispé envoie en permanence des signaux de danger — et un cerveau en danger ne peut pas être en flow.</p>
+
+  <div class="s-head"><div class="s-head-marker earth"></div><div class="s-title" style="color:var(--earth);">Protocoles express d'ancrage</div></div>
+  <div class="protocol-box">
+    <div class="protocol-header earth">
+      <div class="protocol-icon">🌍</div>
+      <div><div class="protocol-label">Protocole TERRE 1</div><div class="protocol-name">Ancrage Basique — 1 minute</div></div>
+    </div>
+    <div class="protocol-body">
+      <div class="steps">
+        <div class="step"><div class="step-num earth">1</div><div class="step-text">Pieds largeur du bassin · genoux légèrement fléchis · épaules relâchées</div></div>
+        <div class="step"><div class="step-num earth">2</div><div class="step-text">Attention dirigée vers les <strong>plantes de pieds</strong> — sentez le contact avec le sol</div></div>
+        <div class="step"><div class="step-num earth">3</div><div class="step-text">Inspiration nasale, expiration lente · visualisez votre poids descendre dans le sol</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="protocol-box">
+    <div class="protocol-header earth">
+      <div class="protocol-icon">🌍</div>
+      <div><div class="protocol-label">Protocole TERRE 4</div><div class="protocol-name">Les 3 Points d'Attention — 10 secondes</div></div>
+    </div>
+    <div class="protocol-body">
+      <div class="steps">
+        <div class="step"><div class="step-num earth">1</div><div class="step-text"><strong>Pieds</strong> — contact avec le sol</div></div>
+        <div class="step"><div class="step-num earth">2</div><div class="step-text"><strong>Épaules</strong> — relâchez consciemment</div></div>
+        <div class="step"><div class="step-num earth">3</div><div class="step-text"><strong>Respiration</strong> — une inspiration nasale lente</div></div>
+      </div>
+      <div class="body-text" style="margin-top:8px;"><p>En 10 secondes, vous sortez de votre tête et revenez dans l'instant.</p></div>
+    </div>
+  </div>
+
+  <div class="s-head"><div class="s-head-marker earth"></div><div class="s-title" style="color:var(--earth);">La Salutation au Soleil — Cycle Complet Flow Athlétique</div></div>
+  <div class="body-text"><p>Le rituel corporel complet qui synchronise respiration, posture, mobilité, fluidité et présence. 2 à 5 minutes suffisent pour transformer votre état nerveux avant une performance.</p></div>
+  <div class="sun-flow">
+    <div class="sun-step">
+      <div class="sun-icon">🧍</div>
+      <div><div class="sun-name">Samasthiti — Position d'ancrage</div><div class="sun-breath">Pieds joints ou largeur bassin, mains jointes au cœur. Intention : "Je m'ancre ici."</div></div>
+      <div class="sun-action hold">Neutre</div>
+    </div>
+    <div class="sun-step">
+      <div class="sun-icon">🙌</div>
+      <div><div class="sun-name">Urdhva Hastasana — Ouverture</div><div class="sun-breath">Bras vers le ciel, poitrine ouverte, colonne qui s'allonge, regard vers le haut</div></div>
+      <div class="sun-action inspire">Inspire</div>
+    </div>
+    <div class="sun-step">
+      <div class="sun-icon">🤸</div>
+      <div><div class="sun-name">Uttanasana — Flexion avant</div><div class="sun-breath">Corps qui se relâche vers l'avant, tête et épaules détendues, genoux légèrement fléchis</div></div>
+      <div class="sun-action expire">Expire</div>
+    </div>
+    <div class="sun-step">
+      <div class="sun-icon">🏃</div>
+      <div><div class="sun-name">Ashwa Sanchalanasana — Fente basse</div><div class="sun-breath">Jambe droite en arrière, genou à terre, regard vers l'avant et le haut</div></div>
+      <div class="sun-action inspire">Inspire</div>
+    </div>
+    <div class="sun-step">
+      <div class="sun-icon">📏</div>
+      <div><div class="sun-name">Phalakasana — Planche</div><div class="sun-breath">Corps en ligne parfaite, tonicité calme, regard au sol, bras tendus</div></div>
+      <div class="sun-action hold">Retiens</div>
+    </div>
+    <div class="sun-step">
+      <div class="sun-icon">⬇️</div>
+      <div><div class="sun-name">Chaturanga — Descente contrôlée</div><div class="sun-breath">Coudes collés au corps, descente lente, poitrine vers le sol (genoux au sol possible)</div></div>
+      <div class="sun-action expire">Expire</div>
+    </div>
+    <div class="sun-step">
+      <div class="sun-icon">🐍</div>
+      <div><div class="sun-name">Bhujangasana — Cobra</div><div class="sun-breath">Poitrine ouverte, nuque longue, épaules loin des oreilles, regard devant</div></div>
+      <div class="sun-action inspire">Inspire</div>
+    </div>
+    <div class="sun-step">
+      <div class="sun-icon">🔺</div>
+      <div><div class="sun-name">Adho Mukha — Chien tête en bas</div><div class="sun-breath">Hanches vers le ciel, talons vers le sol, dos droit. Restez 3 à 5 respirations nasales lentes.</div></div>
+      <div class="sun-action expire">Expire</div>
+    </div>
+    <div class="sun-step">
+      <div class="sun-icon">🏃</div>
+      <div><div class="sun-name">Fente basse — côté gauche</div><div class="sun-breath">Jambe gauche en avant, genou à terre, regard vers l'avant et le haut</div></div>
+      <div class="sun-action inspire">Inspire</div>
+    </div>
+    <div class="sun-step">
+      <div class="sun-icon">🤸</div>
+      <div><div class="sun-name">Uttanasana — Retour flexion avant</div><div class="sun-breath">Revenez vers l'avant, dos droit, corps qui se plie</div></div>
+      <div class="sun-action expire">Expire</div>
+    </div>
+    <div class="sun-step">
+      <div class="sun-icon">🙌</div>
+      <div><div class="sun-name">Remontée — Bras vers le ciel</div><div class="sun-breath">Remontez lentement, bras qui s'élèvent, colonne se déroule vertèbre par vertèbre</div></div>
+      <div class="sun-action inspire">Inspire</div>
+    </div>
+    <div class="sun-step">
+      <div class="sun-icon">🧍</div>
+      <div><div class="sun-name">Retour Samasthiti — Clôture</div><div class="sun-breath">Mains au cœur, expiration longue. Sentez le corps fluide, la respiration libre, l'esprit calme.</div></div>
+      <div class="sun-action expire">Expire</div>
+    </div>
+  </div>
+
+  <!-- PROTOCOLE SECRET TERRE -->
+  <div class="s-head"><div class="s-head-marker earth"></div><div class="s-title" style="color:var(--earth);">🔐 Protocole Secret TERRE — La Salutation au Soleil dans la Tête</div></div>
+  <div class="secret-box">
+    <div class="secret-header">
+      <div class="protocol-icon">🔐</div>
+      <div><div class="protocol-label">Protocole Secret</div><div class="protocol-name">La Salutation au Soleil Mentale</div><div class="zero-secret-sub">Activer l'ancrage corporel complet sans bouger — n'importe où, n'importe quand</div></div>
+    </div>
+    <div class="secret-body" style="">
+      <div class="body-text">
+        <p>Ce protocole exploite le fait que le cerveau ne distingue pas clairement entre une action réelle et une action vivacement imaginée. Quand vous visualisez la Salutation au Soleil avec précision — en ressentant chaque sensation, chaque respiration — votre système nerveux reçoit les mêmes signaux de régulation.</p>
+        <p><strong>Condition préalable :</strong> avoir pratiqué la Salutation au Soleil physiquement suffisamment souvent pour qu'elle soit une compétence inconsciente. Votre cerveau doit connaître la séquence par cœur.</p>
+      </div>
+      <div class="steps" style="margin-top:16px;">
+        <div class="step"><div class="step-num earth">1</div><div class="step-text"><strong>Fermez les yeux</strong> (ou regard doux vers le sol). Posture assise ou debout.</div></div>
+        <div class="step"><div class="step-num earth">2</div><div class="step-text"><strong>Visualisez-vous en position d'ancrage.</strong> Ressentez le poids de vos pieds sur le sol. Sentez vos épaules relâchées. Entendez votre respiration nasale.</div></div>
+        <div class="step"><div class="step-num earth">3</div><div class="step-text"><strong>Déroulez mentalement chaque posture</strong> — inspiration, expiration, sensation musculaire, contact au sol, allongement de la colonne. Ne précipitez pas. Vivez chaque image.</div></div>
+        <div class="step"><div class="step-num earth">4</div><div class="step-text"><strong>Associez chaque posture à une sensation précise</strong> : l'ouverture de la poitrine au Cobra · le relâchement de la nuque en Uttanasana · la force tranquille de la Planche.</div></div>
+        <div class="step"><div class="step-num earth">5</div><div class="step-text"><strong>Terminez en position d'ancrage mentale</strong> : mains au cœur, expiration longue, mot d'ancrage — "ANCRÉ". Ouvrez les yeux.</div></div>
+      </div>
+      <div class="pull" style="border-left-color: var(--earth); background: var(--earth-lt);">
+        <strong>Utilisez ce protocole :</strong> dans les vestiaires avant d'entrer sur le terrain · dans les transports le matin du match · pendant un temps mort assis · en récupération entre deux séries. <strong style="">Durée : 60 à 90 secondes. Effet : ancrage complet.</strong>
+      </div>
+      <div class="body-text"><p style="">C'est l'une des techniques les plus puissantes du programme car elle démontre que <strong style="">l'ancrage n'est plus lié à un lieu ou à une action physique</strong> — il est devenu une compétence mentale portable.</p></div>
+    </div>
+  </div>
+
+  <div class="summary-box"><div class="summary-box-title">Résumé du chapitre</div>
+    <ul class="clist">
+      <li><span class="ck earth">✓</span><span>Ancrage Basique (1 min) et Triple Ancrage (10 sec) : outils express</span></li>
+      <li><span class="ck earth">✓</span><span>Salutation au Soleil complète : 12 postures, synchronisation corps-souffle</span></li>
+      <li><span class="ck earth">✓</span><span>Salutation Mentale : l'ancrage portable — utilisable n'importe où</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- CHAPITRE 7 — EAU -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="opener-rule water"></div>
+  <div class="opener-body">
+    <div class="opener-number">07</div>
+    <span class="opener-el-badge water">💧 Élément 4 — Eau</span>
+    <div class="opener-title">L'EAU</div>
+    <div class="opener-sub">Les bains froids progressifs — et le protocole secret de connexion au froid le jour de la compétition.</div>
+  </div>
+</div>
+<div class="page chapter-content" style="">
+  <div class="running-header"><div class="running-title">Chapitre 7 — L'EAU 💧</div><div class="running-num">Zone 4E</div></div>
+  <p class="lead">La Zone n'est ni un état relax, ni un état excité. C'est un état activé ET régulé. L'EAU allume cette activation — avec précision, avec puissance, avec l'aide de l'une des pratiques les plus anciennes et les plus validées scientifiquement.</p>
+
+  <div class="s-head"><div class="s-head-marker water"></div><div class="s-title" style="color:var(--water);">Protocole express — Activation Froide (20 secondes)</div></div>
+  <div class="protocol-box">
+    <div class="protocol-header water">
+      <div class="protocol-icon">💧</div>
+      <div><div class="protocol-label">Protocole EAU 1</div><div class="protocol-name">Activation Froide — Mains et Visage</div></div>
+    </div>
+    <div class="protocol-body">
+      <div class="body-text"><p>Trempez mains et visage dans de l'eau froide 10 à 20 secondes. Effets : pic de noradrénaline sans stress · focus amélioré · réactivité augmentée · fraîcheur mentale immédiate. <strong>Un switch ON neurologique.</strong></p></div>
+    </div>
+  </div>
+
+  <!-- PROTOCOLE SECRET EAU -->
+  <div class="s-head"><div class="s-head-marker water"></div><div class="s-title" style="color:var(--water);">🔐 Protocole Secret EAU — Les Bains Froids Progressifs</div></div>
+  <div class="secret-box">
+    <div class="secret-header">
+      <div class="protocol-icon">🔐</div>
+      <div><div class="protocol-label">Protocole Secret</div><div class="protocol-name">Immersion Froide Progressive &amp; Ancrage au Froid</div><div class="zero-secret-sub">Reprogrammer le système nerveux pour la performance — et l'ancre mentale du jour de compétition</div></div>
+    </div>
+    <div class="secret-body" style="">
+      <div class="body-text">
+        <p>L'exposition régulière à l'eau froide est l'une des pratiques les plus puissantes pour optimiser le système nerveux autonome. Ce n'est pas une mode — c'est une pratique validée par des millénaires de tradition et de plus en plus par la recherche contemporaine (Wim Hof, Huberman, etc.).</p>
+        <p><strong>Ce que libère l'immersion froide :</strong></p>
+      </div>
+      <ul class="clist" style="margin-bottom:16px;">
+        <li><span class="ck" style="color:var(--water);">💧</span><span><strong>Noradrénaline</strong> : +200 à 300% — vigilance, focus, réactivité</span></li>
+        <li><span class="ck" style="color:var(--water);">💧</span><span><strong>Dopamine</strong> : pic prolongé plusieurs heures — motivation, énergie, plaisir de l'effort</span></li>
+        <li><span class="ck" style="color:var(--water);">💧</span><span><strong>Endorphines</strong> : bien-être, récupération, anti-douleur naturel</span></li>
+        <li><span class="ck" style="color:var(--water);">💧</span><span><strong>Tolérance au stress</strong> : chaque bain entraîne le système nerveux à rester calme sous pression</span></li>
+      </ul>
+
+      <div class="body-text"><p><strong>Programme de progression sur 6 semaines :</strong></p></div>
+      <div class="cold-progression">
+        <div class="cold-row"><div class="cold-week">Sem. 1-2</div><div class="cold-desc">Terminez votre douche habituelle par 30 secondes d'eau froide. Respirez calmement. Ne résistez pas — observez.</div><div class="cold-temp">20-30 sec</div></div>
+        <div class="cold-row"><div class="cold-week">Sem. 3-4</div><div class="cold-desc">Passez à 1 minute de douche froide complète. Respiration nasale obligatoire. Apprenez à "lâcher" la résistance mentale.</div><div class="cold-temp">1-2 min</div></div>
+        <div class="cold-row"><div class="cold-week">Sem. 5</div><div class="cold-desc">Introduisez l'immersion partielle si possible (baignoire froide, lac, mer). Jambes et tronc. Durée progressive.</div><div class="cold-temp">2-3 min</div></div>
+        <div class="cold-row"><div class="cold-week">Sem. 6</div><div class="cold-desc">Immersion complète ou douche froide intégrale chaque matin. Idéalement au réveil. C'est votre nouvelle routine.</div><div class="cold-temp">3-5 min</div></div>
+        <div class="cold-row" style="background:var(--water-lt);"><div class="cold-week" style="color:var(--dark);">Avancé</div><div class="cold-desc" style="color:var(--dark);"><strong>Objectif idéal :</strong> bain froid chaque matin. L'effet dopaminergique se cumule dans le temps et crée une baseline d'énergie et de clarté mentale permanente.</div><div class="cold-temp" style="color:var(--dark);">∞</div></div>
+      </div>
+
+      <div class="body-text" style="margin-top:16px;"><p><strong>La règle de sécurité :</strong> ne jamais forcer au-delà de sa limite. La progression est clé. L'inconfort doit être supportable et maîtrisable — pas traumatisant. En cas de doute médical, consultez votre médecin.</p></div>
+
+      <div class="pull" style="border-left-color: var(--water); background: var(--water-lt); margin-top: 20px;">
+        <strong style="">Le secret du jour de compétition :</strong> La dernière fois où vous vous êtes baigné dans l'eau froide est une ancre puissante. Elle a activé votre système nerveux, libéré vos hormones de performance, prouvé à votre cerveau que vous pouvez rester calme sous pression extrême.
+      </div>
+
+      <div class="body-text" style="margin-top:16px;"><p style=""><strong style="">Le protocole d'ancrage mental au froid (le jour J) :</strong></p></div>
+      <div class="steps" style="">
+        <div class="step"><div class="step-num water">1</div><div class="step-text" style="">Fermez les yeux. <strong style="">Remémorez-vous précisément votre dernier bain froid</strong> — la sensation de l'eau, la fraîcheur, votre respiration, le moment où vous avez lâché la résistance.</div></div>
+        <div class="step"><div class="step-num water">2</div><div class="step-text" style="">Ressentez dans votre corps <strong style="">l'état neurophysiologique post-bain</strong> : la clarté, l'énergie, la légèreté, le calme vibrant.</div></div>
+        <div class="step"><div class="step-num water">3</div><div class="step-text" style="">Dites-vous : <strong style="">"Mon système nerveux sait être calme sous pression. Il l'a prouvé."</strong></div></div>
+        <div class="step" style=""><div class="step-num water">4</div><div class="step-text" style="">Inspirez par le nez. Connectez-vous à cette sensation. <strong>Portez-la sur le terrain.</strong></div></div>
+      </div>
+
+      <div class="body-text" style="margin-top:12px;"><p style="">Ce protocole crée un <strong style="">pont neurologique</strong> entre votre expérience physique du froid et votre état de performance. Plus vous vous baignez régulièrement, plus ce pont devient solide et accessible instantanément.</p></div>
+    </div>
+  </div>
+
+  <div class="protocol-box" style="">
+    <div class="protocol-header water" style="">
+      <div class="protocol-icon">💧</div>
+      <div><div class="protocol-label">Protocole EAU 4</div><div class="protocol-name" style="">Le Rituel d'Énergie Juste — 45 secondes avant le terrain</div></div>
+    </div>
+    <div class="protocol-body" style="">
+      <div class="steps" style="">
+        <div class="step"><div class="step-num water">1</div><div class="step-text" style="">3 respirations nasales profondes</div></div>
+        <div class="step"><div class="step-num water">2</div><div class="step-text" style="">5 sec de mobilisation épaules/hanches</div></div>
+        <div class="step"><div class="step-num water">3</div><div class="step-text" style="">10 sec d'explosivité tonique (sauts, montées de genoux)</div></div>
+        <div class="step"><div class="step-num water">4</div><div class="step-text" style="">Votre phrase d'ancrage personnelle</div></div>
+        <div class="step"><div class="step-num water">5</div><div class="step-text" style="">1 expiration longue par le nez</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary-box" style=""><div class="summary-box-title" style="">Résumé du chapitre</div>
+    <ul class="clist" style="">
+      <li><span class="ck" style="color:var(--water);">✓</span><span style="">Activation Froide express (20 sec) : switch ON neurologique immédiat</span></li>
+      <li><span class="ck" style="color:var(--water);">✓</span><span>Bains froids progressifs : reprogrammation profonde du système nerveux</span></li>
+      <li style=""><span class="ck" style="color:var(--water);">✓</span><span style="">Ancrage mental au froid le jour J : connectez-vous à l'état post-bain</span></li>
+      <li><span class="ck" style="color:var(--water);">✓</span><span style="">Rituel Énergie Juste : l'activation finale avant d'entrer sur le terrain</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- CHAPITRE 8 — PROTOCOLES 4E -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="opener-rule gold"></div>
+  <div class="opener-body" style="">
+    <div class="opener-number">08</div>
+    <div class="opener-chapter-label" style="">Chapitre 8</div>
+    <div class="opener-title" style="">Les Protocoles<br><em>4E assemblés</em></div>
+    <div class="opener-sub">Déclencher la Zone à volonté — avant, pendant, après, au quotidien.</div>
+  </div>
+</div>
+<div class="page chapter-content" style="">
+  <div class="running-header"><div class="running-title">Chapitre 8 — Les Protocoles 4E</div><div class="running-num">Zone 4E</div></div>
+  <p class="lead">Les quatre éléments, utilisés ensemble dans un ordre précis, deviennent un système — un véritable interrupteur interne vers la Zone.</p>
+
+  <div class="s-head"><div class="s-head-marker gold"></div><div class="s-title">Protocole Pré-Performance — 5 minutes</div></div>
+  <div class="sequence">
+    <div class="seq-step"><div class="seq-el">🌬</div><div><div class="seq-name">VENT — Respiration 4-2-6</div><div class="seq-desc">6 cycles · Stabilisation du système nerveux · Réduction du stress précompétitif</div></div><div class="seq-time">90 sec</div></div>
+    <div class="seq-step"><div class="seq-el">🔥</div><div><div class="seq-name">FEU — TFT + ONT</div><div class="seq-desc">Cycle d'Inversion (20 tap.) + Observe-Nomme-Transforme · Clarté émotionnelle</div></div><div class="seq-time">60 sec</div></div>
+    <div class="seq-step"><div class="seq-el">🌍</div><div><div class="seq-name">TERRE — Salutation + Ancrage</div><div class="seq-desc">1 cycle lent · Alignement corps–respiration–attention</div></div><div class="seq-time">90 sec</div></div>
+    <div class="seq-step"><div class="seq-el">💧</div><div><div class="seq-name">EAU — Activation Tonique</div><div class="seq-desc">Sauts réactifs + relâchement + expiration longue · Énergie juste</div></div><div class="seq-time">60 sec</div></div>
+  </div>
+
+  <div class="s-head" style=""><div class="s-head-marker gold"></div><div class="s-title">Protocole En-Match — 15 secondes</div></div>
+  <div class="sequence">
+    <div class="seq-step"><div class="seq-el">🔥</div><div><div class="seq-name">FEU</div><div class="seq-desc" style="">Nommez l'émotion — "Frustration" · "Tension" · "Colère"</div></div><div class="seq-time">2 sec</div></div>
+    <div class="seq-step"><div class="seq-el">🌬</div><div><div class="seq-name">VENT</div><div class="seq-desc" style="">1 respiration : inspire 2s → expire 4s</div></div><div class="seq-time">6 sec</div></div>
+    <div class="seq-step"><div class="seq-el">🌍</div><div><div class="seq-name">TERRE</div><div class="seq-desc">Triple Ancrage : Pieds → Épaules → Respiration · Relâchez 5%</div></div><div class="seq-time">3 sec</div></div>
+    <div class="seq-step" style=""><div class="seq-el">💧</div><div><div class="seq-name">EAU</div><div class="seq-desc">Petit rebond + micro-tension relâchée · Regain d'engagement juste</div></div><div class="seq-time">2 sec</div></div>
+  </div>
+
+  <div class="s-head"><div class="s-head-marker gold"></div><div class="s-title">Protocole Quotidien — 5 minutes par jour</div></div>
+  <div class="sequence">
+    <div class="seq-step"><div class="seq-el">🌬</div><div><div class="seq-name">VENT</div><div class="seq-desc">Respiration nasale lente</div></div><div class="seq-time">1 min</div></div>
+    <div class="seq-step"><div class="seq-el">🔥</div><div><div class="seq-name">FEU</div><div class="seq-desc">Cycle d'Inversion (TFT) + micro-phrase d'ancrage</div></div><div class="seq-time">1 min</div></div>
+    <div class="seq-step"><div class="seq-el">🌍</div><div><div class="seq-name">TERRE</div><div class="seq-desc">1 cycle Salutation au Soleil (ou version mentale)</div></div><div class="seq-time">1 min</div></div>
+    <div class="seq-step"><div class="seq-el">💧</div><div><div class="seq-name">EAU</div><div class="seq-desc">10 sec explosif → 10 sec relâché × 3</div></div><div class="seq-time">1 min</div></div>
+    <div class="seq-step"><div class="seq-el">✨</div><div><div class="seq-name">SILENCE INTERNE</div><div class="seq-desc">Respiration calme — conditioning du ZÉRØ</div></div><div class="seq-time">1 min</div></div>
+  </div>
+
+  <div class="s-head"><div class="s-head-marker gold"></div><div class="s-title">Protocole d'Urgence — moins d'une minute</div></div>
+  <div class="steps">
+    <div class="step"><div class="step-num gold">1</div><div class="step-text"><strong>FEU : Cycle d'Inversion</strong> — 30 sec · Coupez la crise émotionnelle</div></div>
+    <div class="step"><div class="step-num gold">2</div><div class="step-text" style=""><strong>VENT : 3 expirations longues</strong> — 10 sec · Réduisez la charge mentale</div></div>
+    <div class="step"><div class="step-num gold">3</div><div class="step-text"><strong>TERRE : Secouez + 3 Points d'Attention</strong> — 10 sec · Revenez dans le présent</div></div>
+    <div class="step"><div class="step-num gold">4</div><div class="step-text"><strong>EAU : Mini-activation tonique</strong> — 5 sec · Réallumez l'énergie juste</div></div>
+  </div>
+
+  <div class="summary-box"><div class="summary-box-title">Résumé du chapitre</div>
+    <div class="body-text" style="font-size:14px;"><p>Vous avez maintenant 4 protocoles complets pour entrer dans la Zone à volonté : <strong>avant · pendant · au quotidien · en urgence.</strong> Vous ne dépendez plus du hasard. Vous devenez l'architecte de votre état interne.</p></div>
+  </div>
+</div>
+
+<!-- CHAPITRE 9 — RITUEL JOUR DE MATCH -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="opener-rule gold"></div>
+  <div class="opener-body" style="">
+    <div class="opener-number">09</div>
+    <div class="opener-chapter-label">Chapitre 9</div>
+    <div class="opener-title">Le Rituel du<br><em style="">Jour de Match</em></div>
+    <div class="opener-sub" style="">De réveil → Zone → Performance → Récupération. Votre plan de bataille complet.</div>
+  </div>
+</div>
+<div class="page chapter-content" style="">
+  <div class="running-header" style=""><div class="running-title" style="">Chapitre 9 — Rituel du Jour de Match</div><div class="running-num">Zone 4E</div></div>
+  <p class="lead" style="">Les athlètes qui performent le mieux ne laissent rien au hasard. Ils ne réagissent pas — ils suivent un processus maîtrisé de bout en bout.</p>
+  <div class="sequence" style="">
+    <div class="seq-step" style=""><div class="seq-el">🌅</div><div><div class="seq-name" style="">Réveil — 5 à 10 minutes</div><div class="seq-desc" style="">Grand verre d'eau + 10 respirations 4-6 + 1 cycle Salutation au Soleil + ONT rapide ("Quelles émotions sont présentes ?")</div></div></div>
+    <div class="seq-step" style=""><div class="seq-el">🥶</div><div><div class="seq-name">Bain froid matinal (si possible)</div><div class="seq-desc">Douche froide ou immersion 2-3 min. Ancre neurologique majeure. Votre système nerveux sait être calme sous pression — il vient de le prouver une fois de plus.</div></div></div>
+    <div class="seq-step" style=""><div class="seq-el">⏰</div><div><div class="seq-name" style="">2 à 4h avant le match</div><div class="seq-desc" style="">Marche 15 min en respiration nasale + Visualisation (3 scènes) + Repos calme</div></div></div>
+    <div class="seq-step" style=""><div class="seq-el">🏟️</div><div><div class="seq-name">Arrivée sur le lieu</div><div class="seq-desc" style="">6 cycles 4-2-6 + Marche ancrée + TFT Cycle d'Inversion + Ancrage mental au froid</div></div></div>
+    <div class="seq-step" style=""><div class="seq-el">🔥</div><div><div class="seq-name">Échauffement</div><div class="seq-desc" style="">TERRE (Salutation) → VENT (synchronisé) → FEU (micro-phrase) → EAU (activation tonique)</div></div></div>
+    <div class="seq-step" style=""><div class="seq-el">⚡</div><div style=""><div class="seq-name" style="">Juste avant le match — Protocole 4E Pré-Performance</div><div class="seq-desc">VENT → FEU → TERRE → EAU. 5 minutes. Sortie : calme agressif + lucidité + énergie juste.</div></div></div>
+    <div class="seq-step" style=""><div class="seq-el">🎯</div><div><div class="seq-name" style="">Pendant le match</div><div class="seq-desc">Protocole 4E En-Match (15 sec) à chaque erreur, pression, ou sortie du flow</div></div></div>
+    <div class="seq-step"><div class="seq-el">🌙</div><div><div class="seq-name">Après le match</div><div class="seq-desc">Respiration 4-4-4-4 (6 cycles) + Scan corporel + FEU (2 questions) + Eau froide visage 20 sec</div></div></div>
+  </div>
+  <div class="summary-box" style=""><div class="summary-box-title">Les 2 questions post-match</div>
+    <div class="steps" style="">
+      <div class="step"><div class="step-num gold">1</div><div class="step-text" style="">"Quelle émotion reste encore présente ?"</div></div>
+      <div class="step"><div class="step-num gold">2</div><div class="step-text" style="">"Qu'est-ce que j'ai appris aujourd'hui ?"</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CHAPITRE 10 — ZÉRØ -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="opener-rule secret"></div>
+  <div class="opener-body" style="">
+    <div class="opener-number">10</div>
+    <span class="opener-el-badge zero">✨ Le Cinquième Élément</span>
+    <div class="opener-title" style="">Le ZÉRØ</div>
+    <div class="opener-sub" style="">Des compétences inconscientes à l'accès instantané à la Zone — la connexion mentale ultime.</div>
+  </div>
+</div>
+<div class="page chapter-content" style="">
+  <div class="running-header"><div class="running-title">Chapitre 10 — Le ZÉRØ ✨</div><div class="running-num">Zone 4E</div></div>
+  <p class="lead" style="">Quand les 4 éléments sont devenus des compétences inconscientes, quelque chose d'extraordinaire se produit : un simple signal mental suffit pour entrer dans la Zone.</p>
+
+  <div class="s-head"><div class="s-head-marker gold"></div><div class="s-title">Les neurosciences du ZÉRØ</div></div>
+  <div class="two-col">
+    <div class="two-col-cell" style="border-right: 1px solid var(--line);">
+      <div style="font-family:'Barlow Condensed';font-weight:800;font-size:16px;color:var(--gold);margin-bottom:8px;">HYPOFRONTALITÉ TRANSITOIRE</div>
+      <div style="font-size: 13px; color: var(--body); line-height: 1.7;">Votre cortex préfrontal réduit son activité. Moins de pensées, moins de doutes, moins d'autocritique. Votre cerveau ne vous juge plus. Il vous laisse jouer.</div>
+    </div>
+    <div class="two-col-cell">
+      <div style="font-family:'Barlow Condensed';font-weight:800;font-size:16px;color:var(--gold);margin-bottom:8px;">HYPER-FLUIDITÉ MOTRICE</div>
+      <div style="font-size:13px;color:var(--body);line-height:1.7;">Les zones de perception, réflexes, coordination et timing se synchronisent. Vos gestes deviennent plus rapides, précis, naturels. Vous "sentez le jeu".</div>
+    </div>
+  </div>
+
+  <div class="s-head"><div class="s-head-marker gold"></div><div class="s-title">Le ZÉRØ comme connexion mentale</div></div>
+  <div class="body-text">
+    <p>Voici ce que la plupart des gens ne comprennent pas sur la Zone : une fois que vous l'avez vécue consciemment plusieurs fois, <strong>votre cerveau en garde la mémoire neurologique.</strong> La Zone laisse une empreinte — un état que votre système nerveux peut reconnaître et reproduire.</p>
+    <p>C'est pour cette raison que le travail des 4 éléments en tant que compétences inconscientes est si crucial. En pratiquant VENT, FEU, TERRE et EAU régulièrement jusqu'à l'automatisme, vous créez quelque chose de précieux : <strong>des ancres neuronales vers la Zone.</strong></p>
+    <p>Et quand ces ancres existent — un simple déclencheur suffit. Un mot. Une image. Une sensation. Votre cerveau reconnaît le signal et active la séquence complète.</p>
+  </div>
+
+  <div class="pull">Le ZÉRØ ne se commande pas. Mais il se prépare. <strong>Quand les 4E sont des automatismes, le ZÉRØ devient une connexion mentale — accessible en quelques secondes.</strong></div>
+
+  <div class="s-head"><div class="s-head-marker gold"></div><div class="s-title">Les signatures du ZÉRØ — reconnaître l'état</div></div>
+  <ul class="clist" style="">
+    <li><span class="ck gold">✦</span><span>Silence interne — les pensées se sont tues</span></li>
+    <li><span class="ck gold">✦</span><span>Temps qui change de texture — ralentissement ou accélération</span></li>
+    <li><span class="ck gold">✦</span><span>Vision plus large, plus périphérique — vous voyez tout le terrain</span></li>
+    <li><span class="ck gold">✦</span><span>Zéro crispation — le corps coule dans le mouvement</span></li>
+    <li><span class="ck gold">✦</span><span>Réactions qui devancent les intentions — l'instinct prend le relais</span></li>
+    <li><span class="ck gold">✦</span><span>Confiance automatique — pas arrogante, juste certaine</span></li>
+    <li><span class="ck gold">✦</span><span>Absence d'effort mental — vous jouez, vous ne travaillez pas</span></li>
+    <li><span class="ck gold">✦</span><span>Plaisir pur de la performance — l'action pour l'action</span></li>
+  </ul>
+
+  <div class="s-head"><div class="s-head-marker gold"></div><div class="s-title" style="">Le chemin vers le Protocole ZÉRØ Secret</div></div>
+  <div class="body-text">
+    <p style="">Il existe un protocole ultime — le <strong>Protocole ZÉRØ Secret</strong> — qui condense les 4 éléments en un déclencheur de 20 secondes utilisable en pleine compétition. Il intègre la Salutation au Soleil mentale, le tapping discret, la connexion au froid et la respiration nasale en une séquence unique.</p>
+    <p>Mais ce protocole ne fonctionne que si les 4 éléments sont déjà des <strong>compétences inconscientes solidement ancrées.</strong> C'est pourquoi il est réservé au <strong>Programme 21 Jours</strong> — le complément de cet ebook, disponible en order bump.</p>
+    <p>Le Programme 21 Jours vous guide jour par jour dans l'intégration profonde de chaque élément, jusqu'au moment où le Protocole ZÉRØ Secret devient votre interrupteur personnel vers la Zone.</p>
+  </div>
+
+  <div class="zero-secret">
+    <div class="zero-secret-header" style="">
+      <div style="font-size:28px;">🔐</div>
+      <div>
+        <div class="zero-secret-title" style="">Protocole ZÉRØ Secret — Aperçu</div>
+        <div class="zero-secret-sub" style="">Disponible dans le Programme 21 Jours · Order Bump</div>
+      </div>
+    </div>
+    <div class="zero-secret-body" style="">
+      <div class="body-text"><p style="">Le Protocole ZÉRØ Secret est un déclencheur de 20 secondes qui active instantanément l'état de Zone complète. Il repose sur 4 ancres condensées, dans un ordre précis, chacune reliée à une compétence inconsciente :</p></div>
+      <ul class="clist" style="margin-top: 12px;">
+        <li><span class="ck" style="color:var(--secret);">1</span><span style=""><strong>Ancre TERRE</strong> — Version raccourcie de la Salutation au Soleil mentale (2 postures clés)</span></li>
+        <li><span class="ck" style="color:var(--secret);">2</span><span style=""><strong>Ancre FEU</strong> — Tapping discret sur la cuisse/hanche, rapide et invisible</span></li>
+        <li style=""><span class="ck" style="color:var(--secret);">3</span><span style=""><strong>Ancre EAU</strong> — Connexion mentale à votre dernier bain froid</span></li>
+        <li><span class="ck" style="color:var(--secret);">4</span><span style=""><strong>Ancre VENT + ZÉRØ</strong> — Respiration nasale + mot déclencheur "ZONE — ZÉRØ"</span></li>
+      </ul>
+      <div class="body-text" style="margin-top:14px;"><p style="">Ce protocole fonctionne parce que chaque ancre est reliée à une mémoire neurologique profonde — construite par semaines de pratique. Un seul signal déclenche tout le système. <strong>C'est le produit final de votre entraînement.</strong></p></div>
+    </div>
+  </div>
+
+  <div class="summary-box"><div class="summary-box-title">Résumé du chapitre</div>
+    <ul class="clist">
+      <li><span class="ck gold">✓</span><span>Le ZÉRØ est une connexion mentale — pas une action volontaire</span></li>
+      <li><span class="ck gold">✓</span><span>Les 4E en compétences inconscientes créent des ancres neuronales vers la Zone</span></li>
+      <li><span class="ck gold">✓</span><span>Le Protocole ZÉRØ Secret condense les 4 ancres en 20 secondes</span></li>
+      <li><span class="ck gold">✓</span><span>Il est disponible dans le Programme 21 Jours — après intégration complète des 4E</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- CONCLUSION -->
+<div class="page chapter-opener" style="position:relative;">
+  <div class="opener-rule" style="background:linear-gradient(90deg,var(--wind),var(--fire),var(--earth),var(--water));height:5px;"></div>
+  <div class="opener-body" style="">
+    <div class="opener-chapter-label">Conclusion</div>
+    <div class="opener-title">Devenir un<br><em>Athlète de la Zone</em></div>
+    <div class="opener-sub" style="">La Zone n'est plus un mystère. C'est une compétence. Et elle vous appartient maintenant.</div>
+  </div>
+</div>
+<div class="page chapter-content" style="">
+  <div class="running-header"><div class="running-title">Conclusion</div><div class="running-num">Zone 4E</div></div>
+  <p class="lead" style="">Vous venez d'apprendre un système complet. Clair, précis, reproductible — avec les protocoles secrets qui accélèrent chaque élément.</p>
+  <div class="sequence">
+    <div class="seq-step"><div class="seq-el">🌬</div><div><div class="seq-name">VENT — Vous respirez comme un athlète lucide</div><div class="seq-desc">Le Reset 4-2-6 · La Chasse au Lapin · La lucidité sous pression</div></div></div>
+    <div class="seq-step" style=""><div class="seq-el">🔥</div><div><div class="seq-name" style="">FEU — Vous maîtrisez vos émotions</div><div class="seq-desc" style="">ONT express · Séquence TFT complète · Version discrète en match</div></div></div>
+    <div class="seq-step" style=""><div class="seq-el">🌍</div><div><div class="seq-name" style="">TERRE — Vous êtes ancré, solide, fluide</div><div class="seq-desc">Salutation au Soleil complète · Ancrage mental portable · Triple Ancrage 10 sec</div></div></div>
+    <div class="seq-step" style=""><div class="seq-el">💧</div><div><div class="seq-name">EAU — Vous activez votre énergie juste</div><div class="seq-desc" style="">Bains froids progressifs · Ancrage mental au froid · Rituel Énergie Juste</div></div></div>
+    <div class="seq-step" style=""><div class="seq-el">✨</div><div><div class="seq-name" style="">ZÉRØ — La connexion mentale vers la Zone</div><div class="seq-desc" style="">Des automatismes aux ancres neuronales · Le Protocole ZÉRØ Secret vous attend dans le Programme 21 Jours</div></div></div>
+  </div>
+  <div class="pull" style="">La Zone n'est plus un moment magique. <strong style="">C'est une compétence.</strong> Et vous êtes désormais un athlète capable d'en créer les conditions — à volonté.</div>
+
+  <!-- TEASER PROGRAMME 21 JOURS -->
+  <div class="secret-box" style="border-color:var(--gold-bd);">
+    <div class="secret-header" style="background: linear-gradient(135deg,var(--dark),#2a2418);">
+      <div style="font-size:28px;">📅</div>
+      <div>
+        <div class="zero-secret-title">Prochaine étape : Le Programme 21 Jours</div>
+        <div class="zero-secret-sub" style="">Transformer les 4E en réflexes · Débloquer le Protocole ZÉRØ Secret</div>
+      </div>
+    </div>
+    <div class="zero-secret-body">
+      <div class="body-text"><p>Cet ebook vous a donné la méthode complète et les protocoles secrets. Mais la transformation profonde vient de la répétition guidée.</p><p>Le <strong>Programme 21 Jours</strong> vous accompagne jour par jour :</p></div>
+      <ul class="clist" style="margin: 12px 0px;">
+        <li><span class="ck gold">→</span><span><strong>Semaine 1</strong> — Le Corps Calme (VENT + TERRE) : installer les fondations</span></li>
+        <li><span class="ck gold">→</span><span><strong>Semaine 2</strong> — L'Émotion Maîtrisée (FEU) : traverser sans subir</span></li>
+        <li style=""><span class="ck gold">→</span><span style=""><strong>Semaine 3</strong> — Activation + ZÉRØ (EAU) : le Protocole ZÉRØ Secret au Jour 21</span></li>
+      </ul>
+      <div class="body-text"><p>Disponible en complément de cet ebook. <strong>C'est votre prochaine étape.</strong></p></div>
+    </div>
+  </div>
+
+  <div style="margin-top: 48px; padding: 48px; background: var(--dark); border-radius: 6px; text-align: center;">
+    <div style="font-family:'Barlow Condensed';font-weight:900;font-size:52px;color:#fff;line-height:1;margin-bottom:16px;">
+      Le chemin est tracé.<br>
+      <span style="color:var(--gold);">La Zone est ouverte.</span>
+    </div>
+    <div style="font-family:'Lora';font-style:italic;font-size:18px;color:rgba(255,255,255,0.5);line-height:1.65;">Avancez. Jouez. Respirez. Maîtrisez.</div>
+    <div style="margin-top:24px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;">
+      <span class="cover-el wind">🌬 Vent</span>
+      <span class="cover-el fire">🔥 Feu</span>
+      <span class="cover-el earth">🌍 Terre</span>
+      <span class="cover-el water">💧 Eau</span>
+      <span class="cover-el zero">✨ Zérø</span>
+    </div>
+  </div>
+  <div style="margin-top:48px;padding-top:24px;border-top:1px solid var(--line);text-align:center;">
+    <div style="font-size:11px;color:var(--muted);letter-spacing:0.1em;line-height:2;">
+      © 2025 Zone 4E — Tous droits réservés · Par [Votre Prénom]<br>
+      Coach sportif &amp; Préparateur mental · Édition Enrichie V6
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+</body></html>
