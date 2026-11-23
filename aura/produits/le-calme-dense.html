@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Calme Dense — AURA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Bebas+Neue&family=DM+Mono:wght@300;400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A090E; --bg2:#121019; --bg3:#1A1724;
+  --ink:#F3EEE6; --ink2:#CFC8BC; --ink3:#8E8799;
+  --gold:#C9A34A; --gold2:#E3C478; --goldbg:rgba(201,163,74,.08);
+  --line:rgba(201,163,74,.22); --red:#B5524A; --redbg:rgba(181,82,74,.09);
+  --green:#6FAE8E; --greenbg:rgba(111,174,142,.08);
+}
+body.light{
+  --bg:#FFFFFF; --bg2:#F7F4EE; --bg3:#EFEAE0;
+  --ink:#141219; --ink2:#2E2A36; --ink3:#6B6577;
+  --gold:#9C7A24; --gold2:#7E6118; --goldbg:#FBF6EA;
+  --line:rgba(156,122,36,.3); --red:#9A3A32; --redbg:#FBF0EE;
+  --green:#2E7A55; --greenbg:#EEF7F2;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink2);font-family:'Jost',sans-serif;font-weight:300;font-size:18px;line-height:1.8;transition:background .4s,color .4s}
+.wrap{max-width:760px;margin:0 auto;padding:0 26px}
+h1,h2,h3{font-family:'Cormorant Garamond',serif;color:var(--ink);font-weight:500;line-height:1.1}
+p{margin-bottom:1.1em}
+strong{color:var(--ink);font-weight:500}
+em{font-family:'Cormorant Garamond',serif;font-size:1.12em;font-style:italic;color:var(--ink)}
+.mono{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+
+/* toggle */
+.toggle{position:fixed;top:14px;right:14px;z-index:50;background:var(--bg3);color:var(--gold);border:1px solid var(--line);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:9px 14px;cursor:pointer}
+.toggle:hover{color:var(--gold2)}
+
+/* cover */
+.cover{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:80px 26px;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.cover .glow{position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(201,163,74,.16),transparent 65%);top:50%;left:50%;transform:translate(-50%,-55%);pointer-events:none}
+body.light .cover .glow{background:radial-gradient(circle,rgba(156,122,36,.10),transparent 65%)}
+.cover .ring{width:120px;height:120px;border:1px solid var(--gold);border-radius:50%;margin:0 auto 46px;position:relative}
+.cover .ring::after{content:"";position:absolute;inset:26px;border:1px solid var(--line);border-radius:50%}
+.cover .ring::before{content:"";position:absolute;width:8px;height:8px;background:var(--gold);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%)}
+.cover h1{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:clamp(64px,13vw,128px);letter-spacing:.06em;line-height:.92;margin:18px 0 22px}
+.cover h1 span{color:var(--gold)}
+.cover .sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,3vw,26px);color:var(--ink2);max-width:520px}
+.cover .rule{width:60px;height:1px;background:var(--gold);margin:40px auto 22px}
+.cover .sig{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.26em;color:var(--ink3);text-transform:uppercase}
+
+/* sections */
+section{padding:90px 0;border-bottom:1px solid var(--line)}
+.part{background:var(--bg2);text-align:center;padding:110px 0}
+.part .num{font-family:'Bebas Neue',sans-serif;font-size:120px;color:var(--gold);opacity:.18;line-height:1}
+.part h2{font-size:clamp(38px,6vw,56px);margin:-30px 0 14px}
+.part p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:var(--ink2);max-width:540px;margin:0 auto}
+.chap{position:relative}
+.chap .ghost{position:absolute;top:40px;right:10px;font-family:'Bebas Neue',sans-serif;font-size:170px;line-height:1;color:var(--gold);opacity:.07;pointer-events:none}
+.chap h2{font-size:clamp(34px,5.4vw,50px);margin:12px 0 28px}
+.chap h3{font-size:28px;margin:44px 0 14px}
+.lead{font-family:'Cormorant Garamond',serif;font-size:23px;line-height:1.6;color:var(--ink);margin-bottom:1.4em}
+
+/* blocks */
+.pull{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(26px,4vw,34px);line-height:1.3;color:var(--ink);text-align:center;padding:44px 10px;margin:40px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.pull::before{content:"◈";display:block;font-style:normal;font-size:14px;color:var(--gold);margin-bottom:16px}
+.box{background:var(--goldbg);border-left:2px solid var(--gold);padding:26px 28px;margin:30px 0}
+.box .mono{display:block;margin-bottom:10px}
+.box p:last-child{margin-bottom:0}
+.lib{background:var(--bg3);border:1px solid var(--line);padding:24px 28px;margin:30px 0;font-size:16.5px}
+.lib .mono{display:block;margin-bottom:8px}
+.lib p:last-child{margin-bottom:0}
+.immersive{font-family:'Cormorant Garamond',serif;font-size:22px;line-height:1.75;color:var(--ink);padding:10px 0 10px 26px;border-left:1px solid var(--line);margin:30px 0}
+.immersive p{margin-bottom:.9em}
+.ex{border:1px solid var(--gold);padding:30px;margin:40px 0;position:relative}
+.ex .mono{position:absolute;top:-9px;left:22px;background:var(--bg);padding:0 10px}
+.ex h4{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--ink);font-weight:500;margin-bottom:10px}
+.ex p:last-child,.ex ol:last-child,.ex ul:last-child{margin-bottom:0}
+ol,ul{margin:0 0 1.1em 1.3em}
+li{margin-bottom:.45em}
+
+/* map */
+.map{display:grid;gap:12px;margin:34px 0}
+.step{display:grid;grid-template-columns:110px 1fr;gap:18px;align-items:start;padding:18px 20px;border:1px solid var(--line);background:var(--bg2)}
+.step.here{border-color:var(--gold);background:var(--goldbg)}
+.step .t{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);padding-top:4px}
+.step b{display:block;font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--ink);font-weight:500;line-height:1.2;margin-bottom:4px}
+.step span{font-size:15.5px;color:var(--ink3);line-height:1.6;display:block}
+
+/* CALME */
+.calme{display:grid;gap:14px;margin:30px 0}
+.letter{display:grid;grid-template-columns:70px 1fr;gap:20px;padding:22px 22px;border:1px solid var(--line);background:var(--bg2)}
+.letter .L{font-family:'Bebas Neue',sans-serif;font-size:58px;line-height:.9;color:var(--gold);text-align:center}
+.letter b{display:block;font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--ink);font-weight:500;line-height:1.2}
+.letter .s{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--ink3);text-transform:uppercase;display:block;margin:4px 0 8px}
+.letter p{font-size:16.5px;margin-bottom:0}
+
+/* guided */
+.guide{text-align:center;border:1px solid var(--line);background:var(--bg2);padding:40px 20px;margin:40px 0}
+.orb{width:130px;height:130px;margin:10px auto 26px;border-radius:50%;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:64px;color:var(--gold);transition:transform 3.6s ease-in-out, background 1s}
+.orb.big{transform:scale(1.18);background:var(--goldbg)}
+.gtxt{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--ink);min-height:70px;max-width:440px;margin:0 auto 22px;line-height:1.35}
+.btn{background:transparent;color:var(--gold);border:1px solid var(--gold);font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;padding:13px 26px;cursor:pointer}
+.btn:hover{background:var(--goldbg)}
+
+/* situations */
+.sit{margin:70px 0 0;padding-top:50px;border-top:1px solid var(--line)}
+.sit:first-of-type{border-top:none;padding-top:0;margin-top:30px}
+.sit .head{display:flex;gap:18px;align-items:baseline;margin-bottom:6px}
+.sit .n{font-family:'Bebas Neue',sans-serif;font-size:54px;color:var(--gold);line-height:1}
+.sit h3{margin:0;font-size:32px}
+.sit .ctx{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin-bottom:22px}
+.quad{display:grid;gap:12px;margin:22px 0}
+.q{padding:20px 22px;border:1px solid var(--line)}
+.q .mono{display:block;margin-bottom:8px;font-size:11px}
+.q p:last-child{margin-bottom:0}
+.q.body{background:var(--bg2)}
+.q.leak{background:var(--redbg);border-color:rgba(181,82,74,.35)}
+.q.leak .mono{color:var(--red)}
+.q.dense{background:var(--greenbg);border-color:rgba(111,174,142,.4)}
+.q.dense .mono{color:var(--green)}
+.say{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:21px;color:var(--ink);margin:8px 0 10px;padding-left:14px;border-left:2px solid currentColor}
+.q.leak .say{border-color:var(--red)}
+.q.dense .say{border-color:var(--green)}
+.why{font-size:16px;color:var(--ink3);font-style:normal}
+.why b{color:var(--gold);font-weight:500}
+
+/* table */
+table{width:100%;border-collapse:collapse;margin:30px 0;font-size:16px}
+th{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);text-align:left;padding:12px 14px;border-bottom:1px solid var(--gold)}
+td{padding:14px;border-bottom:1px solid var(--line);vertical-align:top}
+td:first-child{color:var(--ink3)}
+td:last-child{color:var(--ink)}
+
+/* tracker */
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:16px 0 26px}
+.d{border:1px solid var(--line);padding:8px 4px;text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--ink3);cursor:pointer;user-select:none}
+.d.on{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+
+/* toc */
+.toc a{display:grid;grid-template-columns:60px 1fr;gap:10px;padding:14px 0;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink2)}
+.toc a:hover{color:var(--gold)}
+.toc .tn{font-family:'DM Mono',monospace;font-size:12px;color:var(--gold);padding-top:5px}
+.toc .tt{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--ink);line-height:1.3}
+.toc .tt small{display:block;font-family:'Jost',sans-serif;font-size:14px;color:var(--ink3)}
+
+/* script */
+.script{font-family:'DM Mono',monospace;font-size:14px;line-height:1.9;background:var(--bg2);border:1px solid var(--line);padding:28px;white-space:pre-wrap;color:var(--ink2)}
+.script .br{color:var(--gold)}
+
+/* card */
+.card{border:1px solid var(--gold);padding:40px 34px;text-align:center;background:var(--bg2);margin:30px 0}
+.card .big{font-family:'Bebas Neue',sans-serif;font-size:72px;letter-spacing:.2em;color:var(--gold);line-height:1;margin:6px 0 20px}
+.card ul{list-style:none;margin:0 auto;max-width:440px;text-align:left}
+.card li{padding:9px 0;border-bottom:1px solid var(--line);font-size:16.5px}
+.card li b{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);font-weight:400;display:inline-block;width:30px}
+
+.final{text-align:center;padding:130px 0;background:var(--bg2)}
+.final h2{font-size:clamp(36px,6vw,56px);margin-bottom:26px}
+.final p{max-width:560px;margin-left:auto;margin-right:auto}
+.final .sig{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.24em;color:var(--ink3);text-transform:uppercase;margin-top:60px}
+
+@media (max-width:560px){
+  body{font-size:17px}
+  .step{grid-template-columns:1fr;gap:6px}
+  .letter{grid-template-columns:50px 1fr;gap:14px}
+  .letter .L{font-size:46px}
+  section{padding:70px 0}
+  .chap .ghost{font-size:110px}
+}
+@media print{
+  .toggle,.guide .btn{display:none}
+  body{background:#fff}
+  section,.part,.final{page-break-before:always;border:none}
+}
+</style>
+</head>
+<body>
+<button class="toggle" id="tg" onclick="toggleMode()">◐ Version claire</button>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="glow"></div>
+  <div class="ring"></div>
+  <div class="mono">AURA · Manuel bonus</div>
+  <h1>LE CALME<br><span>DENSE</span></h1>
+  <div class="sub">Garder ton signal quand tout pousse à réagir.</div>
+  <div class="rule"></div>
+  <div class="sig">Programme AURA · Le Code du Magnétisme</div>
+</div>
+
+<!-- SOMMAIRE -->
+<section>
+<div class="wrap">
+  <div class="mono">Sommaire</div>
+  <h2 style="font-size:44px;margin:12px 0 30px">Ce que tu vas traverser</h2>
+  <nav class="toc">
+    <a href="#ouverture"><span class="tn">00</span><span class="tt">La seconde de trop<small>Ouverture</small></span></a>
+    <a href="#parcours"><span class="tn">01</span><span class="tt">Où ce manuel s'inscrit<small>Ta place dans le parcours AURA</small></span></a>
+    <a href="#fuite"><span class="tn">02</span><span class="tt">La fuite<small>Pourquoi chaque réaction vide ton magnétisme</small></span></a>
+    <a href="#corps"><span class="tn">03</span><span class="tt">Ton corps parle avant toi<small>Les 4 signaux de la bascule</small></span></a>
+    <a href="#calme"><span class="tn">04</span><span class="tt">La méthode C.A.L.M.E<small>Cinq secondes qui changent l'échange</small></span></a>
+    <a href="#situations"><span class="tn">05</span><span class="tt">Les 7 situations<small>De la pique en réunion à la tension avec un proche</small></span></a>
+    <a href="#froid"><span class="tn">06</span><span class="tt">Dense, pas froid<small>La ligne à ne pas franchir</small></span></a>
+    <a href="#rate"><span class="tn">07</span><span class="tt">Quand le calme ne vient pas<small>Réparer, décharger, aller plus profond</small></span></a>
+    <a href="#j21"><span class="tn">08</span><span class="tt">L'entraînement 21 jours<small>Observer · Interrompre · Choisir</small></span></a>
+    <a href="#fin"><span class="tn">09</span><span class="tt">Ce qu'on retient de toi<small>Clôture</small></span></a>
+    <a href="#annexes"><span class="tn">+</span><span class="tt">Annexes<small>Carte mémo · Script audio · Ce que dit la Bibliothèque</small></span></a>
+  </nav>
+</div>
+</section>
+
+<!-- OUVERTURE -->
+<section id="ouverture" class="chap">
+<div class="wrap">
+  <div class="ghost">00</div>
+  <div class="mono">Ouverture</div>
+  <h2>La seconde de trop</h2>
+  <div class="immersive">
+    <p>Mardi, dix heures. Salle de réunion, huit personnes, un écran qui chauffe.</p>
+    <p>Tu viens de présenter ton point. Clair, préparé. Et puis cette phrase, lâchée sur le ton de la blague : <em>« Bon, si c'est lui qui gère, on va prévoir de la marge sur le planning. »</em></p>
+    <p>Deux ou trois rires. Pas méchants. Juste assez.</p>
+    <p>Et là, quelque chose se passe en toi avant même que tu aies pensé. Une chaleur monte dans la nuque. Le cœur prend deux temps d'avance. Ta bouche est déjà en train de préparer la phrase : <em>« Non mais attends, la dernière fois, ce n'était pas de mon fait, c'était parce que… »</em></p>
+    <p>Tu la connais, cette phrase. Tu l'as dite cent fois, sous cent formes. Et tu sais ce qu'elle produit : l'attention quitte ton travail et se pose sur ta défense. Tu viens de passer de celui qui présente à celui qui se justifie.</p>
+    <p>Personne ne s'en souviendra demain. Sauf toi. Et sauf cette impression, diffuse, chez les autres : <em>il est solide… jusqu'à ce qu'on le touche.</em></p>
+  </div>
+  <p class="lead">Ce manuel parle de cette seconde-là. La seconde de trop, celle où ton corps répond avant toi.</p>
+  <p>Dans <strong>Le Code du Magnétisme</strong>, tu as appris à émettre un signal : posture, regard, voix, présence. Mais un signal ne se juge pas quand tout va bien. Il se juge au moment précis où quelqu'un appuie dessus.</p>
+  <p>L'homme qu'on n'oublie pas n'est pas celui qui a toujours la bonne réplique. C'est celui <strong>qu'on n'arrive pas à faire bouger</strong>. Pas parce qu'il est fermé. Parce qu'il est plein.</p>
+  <div class="pull">Le calme n'est pas l'absence de réaction.<br>C'est une réaction que tu as choisie.</div>
+  <p>On appelle ça <strong>le Calme Dense</strong>. Dense, parce qu'il a du poids. Ce n'est pas le calme mou de celui qui laisse tout passer, ni le calme glacé de celui qui joue au plus fort. C'est le calme de quelqu'un dont le centre ne se déplace pas quand on le pousse.</p>
+  <p>Et ça s'entraîne. Comme un geste sportif : d'abord lentement, à vide, puis sous une charge légère, puis en situation réelle. C'est exactement ce que tu vas faire ici.</p>
+</div>
+</section>
+
+<!-- PARCOURS -->
+<section id="parcours" class="chap">
+<div class="wrap">
+  <div class="ghost">01</div>
+  <div class="mono">Chapitre 01</div>
+  <h2>Où ce manuel s'inscrit</h2>
+  <p class="lead">Le Calme Dense n'est pas un module isolé. C'est la pièce qui relie ce que tu construis à ce qui le teste.</p>
+  <div class="map">
+    <div class="step"><div class="t">Level 1</div><div><b>Le Code du Magnétisme</b><span>Tu apprends à émettre : socle intérieur, signal physique, présence sociale, environnement. Le signal existe.</span></div></div>
+    <div class="step here"><div class="t">Bonus</div><div><b>Le Calme Dense — tu es ici</b><span>Tu apprends à garder ce signal sous pression. Les 5 secondes entre la provocation et ta réponse.</span></div></div>
+    <div class="step"><div class="t">Level 2</div><div><b>La Déconnexion</b><span>Tu travailles ce qui te fait réagir en profondeur : peurs sociales, héritages, champ collectif. Le déclencheur perd sa charge.</span></div></div>
+    <div class="step"><div class="t">Manifeste</div><div><b>Le Leadership Naturel</b><span>Le calme sous pression devient une loi : ceux qui t'entourent s'organisent autour de ta stabilité.</span></div></div>
+  </div>
+  <h3>Ce que ce manuel n'est pas</h3>
+  <p>Deux autres manuels AURA touchent des terrains voisins. Pour que tu saches lequel ouvrir et quand :</p>
+  <ul>
+    <li><strong>On ne te parlera plus jamais comme ça</strong> travaille le <em>quoi dire</em> : poser tes limites, te faire respecter dans la durée.</li>
+    <li><strong>Plus Rien Ne T'Atteint</strong> travaille le <em>filtre</em> : ne plus laisser les influences négatives s'installer en toi au fil des semaines.</li>
+    <li><strong>Le Calme Dense</strong> travaille l'<em>instant</em> : ce qui se passe dans ton corps pendant les cinq secondes où tout se joue, et comment ne pas les perdre.</li>
+  </ul>
+  <p>Les trois se complètent. Mais sans le Calme Dense, les deux autres restent théoriques : on ne pose pas une limite claire avec une voix qui tremble, et on ne filtre rien quand le cœur a déjà pris le volant.</p>
+  <div class="box"><span class="mono">◈ Comment lire ce manuel</span><p>Lis les chapitres 02 à 04 d'une traite : ils posent la mécanique. Ensuite, ne lis pas les 7 situations comme une liste. Choisis celle qui te coûte le plus aujourd'hui, et commence par elle. Les autres viendront.</p></div>
+</div>
+</section>
+
+<!-- PARTIE I -->
+<div class="part">
+  <div class="num">I</div>
+  <h2>Comprendre</h2>
+  <p>Avant de maîtriser la seconde de trop, il faut voir ce qu'elle te coûte, et d'où elle vient.</p>
+</div>
+
+<!-- FUITE -->
+<section id="fuite" class="chap">
+<div class="wrap">
+  <div class="ghost">02</div>
+  <div class="mono">Chapitre 02</div>
+  <h2>La fuite</h2>
+  <p class="lead">Chaque fois que tu réagis à chaud, tu ne perds pas seulement un échange. Tu laisses s'échapper quelque chose que tu as mis des semaines à construire.</p>
+  <p>Les anciens traités du magnétisme personnel avaient un mot pour ça : <strong>la fuite</strong>. Pour eux, l'homme magnétique n'était pas celui qui produisait le plus de force, mais celui qui en perdait le moins. Les gestes nerveux, l'agitation, l'irritabilité, le fait de « partir au quart de tour » étaient décrits comme autant de trous dans le réservoir.</p>
+  <p>On peut sourire du vocabulaire. Le constat, lui, est d'une justesse redoutable. Regarde ce que perçoivent les autres quand tu réagis trop vite :</p>
+  <ul>
+    <li><strong>Ton point sensible.</strong> Celui qui te provoque apprend exactement où appuyer. La prochaine fois, il appuiera au même endroit.</li>
+    <li><strong>Ton tempo.</strong> Tu réponds à son rythme, pas au tien. Dans tout échange, celui qui impose le rythme impose le cadre.</li>
+    <li><strong>Ta dépendance.</strong> Se justifier, c'est demander une validation. C'est reconnaître que l'autre est en position de juger.</li>
+    <li><strong>Ton plafond.</strong> Les gens n'évaluent pas ta solidité quand tout va bien. Ils la mesurent au moment où on te pousse. Ta réaction, c'est la jauge.</li>
+  </ul>
+  <div class="pull">Ce que les gens retiennent de toi,<br>c'est ce que tu fais quand on te touche.</div>
+  <h3>Pourquoi on réagit quand même</h3>
+  <p>Ce n'est pas un défaut de caractère. On t'a appris, comme à presque tout le monde, que répondre vite prouvait ta vivacité, que te taire voulait dire te soumettre, et qu'avoir le dernier mot voulait dire gagner. Ton corps, lui, fait ce qu'il fait depuis des millénaires : il perçoit une menace sociale et mobilise de l'énergie pour y répondre.</p>
+  <p>Le problème n'est pas cette mobilisation. Elle est normale, saine, et elle ne disparaîtra jamais complètement. Le problème, c'est qu'elle <strong>prend la décision à ta place</strong>. Entre le moment où ton corps s'active et le moment où ta bouche s'ouvre, il n'y a souvent aucun espace.</p>
+  <p>Le Calme Dense ne consiste pas à supprimer la réaction. Il consiste à <strong>créer cet espace</strong> : cinq secondes pendant lesquelles l'énergie est là, mais où c'est toi qui décides quoi en faire.</p>
+  <div class="lib"><span class="mono">Ce que dit la Bibliothèque</span><p><em>Personal Magnetism — A Practical Course</em> place le contrôle de soi comme « premier facteur » du magnétisme, et décrit la nervosité, l'irritabilité et le fait de céder à ses passions comme une fuite continue de la force qu'on pourrait utiliser. C'est la base de ce chapitre : le magnétisme ne se fabrique pas seulement, il se conserve.</p></div>
+  <div class="ex"><span class="mono">Exercice</span><h4>L'inventaire des fuites</h4>
+  <p>Ce soir, prends cinq minutes et écris les trois dernières fois où tu as réagi trop vite. Pour chacune :</p>
+  <ol><li>Qui était en face ?</li><li>Quelle phrase, quel mot, quel ton a déclenché ?</li><li>Qu'as-tu dit ou fait ?</li><li>Qu'aurais-tu aimé que l'autre voie de toi à ce moment-là ?</li></ol>
+  <p>Tu vas probablement remarquer un motif : souvent, les mêmes mots, ou le même type de personne. Garde cette liste. Elle te servira au chapitre 05.</p></div>
+</div>
+</section>
+
+<!-- CORPS -->
+<section id="corps" class="chap">
+<div class="wrap">
+  <div class="ghost">03</div>
+  <div class="mono">Chapitre 03</div>
+  <h2>Ton corps parle avant toi</h2>
+  <p class="lead">Ta pensée arrive toujours en retard. Le corps, lui, a déjà décidé. Si tu veux reprendre la main, c'est donc dans le corps qu'il faut regarder en premier.</p>
+  <p>Dans <strong>Le Code du Magnétisme</strong>, le pilier « Signal physique » t'a appris que ton corps parle aux autres avant tes mots. Ici, on retourne le principe : <strong>ton corps te parle à toi</strong>, et il te prévient toujours. Une à deux secondes avant que tu ouvres la bouche, il y a un signal. Si tu sais le lire, tu as gagné ces deux secondes.</p>
+  <h3>Les 4 signaux de la bascule</h3>
+  <div class="calme">
+    <div class="letter"><div class="L">1</div><div><b>Le cœur</b><span class="s">Accélération</span><p>Deux battements plus forts, plus rapides, souvent ressentis dans la gorge ou le haut de la poitrine. C'est le signal le plus précoce.</p></div></div>
+    <div class="letter"><div class="L">2</div><div><b>La chaleur</b><span class="s">Visage · nuque · oreilles</span><p>Une bouffée qui monte. Certains rougissent, d'autres sentent juste la peau du visage se tendre. C'est le signal le plus visible pour les autres.</p></div></div>
+    <div class="letter"><div class="L">3</div><div><b>La mâchoire</b><span class="s">Mains · épaules</span><p>Les dents se serrent, les épaules montent d'un centimètre, les mains se ferment ou cherchent un objet. Le corps se prépare au contact.</p></div></div>
+    <div class="letter"><div class="L">4</div><div><b>Le souffle</b><span class="s">Haut · court · bloqué</span><p>La respiration monte dans le thorax, raccourcit, ou se suspend. C'est le signal le plus important, parce que c'est le seul sur lequel tu peux agir directement.</p></div></div>
+  </div>
+  <p>Tu n'as pas forcément les quatre. La plupart des gens ont un signal dominant, toujours le même. Ton travail dans ce chapitre est simple : <strong>trouver le tien</strong>.</p>
+  <h3>Nommer, c'est déjà reprendre</h3>
+  <p>Le psychologue Eugene Gendlin a passé des années à observer ce qui distinguait les personnes qui changeaient vraiment de celles qui tournaient en rond. Une de ses conclusions : celles qui progressaient prenaient le temps de sentir ce qui se passait dans leur corps, ce flou encore sans mots, puis de lui trouver un nom juste. Et au moment où le mot juste arrivait, quelque chose se relâchait.</p>
+  <p>Tu vas utiliser ce mécanisme en version express. Quand le signal arrive, tu ne le combats pas. Tu le nommes, intérieurement, en deux ou trois mots : <em>« chaleur, nuque »</em>, <em>« cœur, vite »</em>, <em>« mâchoire »</em>. Rien de plus.</p>
+  <p>Ce simple acte te fait passer de <strong>celui qui vit la réaction</strong> à <strong>celui qui l'observe</strong>. Et celui qui observe a déjà un pied en dehors.</p>
+  <div class="lib"><span class="mono">Ce que dit la Bibliothèque</span><p>Dans <em>Focusing</em>, Gendlin décrit le « felt sense », cette sensation corporelle globale, encore floue, qui précède les mots. Il montre que le fait de lui trouver une étiquette juste provoque souvent un léger relâchement physique. Ici, on n'utilise qu'une version très courte de son processus, adaptée à l'urgence d'un échange en direct.</p></div>
+  <div class="ex"><span class="mono">Exercice</span><h4>La carte de ton signal</h4>
+  <p>Reprends ta liste des fuites du chapitre 02. Ferme les yeux et revis, quelques secondes, la scène la plus forte. Pas pour te faire du mal : juste assez pour que le corps s'en souvienne.</p>
+  <ol><li>Où ça s'active en premier ? Cœur, chaleur, mâchoire, souffle ?</li><li>Quel est le mot le plus juste pour le décrire ?</li><li>Ouvre les yeux, expire longuement, et note ton signal dominant.</li></ol>
+  <p>C'est ta sentinelle. À partir d'aujourd'hui, c'est elle qui donnera l'alerte.</p></div>
+</div>
+</section>
+
+<!-- PARTIE II -->
+<div class="part">
+  <div class="num">II</div>
+  <h2>La méthode</h2>
+  <p>Cinq gestes, cinq secondes. Assez court pour tenir dans un échange réel. Assez précis pour changer ce qui suit.</p>
+</div>
+
+<section id="calme" class="chap">
+<div class="wrap">
+  <div class="ghost">04</div>
+  <div class="mono">Chapitre 04</div>
+  <h2>La méthode C.A.L.M.E</h2>
+  <p class="lead">Tu ne peux pas décider d'être calme. Mais tu peux faire cinq choses qui, enchaînées, produisent le calme.</p>
+  <p>C'est le principe de tout entraînement physique : on ne commande pas un résultat, on répète un geste. Le résultat suit. Voici le geste.</p>
+  <div class="calme">
+    <div class="letter"><div class="L">C</div><div><b>Capter</b><span class="s">≈ 0,5 seconde</span><p>Ta sentinelle s'allume. Tu nommes intérieurement le signal : <em>« chaleur »</em>, <em>« cœur »</em>. Tu ne le juges pas. Tu sais simplement que la bascule a commencé, et que tu es en train de la regarder.</p></div></div>
+    <div class="letter"><div class="L">A</div><div><b>Allonger l'expiration</b><span class="s">≈ 2 secondes</span><p>Une expiration lente par le nez, plus longue que ton inspiration. Discrète, invisible de l'extérieur. L'expiration longue est le frein naturel du cœur : quand tu expires lentement, ton rythme cardiaque ralentit légèrement. C'est le seul levier direct que tu as sur ton état. Utilise-le.</p></div></div>
+    <div class="letter"><div class="L">L</div><div><b>Lester</b><span class="s">≈ 1 seconde</span><p>Envoie ton poids dans tes pieds, ou dans tes ischions si tu es assis. Relâche les épaules d'un centimètre. Desserre la mâchoire. Tu redescends le centre de gravité qui était monté dans la poitrine et la tête.</p></div></div>
+    <div class="letter"><div class="L">M</div><div><b>Maintenir le regard</b><span class="s">≈ 1 seconde</span><p>Ne fuis pas les yeux de l'autre, et ne le fixe pas non plus pour l'écraser. Un regard posé, neutre, presque curieux. Le message silencieux est simple : <em>« Je suis toujours là. Rien n'a bougé. »</em></p></div></div>
+    <div class="letter"><div class="L">É</div><div><b>Élire ta réponse</b><span class="s">Le choix</span><p>Maintenant seulement, tu choisis. Répondre court. Poser une question. Revenir au sujet. Reporter. Ou ne rien dire du tout. Toutes ces options sont valables. La seule qui ne l'est pas, c'est celle que ton corps avait choisie à ta place.</p></div></div>
+  </div>
+  <div class="pull">Cinq secondes de silence te semblent une éternité.<br>Pour les autres, c'est de l'aplomb.</div>
+  <h3>Pourquoi ça marche</h3>
+  <p>Chaque lettre agit sur un niveau différent. <strong>Capter</strong> agit sur l'attention : tu passes d'acteur à observateur. <strong>Allonger</strong> agit sur la physiologie : le cœur ralentit. <strong>Lester</strong> agit sur la posture : le corps quitte sa position de combat. <strong>Maintenir</strong> agit sur la relation : l'autre perçoit que sa flèche n'a pas fait mouche. <strong>Élire</strong> agit sur l'issue : c'est toi qui décides de la suite.</p>
+  <p>Les anciens traités l'avaient déjà observé : chaque émotion a son propre rythme de respiration, et adopter volontairement le rythme du calme finit par produire le calme. Ce n'est pas de la magie. C'est un chemin qui fonctionne dans les deux sens.</p>
+  <div class="lib"><span class="mono">Ce que dit la Bibliothèque</span><p><em>The Art and Science of Personal Magnetism</em> observe que, sous une forte provocation, on cherche instinctivement à contrôler sa respiration, qui tend à s'emballer, et que tant que ce rythme reste stable, on conserve son sang-froid. Le geste « Allonger » de la méthode en est la version moderne et minimale.</p></div>
+  <h3>Le temps compte moins que l'ordre</h3>
+  <p>Au début, les cinq gestes te prendront plus de cinq secondes, et tu auras l'impression que tout le monde le voit. Ce n'est pas le cas. Avec la répétition, ils vont se compresser jusqu'à tenir dans une seule expiration. Les athlètes appellent ça l'automatisation : ce qui était une séquence devient un seul mouvement.</p>
+  <p>Et parfois, dans un échange écrit ou une situation qui le permet, tu pourras étirer ces cinq secondes en cinq minutes, ou en une heure. Le principe reste le même.</p>
+
+  <div class="guide">
+    <div class="mono">Pratique guidée · 25 secondes</div>
+    <div class="orb" id="orb">◈</div>
+    <div class="gtxt" id="gtxt">Lance la séquence et suis simplement les consignes.</div>
+    <button class="btn" id="gbtn" onclick="runGuide()">Commencer</button>
+  </div>
+
+  <div class="ex"><span class="mono">Exercice</span><h4>Le C.A.L.M.E à vide</h4>
+  <p>Comme un geste technique, on l'apprend d'abord sans pression. Pendant 7 jours, matin et soir :</p>
+  <ol><li>Rappelle-toi une petite provocation (pas la pire, une moyenne).</li><li>Laisse le signal monter légèrement.</li><li>Déroule les cinq gestes, lentement, en les nommant.</li><li>Recommence trois fois.</li></ol>
+  <p>Deux minutes par séance. C'est ton échauffement. Le jour où la vraie situation arrivera, ton corps connaîtra déjà le chemin.</p></div>
+</div>
+</section>
+
+<!-- PARTIE III -->
+<div class="part">
+  <div class="num">III</div>
+  <h2>Les 7 situations</h2>
+  <p>Du plus léger au plus intime. Commence par celle qui te coûte le plus aujourd'hui.</p>
+</div>
+
+<section id="situations" class="chap">
+<div class="wrap">
+  <div class="ghost">05</div>
+  <div class="mono">Chapitre 05</div>
+  <h2>Sept moments où tout se joue</h2>
+  <p class="lead">Chaque situation suit la même structure : la scène, ce qui se passe dans ton corps, la réponse qui fuit, puis la réponse dense.</p>
+  <p>Les phrases proposées ne sont pas des scripts à réciter. Ce sont des exemples de <strong>direction</strong>. La bonne réponse dense est toujours la tienne : courte, posée, et prononcée après le C.A.L.M.E, jamais avant.</p>
+
+  <!-- 1 -->
+  <div class="sit">
+    <div class="head"><span class="n">01</span><h3>La pique en réunion</h3></div>
+    <div class="ctx">Travail · en public · ton de blague</div>
+    <p>Tu viens de parler. Un collègue glisse, sourire en coin : <em>« On prévoira de la marge, on connaît la ponctualité de la maison. »</em> Quelques rires. Les regards se tournent vers toi.</p>
+    <div class="quad">
+      <div class="q body"><span class="mono">Dans ton corps</span><p>Chaleur au visage, sourire crispé qui s'installe tout seul, envie immédiate de rétablir ta version des faits. Le public amplifie tout : tu sens le regard du groupe sur ta nuque.</p></div>
+      <div class="q leak"><span class="mono">La réponse qui fuit</span><span class="say">« Non mais attends, la dernière fois c'était à cause du fournisseur, je l'avais dit… »</span><p class="why">Ou la contre-pique, encore plus coûteuse. Dans les deux cas, la réunion parle désormais de toi, et plus de ton travail.</p></div>
+      <div class="q dense"><span class="mono">La réponse dense</span><span class="say">Un léger sourire, regard posé sur lui deux secondes, puis vers le groupe : « Prévois la marge si ça te rassure. Le livrable sera là jeudi. »</span><p class="why"><b>Pourquoi ça marque :</b> tu ne contestes pas, tu ne te justifies pas. Tu ramènes l'échange sur le fond, avec un engagement clair. L'humour retombe sur celui qui l'a lancé, sans que tu aies eu à l'attaquer.</p></div>
+    </div>
+    <div class="box"><span class="mono">◈ Variante minimale</span><p>Si rien ne vient, un sourire bref et tu reprends ta phrase là où tu l'avais laissée, au même rythme. Ne pas relever, c'est aussi une réponse, et souvent la plus lourde.</p></div>
+  </div>
+
+  <!-- 2 -->
+  <div class="sit">
+    <div class="head"><span class="n">02</span><h3>Le message sec</h3></div>
+    <div class="ctx">Écrit · SMS · mail · messagerie pro</div>
+    <p>Une notification. <em>« Ok. Fais comme tu veux. »</em> Ou un mail de deux lignes, sans bonjour, avec ton chef en copie.</p>
+    <div class="quad">
+      <div class="q body"><span class="mono">Dans ton corps</span><p>Le pouce est déjà sur le clavier. Mâchoire serrée, souffle court. L'écrit est piégeux : rien ne t'oblige à répondre dans la seconde, mais tout te pousse à le faire.</p></div>
+      <div class="q leak"><span class="mono">La réponse qui fuit</span><span class="say">Un pavé de douze lignes pour expliquer, se justifier, anticiper chaque objection.</span><p class="why">Ou l'inverse : un message encore plus sec, en miroir. L'écrit reste. Ce que tu envoies sous le coup de l'émotion, l'autre peut le relire, le transférer, le citer.</p></div>
+      <div class="q dense"><span class="mono">La réponse dense</span><span class="say">Pro : « Bien reçu. Je pars sur la version B, point d'étape vendredi. »<br>Proche : « Je sens que ça t'agace. On en parle ce soir ? »</span><p class="why"><b>Pourquoi ça marque :</b> court, factuel, sans ton. Tu ne réponds pas à l'émotion du message, tu réponds à son contenu. Et quand c'est un proche, tu nommes l'émotion au lieu de la combattre.</p></div>
+    </div>
+    <div class="box"><span class="mono">◈ La règle des deux souffles</span><p>Avant d'envoyer quoi que ce soit en réponse à un message qui t'a piqué : deux expirations longues, puis une question. <em>« Est-ce que ce message a besoin d'une réponse maintenant ? »</em> Si non, attends. Le délai ne sert pas à punir l'autre ou à le faire douter. Il sert à ce que ce soit toi qui écrives, et pas ton cœur à 110.</p></div>
+  </div>
+
+  <!-- 3 -->
+  <div class="sit">
+    <div class="head"><span class="n">03</span><h3>Celui qui te prend pour un idiot</h3></div>
+    <div class="ctx">Ton condescendant · d'un pair ou d'un supérieur</div>
+    <p>C'est peut-être la situation la plus usante, parce qu'elle est rarement frontale. Aucune insulte. Juste un ton. Et elle se présente sous deux formes.</p>
+    <p><strong>A · Le pair condescendant.</strong> <em>« Attends, je vais te réexpliquer doucement. En fait c'est simple, tu vas voir. »</em> Il ralentit son débit, articule un peu trop, te regarde comme on regarde un stagiaire.</p>
+    <p><strong>B · Le supérieur qui t'infantilise.</strong> <em>« Fais juste ce que je te demande. Tu n'as pas besoin de comprendre. »</em> Ou un recadrage devant les autres, sur le ton qu'on prendrait avec un enfant.</p>
+    <div class="quad">
+      <div class="q body"><span class="mono">Dans ton corps</span><p>Un mélange particulier : de la chaleur, mais aussi une petite humiliation qui fait rétrécir. Le menton baisse, ou au contraire se relève d'un coup. Tu hoches la tête trop souvent. Ton débit accélère, comme pour prouver que tu suis.</p></div>
+      <div class="q leak"><span class="mono">La réponse qui fuit</span><span class="say">A · « Oui, c'est bon, j'ai compris, je ne suis pas idiot. »<br>B · « Oui oui, pardon, bien sûr, pas de souci… »</span><p class="why">La première confirme que la flèche a touché. La seconde accepte la posture d'enfant. Et la variante « je vais te montrer que je sais », où tu étales ta compétence, revient au même : tu passes un examen que personne n'aurait dû te faire passer.</p></div>
+      <div class="q dense"><span class="mono">La réponse dense</span><span class="say">A · « J'ai le principe. Ce qui me manque, c'est le chiffre de mars. »<br>B · « Entendu. Pour le faire bien, dis-moi à quoi ça va servir. Ça m'évitera de revenir vers toi. »</span><p class="why"><b>Pourquoi ça marque :</b> en A, tu remontes la conversation au niveau adulte-adulte avec une question précise, qui montre que tu es déjà plus loin que l'explication qu'il te donne. En B, tu acceptes la <strong>direction</strong> mais tu refuses le <strong>statut</strong> : tu restes un professionnel qui a besoin d'une information, pas un enfant qui obéit.</p></div>
+    </div>
+    <div class="pull">Tu peux suivre une consigne<br>sans accepter une posture.</div>
+    <h3 style="margin-top:20px">Trois détails physiques décisifs</h3>
+    <ul>
+      <li><strong>Le tempo.</strong> Celui qui te prend de haut ralentit exprès. Si tu accélères, tu signes ton infériorité. Ralentis toi aussi, et parle un cran plus bas.</li>
+      <li><strong>La tête.</strong> Un seul hochement suffit pour dire « compris ». Les hochements répétés sont un signal de soumission que tout le monde lit sans le savoir.</li>
+      <li><strong>La fin de phrase.</strong> Termine tes phrases en descendant, jamais en montant. Une intonation qui remonte transforme une affirmation en demande d'approbation.</li>
+    </ul>
+    <div class="box"><span class="mono">◈ Si ça se répète</span><p>Avec un supérieur, la réponse dense en direct ne suffit pas toujours. Si le motif revient, demande un moment à deux, à froid, et décris sans accuser : <em>« Hier en réunion, j'ai eu l'impression que tu m'expliquais les choses comme à un débutant. Je préfère qu'on aille directement à l'essentiel, ça ira plus vite pour nous deux. »</em> C'est le moment où le manuel <strong>On ne te parlera plus jamais comme ça</strong> prend le relais.</p></div>
+  </div>
+
+  <!-- 4 -->
+  <div class="sit">
+    <div class="head"><span class="n">04</span><h3>« Tu ne comprends jamais rien »</h3></div>
+    <div class="ctx">La généralisation · la phrase qui vise l'identité</div>
+    <p><em>« De toute façon tu ne comprends jamais rien. »</em> <em>« T'es toujours comme ça. »</em> Une phrase qui ne parle plus d'un fait, mais de qui tu es.</p>
+    <div class="quad">
+      <div class="q body"><span class="mono">Dans ton corps</span><p>Un coup au plexus, sec. Puis l'envie urgente de lister tous les contre-exemples, de prouver que c'est faux. L'ego se sent visé, et il veut un procès.</p></div>
+      <div class="q leak"><span class="mono">La réponse qui fuit</span><span class="say">« C'est faux ! La semaine dernière j'ai géré le dossier tout seul, et le mois d'avant… »</span><p class="why">Tu acceptes le terrain de l'autre : un débat sur ta valeur. Et un débat sur ta valeur, tu le perds même quand tu as raison, parce que tu as accepté qu'il ait lieu.</p></div>
+      <div class="q dense"><span class="mono">La réponse dense</span><span class="say">« Jamais, c'est beaucoup. Qu'est-ce que je n'ai pas compris, là, précisément ? »</span><p class="why"><b>Pourquoi ça marque :</b> les mots « jamais » et « toujours » sont des indices : c'est l'émotion qui parle, pas les faits. Tu ne contestes pas l'émotion, tu ramènes la conversation du général vers le précis. Sur le précis, on peut avancer. Sur le général, on ne fait que se blesser.</p></div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="sit">
+    <div class="head"><span class="n">05</span><h3>Celui qui hausse le ton</h3></div>
+    <div class="ctx">Volume · agressivité ouverte</div>
+    <p>La voix monte. Au téléphone, en open space, dans une cuisine. L'autre ne discute plus, il pousse.</p>
+    <div class="quad">
+      <div class="q body"><span class="mono">Dans ton corps</span><p>Ici, deux réactions opposées sont possibles. L'envie de monter au même volume, ou à l'inverse le <strong>figement</strong> : tu ne bouges plus, tu ne trouves plus tes mots. Attention : le figement ressemble au calme de l'extérieur, mais ce n'en est pas. Le figement est subi. Le Calme Dense est choisi. La différence se sent dans les pieds et dans le souffle : figé, tu ne les sens plus.</p></div>
+      <div class="q leak"><span class="mono">La réponse qui fuit</span><span class="say">« Calme-toi ! » (en criant à moitié)</span><p class="why">Personne ne s'est jamais calmé parce qu'on lui a dit de se calmer. Ou alors tu montes d'un cran, et l'échange devient un concours de volume.</p></div>
+      <div class="q dense"><span class="mono">La réponse dense</span><span class="say">Laisse finir. Baisse ta voix d'un cran sous la normale. « Je t'écoute. Et je te répondrai mieux si on se parle posément. »</span><p class="why"><b>Pourquoi ça marque :</b> tu ne combats pas le volume, tu proposes un autre registre. Ta voix plus basse oblige l'autre à baisser la sienne pour t'entendre. Si ça continue : <em>« Je reprends cette discussion dans dix minutes. »</em> et tu pars. Partir n'est pas fuir quand c'est annoncé calmement.</p></div>
+    </div>
+    <div class="box"><span class="mono">◈ Une limite claire</span><p>Le Calme Dense est fait pour les tensions sociales, pas pour les menaces. Si tu sens un risque pour ta sécurité physique, il n'y a aucune réponse à élire : tu t'éloignes, point.</p></div>
+  </div>
+
+  <!-- 6 -->
+  <div class="sit">
+    <div class="head"><span class="n">06</span><h3>Le test de valeur</h3></div>
+    <div class="ctx">Doute semé · comparaison · défi</div>
+    <p><em>« Tu es sûr que ce poste est pour toi ? »</em> <em>« Toi, faire un marathon ? »</em> <em>« Tu crois vraiment être à la hauteur ? »</em> Parfois dit avec un sourire, parfois avec une fausse bienveillance.</p>
+    <div class="quad">
+      <div class="q body"><span class="mono">Dans ton corps</span><p>Le thorax se gonfle, la tête se relève, et dans la bouche se prépare ton CV complet. L'ego s'enflamme. C'est le signal le plus trompeur : il ressemble à de la confiance, alors que c'est un besoin de preuve.</p></div>
+      <div class="q leak"><span class="mono">La réponse qui fuit</span><span class="say">« Évidemment ! J'ai déjà fait ça, et ça, et en plus… »</span><p class="why">Celui qui se justifie accepte que l'autre soit juge. Plus tu argumentes, plus tu valides la légitimité de la question.</p></div>
+      <div class="q dense"><span class="mono">La réponse dense</span><span class="say">« Oui. » (puis le silence)<br>ou : « On verra bien. Qu'est-ce qui te fait douter ? »</span><p class="why"><b>Pourquoi ça marque :</b> un « oui » calme ne donne aucune prise. Il n'y a rien à contester, rien à discuter. Et retourner la question avec curiosité déplace l'attention vers celui qui a semé le doute, souvent pour des raisons qui n'ont rien à voir avec toi.</p></div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="sit">
+    <div class="head"><span class="n">07</span><h3>La tension avec un proche</h3></div>
+    <div class="ctx">Couple · famille · amis proches</div>
+    <p><em>« Tu fais toujours passer ton boulot avant nous. »</em> <em>« Tu n'écoutes jamais quand je te parle. »</em> Ici, la personne en face n'est pas un adversaire. Et c'est précisément pour ça que c'est la situation la plus difficile.</p>
+    <div class="quad">
+      <div class="q body"><span class="mono">Dans ton corps</span><p>Les mêmes signaux qu'ailleurs, plus un : la culpabilité, qui serre la gorge. Avec un proche, on se défend plus fort, parce que l'enjeu est plus grand.</p></div>
+      <div class="q leak"><span class="mono">La réponse qui fuit</span><span class="say">« Et toi alors ? La semaine dernière tu… »</span><p class="why">Le contre-reproche. Ou pire, pour celui qui a lu trop vite les chapitres précédents : <strong>le mur</strong>. Rester impassible, regard neutre, réponse courte. Face à quelqu'un qui t'aime, ce calme-là n'est pas dense. Il est glacial, et il blesse.</p></div>
+      <div class="q dense"><span class="mono">La réponse dense</span><span class="say">C.A.L.M.E, puis : « Il y a du vrai. Dis-moi ce qui t'a manqué cette semaine. »</span><p class="why"><b>Pourquoi ça marque :</b> avec un proche, le Calme Dense ne sert pas à gagner. Il sert à <strong>rester présent</strong> au lieu de partir dans la défense. La réponse dense est souvent la plus vulnérable : reconnaître une part de vrai, poser une question, écouter la réponse.</p></div>
+    </div>
+    <div class="pull">Avec un adversaire, le calme te protège.<br>Avec un proche, il te rend disponible.</div>
+  </div>
+
+  <div class="ex"><span class="mono">Exercice</span><h4>Ta situation prioritaire</h4>
+  <p>Reprends ton inventaire des fuites. Laquelle des 7 situations revient le plus ? Écris-la en haut d'une page. En dessous :</p>
+  <ol><li>Ta réponse habituelle, mot pour mot.</li><li>Ton signal dominant dans ce cas-là.</li><li>Une réponse dense qui te ressemble (pas celle du manuel, la tienne).</li></ol>
+  <p>Relis-la le matin pendant une semaine. Quand la situation arrivera, la réponse sera déjà là.</p></div>
+</div>
+</section>
+
+<!-- PARTIE IV -->
+<div class="part">
+  <div class="num">IV</div>
+  <h2>Les limites</h2>
+  <p>Ce que le Calme Dense n'est pas. Et quoi faire les jours où il ne vient pas.</p>
+</div>
+
+<section id="froid" class="chap">
+<div class="wrap">
+  <div class="ghost">06</div>
+  <div class="mono">Chapitre 06</div>
+  <h2>Dense, pas froid</h2>
+  <p class="lead">Il existe une version toxique de tout ce que tu viens de lire. Elle est partout sur les réseaux, et elle est séduisante. Il faut la reconnaître pour ne pas y glisser.</p>
+  <p>C'est l'idée que le calme est une arme. Qu'il sert à déstabiliser l'autre, à le faire douter, à « gagner » l'échange. Laisser quelqu'un sans réponse pendant des heures pour qu'il s'inquiète. Répondre <em>« As-tu terminé ? »</em> à quelqu'un qui s'énerve. Afficher une indifférence calculée.</p>
+  <p>Ça fonctionne, parfois, à court terme. Et c'est exactement l'inverse de ce que construit AURA.</p>
+  <table>
+    <tr><th>Calme froid</th><th>Calme dense</th></tr>
+    <tr><td>Cherche à faire douter l'autre</td><td>Cherche à rester entier</td></tr>
+    <tr><td>Un masque posé sur l'agitation</td><td>Un état réellement redescendu</td></tr>
+    <tr><td>Le silence comme punition</td><td>Le silence comme espace</td></tr>
+    <tr><td>Veut gagner l'échange</td><td>Veut une issue juste, ou sortir proprement</td></tr>
+    <tr><td>Crée de la méfiance</td><td>Crée de la confiance</td></tr>
+    <tr><td>Fait peur</td><td>Attire</td></tr>
+  </table>
+  <p>La différence n'est pas morale, elle est stratégique. Le calme froid te rend redoutable, et les gens se tiennent à distance de ce qu'ils redoutent. Le Calme Dense te rend <strong>fiable</strong>, et les gens se rapprochent de ce qui est fiable. C'est toute la différence entre l'homme qu'on craint et l'homme qu'on n'oublie pas.</p>
+  <div class="box"><span class="mono">◈ Le test d'après</span><p>Après un échange tendu, pose-toi deux questions. <em>L'autre est-il reparti humilié, ou respecté ?</em> Et toi, te sens-tu <em>fier</em>, ou seulement <em>vainqueur</em> ? Si tu te sens vainqueur sans être fier, tu as glissé vers le froid.</p></div>
+</div>
+</section>
+
+<section id="rate" class="chap">
+<div class="wrap">
+  <div class="ghost">07</div>
+  <div class="mono">Chapitre 07</div>
+  <h2>Quand le calme ne vient pas</h2>
+  <p class="lead">Tu vas rater. Souvent, au début. Ce chapitre existe pour que chaque échec devienne une répétition, et pas une preuve que « ça ne marche pas pour toi ».</p>
+
+  <h3>1 · Tu as réagi : répare</h3>
+  <p>La seconde de trop est passée, tu as répondu à chaud. Ce n'est pas fini. <strong>Revenir sur une réaction est aussi une forme de Calme Dense</strong>, et souvent une des plus marquantes, parce que presque personne ne le fait.</p>
+  <span class="say" style="color:var(--ink);border-color:var(--gold)">« Tout à l'heure, j'ai répondu trop vite. Je reprends : ce que je voulais dire, c'est… »</span>
+  <p>Pas d'excuse excessive, pas d'autoflagellation. Une phrase, et tu reprends. Ceux qui assistent à ça ne retiennent pas que tu as réagi. Ils retiennent que tu es revenu.</p>
+
+  <h3>2 · L'énergie est restée : décharge-la</h3>
+  <p>Tu as tenu le calme pendant l'échange. Bravo. Mais vingt minutes plus tard, tu rumines encore, le cœur toujours un peu haut, la mâchoire serrée. C'est normal : l'énergie mobilisée par ton corps n'a pas été utilisée. Elle est encore là.</p>
+  <p>Le thérapeute Peter Levine a beaucoup observé les animaux sauvages. Après avoir échappé à un danger, beaucoup d'entre eux tremblent, s'ébrouent, respirent profondément, puis reprennent leur vie. Ils <strong>déchargent</strong>. L'humain, lui, a appris à retenir. Et ce qui est retenu finit par ressortir ailleurs : dans une remarque au mauvais moment, une nuit agitée, une colère disproportionnée trois jours plus tard.</p>
+  <p>Donne à ton corps ce qu'il demandait. Après un échange tendu, dans les heures qui suivent :</p>
+  <ul>
+    <li><strong>3 minutes de marche rapide</strong>, ou un escalier monté d'un bon pas.</li>
+    <li><strong>Secoue</strong> les mains, les bras, les épaules pendant 30 secondes, comme pour te débarrasser d'eau.</li>
+    <li><strong>Trois expirations sonores</strong>, longues, par la bouche, quand tu es seul.</li>
+    <li>Et le soir, si tu le peux : <strong>une vraie séance</strong>. Courir, porter, frapper un sac. Le sport est le lieu le plus sain pour terminer ce qu'un conflit a commencé.</li>
+  </ul>
+  <div class="lib"><span class="mono">Ce que dit la Bibliothèque</span><p>Dans <em>Waking the Tiger</em>, Peter Levine explique que l'énergie mobilisée face à une menace a besoin d'être déchargée par le corps, comme le font spontanément les animaux, et que lorsqu'elle reste bloquée, elle peut entretenir des tensions durables. On en retient ici une application simple et quotidienne, sans aller sur le terrain du traumatisme, qui relève d'un accompagnement à part.</p></div>
+
+  <h3>3 · Ça revient toujours : va plus profond</h3>
+  <p>Certains déclencheurs résistent à tout. Toujours la même phrase, toujours le même type de personne, toujours la même intensité, alors que la situation est objectivement mineure. Quand la réaction est disproportionnée par rapport à ce qui se passe, c'est souvent qu'elle ne répond pas seulement au présent. <strong>Elle répond à une empreinte plus ancienne.</strong></p>
+  <p>Le C.A.L.M.E t'aide à tenir face au déclencheur. Il ne l'efface pas. C'est le travail du <strong>Level 2 — La Déconnexion</strong> : dissoudre la charge des peurs sociales, et regarder ce qui, dans ton histoire, rend certains mots si lourds. Le jour où ce travail est fait, tu n'as plus besoin de cinq secondes. Le mot arrive, et il ne pèse plus rien.</p>
+  <div class="box"><span class="mono">◈ Important</span><p>Si la colère, l'anxiété ou le figement prennent une place qui déborde sur ta vie (sommeil, relations, travail), ce n'est plus une question de technique. Parles-en à un professionnel de santé. C'est une décision de force, pas de faiblesse.</p></div>
+</div>
+</section>
+
+<!-- PARTIE V -->
+<div class="part">
+  <div class="num">V</div>
+  <h2>L'entraînement</h2>
+  <p>Un geste qu'on ne répète pas reste une idée. Voici comment en faire un réflexe.</p>
+</div>
+
+<section id="j21" class="chap">
+<div class="wrap">
+  <div class="ghost">08</div>
+  <div class="mono">Chapitre 08</div>
+  <h2>L'entraînement 21 jours</h2>
+  <p class="lead">Trois semaines, trois phases. Comme une préparation physique : d'abord la technique, puis la charge, puis la compétition.</p>
+
+  <h3>Semaine 1 · Observer</h3>
+  <p>Tu ne changes rien à tes réactions. Tu les <strong>regardes</strong>. Chaque soir, note un moment de la journée où tu as senti la bascule : la situation, ton signal, son intensité de 1 à 10, ce que tu as fait. Matin et soir, deux minutes de C.A.L.M.E à vide.</p>
+  <p class="why" style="font-size:16px;color:var(--ink3)">Objectif : connaître parfaitement ta sentinelle et tes déclencheurs.</p>
+  <div class="days" data-w="1"></div>
+
+  <h3>Semaine 2 · Interrompre</h3>
+  <p>Tu appliques le C.A.L.M.E <strong>au moins une fois par jour</strong> en situation réelle, même sur une petite chose : un automobiliste, une file d'attente, un message agaçant. Il n'est pas obligatoire que ce soit parfait. L'objectif est de créer l'espace, même d'une seule seconde.</p>
+  <p class="why" style="font-size:16px;color:var(--ink3)">Objectif : prouver à ton corps que l'espace existe.</p>
+  <div class="days" data-w="2"></div>
+
+  <h3>Semaine 3 · Choisir</h3>
+  <p>Tu vas chercher volontairement une situation légèrement inconfortable chaque jour : donner ton avis en réunion, tenir trois secondes de silence avant de répondre à une question, ne pas te justifier quand on te fait une remarque, finir tes phrases en descendant. Et tu travailles ta situation prioritaire du chapitre 05.</p>
+  <p class="why" style="font-size:16px;color:var(--ink3)">Objectif : passer de la défense à l'aisance.</p>
+  <div class="days" data-w="3"></div>
+
+  <div class="box"><span class="mono">◈ Avec ton Tracker 90 jours</span><p>Si tu utilises le Tracker AURA, ajoute une ligne <strong>« Calme Dense »</strong> à ta grille quotidienne. Une case cochée = au moins un C.A.L.M.E appliqué dans la journée, en situation réelle. Sur 90 jours, c'est cette ligne qui fera la différence entre comprendre et incarner.</p></div>
+
+  <div class="ex"><span class="mono">Bilan J21</span><h4>Les quatre questions</h4>
+  <ol><li>Mon signal dominant arrive-t-il plus tôt, ou plus faiblement, qu'au jour 1 ?</li><li>Quelle situation me coûte moins qu'avant ?</li><li>Laquelle résiste encore ? (C'est elle que tu emmènes dans le Level 2.)</li><li>Quelqu'un a-t-il remarqué quelque chose de différent chez moi ?</li></ol>
+  <p>La dernière question est la plus intéressante. Souvent, ce sont les autres qui le voient en premier.</p></div>
+</div>
+</section>
+
+<!-- FIN -->
+<div class="final" id="fin">
+<div class="wrap">
+  <div class="mono">Clôture</div>
+  <h2>Ce qu'on retient de toi</h2>
+  <p>Les gens oublient presque tout ce que tu dis. Ils oublient tes arguments, tes chiffres, tes bonnes répliques. Ce qu'ils retiennent, c'est une impression. Et cette impression se forme au moment où on te pousse.</p>
+  <p>L'homme qu'on n'oublie pas n'est pas celui qui a eu le dernier mot. C'est celui dont on se dit, après coup : <em>« Je l'ai poussé, et il n'a pas bougé. Mais il ne m'a pas écrasé non plus. »</em></p>
+  <p>Tu as maintenant la méthode pour tenir cinq secondes. La prochaine étape, c'est de ne plus en avoir besoin : que les mots qui te faisaient basculer arrivent, et ne pèsent plus rien. C'est le travail du <strong>Level 2 — La Déconnexion</strong>.</p>
+  <div class="pull" style="margin-top:50px">Le calme ne se montre pas.<br>Il se laisse remarquer.</div>
+  <div class="sig">AURA · Le Calme Dense · Manuel bonus</div>
+</div>
+</div>
+
+<!-- ANNEXES -->
+<section id="annexes" class="chap">
+<div class="wrap">
+  <div class="mono">Annexe A</div>
+  <h2>La carte mémo</h2>
+  <p>À capturer en fond d'écran, ou à imprimer et garder dans ton portefeuille.</p>
+  <div class="card">
+    <div class="mono">AURA · Le Calme Dense</div>
+    <div class="big">CALME</div>
+    <ul>
+      <li><b>C</b>Capte le signal. Nomme-le.</li>
+      <li><b>A</b>Allonge l'expiration.</li>
+      <li><b>L</b>Leste : poids dans les pieds, mâchoire libre.</li>
+      <li><b>M</b>Maintiens le regard. Posé, pas dur.</li>
+      <li><b>E</b>Élis ta réponse. Ou ne réponds pas.</li>
+    </ul>
+    <p style="margin-top:22px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:var(--ink)">Dense, pas froid.</p>
+  </div>
+
+  <div class="mono" style="margin-top:80px">Annexe B</div>
+  <h2>Script audio · Les 5 secondes</h2>
+  <p>Format prêt pour ElevenLabs (balises de pause incluses). Durée estimée : 4 minutes. Voix grave, lente, proche.</p>
+<div class="script">Installe-toi. Assis ou debout, peu importe.
+Les pieds au sol. <span class="br">&lt;break time="1.5s" /&gt;</span>
+
+Ce que tu vas faire maintenant, tu le feras un jour sans y penser.
+Au milieu d'une réunion. Devant un message. Face à quelqu'un qui hausse le ton.
+Mais aujourd'hui, on le fait lentement. <span class="br">&lt;break time="2s" /&gt;</span>
+
+Rappelle-toi une petite provocation. Pas la pire. Une phrase qui t'a piqué, récemment.
+Laisse-la revenir. Le ton. Le visage. <span class="br">&lt;break time="3s" /&gt;</span>
+
+Et remarque. Quelque part dans ton corps, quelque chose vient de bouger.
+Peut-être le cœur. Peut-être une chaleur dans la nuque.
+Peut-être la mâchoire. <span class="br">&lt;break time="2s" /&gt;</span>
+
+Ne le combats pas. Nomme-le. Juste un mot, à l'intérieur. <span class="br">&lt;break time="3s" /&gt;</span>
+
+C'est la première seconde. Tu viens de capter.
+Tu n'es plus dans la réaction. Tu la regardes. <span class="br">&lt;break time="2s" /&gt;</span>
+
+Maintenant, expire. Lentement. Par le nez.
+Plus long que ton inspiration… encore un peu… <span class="br">&lt;break time="4s" /&gt;</span>
+
+Sens le cœur qui ralentit d'un cran. <span class="br">&lt;break time="2s" /&gt;</span>
+
+Envoie ton poids dans tes pieds. Comme si le sol t'attirait doucement.
+Les épaules descendent d'un centimètre.
+La mâchoire se desserre. <span class="br">&lt;break time="3s" /&gt;</span>
+
+Et maintenant, imagine le regard de cette personne. Tu ne fuis pas.
+Tu ne l'écrases pas non plus. Tu la regardes, simplement.
+Tu es toujours là. Rien n'a bougé. <span class="br">&lt;break time="3s" /&gt;</span>
+
+Et seulement maintenant… tu choisis.
+Répondre. Te taire. Revenir au sujet. Reporter.
+Tout est possible. Parce que c'est toi qui décides. <span class="br">&lt;break time="3s" /&gt;</span>
+
+Encore une fois, plus vite cette fois.
+Capte. <span class="br">&lt;break time="1s" /&gt;</span> Expire. <span class="br">&lt;break time="2.5s" /&gt;</span> Leste. <span class="br">&lt;break time="1s" /&gt;</span> Regarde. <span class="br">&lt;break time="1s" /&gt;</span> Choisis. <span class="br">&lt;break time="2s" /&gt;</span>
+
+Cinq secondes.
+Pour toi, une éternité.
+Pour les autres, de l'aplomb. <span class="br">&lt;break time="2s" /&gt;</span>
+
+Tu n'as pas à être calme.
+Tu as juste à refaire ce geste.
+Le calme suivra. <span class="br">&lt;break time="2s" /&gt;</span>
+
+Ouvre les yeux. Et reviens.</div>
+
+  <div class="mono" style="margin-top:80px">Annexe C</div>
+  <h2>Ce que dit la Bibliothèque</h2>
+  <p>Ce manuel s'appuie sur quatre ouvrages de la Bibliothèque des Initiés. Voici ce que chacun apporte, et où.</p>
+  <div class="lib"><span class="mono">Personal Magnetism — A Practical Course</span><p>Traité du début du XXᵉ siècle. Il fait du contrôle de soi le premier facteur du magnétisme et parle de « fuite » pour décrire la force perdue dans la nervosité et l'irritabilité. <strong>Utilisé au chapitre 02</strong>, pour poser l'idée que le magnétisme se conserve autant qu'il se construit.</p></div>
+  <div class="lib"><span class="mono">The Art and Science of Personal Magnetism</span><p>Un autre classique de la même époque. Il associe chaque émotion à un rythme respiratoire et observe que le fait d'adopter volontairement le rythme du calme aide à garder son sang-froid sous la provocation. <strong>Utilisé au chapitre 04</strong>, à la base du geste « Allonger l'expiration ».</p></div>
+  <div class="lib"><span class="mono">Focusing — Eugene T. Gendlin</span><p>Méthode issue de la recherche en psychothérapie : porter attention à la sensation corporelle encore floue (le « felt sense ») et lui trouver un mot juste, ce qui produit souvent un relâchement. <strong>Utilisé au chapitre 03</strong> et dans le geste « Capter », en version très courte.</p></div>
+  <div class="lib"><span class="mono">Waking the Tiger — Peter A. Levine</span><p>Ouvrage de référence sur la manière dont le corps gère la menace, à partir de l'observation des animaux qui déchargent l'énergie mobilisée après un danger. <strong>Utilisé au chapitre 07</strong>, pour la décharge après un échange tendu, dans une application quotidienne et non thérapeutique.</p></div>
+</div>
+</section>
+
+<script>
+function toggleMode(){
+  document.body.classList.toggle('light');
+  document.getElementById('tg').textContent = document.body.classList.contains('light') ? '◑ Version sombre' : '◐ Version claire';
+}
+document.querySelectorAll('.days').forEach(function(row){
+  var w = +row.dataset.w;
+  for(var i=1;i<=7;i++){
+    var d=document.createElement('div');
+    d.className='d'; d.textContent='J'+((w-1)*7+i);
+    d.onclick=function(){this.classList.toggle('on');};
+    row.appendChild(d);
+  }
+});
+var running=false;
+function runGuide(){
+  if(running) return; running=true;
+  var orb=document.getElementById('orb'), t=document.getElementById('gtxt'), b=document.getElementById('gbtn');
+  b.style.opacity=.3;
+  var steps=[
+    ['C','Capte. Où ça bouge dans ton corps ? Nomme-le, un mot.',false,4000],
+    ['A','Allonge. Expire lentement par le nez… plus long… encore…',true,7000],
+    ['L','Leste. Le poids dans les pieds. Épaules et mâchoire relâchées.',false,5000],
+    ['M','Maintiens. Un regard posé, ni fuyant ni dur.',false,4000],
+    ['É','Élis. Maintenant seulement, tu choisis.',false,4000],
+    ['◈','Cinq secondes. Recommence quand tu veux.',false,0]
+  ];
+  var i=0;
+  (function next(){
+    var s=steps[i];
+    orb.textContent=s[0]; t.textContent=s[1];
+    if(s[2]) orb.classList.remove('big'); else orb.classList.add('big');
+    i++;
+    if(i<steps.length) setTimeout(next,s[3]); else { running=false; b.style.opacity=1; b.textContent='Recommencer'; orb.classList.remove('big'); }
+  })();
+}
+</script>
+</body>
+</html>

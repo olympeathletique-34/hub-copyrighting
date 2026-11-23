@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURA — Espace Membre</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Jost:wght@200;300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F7F5F2; --bg2:#EFECE8; --bg3:#E8E4DE;
+  --ink:#0E0C14; --ink2:#2A2635; --ink3:#4A4758;
+  --violet:#2D1B69; --vm:#4A2E9E; --vl:#7B5EA7; --vp:#EDE8F8;
+  --gold:#B8902A; --gl:#D4AA42; --gbg:#FBF6EC;
+  --gray:#8A8798; --border:#E0DDD8;
+  --deep:#09071A;
+  --green:#1A7A4A; --red:#8B2020;
+  --l1-c:#4A2E9E; --l2-c:#1A6B5C; --l3-c:#8B3A1A;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden;font-size:16px;line-height:1.8;}
+
+/* ══ LAYOUT ══ */
+.app{display:grid;grid-template-columns:300px 1fr;min-height:100vh;}
+@media(max-width:900px){.app{grid-template-columns:1fr;}}
+
+/* ══ SIDEBAR ══ */
+.sidebar{
+  background:var(--deep);
+  position:fixed;top:0;left:0;bottom:0;width:300px;
+  overflow-y:auto;z-index:50;
+  display:flex;flex-direction:column;
+  border-right:1px solid rgba(201,168,75,0.1);
+}
+@media(max-width:900px){
+  .sidebar{position:fixed;left:-300px;transition:left .3s;z-index:200;}
+  .sidebar.open{left:0;}
+  .main{margin-left:0!important;}
+}
+.sb-header{padding:24px 20px 20px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.sb-logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.1em;color:#F7F4F0;}
+.sb-sub{font-size:10px;font-weight:300;letter-spacing:.35em;color:rgba(201,168,75,.5);text-transform:uppercase;margin-top:2px;}
+
+/* Progress bar global */
+.sb-progress{padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.spb-label{font-size:10px;font-weight:400;letter-spacing:.3em;color:rgba(247,244,240,.3);text-transform:uppercase;margin-bottom:8px;display:flex;justify-content:space-between;}
+.spb-bar{height:3px;background:rgba(255,255,255,.08);}
+.spb-fill{height:100%;background:var(--gold);transition:width .5s ease;}
+
+/* Module list */
+.sb-modules{flex:1;overflow-y:auto;padding:12px 0;}
+.sb-book{margin-bottom:4px;}
+.sb-book-header{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 20px;cursor:pointer;
+  font-size:10px;font-weight:500;letter-spacing:.35em;text-transform:uppercase;
+  color:rgba(247,244,240,.4);transition:color .2s;
+  border:none;background:transparent;width:100%;text-align:left;
+}
+.sb-book-header:hover{color:rgba(247,244,240,.7);}
+.sb-book-header.active{color:var(--gold);}
+.sb-book-dot{width:8px;height:8px;border-radius:50%;border:1px solid currentColor;flex-shrink:0;}
+.sb-book-arrow{margin-left:auto;font-size:10px;transition:transform .2s;}
+.sb-book-header.open .sb-book-arrow{transform:rotate(90deg);}
+.sb-lessons{display:none;padding:4px 0;}
+.sb-lessons.open{display:block;}
+.sb-lesson{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 20px 9px 38px;cursor:pointer;
+  font-size:13px;font-weight:300;color:rgba(247,244,240,.45);
+  transition:all .15s;border:none;background:transparent;width:100%;text-align:left;
+  line-height:1.4;
+}
+.sb-lesson:hover{color:rgba(247,244,240,.8);background:rgba(255,255,255,.03);}
+.sb-lesson.active{color:#F7F4F0;background:rgba(255,255,255,.06);}
+.sb-lesson.done{color:rgba(247,244,240,.5);}
+.sl-icon{font-size:12px;flex-shrink:0;margin-top:1px;}
+.sl-text{flex:1;}
+
+/* ══ MAIN ══ */
+.main{margin-left:300px;min-height:100vh;background:var(--bg);}
+@media(max-width:900px){.main{margin-left:0;}}
+
+/* Top bar */
+.topbar{
+  background:#fff;border-bottom:1px solid var(--border);
+  padding:0 32px;height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:40;
+}
+.tb-menu{display:none;background:transparent;border:none;font-size:20px;cursor:pointer;color:var(--ink);}
+@media(max-width:900px){.tb-menu{display:block;}}
+.tb-breadcrumb{font-size:12px;font-weight:300;color:var(--gray);letter-spacing:.08em;}
+.tb-breadcrumb strong{color:var(--ink2);font-weight:500;}
+.tb-progress{display:flex;align-items:center;gap:10px;}
+.tb-pct{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--violet);}
+.tb-plbl{font-size:10px;font-weight:300;color:var(--gray);letter-spacing:.2em;text-transform:uppercase;}
+
+/* ══ CONTENT ══ */
+.content{max-width:780px;margin:0 auto;padding:56px 32px 100px;}
+@media(max-width:600px){.content{padding:40px 20px 80px;}}
+
+/* Lesson header */
+.lesson-header{margin-bottom:48px;}
+.lh-book{
+  font-size:10px;font-weight:500;letter-spacing:.45em;
+  text-transform:uppercase;margin-bottom:10px;
+  display:flex;align-items:center;gap:10px;
+}
+.lh-book::before{content:'';width:24px;height:1px;background:currentColor;opacity:.5;}
+.lh-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,4vw,46px);font-weight:900;
+  color:var(--ink);line-height:1.15;margin-bottom:14px;
+}
+.lh-title em{font-style:italic;color:var(--violet);}
+.lh-meta{display:flex;gap:20px;flex-wrap:wrap;}
+.lh-tag{
+  font-size:10px;font-weight:400;letter-spacing:.3em;
+  text-transform:uppercase;padding:5px 14px;
+  border:1px solid var(--border);color:var(--gray);
+}
+
+/* Concept block */
+.concept-section{margin-bottom:44px;}
+.cs-eye{
+  font-size:10px;font-weight:500;letter-spacing:.45em;
+  color:var(--violet);text-transform:uppercase;margin-bottom:12px;
+  display:flex;align-items:center;gap:10px;
+}
+.cs-eye::before{content:'';width:20px;height:1px;background:var(--violet);opacity:.5;}
+.cs-h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(20px,2.5vw,28px);font-weight:700;
+  color:var(--ink);margin-bottom:20px;line-height:1.2;
+}
+p.body{font-size:16px;font-weight:300;color:var(--ink3);line-height:1.9;margin-bottom:20px;}
+p.body strong{color:var(--ink);font-weight:500;}
+p.body em{color:var(--violet);font-style:italic;}
+
+/* Key insight */
+.insight{
+  background:var(--vp);border-left:3px solid var(--violet);
+  padding:24px 28px;margin:28px 0;
+}
+.insight-lbl{font-size:9px;font-weight:500;letter-spacing:.4em;color:var(--violet);text-transform:uppercase;margin-bottom:8px;}
+.insight p{font-family:'Playfair Display',serif;font-size:17px;font-style:italic;color:var(--violet);line-height:1.65;margin:0;}
+
+/* Exercise */
+.exercise{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--gold);padding:28px 32px;margin:28px 0;}
+.ex-lbl{font-size:9px;font-weight:500;letter-spacing:.4em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
+.ex-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:14px;}
+.ex-body{font-size:15px;font-weight:300;color:var(--ink3);line-height:1.8;}
+.ex-body p{margin-bottom:12px;}
+.ex-body p:last-child{margin-bottom:0;}
+
+/* Journal input */
+.journal-wrap{margin:28px 0;}
+.journal-lbl{font-size:10px;font-weight:500;letter-spacing:.35em;color:var(--gray);text-transform:uppercase;margin-bottom:10px;}
+.journal-ta{
+  width:100%;min-height:120px;
+  background:#fff;border:1px solid var(--border);
+  padding:16px;font-family:'Playfair Display',serif;
+  font-size:15px;font-style:italic;color:var(--ink2);
+  line-height:1.7;resize:vertical;
+  transition:border-color .15s;
+}
+.journal-ta:focus{outline:none;border-color:var(--violet);}
+
+/* ══ QUIZ ══ */
+.quiz-section{
+  background:#fff;border:1px solid var(--border);
+  padding:36px;margin-top:44px;
+}
+.quiz-header{margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+.quiz-lbl{font-size:10px;font-weight:500;letter-spacing:.45em;color:var(--violet);text-transform:uppercase;margin-bottom:8px;}
+.quiz-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--ink);}
+.quiz-sub{font-size:14px;font-weight:300;color:var(--gray);margin-top:6px;}
+
+/* Quiz loading */
+.quiz-loading{text-align:center;padding:40px 0;}
+.ql-dots{display:inline-flex;gap:6px;margin-bottom:12px;}
+.ql-dot{width:7px;height:7px;border-radius:50%;background:var(--violet);opacity:.3;animation:qlpulse .8s ease-in-out infinite;}
+.ql-dot:nth-child(2){animation-delay:.15s;}
+.ql-dot:nth-child(3){animation-delay:.3s;}
+@keyframes qlpulse{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
+.ql-text{font-size:14px;font-weight:300;color:var(--gray);font-style:italic;}
+
+/* Quiz question */
+.quiz-q-num{font-size:10px;font-weight:500;letter-spacing:.4em;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+.quiz-q-text{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--ink);line-height:1.4;margin-bottom:24px;}
+.quiz-options{display:flex;flex-direction:column;gap:8px;}
+.quiz-opt{
+  background:var(--bg2);border:1px solid var(--border);
+  padding:14px 18px;cursor:pointer;
+  display:flex;align-items:flex-start;gap:12px;
+  font-family:'Jost',sans-serif;width:100%;text-align:left;
+  transition:all .15s;
+}
+.quiz-opt:hover{border-color:var(--vl);background:var(--vp);}
+.quiz-opt.selected{border-color:var(--violet);background:var(--vp);}
+.quiz-opt.correct{border-color:var(--green);background:rgba(26,122,74,0.06);}
+.quiz-opt.wrong{border-color:var(--red);background:rgba(139,32,32,0.05);}
+.qo-letter{
+  width:26px;height:26px;border:1px solid var(--border);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:500;color:var(--gray);transition:all .15s;
+}
+.quiz-opt.selected .qo-letter{background:var(--violet);color:#fff;border-color:var(--violet);}
+.quiz-opt.correct .qo-letter{background:var(--green);color:#fff;border-color:var(--green);}
+.quiz-opt.wrong .qo-letter{background:var(--red);color:#fff;border-color:var(--red);}
+.qo-text{font-size:14px;font-weight:300;color:var(--ink2);line-height:1.5;padding-top:3px;}
+
+/* Feedback */
+.quiz-feedback{
+  margin-top:20px;padding:16px 20px;
+  font-size:14px;font-weight:300;line-height:1.7;
+  display:none;
+}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.ok{background:rgba(26,122,74,0.06);border-left:3px solid var(--green);color:#1A4A2A;}
+.quiz-feedback.ko{background:rgba(139,32,32,0.05);border-left:3px solid var(--red);color:#4A1010;}
+
+/* Quiz navigation */
+.quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:24px;flex-wrap:wrap;gap:12px;}
+.quiz-dots{display:flex;gap:6px;}
+.qdot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background .2s;}
+.qdot.done{background:var(--green);}
+.qdot.current{background:var(--violet);}
+
+/* Result */
+.quiz-result{text-align:center;padding:36px 0 24px;}
+.qr-score{font-family:'Bebas Neue',sans-serif;font-size:72px;line-height:1;margin-bottom:8px;}
+.qr-label{font-size:12px;font-weight:300;letter-spacing:.2em;color:var(--gray);text-transform:uppercase;margin-bottom:24px;}
+.qr-msg{font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:var(--ink2);line-height:1.65;max-width:480px;margin:0 auto 32px;}
+
+/* Buttons */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Jost',sans-serif;font-size:12px;font-weight:600;
+  letter-spacing:.15em;text-transform:uppercase;
+  padding:14px 32px;border:none;cursor:pointer;transition:all .2s;
+}
+.btn-primary{background:var(--violet);color:#fff;}
+.btn-primary:hover{background:var(--vm);transform:translateY(-1px);}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.btn-gold{background:var(--gold);color:#fff;}
+.btn-gold:hover{background:var(--gl);}
+.btn-outline{background:transparent;color:var(--violet);border:1px solid var(--violet);}
+.btn-outline:hover{background:var(--vp);}
+.btn-ghost{background:transparent;color:var(--gray);font-size:11px;padding:10px 0;}
+.btn-ghost:hover{color:var(--ink);}
+
+/* Completion banner */
+.completion{
+  background:linear-gradient(135deg,var(--violet),#1A0F3D);
+  padding:36px;margin-top:44px;text-align:center;
+  display:none;
+}
+.completion.show{display:block;}
+.comp-icon{font-size:32px;margin-bottom:12px;}
+.comp-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:#fff;margin-bottom:8px;}
+.comp-sub{font-size:14px;font-weight:300;color:rgba(247,244,240,.65);line-height:1.7;margin-bottom:24px;}
+
+/* Welcome screen */
+.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 60px);text-align:center;padding:40px 24px;}
+.w-icon{font-size:48px;margin-bottom:24px;}
+.w-title{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,48px);font-weight:900;color:var(--ink);margin-bottom:16px;line-height:1.1;}
+.w-title em{font-style:italic;color:var(--violet);}
+.w-sub{font-size:17px;font-weight:300;color:var(--gray);line-height:1.8;max-width:480px;margin:0 auto 36px;}
+.w-stats{display:flex;justify-content:center;gap:36px;margin-bottom:40px;flex-wrap:wrap;}
+.ws-item{text-align:center;}
+.ws-num{font-family:'Bebas Neue',sans-serif;font-size:38px;color:var(--violet);line-height:1;}
+.ws-lbl{font-size:10px;font-weight:300;letter-spacing:.25em;color:var(--gray);text-transform:uppercase;margin-top:4px;}
+
+/* Overlay mobile */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150;}
+@media(max-width:900px){.overlay.show{display:block;}}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+<!-- ══ SIDEBAR ══ -->
+<div class="sidebar" id="sidebar">
+  <div class="sb-header">
+    <div class="sb-logo">AURA</div>
+    <div class="sb-sub">Espace Membre</div>
+  </div>
+  <div class="sb-progress">
+    <div class="spb-label">
+      <span>Progression globale</span>
+      <span id="sb-pct-lbl">0%</span>
+    </div>
+    <div class="spb-bar"><div class="spb-fill" id="sb-fill" style="width:0%"></div></div>
+  </div>
+  <div class="sb-modules" id="sb-modules"></div>
+</div>
+
+<!-- OVERLAY mobile -->
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- ══ MAIN ══ -->
+<div class="main" id="main-area">
+  <div class="topbar">
+    <button class="tb-menu" onclick="toggleSidebar()">☰</button>
+    <div class="tb-breadcrumb" id="tb-bc">Bienvenue</div>
+    <div class="tb-progress">
+      <div class="tb-pct" id="tb-pct">0%</div>
+      <div class="tb-plbl">complété</div>
+    </div>
+  </div>
+
+  <div id="page-content">
+    <!-- Welcome screen -->
+    <div class="welcome">
+      <div class="w-icon">◈</div>
+      <h1 class="w-title">Bienvenue dans<br>ton <em>espace de transformation</em></h1>
+      <p class="w-sub">Chaque notion s'apprend à ton rythme. Chaque étape se valide avant de passer à la suivante. Le programme s'ouvre devant toi, un concept à la fois.</p>
+      <div class="w-stats">
+        <div class="ws-item"><div class="ws-num">30</div><div class="ws-lbl">Notions</div></div>
+        <div class="ws-item"><div class="ws-num">3</div><div class="ws-lbl">Programmes</div></div>
+        <div class="ws-item"><div class="ws-num">30</div><div class="ws-lbl">Quiz IA</div></div>
+      </div>
+      <button class="btn btn-primary" onclick="loadLesson(0,0)">Commencer le programme →</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// CURRICULUM — 30 leçons, 3 livres, 10 leçons chaque
+// ═══════════════════════════════════════════════
+const CURRICULUM = [
+  {
+    id:'l1', title:'AURA Level 1', subtitle:'Le Code du Magnétisme',
+    color:'#4A2E9E', colorName:'l1-c',
+    lessons:[
+      {
+        id:'l1-1', title:'Qu\'est-ce que l\'Aura vraiment ?',
+        tag:'Fondation',
+        concept:`L'aura n'est pas un phénomène mystique. C'est l'ensemble des signaux conscients et inconscients que tu émets en permanence — et qui construisent dans l'esprit des autres une perception de toi avant même que tu aies ouvert la bouche.
+
+Le cerveau humain est câblé pour former des impressions globales à partir d'indices fragmentaires. C'est ce qu'on appelle le **halo effect** : posture, regard, voix, rythme — tout se traite en quelques secondes. Et cette impression, une fois formée, est extraordinairement difficile à inverser.
+
+Ce que la plupart des gens ne comprennent pas : l'aura n'est pas superficielle. Elle est le *reflet externe de ton monde intérieur*. Un homme qui se respecte profondément le montre dans sa façon de marcher. Quelqu'un qui connaît sa valeur le montre dans sa façon de parler — ou de se taire.`,
+        insight:`L'aura n'est pas ce que tu montres. C'est ce que tu ne peux pas cacher.`,
+        exercise:{
+          title:'Le Miroir sans jugement',
+          body:`Pendant 3 minutes, regarde-toi dans un miroir sans te juger. Observe simplement ta posture naturelle, ton regard par défaut, ta position de repos. Ne corrige rien.
+
+Pose-toi une seule question : <em>"Ce que je vois ici — est-ce que ça correspond à ce que je ressens à l'intérieur ?"</em>
+
+Si la réponse est non, c'est ton point de départ.`
+        },
+        journal:'Qu\'as-tu observé dans ton miroir ? Quel décalage as-tu noté entre ton apparence et ce que tu ressens intérieurement ?',
+        quizContext:'L\'aura est définie comme l\'ensemble des signaux émis par une personne, perçus par les autres via le halo effect. Elle reflète l\'état intérieur réel, pas une performance. Elle ne se construit pas — elle se révèle en retirant ce qui la cache.'
+      },
+      {
+        id:'l1-2', title:'Le Socle Intérieur',
+        tag:'Pilier 1',
+        concept:`Tout commence ici. Avant le corps, avant la voix, avant les techniques sociales — il y a ce que tu penses de toi quand tu es seul avec toi-même.
+
+La confiance en soi authentique n'est pas l'absence de doutes. C'est la capacité à agir malgré eux. C'est savoir, profondément, que tu es capable de traverser ce qui se présente.
+
+Les personnes à haute aura ne cherchent pas l'approbation. **Non par arrogance, mais par complétude.** Elles n'ont pas besoin que tu leur confirmes leur valeur parce qu'elles la connaissent déjà. Et c'est précisément ce manque de besoin qui les rend irrésistiblement attirantes.
+
+L'exercice fondamental est celui de *l'identité intentionnelle* : décider consciemment qui tu es, ce que tu défends, ce que tu refuses — et te tenir à cette définition même sous pression sociale.`,
+        insight:`Cesse de vouloir être apprécié. Commence à être toi-même pleinement. L'appréciation suivra — chez les gens qui comptent.`,
+        exercise:{
+          title:'L\'Audit d\'identité',
+          body:`Prends 20 minutes et une feuille blanche. Écris en haut : <em>"Qui suis-je quand personne ne regarde ?"</em>
+
+Liste 10 comportements, habitudes ou pensées récurrentes. Pour chacun, demande-toi : est-ce que ça renforce ou affaiblit la personne que je veux être ?
+
+Raye ceux qui affaiblissent. Entoure ceux qui renforcent. Commence à amplifier les seconds.`
+        },
+        journal:'Quels comportements as-tu identifiés qui trahissent ta version idéale ? Lequel vas-tu travailler en premier ?',
+        quizContext:'Le socle intérieur est le premier pilier de l\'aura. La confiance authentique vient de la capacité à agir malgré les doutes — pas de l\'absence de doutes. L\'identité intentionnelle consiste à décider consciemment qui on est et à tenir cette définition sous pression sociale. Le besoin d\'approbation affaiblit le socle.'
+      },
+      {
+        id:'l1-3', title:'Le Signal Physique',
+        tag:'Pilier 2',
+        concept:`Ton corps ne ment pas. Il traduit en signaux visibles et sonores l'état de ton monde intérieur — et il influence en retour ce même monde intérieur. C'est une boucle que tu peux activer dans les deux sens.
+
+Amy Cuddy à Harvard a démontré que des **postures de puissance** adoptées pendant seulement 2 minutes modifient les niveaux de cortisol et de testostérone. Le corps ne sait pas faire semblant — mais il peut être rééduqué.
+
+Les athlètes de haut niveau le savent intuitivement. Regarde Djokovic avant un service décisif. Étudie Ronaldo à la sortie du tunnel. *Ces corps parlent avant que les scores ne le fassent.*
+
+**Les 4 leviers fondamentaux du signal physique :**
+
+— La posture verticale : tête haute, épaules basses et ouvertes, enracinement sans rigidité
+— Le regard direct : ni fuyant, ni fixé. Le contact visuel transmet la présence
+— La voix grave et lente : parler lentement est une manifestation de confiance
+— Les gestes économes : les mouvements parasites signalent l'inconfort`,
+        insight:`Kobe Bryant ne marchait pas vers le terrain. Il en prenait possession. Cette distinction est tout.`,
+        exercise:{
+          title:'Le Reset Physique — 5 minutes le matin',
+          body:`Avant de sortir de chez toi, debout, pieds écartés à largeur d'épaules. Respire profondément 5 fois. Redresse la colonne. Regarde devant toi. Visualise la version de toi que tu construis.
+
+Marche ensuite comme si tu étais déjà cette personne.
+
+Ce n'est pas de la performance. C'est de la programmation neuronale.`
+        },
+        journal:'Comment as-tu ressenti le changement après le reset physique ? Qu\'ont remarqué les autres (ou toi-même) dans ta façon d\'occuper l\'espace ?',
+        quizContext:'Le signal physique est le deuxième pilier. La posture, le regard, la voix et les gestes sont des signaux non-verbaux qui précèdent les mots. Amy Cuddy a prouvé que les postures de puissance modifient les hormones. Parler lentement signale la confiance. Les gestes parasites signalent l\'inconfort et le besoin d\'approbation.'
+      },
+      {
+        id:'l1-4', title:'La Présence Sociale',
+        tag:'Pilier 3',
+        concept:`La présence sociale n'est pas de l'extraversion. Certaines des personnes les plus magnétiques que tu rencontreras seront les plus silencieuses dans la pièce. Ce n'est pas ce que tu dis qui compte — c'est comment tu fais sentir les autres quand tu es là.
+
+Il y a une distinction fondamentale entre **chercher à impressionner** et **chercher à connecter**. La première orientation trahit un besoin. La seconde exprime une générosité. Et les gens perçoivent la différence avec une précision redoutable.
+
+Les personnes à haute aura sociale maîtrisent l'art du silence actif. Elles ne remplissent pas l'espace par peur du vide. Elles laissent les silences exister, ce qui leur confère un poids que les bavards n'auront jamais. *Chaque mot devient précieux parce qu'il est rare.*
+
+**Les 5 principes de présence sociale :**
+
+— Écoute totale : arrête de préparer ta réponse. Écoute vraiment
+— Maîtrise l'entrée : prends l'espace avant de chercher à interagir
+— Prends position : assumer une opinion ferme est une des manifestations les plus puissantes du magnétisme
+— Dis moins, impacte plus : une phrase placée au bon moment vaut mille mots
+— Ne justifie pas : chaque surexplication trahit le besoin d'être approuvé`,
+        insight:`L'aura sociale ne dépend pas de l'approbation des autres — mais elle se teste dans leur regard.`,
+        exercise:{
+          title:'Le Défi du Silence — 7 jours',
+          body:`Pendant une semaine, dans chaque conversation, impose-toi une règle : parler **30% moins** que d'habitude.
+
+Observe ce qui se passe. Qui comble le vide ? Comment les gens te regardent-ils différemment quand tes mots sont rares ?
+
+Le silence inconfortable que tu crées chez les autres est le signe que ta présence a du poids.`
+        },
+        journal:'Qu\'as-tu observé quand tu as parlé moins ? Comment les dynamiques ont-elles changé dans tes conversations ?',
+        quizContext:'La présence sociale est le troisième pilier. Elle n\'est pas synonyme d\'extraversion. L\'écoute totale, le silence actif, prendre position sans se justifier et dire moins sont les marques d\'une haute présence sociale. Chercher à impressionner trahit un besoin. Chercher à connecter exprime une générosité.'
+      },
+      {
+        id:'l1-5', title:'L\'Environnement de Vie',
+        tag:'Pilier 4',
+        concept:`Tu es le produit de ce qui t'entoure — les personnes, les espaces, les habitudes, les contenus. L'aura ne se maintient pas dans un environnement toxique, peu importe la force de ta volonté.
+
+Jim Rohn disait que tu es la moyenne des cinq personnes que tu fréquentes le plus. Cette vérité est inconfortable parce qu'elle implique des choix difficiles. **Mais les personnes à haute aura l'ont compris avant toi.**
+
+Au-delà des relations, ton environnement physique parle de toi — à toi. Un appartement en ordre, un corps reposé, une routine matinale solide : tout cela envoie à ton cerveau le signal que tu es quelqu'un qui prend soin de lui-même. Et cette conviction se traduit en aura.
+
+**Les 5 leviers d\'environnement :**
+
+— Curete ton cercle : réduire le temps avec ceux qui drainent ou normalisent la médiocrité
+— Construis une routine ancrante : lever tôt, bouger, créer avant de consommer
+— Limite les poisons silencieux : réseaux passifs, alcool excessif, manque de sommeil
+— Crée la cohérence espace-identité : ton appartement fait-il écho à qui tu veux être ?
+— Protège ton énergie : apprendre à dire non est l'acte de quelqu'un qui sait ce qu'il vaut`,
+        insight:`Un athlète de haut niveau contrôle son alimentation, son sommeil, son entourage, son mental. Ce n'est pas de la paranoïa. C'est de la précision.`,
+        exercise:{
+          title:'L\'Audit d\'environnement',
+          body:`Fais le tour de ta vie en 4 colonnes : personnes, espaces, contenus consommés, habitudes quotidiennes.
+
+Pour chaque élément, réponds honnêtement : est-ce que ça élève ou ça draine mon niveau d'aura ?
+
+Identifie une chose à éliminer et une chose à renforcer cette semaine.`
+        },
+        journal:'Qu\'as-tu découvert dans ton audit d\'environnement ? Quelle est la chose la plus urgente à changer ?',
+        quizContext:'L\'environnement de vie est le quatrième pilier. L\'entourage, l\'espace physique, les contenus consommés et les habitudes influencent directement l\'aura. La routine matinale, la protection de l\'énergie et la cohérence entre l\'espace et l\'identité sont des leviers concrets. Dire non est une marque de respect de soi.'
+      },
+      {
+        id:'l1-6', title:'L\'Aura & le Sport',
+        tag:'Laboratoire',
+        concept:`Le sport est le laboratoire de l'aura. Nulle part ailleurs la transformation intérieure ne se traduit aussi directement en réalité physique.
+
+Les plus grands athlètes de l'histoire ne sont pas seulement des corps entraînés — ce sont des auras vivantes. **Kobe Bryant** avait ce qu'il appelait la Mamba Mentality — une obsession de la maîtrise qui débordait bien au-delà du basket. Ce n'était pas de la confiance. C'était de la *certitude*.
+
+Le sport enseigne trois leçons d'aura que la vie ordinaire n'enseigne pas :
+
+— **La gestion de la pression** : performer quand l'enjeu est maximal est le test ultime de l'ancrage intérieur
+— **Le langage du corps sous stress** : dans le sport, on ne peut pas mentir. La posture sous la défaite révèle l'homme
+— **La discipline comme identité** : l'athlète qui s'entraîne à 5h du matin n'est pas en train de faire du sport. Il est en train de décider qui il est.
+
+Tu n'as pas besoin d'être athlète professionnel. Tu as besoin de trouver ton arène — la discipline dans laquelle tu choisis l'excellence.`,
+        insight:`L'aura naît dans l'arène où tu choisis la difficulté quand personne ne regarde.`,
+        exercise:{
+          title:'Le Rituel du Champion',
+          body:`Avant ta prochaine session physique, prends 60 secondes : posture droite, respiration profonde, intention claire.
+
+Après la session, pose-toi la question : <em>"Ai-je été la version de moi que j'admire ?"</em>
+
+La régularité de ce rituel construit, pierre par pierre, l'identité d'une personne qui fait ce qu'elle dit.`
+        },
+        journal:'Comment le sport ou l\'activité physique reflète-t-il ton niveau d\'aura actuel ? Qu\'est-ce que ton corps dit de toi quand tu es sous pression ?',
+        quizContext:'Le sport est un laboratoire de l\'aura car il révèle l\'état intérieur sans possibilité de le masquer. La discipline physique construit l\'identité. La façon dont on se comporte sous pression sportive révèle l\'ancrage intérieur réel. Le rituel pré-session ancre intentionnellement l\'état mental.'
+      },
+      {
+        id:'l1-7', title:'Le Plan Concret — Phase I',
+        tag:'Action — Jours 1-30',
+        concept:`La connaissance sans action est une distraction coûteuse. La Phase I est celle du **nettoyage** : avant de construire, on retire.
+
+Cette phase est inconfortable — parce qu'elle te demande de regarder en face les habitudes, les comportements et les environnements qui sabotent silencieusement ton aura.
+
+**Semaines 1-2 : L'Audit complet**
+Identité, corps, cercle, environnement. Qu'est-ce qui doit partir ? Qu'est-ce qui doit rester ? Qu'est-ce qui doit être construit ?
+
+**Semaines 3-4 : L'Élimination**
+Coupe une habitude toxique. Réduis le temps passé avec une personne drainante. Range ton espace de vie. Dors 7-8h par nuit sans négociation.
+
+Ces 30 jours ne visent pas à tout transformer. Ils visent à prouver à ton cerveau que tu es quelqu'un qui fait ce qu'il dit. **C'est ça, la racine de l'aura.**`,
+        insight:`La discipline n'est pas ce que tu fais quand tu es motivé. C'est ce que tu fais quand tu ne l'es pas.`,
+        exercise:{
+          title:'Lancer le Tracker 90 Jours',
+          body:`Si tu as le Tracker 90 Jours, ouvre-le maintenant. Remplis ta première semaine.
+
+Si tu ne l'as pas : crée un simple tableau hebdomadaire avec les 4 piliers. Note chaque jour ce que tu as fait ou pas fait. L'honnêteté est plus importante que la performance.`
+        },
+        journal:'Quel est le premier comportement ou habitude que tu t\'engages à éliminer pendant ces 30 jours ? Pourquoi celui-là en priorité ?',
+        quizContext:'La Phase I dure 30 jours et s\'appelle le Nettoyage. Elle consiste à identifier et éliminer ce qui sabote l\'aura avant de construire. Les 4 dimensions auditées sont l\'identité, le corps, le cercle social et l\'environnement. L\'objectif n\'est pas la perfection mais de prouver à son cerveau qu\'on fait ce qu\'on dit.'
+      },
+      {
+        id:'l1-8', title:'Le Plan Concret — Phase II',
+        tag:'Action — Jours 31-60',
+        concept:`La Phase II est celle de la **Construction**. Le nettoyage est fait. Place à la fondation.
+
+Cette phase est celle de la routine matinale, de l'engagement physique, de la discipline quotidienne. Ce que tu installes ici devient ton identité.
+
+**Semaines 5-6 : La Routine Ancrante**
+Lever à heure fixe, même le week-end. 30 minutes de mouvement au réveil. Création avant consommation. Intention matinale posée à l'écrit. Visualisation du soi à haute aura.
+
+**Semaines 7-8 : L'Identité Physique**
+Engage-toi dans un défi physique mesurable. Pas pour le corps — pour l'identité. Chaque session est une preuve de qui tu es en train de devenir.
+
+La routine n'est pas un outil de productivité. C'est un signal que tu envoies à ton inconscient : *"Je suis quelqu'un qui tient ses engagements avec lui-même."*`,
+        insight:`L'aura se construit dans le matin silencieux, avant que le monde ait commencé à faire ses demandes.`,
+        exercise:{
+          title:'Installer la Routine Matinale',
+          body:`Pendant 14 jours consécutifs, pratique la même routine matinale minimale :
+          
+1. Lever à la même heure
+2. 20 minutes de mouvement (peu importe la forme)  
+3. 5 minutes de silence ou de journaling
+4. Une intention pour la journée, posée à l'écrit
+
+Pas de téléphone pendant la première heure. C'est non-négociable.`
+        },
+        journal:'Après avoir tenu la routine quelques jours, qu\'est-ce qui a changé dans ton état général ? Dans comment les autres te perçoivent ?',
+        quizContext:'La Phase II dure du jour 31 au jour 60 et s\'appelle la Construction. Elle installe les rituels qui bâtissent l\'aura : routine matinale fixe, mouvement quotidien, création avant consommation. La routine n\'est pas un outil de productivité — c\'est un signal envoyé à l\'inconscient.'
+      },
+      {
+        id:'l1-9', title:'Le Plan Concret — Phase III',
+        tag:'Action — Jours 61-90',
+        concept:`La Phase III est celle de l'**Intégration**. Ce n'est plus un programme. C'est qui tu es.
+
+Cette phase te confronte aux situations réelles — pression, friction, exposition publique — pour ancrer définitivement ce que tu as construit.
+
+**Semaines 9-10 : La Friction**
+Mets-toi en situation sociale inconfortable une fois par semaine. Prise de parole, leadership dans un groupe, confrontation respectueuse d'un désaccord.
+
+**Semaines 11-12 : L'Ancrage Final**
+Bilan et ancrage. Qu'est-ce qui a changé ? Comment les autres te perçoivent-ils différemment ? Qu'est-ce qui reste à travailler ?
+
+Ce n'est pas une fin. C'est un nouveau point de départ. L'aura ne se maintient pas — elle grandit ou elle rétrécit. Il n'y a pas de milieu.`,
+        insight:`Dans 90 jours, tu ne seras pas quelqu'un de différent. Tu seras plus pleinement toi-même. Et c'est infiniment plus puissant.`,
+        exercise:{
+          title:'Bilan des 90 Jours',
+          body:`Réponds honnêtement à ces 4 questions :
+
+1. Quel pilier a le plus évolué ? Comment le mesures-tu concrètement ?
+2. Quel pilier résiste encore ? Qu'est-ce qui l'explique ?
+3. Comment les autres ont-ils changé leur façon de te percevoir ?
+4. Quel est ton prochain engagement pour les 90 jours suivants ?`
+        },
+        journal:'Écris une lettre à ton moi du Jour 1. Que veux-tu lui dire ?',
+        quizContext:'La Phase III dure du jour 61 au 90 et s\'appelle l\'Intégration. Elle consiste à tester l\'aura construite dans des situations réelles de friction et d\'exposition. L\'objectif est de prouver que les changements sont structurels, pas circonstanciels. L\'aura grandit ou rétrécit — il n\'y a pas de milieu.'
+      },
+      {
+        id:'l1-10', title:'Synthèse — AURA Level 1',
+        tag:'Synthèse',
+        concept:`Tu as parcouru les 4 piliers fondamentaux de l'aura. Avant de passer au Level 2, voici ce que tu dois avoir intégré — pas intellectuellement, mais dans tes actes.
+
+**Ce que l'aura EST :**
+— L'ensemble des signaux conscients et inconscients que tu émets
+— Le reflet externe de ton état intérieur réel
+— Quelque chose qui se révèle, pas qui se construit
+
+**Ce que l'aura N'EST PAS :**
+— Une technique ou un ensemble de comportements
+— Une performance ou un rôle à jouer
+— Quelque chose qui dépend de l'approbation des autres
+
+**Les 4 piliers opérationnels :**
+1. Socle intérieur — identité intentionnelle, valeurs claires, confiance non-conditionnelle
+2. Signal physique — posture, regard, voix, gestes économes, corps discipliné
+3. Présence sociale — écoute totale, silence actif, économie verbale, prise de position
+4. Environnement — cercle choisi, routine ancrante, espace cohérent avec l'identité
+
+Tu es prêt pour le Level 2 — celui qui va plus loin que la surface.`,
+        insight:`Le Level 1 t'a donné les outils. Le Level 2 te donne les clés que personne ne mentionne.`,
+        exercise:{
+          title:'Auto-évaluation finale Level 1',
+          body:`Score tes 4 piliers honnêtement de 1 à 10 aujourd'hui :
+
+— Socle intérieur : ___/10
+— Signal physique : ___/10  
+— Présence sociale : ___/10
+— Environnement de vie : ___/10
+
+Le pilier le plus faible est ton prochain chantier prioritaire.`
+        },
+        journal:'Quel est ton score sur chaque pilier ? Qu\'est-ce que ça révèle sur ton prochain travail prioritaire ?',
+        quizContext:'Le Level 1 couvre les 4 piliers fondamentaux de l\'aura. L\'aura est un reflet de l\'état intérieur réel — elle se révèle en retirant ce qui la cache. Elle n\'est pas une performance ni une technique. Les 4 piliers sont le socle intérieur, le signal physique, la présence sociale et l\'environnement de vie. Le Level 2 aborde les dimensions profondes : champ collectif, TFT, transgénérationnel.'
+      }
+    ]
+  },
+  {
+    id:'l2', title:'AURA Level 2', subtitle:'La Déconnexion',
+    color:'#1A6B5C', colorName:'l2-c',
+    lessons:[
+      {
+        id:'l2-1', title:'Le Champ Collectif — La Prison Invisible',
+        tag:'Secret 1',
+        concept:`Tu crois penser tes propres pensées. C'est en partie vrai. Mais une grande portion de ce que tu ressens, de ce dont tu as peur, de ce que tu juges acceptable — ne vient pas de toi. Ça vient du **champ**.
+
+Carl Jung l'appelait l'*inconscient collectif*. Rupert Sheldrake le nomme le *champ morphique*. Ce champ de résonance transmettant comportements et peurs entre individus sans contact physique.
+
+Le HeartMath Institute a démontré que le cœur génère un champ électromagnétique mesurable jusqu'à 3 mètres — et que ce champ encode et transmet des informations émotionnelles à d'autres systèmes nerveux.
+
+Le problème : **le champ collectif est majoritairement composé de peur, de conformisme et de limitation.** Ces émotions, amplifiées par des milliards d'humains en simultané, créent un courant qui tire chaque individu vers la moyenne.
+
+Les personnes à haute aura ont opéré une **désolidarisation partielle de ce champ**. Ce vide laissé a été comblé par quelque chose de plus puissant : leur propre signal.`,
+        insight:`Tu ne peux pas développer une aura puissante en restant branché à la conscience moyenne de ton époque.`,
+        exercise:{
+          title:'L\'Audit du Champ',
+          body:`Assieds-toi 10 minutes. Pour chaque peur ou croyance limitante que tu identifies, pose-toi cette question :
+
+<em>"Est-ce que j'aurais cette peur si j'avais grandi seul sur une île déserte ?"</em>
+
+Si non — cette peur vient du champ, pas de toi. Identifie-en 3. C'est ton terrain de travail pour les prochains jours.`
+        },
+        journal:'Quelles peurs ou limitations as-tu identifiées comme venant du champ plutôt que de toi-même ?',
+        quizContext:'Le champ collectif est un réservoir d\'énergie partagée (Jung : inconscient collectif, Sheldrake : champ morphique) composé majoritairement de peurs et de conformisme. Le HeartMath Institute a mesuré le champ électromagnétique du cœur jusqu\'à 3 mètres. La désolidarisation crée un espace dans lequel le signal personnel peut émerger. La plupart des peurs viennent du champ, pas de l\'individu.'
+      },
+      {
+        id:'l2-2', title:'La TFT — Dissoudre les fils invisibles',
+        tag:'Secret 2',
+        concept:`La Thought Field Therapy, développée par le **Dr Roger Callahan** dans les années 80, repose sur un principe : les perturbations émotionnelles sont des perturbations dans le champ d'énergie du corps, localisées sur des méridiens spécifiques. En tapotant ces points dans un ordre précis, on neutralise la charge émotionnelle.
+
+Plusieurs études ont montré des réductions significatives du cortisol après séances de TFT. Des recherches menées sur des populations traumatisées ont montré des taux de rémission de 80 à 90% pour les symptômes de PTSD.
+
+**Application pour l\'aura :** neutraliser les peurs sociales enkystées — peur du regard, peur du rejet, besoin compulsif d'approbation.
+
+**La Séquence de Base :**
+1. Activation : pense à la peur sociale. Note l'intensité sur 10.
+2. Tapotements (7x chacun) : sous l'œil → sous le bras → sous la clavicule → sourcil → tempe → sous le nez → sous la lèvre
+3. Pont neurologique (point gamut sur le dos de la main)
+4. Répéter la séquence
+5. Réévaluer l'intensité. Répéter jusqu'à descendre sous 2/10`,
+        insight:`Ce que tu ressens physiquement après une séance TFT réussie : un allègement soudain, une sensation d'espace dans la poitrine, une indifférence nouvelle à des jugements qui te paralysaient.`,
+        exercise:{
+          title:'Première Séance TFT',
+          body:`Identifie ta peur sociale principale (peur du regard, d'être jugé, du rejet).
+
+Note l'intensité de 1 à 10.
+
+Applique la séquence complète décrite ci-dessus, lentement, en gardant la peur en tête.
+
+Réévalue l'intensité après. Note le résultat dans ton journal.`
+        },
+        journal:'Quelle peur sociale as-tu travaillée ? Quelle était l\'intensité avant et après ? Qu\'as-tu ressenti physiquement ?',
+        quizContext:'La TFT a été développée par le Dr Roger Callahan. Elle neutralise les perturbations émotionnelles via des tapotements sur des points méridiens dans un ordre spécifique (algorithme). Elle a montré des taux de rémission de 80-90% pour le PTSD dans des études cliniques. Pour l\'aura, elle neutralise les peurs sociales : peur du regard, du rejet, besoin d\'approbation. L\'effet ressenti : allègement, espace dans la poitrine.'
+      },
+      {
+        id:'l2-3', title:'Penser par soi-même',
+        tag:'Secret 3',
+        concept:`Dans une civilisation de masse, penser par soi-même n'est pas une faculté — c'est une discipline. Une discipline que presque personne ne pratique vraiment.
+
+La réalité inconfortable : **la plupart de ce que les gens appellent "leurs opinions" sont des positions sociales déguisées en convictions personnelles.** Ils ne pensent pas — ils s'alignent.
+
+Le cerveau humain est câblé pour l'appartenance sociale. Exprimer une opinion différente de son groupe active les mêmes zones neurologiques que la douleur physique. La pression de conformité est **biologique**, pas psychologique.
+
+Les personnes à haute aura intellectuelle partagent une caractéristique : elles forment leur opinion **avant** de savoir ce que les autres pensent. Elles tolèrent d'être seules à avoir raison. Et cette capacité irradie — parce qu'une pensée qui naît de l'intérieur a une texture différente de celle importée du dehors.`,
+        insight:`Les penseurs autonomes parlent moins et pèsent plus. Chaque mot vient d'un lieu de conviction, pas de remplissage social.`,
+        exercise:{
+          title:'Le Protocole de la Page Blanche',
+          body:`Choisis un sujet sur lequel tu as une opinion (politique, travail, relation, société).
+
+Prends une feuille vierge. Écris d'abord ce que TU penses, seul, sans référence à ce que tu as lu ou entendu.
+
+Si tu es incapable d'articuler une opinion sans citer quelqu'un d'autre — tu n'as pas encore cette opinion. Tu as une appartenance.
+
+Pratique quotidiennement pendant 7 jours.`
+        },
+        journal:'Sur quel sujet as-tu découvert que tu avais une opinion "importée" plutôt que vraiment tienne ? Qu\'est-ce que tu penses vraiment ?',
+        quizContext:'Penser par soi-même est une discipline rare. La conformité est neurobiologique : s\'écarter de son groupe active les mêmes zones que la douleur physique. Les personnes à haute aura forment leur opinion avant de savoir ce que les autres pensent. Une pensée née de l\'intérieur a une texture différente perçue par les autres. L\'appartenance et la conviction sont deux choses distinctes.'
+      },
+      {
+        id:'l2-4', title:'Le Charisme Quantique',
+        tag:'Secret 5',
+        concept:`Le charisme authentique n'est pas de l'extraversion. Ce n'est pas de la séduction. C'est une **résonance** — le résultat d'un alignement si profond que le système nerveux des autres y répond instinctivement.
+
+Un laser est de la lumière cohérente : toutes les ondes alignées en fréquence et en phase. Cette cohérence lui donne une puissance qu'une lumière incohérente de même intensité ne peut pas avoir. **Le charisme fonctionne exactement de cette manière.**
+
+Le HeartMath Institute a montré que le cœur génère un champ 5000 fois plus puissant que le cerveau. Quand deux personnes sont en conversation, leurs champs se superposent. Si l'une est en haute cohérence cardiaque, son champ influence mesurément la variabilité cardiaque de l'autre.
+
+**Le Protocole Quick Coherence :**
+1. Focus cardiaque : concentre ton attention sur ton cœur, respire par là (5s/5s)
+2. Activation émotionnelle : évoque sincèrement un sentiment de gratitude ou d'appréciation
+3. Maintiens 3 à 5 minutes avant une interaction importante`,
+        insight:`Tu ne peux pas imiter le charisme. Tu peux seulement devenir la personne dont il émerge naturellement.`,
+        exercise:{
+          title:'Pratique du Quick Coherence',
+          body:`Avant ta prochaine interaction importante, pratique le protocole :
+
+1. Main sur le cœur, respiration 5s inspir / 5s expir
+2. Pense à quelqu'un ou quelque chose qui te donne de la gratitude sincère
+3. Maintiens 3 minutes
+
+Observe comment l'interaction se déroule différemment.`
+        },
+        journal:'Après avoir pratiqué le Quick Coherence avant une interaction, qu\'as-tu remarqué dans la qualité de l\'échange ? Dans la réaction de l\'autre ?',
+        quizContext:'Le charisme quantique est une résonance basée sur la cohérence interne — analogie avec le laser. Le HeartMath Institute a prouvé que le champ cardiaque est 5000x plus puissant que le cérébral et influence les autres. Le protocole Quick Coherence : focus cardiaque + respiration + émotion positive authentique pendant 3-5 minutes. Le charisme émerge de la complétude, pas de la performance.'
+      },
+      {
+        id:'l2-5', title:'Les Mémoires Transgénérationnelles',
+        tag:'Secret 6',
+        concept:`Une grande partie de ce qui limite ton aura ne t'appartient pas. Ce sont des peurs et des schémas que tu portes pour des personnes qui sont mortes avant ta naissance.
+
+L'**épigénétique transgénérationnelle** — démontrée par les travaux de **Rachel Yehuda** sur les descendants de survivants de l'Holocauste — a établi que des traumatismes vécus par une génération laissent des *marques épigénétiques* sur l'ADN, transmissibles aux générations suivantes.
+
+En termes simples : les peurs que ton grand-père a vécues intensément peuvent se manifester dans ton corps comme des réactions "inexpliquées" — des anxiétés sociales sans origine personnelle, des limites que tu n'arrives pas à dépasser.
+
+**La Cartographie Transgénérationnelle :**
+1. Dessine 3 générations de ta famille (toi, parents, grands-parents)
+2. Note pour chacun : traumatismes majeurs, honte sociale, secrets, ruptures, morts prématurées
+3. Identifie les thèmes qui reviennent entre les générations
+4. Prononce la phrase de libération pour les patterns identifiés`,
+        insight:`Tu n'es pas seulement toi. Tu es aussi tous ceux qui t'ont précédé. La question est : lesquels d'entre eux gouvernent encore ta vie ?`,
+        exercise:{
+          title:'La Phrase de Libération',
+          body:`Identifie une peur ou un schéma qui se répète dans ta famille sur plusieurs générations.
+
+Prononce à voix haute, debout :
+
+<em>"Je t'honore, [prénom de l'ancêtre]. Je reçois l'amour que tu m'as transmis. Et je te rends ce qui t'appartient — cette peur n'est pas la mienne à porter."</em>
+
+Simple. Souvent profondément libérateur.`
+        },
+        journal:'Quel pattern transgénérationnel as-tu identifié ? Comment se manifeste-t-il dans ta vie aujourd\'hui ?',
+        quizContext:'Les mémoires transgénérationnelles sont prouvées par l\'épigénétique (Rachel Yehuda, descendants de survivants de l\'Holocauste). Les traumatismes laissent des marques sur l\'ADN transmissibles aux générations suivantes. La cartographie familiale sur 3 générations révèle les patterns répétés. La phrase de libération permet de symboliquement rendre ce qui appartient aux ancêtres.'
+      },
+      {
+        id:'l2-6', title:'Le Silence comme Technologie',
+        tag:'Secret 7',
+        concept:`Le silence n'est pas l'absence de son. C'est un état **actif** dans lequel la conscience cesse de consommer l'énergie du champ collectif et commence à générer sa propre fréquence.
+
+Imke Kirste (Duke, 2013) a découvert que deux heures de silence quotidien stimulent la neurogenèse dans l'hippocampe. Le silence n'est pas passif : il est **génératif**.
+
+Dans une civilisation de bruit permanent, le silence maîtrisé est devenu la ressource la plus rare. Et ce qui est rare magnétise.
+
+**Les 3 niveaux de silence actif :**
+
+— **Niveau 1** : 20 minutes/jour sans stimulus sonore. Observer ce qui émerge du vide
+— **Niveau 2** : La pause de 3 secondes systématique avant chaque réponse en conversation
+— **Niveau 3** : 30 minutes de méditation quotidienne avec discrimination entre pensées internes et pensées importées du champ
+
+**Le jeûne informationnel :** 48h sans médias, réseaux et divertissement une fois par mois. Ce qui émerge dans ce silence révèle ce que tu penses vraiment.`,
+        insight:`Dans un monde qui s'accélère, celui qui ralentit fascine. La lenteur maîtrisée signale une indépendance du tempo collectif.`,
+        exercise:{
+          title:'Le Silence Niveau 1 — 14 jours',
+          body:`Pendant 14 jours, réserve 20 minutes par jour à un silence total :
+
+— Pas de musique, pas de podcast, pas d'écran
+— Assis, debout ou en marchant
+— Laisse les pensées passer sans les suivre
+— Note en fin de session ce qui a émergé
+
+Note : les 3 premiers jours sont difficiles. C'est précisément là que le travail commence.`
+        },
+        journal:'Qu\'as-tu découvert dans les premiers silences ? Quelles pensées ont émergé que le bruit habituellement masque ?',
+        quizContext:'Le silence actif est générateur, pas passif. Imke Kirste (Duke 2013) a prouvé que 2h de silence quotidien stimulent la neurogenèse. Il y a 3 niveaux : silence externe (20min/jour), pause de 3 secondes en conversation, et méditation de discrimination. Le jeûne informationnel de 48h mensuel permet d\'identifier ses vraies pensées. Le silence se désolidarise du champ collectif.'
+      },
+      {
+        id:'l2-7', title:'La Communication Énergétique',
+        tag:'Bonus',
+        concept:`La communication à haute aura n'est pas une technique. C'est une posture. La question fondamentale n'est pas *ce que tu dis* — c'est *depuis quoi tu parles*.
+
+Est-ce que tu parles depuis un lieu de **besoin** — besoin d'être compris, approuvé, cru ? Ou depuis un lieu de **plénitude** — partageant quelque chose parce que tu as quelque chose à partager ?
+
+Cette distinction est perceptible à plusieurs mètres. Le système nerveux de l'auditeur détecte immédiatement si l'émetteur est en état de besoin ou de plénitude.
+
+**Les 5 principes de communication énergétique :**
+
+1. **Pré-ancrage** : Quick Coherence avant chaque échange important
+2. **Intention de service** : "Qu'est-ce que je veux que l'autre reçoive ?" (pas obtienne de moi)
+3. **Écoute totale** : écouter avec le corps, pas seulement l'intellect
+4. **Le mot juste, rare** : dire la chose la plus vraie — une fois, sans précautions
+5. **La clôture intentionnelle** : savoir quand une conversation est terminée`,
+        insight:`Ce n'est pas ce que tu dis qui touche les gens. C'est l'état depuis lequel tu le dis.`,
+        exercise:{
+          title:'L\'Intention de Service',
+          body:`Avant ta prochaine conversation importante, prends 60 secondes pour te demander :
+
+<em>"Qu'est-ce que je veux que cette personne reçoive de cet échange ?"</em>
+
+Pas ce que tu veux obtenir. Ce que tu veux **donner**.
+
+Cette simple inversion d'orientation modifie instantanément ton état nerveux — et la qualité de l'échange.`
+        },
+        journal:'Quand tu as renversé l\'orientation (du besoin vers le don) dans une conversation, comment cela a-t-il changé la qualité de l\'échange ?',
+        quizContext:'La communication énergétique dépend de l\'état depuis lequel on parle (besoin ou plénitude). Les 5 principes sont : pré-ancrage via Quick Coherence, intention de service (que veut-on donner ?), écoute totale avec le corps, économie verbale, et clôture intentionnelle. Le système nerveux de l\'auditeur détecte l\'état du locuteur avant même les mots.'
+      },
+      {
+        id:'l2-8', title:'Ancrage Quantique — Construire son Champ',
+        tag:'Avancé',
+        concept:`Une fois déconnecté partiellement du champ collectif, il ne suffit pas de flotter dans le vide. Les personnes à haute aura ont construit ce qu'on peut appeler un **champ personnel** — une bulle d'énergie cohérente, stable, identifiable, qui précède leur présence physique.
+
+Ce champ se construit par :
+
+— **La congruence radicale** : être exactement la même personne dans tous les contextes
+— **L'intention consciente** : orienter délibérément chaque jour vers ce qui compte
+— **Le travail sur les mémoires** : libérer les traumatismes enkystés qui créent des fuites énergétiques
+— **Des pratiques quotidiennes** : cohérence cardiaque, silence actif, journaling
+
+**Le Stack Quotidien Avancé :**
+Matin : 5 min Quick Coherence + 10 min silence + 5 min journaling autonome
+Journée : 1 séance TFT hebdomadaire + pause 3s systématique + 1 pensée du champ questionnée
+Soir : 10 min bilan de cohérence — où ai-je cherché l'approbation ? Où suis-je resté ancré ?`,
+        insight:`Le champ personnel ne se construit pas. Il s'installe naturellement quand les interférences du champ collectif sont suffisamment réduites.`,
+        exercise:{
+          title:'Le Stack Quotidien — Première Semaine',
+          body:`Pendant 7 jours, applique le stack :
+
+**Matin (20 min) :** Quick Coherence → Silence → Journaling
+**Soir (10 min) :** Bilan de cohérence : dans quels moments ai-je cherché l'approbation ? Dans quels moments suis-je resté ancré ?
+
+Pas de jugement. De l'observation.`
+        },
+        journal:'Après une semaine de stack quotidien, qu\'est-ce qui a changé dans ta façon d\'entrer dans les situations sociales ?',
+        quizContext:'Le champ personnel est une bulle d\'énergie cohérente construite par la congruence radicale, l\'intention consciente, la libération des traumatismes et des pratiques quotidiennes. Le stack quotidien combine Quick Coherence, silence actif et journaling le matin, et un bilan de cohérence le soir. Les fuites énergétiques viennent des traumatismes non résolus et des contradictions identitaires.'
+      },
+      {
+        id:'l2-9', title:'Intégration Level 2',
+        tag:'Intégration',
+        concept:`Tu as parcouru les 7 secrets du Level 2. Voici la synthèse de ce que tu dois avoir non pas compris — mais **commencé à vivre**.
+
+**Les 7 Secrets en un regard :**
+
+1. **Champ collectif** — comprendre la prison invisible et identifier ce qui vient de toi vs du champ
+2. **TFT** — dissoudre les peurs sociales enkystées, descendre sous 2/10 sur chaque peur travaillée
+3. **Pensée autonome** — former ses opinions avant de savoir ce que les autres pensent
+4. **Charisme quantique** — cohérence cardiaque comme base biologique du magnétisme
+5. **Transgénérationnel** — identifier et rendre ce qui appartient aux ancêtres
+6. **Silence** — 20 minutes quotidiennes au minimum, jeûne informationnel mensuel
+7. **Communication énergétique** — parler depuis la plénitude, pas depuis le besoin
+
+**Ce qui change structurellement :**
+Les gens ressentent quelque chose de différent avant même que tu aies parlé. Ton silence a du poids. Ta présence crée de l'espace plutôt qu'elle ne le cherche.`,
+        insight:`Tu n'es plus en train de travailler ton aura. Tu es en train de la laisser exister.`,
+        exercise:{
+          title:'Quiz de Positionnement Level 2',
+          body:`Note honnêtement de 0 à 5 :
+
+— J'identifie mes peurs qui viennent du champ vs de moi : ___/5
+— J'ai pratiqué TFT sur ma peur principale : ___/5
+— Je forme mes opinions avant de consulter les autres : ___/5
+— Je pratique le Quick Coherence avant les interactions : ___/5
+— J'ai fait une cartographie transgénérationnelle : ___/5
+— Je pratique 20min de silence quotidien : ___/5
+
+Total : ___/30. Moins de 20 → recommence depuis le secret le plus faible.`
+        },
+        journal:'Quel secret du Level 2 a eu l\'impact le plus profond sur toi ? Lequel résiste encore ? Pourquoi selon toi ?',
+        quizContext:'L\'intégration du Level 2 signifie avoir non seulement compris mais commencé à vivre les 7 secrets. Les changements structurels incluent : présence ressentie avant les mots, silence avec du poids, espace créé plutôt que cherché. Le Level 2 complète le Level 1 en travaillant les dimensions profondes (champ, trauma, héritage) que la surface ne peut pas atteindre.'
+      },
+      {
+        id:'l2-10', title:'Vers le Manifeste',
+        tag:'Transition',
+        concept:`Les deux premiers programmes ont posé les fondations : une aura de surface solide (Level 1) et une déconnexion des interférences profondes (Level 2).
+
+Il reste une dimension que peu de programmes abordent : le **leadership naturel**. Non pas comme une compétence à apprendre — mais comme une conséquence inévitable de ce que tu as construit.
+
+Le Manifeste du Leadership Naturel est la synthèse finale. Il ne t'apprendra pas à diriger les autres. Il te montrera pourquoi, quand on est suffisamment ancré en soi-même, les autres s'organisent naturellement autour de cette présence.
+
+**Ce qui t'attend dans le Manifeste :**
+
+— Les 6 lois du leadership qui émerge sans le chercher
+— La voix comme champ de force neurologique
+— Le calme sous pression qui crée la hiérarchie perçue
+— La vision qui oriente plutôt que qui convainc
+— Les 3 signatures du leader silencieux
+— Des exercices pratiques pour chacune
+
+Tu n'as pas besoin d'être prêt. Tu l'es déjà — peut-être sans le savoir encore.`,
+        insight:`Le leadership naturel n'est pas ce que tu fais. C'est ce qui reste de toi quand tu as cessé de performer.`,
+        exercise:{
+          title:'Réflexion de Transition',
+          body:`Avant de passer au Manifeste, réponds à cette question par écrit :
+
+<em>"Dans ma vie — professionnelle, sociale, intime — dans quel contexte est-ce que j'exerce déjà un leadership naturel sans le chercher ?"</em>
+
+Ce que tu identifies là est la graine. Le Manifeste te donnera les outils pour la faire pousser.`
+        },
+        journal:'Dans quel(s) domaine(s) exerçes-tu déjà un leadership naturel ? Comment se manifeste-t-il concrètement ?',
+        quizContext:'La transition vers le Manifeste du Leadership Naturel représente le passage de l\'aura individuelle au leadership collectif. Le leadership naturel est une conséquence de l\'ancrage profond — pas une compétence apprise. Il s\'agit d\'être suffisamment aligné pour que les autres s\'organisent naturellement autour de cette présence. Les 6 lois du Manifeste incluent paradoxe, cohérence, voix, calme, vision et constance.'
+      }
+    ]
+  },
+  {
+    id:'l3', title:'Manifeste du Leadership', subtitle:'Leadership Naturel',
+    color:'#8B3A1A', colorName:'l3-c',
+    lessons:[
+      {
+        id:'l3-1', title:'Loi I — Le Paradoxe du Leadership',
+        tag:'Loi 1',
+        concept:`Le paradoxe fondamental du leadership naturel : il émerge exactement au moment où tu cesses de le chercher. Pas par accident — par mécanique.
+
+Vouloir être un leader, c'est vouloir être *perçu* comme un leader. C'est orienter son énergie vers ce que les autres pensent. Et cette orientation extérieure crée précisément la dépendance au champ collectif que le Level 2 cherchait à dissoudre.
+
+Les neurosciences sociales sont claires : le cerveau humain détecte en quelques secondes si un individu est en état de **besoin** ou de **plénitude**. Le besoin de reconnaissance hiérarchique s'exprime dans le tonus musculaire, la variabilité cardiaque, le pattern de regard. Il est visible. Et il contredit précisément l'autorité qu'il cherche à établir.
+
+Les recherches de **Dacher Keltner** à Berkeley montrent que les individus perçus comme ayant le plus d'autorité naturelle sont orientés vers autrui — pas vers eux-mêmes. Ce paradoxe d'attention crée l'attraction que les autres perçoivent comme du charisme.`,
+        insight:`Cesse de vouloir diriger. Le groupe s'organise autour de celui qui n'en a pas besoin.`,
+        exercise:{
+          title:'Le Miroir Inversé',
+          body:`Avant ta prochaine réunion, présentation ou moment de leadership, remplace la question habituelle :
+
+❌ <em>"Qu'est-ce que je veux qu'on pense de moi ?"</em>
+
+Par :
+
+✓ <em>"Qu'est-ce que je veux que cette personne ou ce groupe reçoive de cet échange ?"</em>
+
+Cette inversion change ton état nerveux. Et les autres le ressentent avant que tu aies dit un mot.`
+        },
+        journal:'Dans quelle situation as-tu appliqué le miroir inversé ? Comment l\'échange s\'est-il déroulé différemment ?',
+        quizContext:'La Loi I est le paradoxe du leadership : il émerge quand on cesse de le chercher. Le besoin de reconnaissance hiérarchique est détectable biologiquement (tonus, variabilité cardiaque, regard). Les recherches de Dacher Keltner (Berkeley) montrent que les vrais leaders sont orientés vers autrui. Le miroir inversé remplace "que pensent-ils de moi ?" par "que veux-je leur donner ?"'
+      },
+      {
+        id:'l3-2', title:'Loi II — La Cohérence Interne',
+        tag:'Loi 2',
+        concept:`L'autorité ne s'octroie pas. Elle émerge de la cohérence — de l'alignement visible entre ce qu'on dit, ce qu'on fait, ce qu'on ressent et ce qu'on est.
+
+La cohérence, c'est l'absence de contradiction entre les différentes couches de soi. Quand ce qu'un individu exprime en public correspond à ce qu'il vit en privé — le système nerveux des autres le détecte immédiatement comme *fiable*.
+
+Les études en **hyperscanning** — IRM simultanée de plusieurs personnes en interaction — montrent que les cerveaux d'un groupe se synchronisent sur celui qui présente la cohérence interne la plus élevée. **La personne la plus cohérente dans la pièce devient le point d'ancrage neurologique du groupe.**
+
+C'est le mécanisme du leadership naturel. Non pas par statut ou par compétence — par résonance.
+
+**Le Protocole 21 Jours :**
+J1-7 : identifier chaque soir les contradictions entre valeurs déclarées et comportements réels
+J8-14 : chaque matin, un acte concret d'alignement. Un seul, petit mais réel
+J15-21 : règle du miroir : n'affirmer que ce qu'on s'applique à soi-même`,
+        insight:`Tu peux tromper un cerveau conscient avec des mots. Tu ne peux pas tromper un système nerveux avec une incohérence interne.`,
+        exercise:{
+          title:'Le Protocole 21 Jours — Semaine 1',
+          body:`Pendant 7 jours, chaque soir, prends 5 minutes et note honnêtement :
+
+<em>"Aujourd'hui, à quels moments ai-je agi en contradiction avec ce que je dis être ?"</em>
+
+Pas de jugement. De l'observation pure. Ce mapping est la condition préalable à la cohérence réelle.`
+        },
+        journal:'Quelles contradictions entre tes valeurs déclarées et tes comportements réels as-tu identifiées cette semaine ?',
+        quizContext:'La Loi II est la cohérence interne comme fondement de l\'autorité. L\'hyperscanning (IRM simultanée) montre que les cerveaux d\'un groupe se synchronisent sur l\'individu le plus cohérent. La cohérence est l\'alignement entre valeurs, pensées, émotions et actes. Le Protocole 21 Jours : J1-7 identification des contradictions, J8-14 actes d\'alignement, J15-21 règle du miroir.'
+      },
+      {
+        id:'l3-3', title:'Loi III — La Voix comme Champ de Force',
+        tag:'Loi 3',
+        concept:`La voix est l'outil de leadership le plus sous-estimé. Elle ne transmet pas seulement des mots — elle transporte un état entier.
+
+Les caractéristiques vocales sont traitées par le **système limbique avant que le cortex ne traite le sens des mots**. Ce que ton interlocuteur ressent de toi, il le ressent dans sa cage thoracique avant de le comprendre dans son cerveau.
+
+Une voix grave et résonante active le **nerf vague** du système nerveux parasympathique chez l'auditeur. Elle induit physiologiquement un état de calme et de réceptivité.
+
+**Une étude de Yale et Princeton** a démontré que des investisseurs pouvaient prédire le niveau de rémunération d'un PDG — uniquement sur 10 secondes de voix, sans les mots.
+
+**Les 4 Leviers :**
+
+1. **Résonance thoracique** : parler depuis la poitrine (5 min de lecture orale/matin)
+2. **Rythme à 70%** : ralentir délibérément — les pressés ont peur de ne pas être écoutés
+3. **Fin de phrase descendante** : affirmer plutôt que chercher validation
+4. **Pause de 2 secondes** avant les mots importants`,
+        insight:`Une voix qui descend à la fin des phrases affirme. Une voix qui monte demande une validation.`,
+        exercise:{
+          title:'Les 4 Leviers Vocaux — Semaine 1',
+          body:`Cette semaine, travaille un seul levier : la **résonance thoracique**.
+
+Chaque matin, 5 minutes de lecture à voix haute à partir de n'importe quel texte. Place une main sur ton sternum. Si tu ne sens pas de vibration, baisse légèrement la voix et cherche la résonance.
+
+Ce réentraînement prend 3 à 4 semaines pour devenir automatique.`
+        },
+        journal:'As-tu senti la différence dans les réactions des autres quand ta voix est plus grave et plus lente ? Décris une situation concrète.',
+        quizContext:'La Loi III traite de la voix comme champ de force. Les caractéristiques vocales sont traitées par le système limbique avant les mots. La voix grave active le nerf vague et induit la réceptivité. L\'étude Yale/Princeton : les investisseurs prédisent la rémunération des PDG sur 10s de voix seule. Les 4 leviers : résonance thoracique, rythme à 70%, fin descendante, pause de 2 secondes.'
+      },
+      {
+        id:'l3-4', title:'Loi IV — Le Calme sous Pression',
+        tag:'Loi 4',
+        concept:`Dans tout groupe humain sous pression, une hiérarchie émergente se forme en quelques secondes. Non pas basée sur les titres ou les compétences — mais sur **qui reste le plus calme**.
+
+Le système nerveux collectif s'organise autour de l'individu dont l'état interne est le plus stable. C'est automatique. C'est animal.
+
+Sous pression, le système nerveux sympathique s'active chez la plupart des individus — rythme cardiaque accéléré, respiration haute, activation de l'amygdale. L'individu qui maintient un **calme actif** dans cet environnement signale quelque chose de fondamental à tous les autres : *"ici, il y a quelqu'un qui a les ressources pour traverser ça."*
+
+**Les 3 outils du calme sous pression :**
+
+— **Le Décalage de Rythme** : quand le groupe accélère, tu ralentis. Gestes plus rares, voix plus lente, respiration abdominale
+— **Le 4-7-8** : inspire 4s, retiens 7s, expire 8s. Active le nerf vague en 90 secondes
+— **L'Ancrage Somatique** : ramener l'attention dans les pieds et leur contact avec le sol. Coupe la rumination instantanément`,
+        insight:`Ce n'est pas celui qui parle le plus fort qui rassure la meute. C'est celui dont le pouls ne monte pas.`,
+        exercise:{
+          title:'Le 4-7-8 en situation',
+          body:`Avant ta prochaine situation stressante (réunion difficile, confrontation, prise de parole), pratique discrètement :
+
+Inspire 4 secondes. Retiens 7 secondes. Expire 8 secondes. Répète 3 fois.
+
+C'est invisible pour les autres. Son effet sur ta présence ne l'est pas.`
+        },
+        journal:'Dans quelle situation de pression as-tu appliqué le décalage de rythme ou le 4-7-8 ? Quel a été l\'effet sur toi ? Sur les autres ?',
+        quizContext:'La Loi IV : le calme sous pression crée la hiérarchie perçue. Le groupe s\'organise autour de l\'individu le plus stable — mécanisme automatique et animal. Les 3 outils : décalage de rythme (ralentir quand les autres accélèrent), protocole 4-7-8 (active le nerf vague en 90s), ancrage somatique (attention dans les pieds pour couper la rumination).'
+      },
+      {
+        id:'l3-5', title:'Loi V — La Vision qui Oriente',
+        tag:'Loi 5',
+        concept:`Les leaders naturels ne convainquent pas — ils **orientent**. La différence est fondamentale.
+
+Convaincre agit sur le jugement rationnel. Orienter donne à l'autre une direction vers laquelle son énergie peut naturellement se diriger.
+
+L'être humain ne cherche pas seulement à réussir. Il cherche à s'inscrire dans quelque chose qui le dépasse. Et le leader naturel est précisément celui qui a une vision assez claire, assez profonde, assez *réelle* — pour que les autres puissent y trouver leur propre sens.
+
+Les recherches de **Richard Boyatzis** (Case Western Reserve) montrent que les leaders orientés vers un idéal positif activent le réseau neuronal parasympathique chez leurs interlocuteurs — celui de l'ouverture, la créativité et la motivation intrinsèque. À l'inverse, les leaders orientés problème activent le système sympathique : stress et conformité.
+
+**L'Exercice de la Vision en une Phrase :**
+1. Dans 10 ans, si tu regardes ta vie avec fierté — que s'est-il passé ?
+2. Quelle est la chose que tu construis qui continuera d'exister après toi ?
+3. Si tu pouvais changer une seule chose dans ton domaine — laquelle ?
+
+Synthétise en une phrase formulable en moins de 15 secondes.`,
+        insight:`Tu n'as pas à convaincre les gens de te suivre. Tu as à marcher avec assez de conviction pour qu'ils veuillent aller dans la même direction.`,
+        exercise:{
+          title:'La Vision en Une Phrase',
+          body:`Prends 20 minutes. Réponds aux 3 questions par écrit, de façon spontanée.
+
+Puis synthétise en une seule phrase ta direction de vie.
+
+Si tu mets plus de 15 secondes à la formuler sous pression — elle n'est pas encore assez ancrée pour rayonner. Continue de la travailler jusqu'à ce qu'elle soit aussi naturelle que ton prénom.`
+        },
+        journal:'Quelle est ta vision en une phrase ? Comment résonne-t-elle quand tu la lis à voix haute ? Qu\'est-ce qui manque encore ?',
+        quizContext:'La Loi V : la vision oriente plutôt que convaincre. Boyatzis (Case Western Reserve) : les leaders orientés vers un idéal positif activent le système parasympathique (ouverture, créativité) chez les autres, vs le système sympathique (stress, conformité) pour les leaders orientés problème. La vision doit être formulable en 15 secondes. Elle oriente sans persuader.'
+      },
+      {
+        id:'l3-6', title:'Loi VI — Les 3 Signatures du Leader Silencieux',
+        tag:'Loi 6',
+        concept:`Il existe un type de leadership que les livres ne mentionnent presque jamais — parce qu'il est impossible à imiter. Le **leadership silencieux** : perçu avant d'être vu, exercé sans le chercher.
+
+Les leaders silencieux partagent 3 signatures que personne ne formule explicitement.
+
+**Signature I — Ils font sentir aux autres qu'ils comptent vraiment**
+Ils n'écoutent pas pour répondre. Ils écoutent pour comprendre. Et cette qualité de présence, rarissime, crée une loyauté que aucun discours ne peut produire.
+
+**Signature II — Ils assument des positions que les autres évitent**
+Ils cherchent la vérité, pas le consensus. Et quand ils l'ont trouvée, ils la disent — calmement, fermement, même quand ça coûte quelque chose. Le cerveau humain associe la résistance à la pression sociale avec la compétence et l'intégrité.
+
+**Signature III — Ils restent les mêmes dans tous les contextes**
+Identiques en réunion formelle, en dîner informel, sous les projecteurs ou dans l'ombre. Cette constance n'est pas de la rigidité — c'est une forme de liberté. Et dans un monde où tout le monde ajuste sa persona selon l'audience, quelqu'un qui reste exactement lui-même partout est magnétique d'une façon que personne ne peut expliquer.`,
+        insight:`Voir les autres. Tenir ses positions. Rester identique partout. Là où ces trois éléments coexistent, le leadership naturel est inévitable.`,
+        exercise:{
+          title:'Exercice Signature I — L\'Écoute Totale',
+          body:`Pendant 7 jours, dans chaque conversation :
+
+— Ne prépare pas ta réponse pendant que l'autre parle
+— Attends 3 secondes après qu'il a terminé avant de répondre
+— Pose une question de profondeur (pas "ça va ?", mais "qu'est-ce qui compte vraiment pour toi là-dedans ?")
+
+Note en fin de journée comment les gens ont réagi différemment.`
+        },
+        journal:'Parmi les 3 signatures, laquelle est la plus naturelle pour toi ? Laquelle est la plus difficile ? Qu\'est-ce que ça révèle ?',
+        quizContext:'La Loi VI : les 3 signatures du leader silencieux. Signature I : faire sentir aux autres qu\'ils comptent vraiment (écoute pour comprendre, pas pour répondre). Signature II : assumer des positions que les autres évitent (résistance à la pression sociale = compétence perçue). Signature III : rester identique dans tous les contextes (constance = liberté, pas rigidité). Ces 3 signatures ensemble créent un leadership inévitable.'
+      },
+      {
+        id:'l3-7', title:'Exercices des 3 Signatures',
+        tag:'Pratique',
+        concept:`Chaque signature se cultive par des exercices spécifiques. Voici les pratiques les plus efficaces pour chacune.
+
+**Pour la Signature I (Voir les autres) :**
+— L'écoute totale avec la pause de 3 secondes
+— La question qui va plus loin ("qu'est-ce qui compte vraiment pour toi là-dedans ?")
+— Le mémo de reconnaissance : identifier chaque semaine une qualité spécifique chez quelqu'un et la lui dire
+
+**Pour la Signature II (Tenir ses positions) :**
+— La position avant le groupe : formuler son opinion par écrit avant une réunion, avant d'entendre les autres
+— Le désaccord respectueux : "Je comprends ton point de vue. Je maintiens ma position."
+— La pression simulée : demander à un ami de challenge ton opinion par pression sociale, pas par argument
+
+**Pour la Signature III (Rester identique) :**
+— L'audit des masques : 3 colonnes (professionnel, social, intime) — ce qui change selon le contexte
+— Le test du comportement privé : "Ai-je agi aujourd'hui comme si quelqu'un que j'admire m'observait en permanence ?"
+— La phrase-ancre vocale : formuler à voix haute chaque matin qui tu es, indépendamment du contexte`,
+        insight:`La constance est contagieuse. Quand les gens réalisent que tu n'as pas de version, leur façon de te regarder change.`,
+        exercise:{
+          title:'L\'Audit des Masques',
+          body:`Prends une feuille. Trois colonnes : professionnel, social, intime.
+
+Liste les comportements, opinions et attitudes que tu **modifies** selon le contexte.
+
+Ce mapping révèle où tu portes des masques. Chaque masque est une dépense d'énergie et une fuite dans ton champ de présence.
+
+L'objectif n'est pas tout révéler à tout le monde — c'est de ne plus avoir à jouer un rôle différent selon qui te regarde.`
+        },
+        journal:'Quels masques as-tu identifiés dans l\'audit ? Lequel coûte le plus d\'énergie à maintenir ? Que se passerait-il si tu l\'enlevais ?',
+        quizContext:'Les exercices des 3 signatures : Signature I (écoute totale, question de profondeur, mémo de reconnaissance), Signature II (position avant le groupe, désaccord respectueux, pression simulée), Signature III (audit des masques 3 colonnes, test du comportement privé, phrase-ancre vocale). Les masques coûtent de l\'énergie et créent des fuites dans le champ de présence.'
+      },
+      {
+        id:'l3-8', title:'Le Leadership dans le Quotidien',
+        tag:'Application',
+        concept:`Le leadership naturel ne se manifeste pas seulement dans les grands moments — il se construit dans les micro-moments du quotidien.
+
+**Au travail :**
+— La réunion difficile où tu gardes le rythme lent quand les autres s'emballent
+— L'opinion que tu exposes même si tu es seul à la défendre
+— La décision que tu prends sans avoir besoin d'un consensus préalable
+
+**Dans les relations :**
+— La conversation où tu écoutes vraiment plutôt que d'attendre ton tour
+— Le silence que tu laisses exister sans l'inconfort de le remplir
+— La limite que tu poses clairement, sans s'excuser ni surexposer
+
+**Dans le sport :**
+— Le moment de pression où tu ralentis ta respiration quand les autres accélèrent
+— La défaite que tu vis debout, sans chercher des excuses
+— L'effort que tu fais seul, quand personne ne regarde
+
+Chaque micro-moment est une vote. Un vote pour ou contre la personne que tu construis. Les votes s'accumulent. Et après assez de votes dans la même direction, l'identité devient évidente — pour toi, et pour les autres.`,
+        insight:`Tu ne construis pas ton leadership dans les moments d'exposition. Tu le révèles dans les moments ordinaires.`,
+        exercise:{
+          title:'Le Journal des Micro-Moments',
+          body:`Pendant 7 jours, identifie chaque soir un micro-moment de ta journée où tu as exercé — ou raté — un leadership naturel.
+
+Pas de grand événement requis. Une conversation, une décision, une réaction sous pression.
+
+Décris le moment, ce que tu as fait ou n'as pas fait, et ce que tu ferais différemment.`
+        },
+        journal:'Quel micro-moment de cette semaine t\'a appris quelque chose sur ton leadership naturel ? Décris-le avec précision.',
+        quizContext:'Le leadership naturel se manifeste dans les micro-moments : réunion difficile, opinion défendue seul, conversation authentique, limite posée, défaite vécue debout, effort invisible. Chaque micro-moment est un vote pour ou contre l\'identité qu\'on construit. L\'accumulation de votes dans la même direction crée une identité évidente. Le leadership se révèle dans l\'ordinaire, pas seulement dans l\'exceptionnel.'
+      },
+      {
+        id:'l3-9', title:'Le Stack Intégré — 90 Jours Avancés',
+        tag:'Protocole Final',
+        concept:`Tu as maintenant tous les éléments. Ce stack final intègre les 3 programmes en un protocole quotidien soutenable — pas une liste de 50 pratiques, mais les 5 à 7 qui ont le plus d'impact.
+
+**Matin (25-30 min) :**
+→ 5 min Quick Coherence (Level 2)
+→ 10 min silence actif (Level 2)
+→ 5 min journaling autonome : une opinion, une intention, une question de croissance (Level 1 + 2)
+→ Reset physique 5 min (Level 1)
+
+**Journée :**
+→ Décalage de rythme systématique (Manifeste)
+→ Pause de 3 secondes avant chaque réponse (Manifeste + Level 2)
+→ Une séance TFT hebdomadaire sur la peur la plus présente (Level 2)
+
+**Soir (10 min) :**
+→ Bilan de cohérence : où ai-je cherché l'approbation ? où suis-je resté ancré ? (Manifeste)
+→ Journal des micro-moments de leadership (Manifeste)
+
+**Mensuel :**
+→ Jeûne informationnel 48h (Level 2)
+→ Travail transgénérationnel : un pattern identifié et travaillé (Level 2)
+→ Relecture du quiz de positionnement pour mesurer la progression`,
+        insight:`Le meilleur programme est celui qu'on tient. Pas celui qui est le plus complet.`,
+        exercise:{
+          title:'Installer le Stack — Semaine 1',
+          body:`Commence par le minimum viable :
+
+**Matin :** Quick Coherence (5 min) + une intention écrite (2 min)
+**Soir :** une question : "Ai-je cherché l'approbation aujourd'hui ? Où ?"
+
+Une semaine. Tous les jours. Même le week-end.
+
+Ajoute un élément par semaine. En 4 semaines, le stack complet sera en place.`
+        },
+        journal:'Après avoir tenu le stack pendant une semaine, qu\'est-ce qui a le plus changé dans ton état général ? Dans tes interactions ?',
+        quizContext:'Le stack intégré combine les 3 programmes en 5-7 pratiques quotidiennes essentielles. Matin : Quick Coherence + silence + journaling autonome + reset physique. Journée : décalage de rythme, pause 3 secondes, TFT hebdomadaire. Soir : bilan de cohérence + journal des micro-moments. Mensuel : jeûne informationnel + travail transgénérationnel. Le principe : le meilleur programme est celui qu\'on tient.'
+      },
+      {
+        id:'l3-10', title:'Tu es arrivé',
+        tag:'Conclusion',
+        concept:`Tu as parcouru les 30 notions de ce programme. Ce n'est pas une fin — c'est un nouveau point de départ.
+
+Voici ce que tu as intégré :
+
+**Level 1 — Les fondations :**
+L'aura comme reflet de l'état intérieur. Les 4 piliers opérationnels. Le plan 90 jours.
+
+**Level 2 — La profondeur :**
+La déconnexion du champ collectif. TFT pour dissoudre les peurs sociales. Pensée autonome. Charisme quantique. Libération des mémoires transgénérationnelles. Silence comme technologie. Communication depuis la plénitude.
+
+**Manifeste — La conséquence :**
+Le paradoxe du leadership. Cohérence interne. Voix comme champ de force. Calme sous pression. Vision qui oriente. Les 3 signatures du leader silencieux.
+
+**Ce qui vient ensuite :**
+Continue le stack quotidien. Refais le quiz de niveau dans 30 jours. Identifie le prochain chantier. Transmets ce que tu as appris — c'est la forme la plus puissante d'intégration.
+
+L'aura ne se maintient pas — elle grandit ou elle rétrécit. Ce que tu fais demain matin, avant que le monde commence ses demandes, est la seule chose qui compte.`,
+        insight:`Tu n'es plus quelqu'un qui cherche son aura. Tu es quelqu'un qui la laisse exister — et qui sait maintenant comment y revenir quand elle s'éloigne.`,
+        exercise:{
+          title:'La Lettre Finale',
+          body:`Écris une lettre à ton moi du premier jour de ce programme.
+
+Qu'est-ce que tu lui dirais ?
+Qu'est-ce qui a vraiment changé ?
+Qu'est-ce que tu ne savais pas encore et que tu sais maintenant ?
+
+Cette lettre est pour toi. Et peut-être, un jour, pour quelqu'un qui commencera là où tu as commencé.`
+        },
+        journal:'Écris ta lettre au toi du premier jour. Prends le temps qu\'il faut.',
+        quizContext:'La conclusion intègre les 3 programmes : Level 1 (fondations, 4 piliers, plan 90j), Level 2 (champ collectif, TFT, pensée autonome, charisme, transgénérationnel, silence, communication), Manifeste (6 lois, 3 signatures). Le travail continue via le stack quotidien, le quiz mensuel et la transmission. L\'aura grandit ou rétrécit — le travail du matin en est la cause principale.'
+      }
+    ]
+  }
+];
+
+// ═══════════════════════════
+// STATE (localStorage)
+// ═══════════════════════════
+function getState(){
+  try{return JSON.parse(localStorage.getItem('aura_state'))||{completed:{},current:{b:0,l:0}};}
+  catch(e){return{completed:{},current:{b:0,l:0}};}
+}
+function setState(s){try{localStorage.setItem('aura_state',JSON.stringify(s));}catch(e){}}
+
+let STATE=getState();
+let QUIZ_DATA=null;
+let QUIZ_ANSWERS=[];
+let QUIZ_SHOWN=0;
+
+// ═══════════════════════════
+// INIT
+// ═══════════════════════════
+function totalLessons(){return CURRICULUM.reduce((a,b)=>a+b.lessons.length,0);}
+function doneCount(){return Object.keys(STATE.completed).length;}
+
+function globalPct(){return Math.round((doneCount()/totalLessons())*100);}
+
+function buildSidebar(){
+  const wrap=document.getElementById('sb-modules');
+  wrap.innerHTML='';
+  CURRICULUM.forEach((book,bi)=>{
+    const bookDiv=document.createElement('div');
+    bookDiv.className='sb-book';
+    const isOpenBook=STATE.current.b===bi;
+    const hdr=document.createElement('button');
+    hdr.className='sb-book-header'+(isOpenBook?' active open':'');
+    hdr.innerHTML=`<span class="sb-book-dot"></span><span style="flex:1;text-align:left;">${book.title}</span><span class="sb-book-arrow">›</span>`;
+    hdr.onclick=()=>{
+      const lessons=bookDiv.querySelector('.sb-lessons');
+      const isOpen=lessons.classList.contains('open');
+      document.querySelectorAll('.sb-lessons').forEach(l=>l.classList.remove('open'));
+      document.querySelectorAll('.sb-book-header').forEach(h=>h.classList.remove('open'));
+      if(!isOpen){lessons.classList.add('open');hdr.classList.add('open');}
+    };
+    const lessonsDiv=document.createElement('div');
+    lessonsDiv.className='sb-lessons'+(isOpenBook?' open':'');
+    book.lessons.forEach((lesson,li)=>{
+      const isDone=STATE.completed[lesson.id];
+      const isCurrent=STATE.current.b===bi&&STATE.current.l===li;
+      const btn=document.createElement('button');
+      btn.className='sb-lesson'+(isCurrent?' active':'')+(isDone?' done':'');
+      btn.innerHTML=`<span class="sl-icon">${isDone?'✓':isCurrent?'▶':'○'}</span><span class="sl-text">${lesson.title}</span>`;
+      btn.onclick=()=>loadLesson(bi,li);
+      lessonsDiv.appendChild(btn);
+    });
+    bookDiv.appendChild(hdr);
+    bookDiv.appendChild(lessonsDiv);
+    wrap.appendChild(bookDiv);
+  });
+  const pct=globalPct();
+  document.getElementById('sb-fill').style.width=pct+'%';
+  document.getElementById('sb-pct-lbl').textContent=pct+'%';
+  document.getElementById('tb-pct').textContent=pct+'%';
+}
+
+// ═══════════════════════════
+// LOAD LESSON
+// ═══════════════════════════
+function loadLesson(bi,li){
+  STATE.current={b:bi,l:li};
+  setState(STATE);
+  buildSidebar();
+  closeSidebar();
+  const book=CURRICULUM[bi];
+  const lesson=book.lessons[li];
+  const isDone=STATE.completed[lesson.id];
+  document.getElementById('tb-bc').innerHTML=`<strong>${book.title}</strong> — ${lesson.title}`;
+  // Render
+  const html=`
+    <div class="content">
+      <div class="lesson-header">
+        <div class="lh-book" style="color:${book.color}">${book.title} · ${book.subtitle}</div>
+        <h1 class="lh-title">${lesson.title.replace(/'/g,"'")}</h1>
+        <div class="lh-meta">
+          <div class="lh-tag">${lesson.tag}</div>
+          ${isDone?'<div class="lh-tag" style="color:var(--green);border-color:rgba(26,122,74,.3);">✓ Complété</div>':''}
+        </div>
+      </div>
+
+      <div class="concept-section">
+        <div class="cs-eye">Le concept</div>
+        <div style="font-size:16px;font-weight:300;color:var(--ink3);line-height:1.9;">${mdToHtml(lesson.concept)}</div>
+      </div>
+
+      <div class="insight">
+        <div class="insight-lbl">◈ À retenir</div>
+        <p>${lesson.insight.replace(/'/g,"'")}</p>
+      </div>
+
+      <div class="exercise">
+        <div class="ex-lbl">Exercice de la leçon</div>
+        <div class="ex-title">${lesson.exercise.title.replace(/'/g,"'")}</div>
+        <div class="ex-body">${lesson.exercise.body.replace(/'/g,"'")}</div>
+      </div>
+
+      <div class="journal-wrap">
+        <div class="journal-lbl">Journal de pratique</div>
+        <textarea class="journal-ta" id="journal-ta" placeholder="${lesson.journal.replace(/'/g,"'")}" rows="5">${STATE['journal_'+lesson.id]||''}</textarea>
+        <div style="margin-top:8px;">
+          <button class="btn btn-outline" style="font-size:11px;padding:10px 20px;" onclick="saveJournal('${lesson.id}')">Sauvegarder ma réflexion</button>
+        </div>
+      </div>
+
+      <!-- QUIZ ZONE -->
+      <div class="quiz-section" id="quiz-zone">
+        <div class="quiz-header">
+          <div class="quiz-lbl">Validation — Quiz IA</div>
+          <div class="quiz-title">Teste ta compréhension</div>
+          <div class="quiz-sub">Réponds à 3 questions pour valider cette notion et débloquer la suivante.</div>
+        </div>
+        <div id="quiz-inner">
+          <div style="text-align:center;padding:20px 0;">
+            <button class="btn btn-primary" onclick="startQuiz('${lesson.id}','${escJs(lesson.quizContext)}')">Lancer le quiz →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPLETION -->
+      <div class="completion ${isDone?'show':''}" id="completion-banner">
+        <div class="comp-icon">✦</div>
+        <div class="comp-title">Notion intégrée</div>
+        <p class="comp-sub">Tu as validé cette étape. La suivante t'attend.</p>
+        <button class="btn btn-gold" onclick="nextLesson()">Leçon suivante →</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('page-content').innerHTML=html;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function mdToHtml(text){
+  return text
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/\n\n/g,'</p><p class="body" style="margin-bottom:20px;">')
+    .replace(/^(.)/,'<p class="body" style="margin-bottom:20px;">$1')
+    +'</p>';
+}
+
+function escJs(s){return s.replace(/'/g,"\\'").replace(/\n/g,' ');}
+
+function saveJournal(id){
+  const val=document.getElementById('journal-ta')?.value||'';
+  STATE['journal_'+id]=val;
+  setState(STATE);
+  // small feedback
+  const btn=event.target;
+  btn.textContent='Sauvegardé ✓';
+  btn.style.color='var(--green)';
+  btn.style.borderColor='var(--green)';
+  setTimeout(()=>{btn.textContent='Sauvegarder ma réflexion';btn.style.color='';btn.style.borderColor='';},2000);
+}
+
+function nextLesson(){
+  const bi=STATE.current.b, li=STATE.current.l;
+  const book=CURRICULUM[bi];
+  if(li<book.lessons.length-1){loadLesson(bi,li+1);}
+  else if(bi<CURRICULUM.length-1){loadLesson(bi+1,0);}
+  else{
+    document.getElementById('page-content').innerHTML=`
+      <div class="welcome">
+        <div class="w-icon">✦</div>
+        <h1 class="w-title">Programme <em>Complété</em></h1>
+        <p class="w-sub">Tu as parcouru les 30 notions des 3 programmes. L'aura n'est plus quelque chose que tu travailles — c'est qui tu es.</p>
+        <div class="w-stats">
+          <div class="ws-item"><div class="ws-num">30</div><div class="ws-lbl">Notions validées</div></div>
+          <div class="ws-item"><div class="ws-num">100%</div><div class="ws-lbl">Complété</div></div>
+        </div>
+        <button class="btn btn-gold" onclick="loadLesson(0,0)">Recommencer depuis le début →</button>
+      </div>`;
+  }
+}
+
+// ═══════════════════════════
+// QUIZ VIA CLAUDE API
+// ═══════════════════════════
+async function startQuiz(lessonId, context){
+  const inner=document.getElementById('quiz-inner');
+  inner.innerHTML=`<div class="quiz-loading"><div class="ql-dots"><div class="ql-dot"></div><div class="ql-dot"></div><div class="ql-dot"></div></div><div class="ql-text">L'IA génère ton quiz personnalisé…</div></div>`;
+  QUIZ_ANSWERS=[];
+  QUIZ_SHOWN=0;
+  try{
+    const prompt=`Tu es un expert du programme AURA sur le développement personnel, l'aura, le magnétisme et le leadership naturel.
+
+Génère exactement 3 questions de quiz pour valider la compréhension de cette notion.
+
+CONTEXTE DE LA LEÇON :
+${context}
+
+RÈGLES STRICTES :
+- 3 questions, 4 réponses chacune
+- Une seule bonne réponse par question
+- Les mauvaises réponses doivent être plausibles (pas évidemment fausses)
+- Chaque question teste une dimension différente de la notion
+- Court feedback d'explication pour chaque bonne réponse (1-2 phrases max)
+- Niveau : intermédiaire, pas trivial
+
+RÉPONDS UNIQUEMENT EN JSON VALIDE, ce format exact, sans markdown :
+{"questions":[{"q":"texte de la question","options":["A","B","C","D"],"correct":0,"feedback":"explication courte"}]}
+
+correct = index 0-3 de la bonne réponse.`;
+
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1200,messages:[{role:'user',content:prompt}]})
+    });
+    const data=await resp.json();
+    const raw=data.content?.map(b=>b.text||'').join('')||'';
+    const clean=raw.replace(/```json|```/g,'').trim();
+    QUIZ_DATA=JSON.parse(clean);
+    renderQuizQuestion(lessonId,0);
+  } catch(e){
+    inner.innerHTML=`<div style="text-align:center;padding:20px;">
+      <p style="color:var(--gray);margin-bottom:16px;font-size:14px;">Quiz indisponible. Tu peux marquer cette leçon comme complétée manuellement.</p>
+      <button class="btn btn-gold" onclick="markDone('${lessonId}')">Marquer comme complétée →</button>
+    </div>`;
+  }
+}
+
+function renderQuizQuestion(lessonId, qIdx){
+  const inner=document.getElementById('quiz-inner');
+  const q=QUIZ_DATA.questions[qIdx];
+  const total=QUIZ_DATA.questions.length;
+  const letters=['A','B','C','D'];
+  const selectedAns=QUIZ_ANSWERS[qIdx];
+  const answered=selectedAns!==undefined;
+
+  let dotsHtml='<div class="quiz-dots">';
+  for(let i=0;i<total;i++){
+    const cls=i<QUIZ_ANSWERS.length?'qdot done':i===qIdx?'qdot current':'qdot';
+    dotsHtml+=`<div class="${cls}"></div>`;
+  }
+  dotsHtml+='</div>';
+
+  let optsHtml='';
+  q.options.forEach((opt,i)=>{
+    let cls='quiz-opt';
+    if(answered){
+      if(i===q.correct)cls+=' correct';
+      else if(i===selectedAns&&i!==q.correct)cls+=' wrong';
+    } else if(i===selectedAns){cls+=' selected';}
+    optsHtml+=`<button class="${cls}" ${answered?'disabled':''} onclick="selectQuizOpt('${lessonId}',${qIdx},${i})">
+      <span class="qo-letter">${letters[i]}</span>
+      <span class="qo-text">${opt}</span>
+    </button>`;
+  });
+
+  const feedbackHtml=answered?`
+    <div class="quiz-feedback ${selectedAns===q.correct?'ok':'ko'} show">
+      ${selectedAns===q.correct?'✓ Correct — ':'✗ Pas tout à fait — '}${q.feedback}
+    </div>`:'';
+
+  const isLast=qIdx===total-1;
+  const navHtml=answered?`
+    <div class="quiz-nav">
+      ${dotsHtml}
+      <button class="btn btn-primary" onclick="${isLast?`showQuizResult('${lessonId}')`:`renderQuizQuestion('${lessonId}',${qIdx+1})`}">
+        ${isLast?'Voir mon résultat':'Question suivante →'}
+      </button>
+    </div>`:`<div class="quiz-nav">${dotsHtml}<div></div></div>`;
+
+  inner.innerHTML=`
+    <div class="quiz-q-num">Question ${qIdx+1} / ${total}</div>
+    <div class="quiz-q-text">${q.q}</div>
+    <div class="quiz-options">${optsHtml}</div>
+    ${feedbackHtml}
+    ${navHtml}
+  `;
+}
+
+function selectQuizOpt(lessonId,qIdx,optIdx){
+  QUIZ_ANSWERS[qIdx]=optIdx;
+  renderQuizQuestion(lessonId,qIdx);
+}
+
+function showQuizResult(lessonId){
+  const inner=document.getElementById('quiz-inner');
+  const total=QUIZ_DATA.questions.length;
+  const correct=QUIZ_ANSWERS.filter((a,i)=>a===QUIZ_DATA.questions[i].correct).length;
+  const pct=Math.round((correct/total)*100);
+  const passed=correct>=2; // 2/3 minimum
+
+  let color=passed?'var(--green)':'var(--red)';
+  let msg=passed
+    ?'Tu as démontré une bonne compréhension de cette notion. La prochaine étape t\'attend.'
+    :'Quelques points méritent une relecture. Reprends le concept et retente le quiz.';
+
+  inner.innerHTML=`
+    <div class="quiz-result">
+      <div class="qr-score" style="color:${color}">${correct}/${total}</div>
+      <div class="qr-label">${pct}% de bonnes réponses</div>
+      <p class="qr-msg">${msg}</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        ${passed
+          ?`<button class="btn btn-gold" onclick="markDone('${lessonId}')">Valider cette étape →</button>`
+          :`<button class="btn btn-outline" onclick="startQuiz('${lessonId}','${escJs(QUIZ_DATA._ctx||'')}')">Recommencer le quiz</button>`
+        }
+      </div>
+    </div>`;
+
+  if(passed) markDone(lessonId, true);
+}
+
+function markDone(lessonId, fromQuiz=false){
+  STATE.completed[lessonId]=true;
+  setState(STATE);
+  buildSidebar();
+  if(!fromQuiz){
+    const banner=document.getElementById('completion-banner');
+    if(banner){banner.classList.add('show');}
+  } else {
+    const banner=document.getElementById('completion-banner');
+    if(banner){banner.classList.add('show');}
+    const quizZone=document.getElementById('quiz-zone');
+    if(quizZone) quizZone.style.display='none';
+  }
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
+
+// ═══════════════════════════
+// SIDEBAR MOBILE
+// ═══════════════════════════
+function toggleSidebar(){
+  const sb=document.getElementById('sidebar');
+  const ov=document.getElementById('overlay');
+  sb.classList.toggle('open');
+  ov.classList.toggle('show');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+}
+
+// ═══════════════════════════
+// BOOT
+// ═══════════════════════════
+buildSidebar();
+</script>
+</body>
+</html>

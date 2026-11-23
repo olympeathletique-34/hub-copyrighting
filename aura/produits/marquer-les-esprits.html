@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURA — Marquer les Esprits</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Jost:wght@200;300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#06080F;
+  --dark:#0B0D18;
+  --dark2:#121524;
+  --dark3:#181C2E;
+  --teal:#0D6E5A;
+  --teal-l:#14C49A;
+  --teal-p:#D8F5EE;
+  --sapphire:#1A2E6B;
+  --sap-l:#4A72E8;
+  --gold:#C4993A;
+  --gold-l:#E0BC68;
+  --gold-p:#F5EDD4;
+  --white:#F0EDF6;
+  --gray:#8A8498;
+  --ink:#12101E;
+  --ink2:#26223A;
+  --ink3:#48445A;
+  --border:#DDDAE8;
+  --bg:#F7F5FB;
+  --bg2:#EEEAF4;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.8;overflow-x:hidden;}
+
+/* ══ COVER ══ */
+.cover{
+  min-height:100vh;
+  background:var(--night);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:80px 40px;
+  position:relative;overflow:hidden;
+}
+.cover-bg{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 65% 55% at 50% 42%,rgba(13,110,90,.28) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 35% at 20% 80%,rgba(26,46,107,.18) 0%,transparent 55%),
+    radial-gradient(ellipse 35% 30% at 82% 18%,rgba(196,153,58,.07) 0%,transparent 50%);
+}
+.cover-stars{position:absolute;inset:0;pointer-events:none;}
+.cover-inner{position:relative;z-index:2;max-width:720px;}
+.cover-kicker{font-size:9px;font-weight:500;letter-spacing:.55em;color:rgba(196,153,58,.5);text-transform:uppercase;margin-bottom:24px;}
+.cover-pre{font-family:'Playfair Display',serif;font-size:clamp(15px,1.8vw,19px);font-style:italic;font-weight:300;color:rgba(240,237,246,.3);margin-bottom:10px;}
+.cover-main{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(46px,8vw,96px);
+  font-weight:900;line-height:.94;
+  color:var(--white);letter-spacing:-.01em;
+  text-shadow:0 0 80px rgba(13,110,90,.3);
+  margin-bottom:12px;
+}
+.cover-main em{font-style:italic;color:rgba(20,196,154,.75);}
+.cover-sub{font-family:'Playfair Display',serif;font-size:clamp(15px,1.8vw,19px);font-style:italic;color:rgba(240,237,246,.3);margin-bottom:32px;}
+.cover-rule{width:52px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 32px;}
+.cover-desc{font-family:'Playfair Display',serif;font-size:clamp(15px,1.8vw,19px);font-style:italic;font-weight:300;color:rgba(240,237,246,.42);line-height:1.7;max-width:520px;margin:0 auto 44px;}
+.cover-refs{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:16px;}
+.ref-tag{font-size:9px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;padding:6px 14px;border:1px solid rgba(13,110,90,.4);color:rgba(20,196,154,.6);}
+.cover-sig{font-size:10px;font-weight:300;letter-spacing:.35em;color:rgba(196,153,58,.25);text-transform:uppercase;}
+
+/* ══ CHAPTER COVERS ══ */
+.ch-cover{
+  min-height:55vh;
+  background:var(--dark);
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;
+  padding:64px 10% 56px;position:relative;overflow:hidden;
+}
+.ch-glow{
+  position:absolute;right:-60px;top:-40px;width:320px;height:320px;border-radius:50%;
+  background:radial-gradient(circle,rgba(13,110,90,.14) 0%,transparent 70%);pointer-events:none;
+}
+.ch-num{
+  font-family:'Bebas Neue',sans-serif;font-size:120px;line-height:1;
+  color:rgba(13,110,90,.07);position:absolute;right:7%;bottom:28px;pointer-events:none;
+}
+.ch-eye{
+  font-size:9px;font-weight:600;letter-spacing:.55em;color:var(--gold);text-transform:uppercase;
+  margin-bottom:14px;display:flex;align-items:center;gap:12px;
+}
+.ch-eye::before{content:'';width:24px;height:1px;background:var(--gold);opacity:.5;}
+.ch-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,4.5vw,56px);font-weight:900;line-height:1.08;
+  color:var(--white);max-width:560px;
+}
+.ch-title em{font-style:italic;color:rgba(20,196,154,.8);}
+.ch-source{
+  font-size:10px;font-weight:300;letter-spacing:.25em;color:rgba(240,237,246,.25);
+  text-transform:uppercase;margin-top:16px;
+}
+.ch-rule{width:56px;height:1px;background:linear-gradient(90deg,var(--teal-l),transparent);margin-top:22px;opacity:.4;}
+
+/* ══ BODY ══ */
+.bwrap{max-width:740px;margin:0 auto;padding:68px 40px 80px;}
+@media(max-width:600px){.bwrap{padding:48px 22px 64px;}}
+
+.eye{font-size:9px;font-weight:600;letter-spacing:.5em;text-transform:uppercase;color:var(--teal);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.eye::before{content:'';width:20px;height:1px;background:var(--teal);opacity:.5;}
+.eye.gold{color:var(--gold);}.eye.gold::before{background:var(--gold);}
+
+h2.sec{font-family:'Playfair Display',serif;font-size:clamp(24px,3.5vw,40px);font-weight:900;color:var(--ink);line-height:1.1;margin-bottom:20px;}
+h2.sec em{font-style:italic;color:var(--teal);}
+h3.sub{font-family:'Playfair Display',serif;font-size:clamp(19px,2.5vw,26px);font-weight:700;color:var(--ink);margin:36px 0 14px;line-height:1.2;}
+h3.sub em{font-style:italic;color:var(--gold);}
+
+p.lead{font-family:'Playfair Display',serif;font-size:clamp(17px,2vw,20px);font-style:italic;color:var(--ink2);line-height:1.75;margin-bottom:24px;}
+p.bd{font-size:16px;font-weight:300;color:var(--ink3);line-height:1.95;margin-bottom:18px;}
+p.bd strong{color:var(--ink2);font-weight:500;}
+p.bd em{color:var(--teal);font-style:italic;}
+
+/* SOURCE TAG */
+.src{display:inline-block;font-size:9px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;padding:3px 10px;border:1px solid;margin-bottom:6px;}
+.src.car{color:rgba(74,114,232,.7);border-color:rgba(74,114,232,.3);}
+.src.gib{color:rgba(13,110,90,.7);border-color:rgba(13,110,90,.3);}
+.src.boo{color:rgba(196,153,58,.75);border-color:rgba(196,153,58,.3);}
+.src.cia{color:rgba(139,42,42,.7);border-color:rgba(139,42,42,.3);}
+.src.nav{color:rgba(60,42,100,.7);border-color:rgba(60,42,100,.3);}
+.src.low{color:rgba(42,80,60,.7);border-color:rgba(42,80,60,.3);}
+
+/* TECHNIQUE BOX */
+.tech{background:#fff;border:1px solid var(--border);border-left:3px solid var(--teal-l);padding:26px 30px;margin:28px 0;}
+.tech-lbl{font-size:9px;font-weight:600;letter-spacing:.4em;color:var(--teal);text-transform:uppercase;margin-bottom:8px;}
+.tech-title{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;}
+.tech-body{font-size:14px;font-weight:300;color:var(--ink3);line-height:1.8;}
+.tech-body p{margin-bottom:10px;}
+.tech-body p:last-child{margin-bottom:0;}
+.tech-body strong{color:var(--ink2);font-weight:500;}
+.tech-body em{color:var(--teal);}
+
+/* PRACTICE */
+.practice{background:var(--teal-p);border-left:3px solid var(--teal);padding:24px 28px;margin:24px 0;}
+.prac-lbl{font-size:9px;font-weight:600;letter-spacing:.4em;color:var(--teal);text-transform:uppercase;margin-bottom:8px;}
+.prac-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--ink2);margin-bottom:12px;}
+.prac-body{font-size:14px;font-weight:300;color:var(--ink2);line-height:1.8;}
+.prac-body strong{font-weight:500;}
+
+/* INSIGHT DARK */
+.insight{background:var(--dark2);padding:28px 32px;margin:28px 0;position:relative;}
+.ins-bar{position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--teal-l);}
+.ins-lbl{font-size:9px;font-weight:600;letter-spacing:.4em;color:var(--teal-l);text-transform:uppercase;margin-bottom:10px;}
+.ins-text{font-family:'Playfair Display',serif;font-size:17px;font-style:italic;font-weight:400;color:var(--white);line-height:1.65;}
+
+/* QUOTE DARK */
+.dquote{background:var(--dark3);padding:30px 34px;margin:28px 0;position:relative;overflow:hidden;border-left:3px solid var(--gold);}
+.dquote::before{content:'\201C';position:absolute;top:-32px;left:8px;font-family:'Playfair Display',serif;font-size:150px;font-weight:900;color:var(--gold);opacity:.05;line-height:1;pointer-events:none;}
+.dquote-text{font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,20px);font-style:italic;color:var(--white);line-height:1.65;position:relative;z-index:1;}
+.dquote-attr{font-size:11px;font-weight:300;letter-spacing:.2em;color:rgba(196,153,58,.5);text-transform:uppercase;margin-top:12px;position:relative;z-index:1;}
+
+/* SCIENCE BOX */
+.science{background:var(--dark);padding:22px 26px;margin:24px 0;}
+.sci-lbl{font-size:8px;font-weight:600;letter-spacing:.45em;color:rgba(20,196,154,.7);text-transform:uppercase;margin-bottom:8px;}
+.sci-body{font-size:13.5px;font-weight:300;color:rgba(240,237,246,.65);line-height:1.75;}
+.sci-body strong{color:var(--white);font-weight:400;}
+
+/* RULE TABLE */
+.rtable{margin:28px 0;}
+.rt-row{display:grid;grid-template-columns:44px 1fr;gap:0;background:var(--border);margin-bottom:2px;}
+.rt-n{background:var(--dark);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--teal-l);}
+.rt-c{background:#fff;padding:15px 20px;}
+.rt-t{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px;}
+.rt-d{font-size:13px;font-weight:300;color:var(--ink3);line-height:1.6;}
+
+/* MASTERY CARD */
+.mastery-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;background:var(--border);margin:28px 0;}
+.mc{background:#fff;padding:22px 18px;}
+.mc-ico{font-size:26px;margin-bottom:10px;}
+.mc-name{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.mc-src{font-size:9px;font-weight:500;letter-spacing:.2em;color:var(--gray);text-transform:uppercase;margin-bottom:8px;}
+.mc-desc{font-size:13px;font-weight:300;color:var(--ink3);line-height:1.6;}
+
+/* GRULE */
+.grule{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--teal-l),transparent);margin:40px 0;opacity:.2;}
+
+/* FINALE */
+.finale{
+  min-height:80vh;background:var(--night);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:80px 40px;position:relative;overflow:hidden;
+}
+.finale-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 50% at 50% 50%,rgba(13,110,90,.2) 0%,transparent 65%);}
+.fin-inner{position:relative;z-index:2;max-width:580px;}
+.fin-kicker{font-size:9px;font-weight:600;letter-spacing:.55em;color:rgba(196,153,58,.4);text-transform:uppercase;margin-bottom:28px;}
+.fin-title{font-family:'Playfair Display',serif;font-size:clamp(36px,5.5vw,66px);font-weight:900;line-height:1.05;color:var(--white);margin-bottom:8px;}
+.fin-title em{font-style:italic;color:rgba(20,196,154,.8);}
+.fin-rule{width:52px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:28px auto;}
+.fin-sub{font-family:'Playfair Display',serif;font-size:clamp(15px,2vw,18px);font-style:italic;color:rgba(240,237,246,.35);line-height:1.75;margin-bottom:28px;}
+.fin-sig{font-size:10px;font-weight:300;letter-spacing:.3em;color:rgba(196,153,58,.2);text-transform:uppercase;}
+
+@media(max-width:600px){
+  .mastery-grid{grid-template-columns:1fr;}
+  .rt-row{grid-template-columns:34px 1fr;}
+  .ch-num{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ COVER ══ -->
+<div class="cover">
+  <div class="cover-bg"></div>
+  <svg class="cover-stars" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="80" cy="60" r="1.2" fill="rgba(196,153,58,0.35)"/>
+    <circle cx="220" cy="140" r="0.8" fill="rgba(196,153,58,0.2)"/>
+    <circle cx="620" cy="80" r="1.4" fill="rgba(196,153,58,0.3)"/>
+    <circle cx="720" cy="200" r="0.9" fill="rgba(196,153,58,0.25)"/>
+    <circle cx="150" cy="450" r="1.1" fill="rgba(196,153,58,0.2)"/>
+    <circle cx="680" cy="480" r="1.3" fill="rgba(196,153,58,0.28)"/>
+    <circle cx="400" cy="50" r="0.7" fill="rgba(20,196,154,0.2)"/>
+    <circle cx="550" cy="520" r="1.0" fill="rgba(20,196,154,0.18)"/>
+    <circle cx="50" cy="300" r="0.9" fill="rgba(196,153,58,0.22)"/>
+    <circle cx="760" cy="350" r="1.1" fill="rgba(196,153,58,0.18)"/>
+  </svg>
+  <div class="cover-inner">
+    <div class="cover-kicker">AURA — Bonus Exclusif Programme Complet</div>
+    <p class="cover-pre">Les techniques de Carnegie, Giblin, Boothman et d'autres</p>
+    <h1 class="cover-main">Marquer<br>les <em>Esprits</em></h1>
+    <p class="cover-sub">L'art de laisser une empreinte inoubliable dans chaque rencontre.</p>
+    <div class="cover-rule"></div>
+    <p class="cover-desc">Ce que font différemment les personnes que l'on n'oublie pas — et comment intégrer ces comportements dès la prochaine conversation.</p>
+    <div class="cover-refs">
+      <div class="ref-tag">Dale Carnegie</div>
+      <div class="ref-tag">Les Giblin</div>
+      <div class="ref-tag">Nicholas Boothman</div>
+      <div class="ref-tag">Robert Cialdini</div>
+      <div class="ref-tag">Joe Navarro</div>
+      <div class="ref-tag">Leil Lowndes</div>
+    </div>
+    <br>
+    <div class="cover-sig">AURA · Marquer les Esprits · Bonus Exclusif Programme Complet</div>
+  </div>
+</div>
+
+<!-- ══ PRÉAMBULE ══ -->
+<div class="ch-cover">
+  <div class="ch-glow"></div>
+  <div class="ch-num">✦</div>
+  <div class="ch-eye">Avant de commencer</div>
+  <h2 class="ch-title">Certaines personnes,<br>on ne les <em>oublie pas.</em></h2>
+  <div class="ch-rule"></div>
+</div>
+
+<div class="bwrap">
+  <p class="lead">Tu as déjà rencontré quelqu'un après qui tu t'es dit : "Cette personne était... différente." Tu ne savais pas exactement pourquoi. Mais tu t'en souvenais encore.</p>
+  <p class="bd">Ce dossier répond à une question simple : <strong>qu'est-ce que ces personnes font exactement ?</strong> Pas de façon abstraite — de façon précise, comportement par comportement, moment par moment.</p>
+  <p class="bd">Les sources mobilisées ici ne sont pas des théories. Ce sont des dizaines d'années de recherche terrain, de vente, de psychologie comportementale et de coaching : Dale Carnegie (les relations humaines), Les Giblin (la confiance dans l'interaction), Nicholas Boothman (le rapport en 90 secondes), Robert Cialdini (l'influence), Joe Navarro (le langage non-verbal, ex-agent FBI), et Leil Lowndes (l'art de parler à n'importe qui).</p>
+  <p class="bd">Ces techniques suffisent pour changer une vie. Combinées avec le travail de fond du programme AURA sur le socle intérieur, la présence et la déconnexion du champ collectif, leur impact est exponentiel.</p>
+
+  <div class="insight">
+    <div class="ins-bar"></div>
+    <div class="ins-lbl">◈ Le principe qui gouverne tout</div>
+    <p class="ins-text">Les gens ne se souviennent pas de ce que tu as dit. Ils se souviennent de ce qu'ils ont ressenti quand tu leur parlais. Ce dossier t'apprend à agir sur ce ressenti — intentionnellement.</p>
+  </div>
+</div>
+
+<!-- ══ CHAPITRE 1 ══ -->
+<div class="ch-cover">
+  <div class="ch-glow"></div>
+  <div class="ch-num">1</div>
+  <div class="ch-eye">Chapitre 1</div>
+  <h2 class="ch-title">Les 90 premières<br>secondes — <em>tout se joue là.</em></h2>
+  <div class="ch-source">Sources · Nicholas Boothman · Joe Navarro</div>
+  <div class="ch-rule"></div>
+</div>
+
+<div class="bwrap">
+  <p class="lead">Avant d'avoir dit un mot significatif, l'autre a déjà formé une opinion de toi. Pas une impression vague — une évaluation structurée de ton statut, ta fiabilité et ton intérêt.</p>
+
+  <div class="eye">Boothman — NLP</div>
+  <h2 class="sec">Le Rapport par Design — <em>en 3 couches simultanées</em></h2>
+
+  <div class="src boo">Nicholas Boothman · How to Make People Like You in 90 Seconds</div>
+  <p class="bd">Boothman, maître praticien en Programmation Neuro-Linguistique formé par les pionniers du domaine, a découvert que le rapport naît de la convergence de trois éléments simultanés. Il appelle ça la <strong>synchronie</strong>.</p>
+
+  <div class="mastery-grid">
+    <div class="mc">
+      <div class="mc-ico">🧠</div>
+      <div class="mc-name">Attitude synchronisée</div>
+      <div class="mc-src">Couche 1</div>
+      <p class="mc-desc">Tu arrives avec une attitude ouvertement positive — pas jouée, calibrée. Boothman appelle ça une "Really Useful Attitude" (RUA) : un état d'anticipation bienveillante qui se transmet avant les mots.</p>
+    </div>
+    <div class="mc">
+      <div class="mc-ico">🤝</div>
+      <div class="mc-name">Corps synchronisé</div>
+      <div class="mc-src">Couche 2</div>
+      <p class="mc-desc">Tu miroirs subtilement la posture et les gestes de l'autre — pas de façon mécanique, mais de façon fluide. Le cerveau interprète "quelqu'un qui me ressemble" comme "quelqu'un en qui j'ai confiance".</p>
+    </div>
+    <div class="mc">
+      <div class="mc-ico">🎙️</div>
+      <div class="mc-name">Voix synchronisée</div>
+      <div class="mc-src">Couche 3</div>
+      <p class="mc-desc">Tu calibres ton rythme, ton volume et ton registre sur celui de l'autre. Une voix lente avec quelqu'un de lent. Légèrement plus vif avec quelqu'un d'énergique. Le confort naît de la similitude.</p>
+    </div>
+  </div>
+
+  <div class="science">
+    <div class="sci-lbl">Neuroscience — Système miroir</div>
+    <p class="sci-body">Les neurones miroirs reproduisent partiellement dans notre cerveau les états observés chez autrui. Quand quelqu'un synchronise subtilement son comportement sur le nôtre, notre cerveau limbique génère un <strong>signal de familiarité</strong> — avant même que le néocortex conscient ait formulé une opinion. Le rapport est d'abord biologique.</p>
+  </div>
+
+  <div class="grule"></div>
+
+  <div class="eye">Navarro — FBI</div>
+  <h2 class="sec">Le Langage du Corps <em>qui marque</em></h2>
+
+  <div class="src nav">Joe Navarro · What Every BODY Is Saying</div>
+  <p class="bd">Joe Navarro a passé 25 ans au FBI à décoder le comportement non-verbal. Ce qu'il a découvert va à l'encontre de ce qu'on enseigne habituellement : ce n'est pas le visage qui dit le plus — c'est le corps.</p>
+
+  <div class="rtable">
+    <div class="rt-row">
+      <div class="rt-n">1</div>
+      <div class="rt-c">
+        <div class="rt-t">Les pieds — le signal le plus honnête</div>
+        <div class="rt-d">Les pieds pointent vers l'endroit où l'on veut aller — ou la personne à laquelle on est vraiment intéressé. Pointer tes pieds vers ton interlocuteur signale une présence totale que les mots seuls ne donnent pas.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n">2</div>
+      <div class="rt-c">
+        <div class="rt-t">L'espace ventral — l'ouverture ou la fermeture</div>
+        <div class="rt-d">Exposer ton torse (posture ouverte, pas de bras croisés) envoie un signal de confort et de confiance. Le refermer signale la méfiance ou l'inconfort — sans que tu dises un mot.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n">3</div>
+      <div class="rt-c">
+        <div class="rt-t">Les mains visibles — le signal de transparence</div>
+        <div class="rt-d">Les mains cachées (sous la table, dans les poches) activent une méfiance instinctive chez l'autre. Garder les mains visibles et ouvertes est un signal de sécurité primitif et immédiat.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n">4</div>
+      <div class="rt-c">
+        <div class="rt-t">L'inclinaison tête-corps — l'intérêt réel</div>
+        <div class="rt-d">Incliner légèrement la tête quand l'autre parle expose l'artère jugulaire — un signal de vulnérabilité qui dit "je suis en sécurité avec toi". Couplé à un léger penchement vers l'avant du corps, il signale un intérêt authentique impossible à imiter verbalement.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tech">
+    <div class="tech-lbl">Pratique immédiate</div>
+    <div class="tech-title">Le Check Non-Verbal en 4 points — avant chaque rencontre importante</div>
+    <div class="tech-body">
+      <p><strong>Pieds :</strong> pointés vers la personne. Pas en fuite, pas de biais.</p>
+      <p><strong>Corps :</strong> ouvert, épaules basses, pas de barrières croisées.</p>
+      <p><strong>Mains :</strong> visibles, ouvertes, pas crispées.</p>
+      <p><strong>Tête :</strong> légèrement inclinée dès que l'autre parle. Signe d'écoute réelle.</p>
+      <p>Ces quatre points mis ensemble créent un signal de présence et de sécurité que l'autre ressent dans les premières secondes — et dont il se souviendra, sans savoir pourquoi.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CHAPITRE 2 ══ -->
+<div class="ch-cover">
+  <div class="ch-glow"></div>
+  <div class="ch-num">2</div>
+  <div class="ch-eye">Chapitre 2</div>
+  <h2 class="ch-title">Faire sentir à l'autre<br>qu'il <em>compte vraiment.</em></h2>
+  <div class="ch-source">Sources · Dale Carnegie · Les Giblin</div>
+  <div class="ch-rule"></div>
+</div>
+
+<div class="bwrap">
+  <p class="lead">Le besoin le plus profond de l'être humain — au-delà de la sécurité, au-delà de la nourriture — est de se sentir important. Comprendre ça change tout.</p>
+
+  <div class="eye">Carnegie</div>
+  <h2 class="sec">La loi fondamentale<br>de <em>l'importance sincère</em></h2>
+
+  <div class="src car">Dale Carnegie · How to Win Friends and Influence People, 1936</div>
+  <p class="bd">Carnegie l'a formulé comme la loi la plus importante des relations humaines : <strong>"Faites toujours sentir à l'autre qu'il est important."</strong> Pas de façon performative — de façon sincère. Et cette sincérité passe par des comportements précis, pas par des intentions vagues.</p>
+
+  <div class="dquote">
+    <p class="dquote-text">Vous pouvez vous faire plus d'amis en deux mois en vous intéressant sincèrement aux autres qu'en deux ans à essayer d'intéresser les autres à vous.</p>
+    <p class="dquote-attr">— Dale Carnegie, 1936</p>
+  </div>
+
+  <h3 class="sub">Le Prénom — <em>le mot le plus puissant dans toute langue</em></h3>
+  <p class="bd">Carnegie y consacre un chapitre entier. Et les neurosciences lui donnent raison : entendre son propre prénom active l'amygdale et le cortex préfrontal médian — les zones du cerveau associées à l'identité et à la valeur de soi. <strong>Un prénom prononcé avec chaleur est une micro-dose de reconnaissance.</strong></p>
+  <p class="bd">La règle de Carnegie : répéter le prénom de quelqu'un dans les 20 premières secondes d'une conversation, puis une ou deux fois au cours de l'échange — jamais de façon mécanique, toujours de façon naturelle et placée au bon moment.</p>
+
+  <div class="tech">
+    <div class="tech-lbl">Technique Carnegie</div>
+    <div class="tech-title">Le Protocole du Prénom — 3 étapes</div>
+    <div class="tech-body">
+      <p><strong>1. Ancrage :</strong> Dès qu'on te donne un prénom, répète-le immédiatement. "Enchanté, [prénom]." Pas pour être poli — pour l'imprimer. Cette répétition aide aussi ta mémoire.</p>
+      <p><strong>2. Tissage :</strong> Utilise le prénom une fois au milieu de la conversation — au moment d'une transition ou d'un point important. "Ce que tu dis, [prénom], c'est exactement..."</p>
+      <p><strong>3. Clôture :</strong> Termine l'échange en le nommant. "À bientôt, [prénom]." La dernière chose entendue reste en mémoire — et entendre son prénom en partant crée une empreinte positive.</p>
+    </div>
+  </div>
+
+  <div class="grule"></div>
+
+  <div class="eye">Giblin</div>
+  <h2 class="sec">Le Triple A — <em>la formule secrète de Giblin</em></h2>
+
+  <div class="src gib">Les Giblin · How to Have Confidence and Power in Dealing with People, 1956</div>
+  <p class="bd">Giblin — deux fois meilleur vendeur national des États-Unis, qui a formé des dizaines de milliers de professionnels — a réduit les relations humaines à trois besoins fondamentaux qu'il appelle le Triple A :</p>
+
+  <div class="mastery-grid">
+    <div class="mc">
+      <div class="mc-ico">🫂</div>
+      <div class="mc-name">Acceptance</div>
+      <div class="mc-src">Besoin fondamental 1</div>
+      <p class="mc-desc">Être accepté tel qu'on est. Giblin : "Les gens s'ouvrent à ceux qui les acceptent sans agenda de transformation." Le premier signal que tu donnes doit dire : "Je t'accepte comme tu es."</p>
+    </div>
+    <div class="mc">
+      <div class="mc-ico">👍</div>
+      <div class="mc-name">Approval</div>
+      <div class="mc-src">Besoin fondamental 2</div>
+      <p class="mc-desc">Être approuvé — dans ses choix, ses opinions, ses actions. Même un désaccord peut être exprimé de façon à valider l'importance de la perspective de l'autre avant de proposer une alternative.</p>
+    </div>
+    <div class="mc">
+      <div class="mc-ico">🙏</div>
+      <div class="mc-name">Appreciation</div>
+      <div class="mc-src">Besoin fondamental 3</div>
+      <p class="mc-desc">Être apprécié — concrètement, spécifiquement. Giblin insiste : <strong>un compliment vague ne touche pas.</strong> Un compliment précis, ancré dans un comportement ou un attribut observé, crée une connexion réelle.</p>
+    </div>
+  </div>
+
+  <div class="insight">
+    <div class="ins-bar"></div>
+    <div class="ins-lbl">◈ La règle du compliment précis</div>
+    <p class="ins-text">❌ "Tu t'en es bien sorti." → générique, oublié en 30 secondes.<br>✓ "La façon dont tu as géré la question difficile à la fin — ce calme, cette précision — c'était remarquable." → spécifique, ancré, inoubliable.</p>
+  </div>
+
+  <h3 class="sub">L'ego comme <em>boussole de l'interaction</em></h3>
+  <p class="bd">Giblin le formule sans détour : "Tout le monde agit depuis son ego." Non pas au sens négatif — au sens neutre. L'ego de l'autre cherche constamment des signaux qui confirment sa valeur. <strong>Ton travail dans chaque interaction est de lui envoyer ces signaux sincèrement.</strong></p>
+  <p class="bd">La personne qui sait faire ça — qui sait vraiment voir les gens et leur renvoyer une image positive d'eux-mêmes — devient irrésistiblement magnétique. Pas parce qu'elle est flatteuse. Parce qu'elle est l'une des rares personnes dans la vie de l'autre à le voir vraiment.</p>
+</div>
+
+<!-- ══ CHAPITRE 3 ══ -->
+<div class="ch-cover">
+  <div class="ch-glow"></div>
+  <div class="ch-num">3</div>
+  <div class="ch-eye">Chapitre 3</div>
+  <h2 class="ch-title">L'écoute qui<br><em>transforme tout.</em></h2>
+  <div class="ch-source">Sources · Carnegie · Boothman · Lowndes</div>
+  <div class="ch-rule"></div>
+</div>
+
+<div class="bwrap">
+  <p class="lead">L'écoute est le comportement le plus rare dans les interactions humaines. Et paradoxalement, c'est celui qui crée le plus d'impact sur celui qui parle.</p>
+
+  <div class="eye">Carnegie + Lowndes</div>
+  <h2 class="sec">Écouter pour <em>voir</em>, pas pour <em>répondre</em></h2>
+
+  <div class="src car">Dale Carnegie</div>
+  <div class="src low">Leil Lowndes · How to Talk to Anyone</div>
+
+  <p class="bd">Carnegie : <em>"Soyez un bon auditeur. Encouragez les autres à parler d'eux-mêmes."</em> Lowndes va plus loin avec ce qu'elle appelle le <strong>"Flooding Smile"</strong> : au lieu de sourire immédiatement quand tu rencontres quelqu'un (réflexe automatique perçu comme social), retenir le sourire une seconde, regarder vraiment la personne — et laisser le sourire arriver naturellement depuis ce que tu observes.</p>
+
+  <div class="science">
+    <div class="sci-lbl">Psychologie — L'effet de confirmation par l'écoute</div>
+    <p class="sci-body">Les études de Karl Weick sur le sensemaking montrent que <strong>se sentir écouté active les mêmes zones neurologiques que se sentir compris et aimé</strong>. La qualité d'écoute d'un interlocuteur est vécue comme un acte d'affection — qu'il en ait l'intention ou non. C'est pourquoi les personnes qui savent écouter créent des liens durables sans effort apparent.</p>
+  </div>
+
+  <h3 class="sub">Les 5 niveaux d'écoute — <em>et celui qui marque</em></h3>
+  <p class="bd">Il existe cinq niveaux d'écoute dans une conversation ordinaire. Chacun est perçu différemment par l'autre.</p>
+
+  <div class="rtable">
+    <div class="rt-row">
+      <div class="rt-n">1</div>
+      <div class="rt-c">
+        <div class="rt-t">Ignorer — ne pas écouter du tout</div>
+        <div class="rt-d">Laisse une empreinte négative durable. Les gens ne l'oublient pas — et ne pardonnent pas facilement.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n">2</div>
+      <div class="rt-c">
+        <div class="rt-t">Faire semblant — hocher la tête sans entendre</div>
+        <div class="rt-d">Détecté instinctivement par l'autre. Son regard change. La conversation se ferme légèrement.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n">3</div>
+      <div class="rt-c">
+        <div class="rt-t">Écoute sélective — filtrer ce qui nous intéresse</div>
+        <div class="rt-d">Ce que font la plupart des gens dans la plupart des conversations. Neutre. Laisse peu de trace.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n">4</div>
+      <div class="rt-c">
+        <div class="rt-t">Écoute active — écouter pour répondre intelligemment</div>
+        <div class="rt-d">Au-dessus de la moyenne. L'autre se sent entendu. Laisse une trace positive.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n" style="background:var(--teal);color:white;">5</div>
+      <div class="rt-c" style="background:var(--teal-p);">
+        <div class="rt-t" style="color:var(--teal);">Écoute empathique — écouter pour comprendre</div>
+        <div class="rt-d"><strong>Le seul niveau qui marque.</strong> L'autre ressent qu'il a été vu — pas seulement entendu. Cette expérience est si rare qu'elle crée un lien immédiat et durable.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tech">
+    <div class="tech-lbl">Technique de Lowndes</div>
+    <div class="tech-title">Le "Swivelling Spotlight" — retourner la lumière sur l'autre</div>
+    <div class="tech-body">
+      <p>La plupart des gens font converger la conversation vers eux. Lowndes propose de faire exactement l'inverse : <strong>retourner le projecteur sur l'autre à chaque occasion.</strong></p>
+      <p>Concrètement : quand quelqu'un mentionne quelque chose — même en passant — tu y reviens avec une question. "Tu as dit tout à l'heure que tu avais changé de ville l'an dernier — c'était un grand changement ?"</p>
+      <p>Cette technique produit un effet immédiat : l'autre se sent vu et mémorisé. Il associe cette sensation à ta présence. Et quand une personne se sent vue, elle veut naturellement se retrouver en présence de cette personne.</p>
+    </div>
+  </div>
+
+  <div class="practice">
+    <div class="prac-lbl">Exercice — 7 jours</div>
+    <div class="prac-title">L'écoute sans préparation</div>
+    <div class="prac-body">
+      <p>Dans chaque conversation cette semaine : <strong>interdis-toi de préparer ta réponse pendant que l'autre parle.</strong></p>
+      <p>Attends qu'il finisse. Attends encore 2 secondes. Puis pose UNE question sur ce qu'il vient de dire — pas pour rebondir sur toi-même, juste pour l'amener plus loin dans ce qu'il voulait dire.</p>
+      <p>Observe comment les conversations changent de profondeur. Et comment les gens te regardent différemment.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CHAPITRE 4 ══ -->
+<div class="ch-cover">
+  <div class="ch-glow"></div>
+  <div class="ch-num">4</div>
+  <div class="ch-eye">Chapitre 4</div>
+  <h2 class="ch-title">L'influence sans<br><em>manipulation.</em></h2>
+  <div class="ch-source">Sources · Robert Cialdini · Carnegie</div>
+  <div class="ch-rule"></div>
+</div>
+
+<div class="bwrap">
+  <p class="lead">Il existe une ligne précise entre influencer et manipuler. Elle se situe exactement là où l'intérêt de l'autre commence à compter.</p>
+
+  <div class="eye">Cialdini</div>
+  <h2 class="sec">Les leviers de <em>l'influence éthique</em></h2>
+
+  <div class="src cia">Robert Cialdini · Influence : The Psychology of Persuasion, 1984</div>
+  <p class="bd">Cialdini — professeur de psychologie sociale à l'Université d'État d'Arizona — a passé des années sous couverture à observer des vendeurs, négociateurs et agents de recrutement pour comprendre ce qui amène les gens à dire oui. Il a identifié 6 principes universels. Trois d'entre eux sont particulièrement puissants pour créer une empreinte positive.</p>
+
+  <h3 class="sub">La Réciprocité — <em>donner d'abord</em></h3>
+  <p class="bd">Le principe le plus puissant de Cialdini. Les êtres humains sont câblés pour rendre ce qu'on leur a donné. Offrir quelque chose en premier — une information utile, une attention sincère, un service non sollicité — crée une dette psychologique non consciente qui augmente la bienveillance de l'autre.</p>
+  <p class="bd"><strong>Application pratique :</strong> dans chaque interaction importante, commence par donner avant de recevoir. Partage une information utile. Rends un petit service. Accorde de l'attention. Cette séquence prépare le terrain pour tout ce qui suit.</p>
+
+  <div class="dquote">
+    <p class="dquote-text">La règle de la réciprocité est l'une des normes sociales les plus répandues dans toutes les cultures humaines. Quelque chose en nous exige que nous remboursions ce que nous avons reçu.</p>
+    <p class="dquote-attr">— Robert Cialdini</p>
+  </div>
+
+  <h3 class="sub">La Preuve Sociale — <em>l'accord tacite</em></h3>
+  <p class="bd">Les gens évaluent ce qui est approprié dans une situation en regardant ce que font les autres. Quand tu exprimes naturellement et avec aisance ce que tu fais et qui tu es — sans besoin d'approbation — tu crées une "normalité sociale" autour de ta présence. L'aisance est perçue comme la preuve que ta place dans cet espace est légitime.</p>
+
+  <h3 class="sub">L'Appréciation Sincère — <em>le catalyseur de Carnegie</em></h3>
+  <div class="src car">Dale Carnegie</div>
+  <p class="bd">Carnegie et Cialdini convergent ici. La reconnaissance sincère — nommer spécifiquement ce qu'on admire chez quelqu'un — déclenche un mécanisme de réciprocité affective. L'autre veut naturellement correspondre à l'image positive que tu lui renvoies. Et pour ça, il doit continuer à être en ta présence.</p>
+
+  <div class="tech">
+    <div class="tech-lbl">Technique combinée · Carnegie + Cialdini</div>
+    <div class="tech-title">Le Trifecta de l'influence éthique</div>
+    <div class="tech-body">
+      <p><strong>1. Donne d'abord (Réciprocité) :</strong> Une information, une attention, un service. Sans rien attendre en retour — l'impact est plus fort quand c'est non sollicité.</p>
+      <p><strong>2. Nomme spécifiquement (Appreciation) :</strong> Identifie quelque chose de précis que tu admires dans ce que l'autre vient de faire ou de dire. Dis-le. Sans flatterie — avec précision.</p>
+      <p><strong>3. Pose la question de profondeur (Preuve sociale par l'intérêt) :</strong> "Comment tu en es venu à ça ?" "Qu'est-ce qui t'a amené là ?" L'intérêt porté à l'histoire de l'autre crée une connexion que les compliments seuls ne peuvent pas créer.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CHAPITRE 5 ══ -->
+<div class="ch-cover">
+  <div class="ch-glow"></div>
+  <div class="ch-num">5</div>
+  <div class="ch-eye">Chapitre 5</div>
+  <h2 class="ch-title">Les mots qui<br><em>créent des liens.</em></h2>
+  <div class="ch-source">Sources · Leil Lowndes · Boothman · Giblin</div>
+  <div class="ch-rule"></div>
+</div>
+
+<div class="bwrap">
+  <p class="lead">Ce que tu dis importe moins que comment tu le dis. Mais certains mots, certaines structures, certaines questions changent radicalement la façon dont l'autre vit la conversation.</p>
+
+  <div class="eye">Lowndes</div>
+  <h2 class="sec">Les techniques verbales<br>de <em>Leil Lowndes</em></h2>
+
+  <div class="src low">Leil Lowndes · How to Talk to Anyone, 2003</div>
+  <p class="bd">Auteure et coach en communication pour des milliers de dirigeants, Lowndes a compilé 92 techniques de conversation. Voici les 5 qui produisent l'impact le plus immédiat.</p>
+
+  <div class="rtable">
+    <div class="rt-row">
+      <div class="rt-n">1</div>
+      <div class="rt-c">
+        <div class="rt-t">Le "Flooding Smile" — sourire différé</div>
+        <div class="rt-d">Ne souris pas immédiatement. Regarde d'abord la personne pendant une seconde — puis laisse le sourire arriver. Ce léger délai le rend authentique. L'autre perçoit : "Ce sourire est pour moi, pas pour tout le monde."</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n">2</div>
+      <div class="rt-c">
+        <div class="rt-t">L'"Sticky Eyes" — regard qui reste</div>
+        <div class="rt-d">Maintenir le contact visuel un battement de plus qu'à l'accoutumée — même après que l'autre a fini de parler. Ce silence de regard dit : "Ce que tu viens de dire mérite que je reste sur toi encore un moment."</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n">3</div>
+      <div class="rt-c">
+        <div class="rt-t">L'"Echoing" — reformulation miroir</div>
+        <div class="rt-d">Reprendre les 3 derniers mots de ce que l'autre vient de dire avec une légère intonation interrogative. Il continue — plus en profondeur. La reformulation dit : "Je t'ai vraiment entendu. Continue."</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n">4</div>
+      <div class="rt-c">
+        <div class="rt-t">La "Parroting Question" — question miroir</div>
+        <div class="rt-d">Poser une question en reprenant exactement les mots de l'autre, pas les tiens. Si l'autre dit "c'était une période intense", tu ne demandes pas "c'était difficile ?" — tu demandes : "une période intense dans quel sens ?"</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n" style="background:var(--teal);color:white;">5</div>
+      <div class="rt-c" style="background:var(--teal-p);">
+        <div class="rt-t" style="color:var(--teal);">"Never the Naked Thank You" — gratitude habillée</div>
+        <div class="rt-d"><strong>Ne jamais dire juste "merci".</strong> Toujours y ajouter une spécificité. "Merci — ce conseil sur la gestion du temps était exactement ce dont j'avais besoin." La gratitude spécifique est mémorisée. La gratitude générique s'évapore en 10 secondes.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grule"></div>
+
+  <div class="eye">Boothman</div>
+  <h2 class="sec">Les Préférences Sensorielles — <em>parler la langue de l'autre</em></h2>
+
+  <div class="src boo">Nicholas Boothman</div>
+  <p class="bd">Boothman, s'appuyant sur la PNL, explique que les gens traitent l'information selon trois modalités sensorielles dominantes. Identifier celle de ton interlocuteur et adapter ton langage en conséquence crée une connexion immédiate et inexplicable.</p>
+
+  <div class="mastery-grid">
+    <div class="mc">
+      <div class="mc-ico">👁️</div>
+      <div class="mc-name">Visuel</div>
+      <div class="mc-src">~65% des personnes</div>
+      <p class="mc-desc">Utilise des métaphores visuelles. "Je vois ce que tu veux dire." "Le tableau est clair." "Regardons ça ensemble." Les visuels pensent en images — parle en images.</p>
+    </div>
+    <div class="mc">
+      <div class="mc-ico">👂</div>
+      <div class="mc-name">Auditif</div>
+      <div class="mc-src">~20% des personnes</div>
+      <p class="mc-desc">Utilise des métaphores sonores. "Ça sonne juste." "On est en harmonie." "Je t'entends." Les auditifs pensent en mots et en sons — adapte ton rythme et ta mélodie vocale.</p>
+    </div>
+    <div class="mc">
+      <div class="mc-ico">🤲</div>
+      <div class="mc-name">Kinesthésique</div>
+      <div class="mc-src">~15% des personnes</div>
+      <p class="mc-desc">Utilise des métaphores tactiles. "Ça me touche." "Je sens qu'on est alignés." "Ça tient la route." Les kinesthésiques pensent en sensations — ancre tes mots dans du concret ressenti.</p>
+    </div>
+  </div>
+
+  <div class="practice">
+    <div class="prac-lbl">Exercice · Boothman</div>
+    <div class="prac-title">Identifier la modalité sensorielle en 2 minutes</div>
+    <div class="prac-body">
+      <p>Lors de la prochaine conversation, écoute les <strong>verbes et métaphores</strong> spontanément utilisés par l'autre. "Je vois" / "Je comprends l'image" = visuel. "Ça sonne bien" / "Je m'entends là-dessus" = auditif. "Je sens" / "Ça me touche" = kinesthésique.</p>
+      <p>Puis utilise les mêmes. Cette adaptation subtile crée un sentiment de "on se comprend vraiment" — sans que l'autre sache pourquoi.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CHAPITRE 6 ══ -->
+<div class="ch-cover">
+  <div class="ch-glow"></div>
+  <div class="ch-num">6</div>
+  <div class="ch-eye">Chapitre 6</div>
+  <h2 class="ch-title">La clôture qui <em>donne envie<br>de revenir.</em></h2>
+  <div class="ch-source">Sources · Carnegie · Giblin · Lowndes</div>
+  <div class="ch-rule"></div>
+</div>
+
+<div class="bwrap">
+  <p class="lead">La fin d'une interaction est ce qui reste en mémoire. Les psychologues appellent ça l'effet de récence — la dernière impression est la plus ancrée.</p>
+
+  <div class="eye gold">L'effet de récence</div>
+  <h2 class="sec">La dernière impression est<br><em>la première mémoire.</em></h2>
+
+  <p class="bd">Les études en psychologie de la mémoire montrent que dans un échange, on retient surtout le début et la fin. La partie centrale s'estompe. Ce qui signifie que la clôture d'une conversation est aussi importante que l'ouverture — et souvent beaucoup plus négligée.</p>
+
+  <div class="rtable">
+    <div class="rt-row">
+      <div class="rt-n">1</div>
+      <div class="rt-c">
+        <div class="rt-t">La récapitulation sincère</div>
+        <div class="rt-d">Avant de partir, résumer ce que tu retiens de la conversation en une phrase — et ce que tu en feras. "Ce que tu m'as dit sur [X] — je vais y réfléchir sérieusement." Signal fort : l'autre a été entendu et son impact sur toi est réel.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n">2</div>
+      <div class="rt-c">
+        <div class="rt-t">Le pont vers le futur — Lowndes</div>
+        <div class="rt-d">Planter une graine de continuité. "La prochaine fois qu'on se voit, je voudrais entendre la suite de ça." ou "Il faut qu'on en parle plus longuement." L'avenir partagé crée un ancrage de relation.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n">3</div>
+      <div class="rt-c">
+        <div class="rt-t">Le prénom en clôture — Carnegie</div>
+        <div class="rt-d">Terminer en prononçant le prénom de l'autre. C'est le dernier son qu'il entend de ta voix. Et c'est le son le plus agréable pour lui. "Prends soin de toi, [prénom]."</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n">4</div>
+      <div class="rt-c">
+        <div class="rt-t">La reconnaissance spécifique finale — Giblin</div>
+        <div class="rt-d">Terminer en nommant quelque chose que l'autre t'a apporté dans cet échange. "J'ai appris quelque chose aujourd'hui grâce à toi — ce que tu m'as expliqué sur [X], c'était éclairant." Fin sur la valeur qu'il a créée.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n" style="background:var(--teal);color:white;">5</div>
+      <div class="rt-c" style="background:var(--teal-p);">
+        <div class="rt-t" style="color:var(--teal);">La micro-action de suivi</div>
+        <div class="rt-d">Dans les 24 heures après une rencontre importante : envoyer un message court qui fait référence à quelque chose de spécifique dit pendant la conversation. <strong>Ce geste transforme une rencontre en début de relation.</strong> Presque personne ne le fait. C'est pour ça que ça marque autant.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight">
+    <div class="ins-bar"></div>
+    <div class="ins-lbl">◈ Le principe de la micro-action</div>
+    <p class="ins-text">"J'ai pensé à ce que tu m'as dit hier sur [X]. Tu avais raison." Ce message — envoyé le lendemain d'une conversation — dit trois choses en une phrase : je t'ai vraiment écouté, tu m'as impacté, et tu avais raison. Difficile de faire plus marquant en moins de 15 mots.</p>
+  </div>
+</div>
+
+<!-- ══ SYNTHÈSE ══ -->
+<div class="ch-cover">
+  <div class="ch-glow"></div>
+  <div class="ch-num">✦</div>
+  <div class="ch-eye">Synthèse</div>
+  <h2 class="ch-title">Le Stack complet —<br><em>de la rencontre à la mémoire.</em></h2>
+  <div class="ch-rule"></div>
+</div>
+
+<div class="bwrap">
+  <p class="lead">Toutes les techniques de ce dossier forment une séquence logique — du premier contact à l'empreinte durable.</p>
+
+  <div class="rtable">
+    <div class="rt-row">
+      <div class="rt-n">1</div>
+      <div class="rt-c">
+        <div class="rt-t">Les 90 premières secondes · Boothman + Navarro</div>
+        <div class="rt-d">Attitude ouverte. Corps synchronisé. Voix calibrée. Pieds pointés. Mains visibles. Check non-verbal en 4 points. Le rapport s'installe avant les mots.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n">2</div>
+      <div class="rt-c">
+        <div class="rt-t">Faire compter l'autre · Carnegie + Giblin</div>
+        <div class="rt-d">Prénom dans les 20 premières secondes. Triple A : accepter, approuver, apprécier. Donner d'abord avant de recevoir.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n">3</div>
+      <div class="rt-c">
+        <div class="rt-t">L'écoute qui transforme · Carnegie + Lowndes</div>
+        <div class="rt-d">Niveau 5 — écoute empathique. Swivelling Spotlight : retourner le projecteur. Echoing : reformulation miroir. Poser la question de profondeur.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n">4</div>
+      <div class="rt-c">
+        <div class="rt-t">La langue sensorielle · Boothman</div>
+        <div class="rt-d">Identifier la modalité dominante (visuel / auditif / kinesthésique). Adapter les métaphores en conséquence. Créer la sensation inexplicable "on se comprend vraiment".</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n">5</div>
+      <div class="rt-c">
+        <div class="rt-t">L'influence éthique · Cialdini</div>
+        <div class="rt-d">Réciprocité : donner d'abord. Nommer spécifiquement. Poser la question de profondeur sur l'histoire de l'autre.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-n" style="background:var(--teal);color:white;">6</div>
+      <div class="rt-c" style="background:var(--teal-p);">
+        <div class="rt-t" style="color:var(--teal);">La clôture mémorable · Carnegie + Lowndes + Giblin</div>
+        <div class="rt-d"><strong>Récapituler sincèrement. Planter le pont vers le futur. Prononcer le prénom en partant. Micro-action de suivi dans les 24h.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dquote">
+    <p class="dquote-text">La personne qui sait faire sentir aux autres qu'ils comptent vraiment — pas de façon calculée, mais de façon sincère et précise — est une personne qu'on cherche à retrouver. Ce n'est pas du charisme. C'est une compétence. Et une compétence, ça s'apprend.</p>
+    <p class="dquote-attr">— Synthèse des 6 auteurs</p>
+  </div>
+
+  <div class="practice">
+    <div class="prac-lbl">Protocole de pratique — 30 jours</div>
+    <div class="prac-title">Une technique par semaine</div>
+    <div class="prac-body">
+      <p><strong>Semaine 1 :</strong> Le non-verbal. Check en 4 points (Navarro) + Flooding Smile (Lowndes) dans chaque interaction.</p>
+      <p><strong>Semaine 2 :</strong> Les prénoms + Triple A (Carnegie + Giblin). Dans chaque conversation, prénom placé et un compliment spécifique.</p>
+      <p><strong>Semaine 3 :</strong> L'écoute niveau 5. Swivelling Spotlight + Echoing dans chaque échange important.</p>
+      <p><strong>Semaine 4 :</strong> La clôture + la micro-action. Finir chaque conversation avec une reconnaissance spécifique + un message dans les 24h après les rencontres importantes.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FINALE ══ -->
+<div class="finale">
+  <div class="finale-bg"></div>
+  <div class="fin-inner">
+    <div class="fin-kicker">Ce que tu emportes</div>
+    <h2 class="fin-title">Certaines<br>personnes, on ne<br>les <em>oublie pas.</em></h2>
+    <div class="fin-rule"></div>
+    <p class="fin-sub">Tu seras l'une d'entre elles. Pas parce que tu es le plus brillant dans la pièce. Parce que tu es la personne qui a vraiment regardé les autres — qui a vraiment entendu ce qu'ils disaient — et qui leur a renvoyé une image d'eux-mêmes qu'ils avaient envie de garder.</p>
+    <p class="fin-sub">Ce dossier te donne les outils. La prochaine conversation est l'occasion de les utiliser.</p>
+    <div class="fin-sig">AURA · Marquer les Esprits · Bonus Exclusif Programme Complet</div>
+  </div>
+</div>
+
+</body>
+</html>

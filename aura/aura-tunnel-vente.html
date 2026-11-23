@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURA — Tunnel de Vente</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Jost:wght@200;300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #FFFFFF;
+  --bg2:       #F7F5F2;
+  --bg3:       #EFECE8;
+  --ink:       #0E0C14;
+  --ink2:      #2A2635;
+  --ink3:      #4A4758;
+  --violet:    #2D1B69;
+  --violet-m:  #4A2E9E;
+  --violet-l:  #7B5EA7;
+  --violet-p:  #EDE8F8;
+  --gold:      #B8902A;
+  --gold-l:    #D4AA42;
+  --gold-bg:   #FBF6EC;
+  --gray:      #8A8798;
+  --gray-l:    #C4C2CC;
+  --border:    #E8E5E0;
+  --red:       #B83232;
+  --green:     #2A7A4A;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Jost',sans-serif; background:var(--bg); color:var(--ink); overflow-x:hidden; font-size:17px; line-height:1.8; }
+
+/* ── NAV ── */
+.tnav {
+  position:sticky; top:0; z-index:200;
+  background:#fff; border-bottom:1px solid var(--border);
+  display:flex;
+}
+.tnav-btn {
+  flex:1; padding:16px 8px; border:none; background:transparent;
+  font-family:'Jost',sans-serif; font-size:10px; font-weight:500;
+  letter-spacing:0.35em; text-transform:uppercase; color:var(--gray);
+  cursor:pointer; border-bottom:2px solid transparent; transition:all .2s;
+}
+.tnav-btn.active { color:var(--violet); border-bottom-color:var(--violet); }
+
+/* ── PAGES ── */
+.pg { display:none; }
+.pg.active { display:block; }
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(160deg, #F7F4FF 0%, #FFF9F0 60%, #FFFFFF 100%);
+  padding: 100px 24px 80px;
+  text-align:center;
+  border-bottom: 1px solid var(--border);
+  position:relative; overflow:hidden;
+}
+.hero::before {
+  content:'';
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 20%, rgba(45,27,105,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 70%, rgba(184,144,42,0.06) 0%, transparent 60%);
+  pointer-events:none;
+}
+.hero-inner { max-width:760px; margin:0 auto; position:relative; z-index:1; }
+
+.eyebrow {
+  display:inline-flex; align-items:center; gap:10px;
+  font-size:10px; font-weight:500; letter-spacing:0.5em;
+  color:var(--violet-m); text-transform:uppercase;
+  margin-bottom:32px;
+}
+.eyebrow::before, .eyebrow::after { content:''; width:24px; height:1px; background:var(--violet-m); opacity:0.4; }
+
+.hero-h1 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(34px,5.5vw,68px);
+  font-weight:900; line-height:1.1;
+  color:var(--ink); margin-bottom:28px;
+}
+.hero-h1 em { font-style:italic; color:var(--violet); }
+.hero-h1 span { color:var(--gold); }
+
+.hero-sub {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(17px,2.2vw,22px); font-style:italic; font-weight:400;
+  color:var(--ink3); line-height:1.75; max-width:600px;
+  margin:0 auto 48px;
+}
+
+/* ── CTA ── */
+.cta {
+  display:inline-block;
+  background:var(--violet);
+  color:#fff; font-size:14px; font-weight:600;
+  letter-spacing:0.12em; text-transform:uppercase;
+  padding:20px 52px; border:none; cursor:pointer;
+  text-decoration:none; transition:all .2s;
+}
+.cta:hover { background:var(--violet-m); transform:translateY(-2px); box-shadow:0 12px 36px rgba(45,27,105,0.2); }
+
+.cta-gold {
+  background:var(--gold);
+  color:#fff;
+}
+.cta-gold:hover { background:var(--gold-l); box-shadow:0 12px 36px rgba(184,144,42,0.25); }
+
+.cta-note { font-size:12px; font-weight:300; color:var(--gray); margin-top:14px; letter-spacing:0.08em; }
+
+/* ── PROOF BAR ── */
+.proof-bar {
+  background:var(--bg2); border-bottom:1px solid var(--border);
+  padding:24px; display:flex; justify-content:center;
+  align-items:center; gap:48px; flex-wrap:wrap;
+}
+.pb-item { text-align:center; }
+.pb-num { font-family:'Bebas Neue',sans-serif; font-size:34px; color:var(--violet); line-height:1; }
+.pb-lbl { font-size:10px; font-weight:400; letter-spacing:0.2em; color:var(--gray); text-transform:uppercase; margin-top:4px; }
+
+/* ── SECTIONS ── */
+.sec { max-width:760px; margin:0 auto; padding:80px 24px; }
+.sec-gray { background:var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.sec-gray .sec { padding:80px 24px; }
+.sec-violet { background:linear-gradient(135deg, var(--violet) 0%, #1A0F3D 100%); }
+.sec-violet .sec { padding:80px 24px; }
+
+.s-eye {
+  font-size:10px; font-weight:500; letter-spacing:0.45em;
+  color:var(--violet-m); text-transform:uppercase;
+  margin-bottom:12px; display:flex; align-items:center; gap:10px;
+}
+.s-eye::before { content:''; width:24px; height:1px; background:var(--violet-m); opacity:0.5; }
+.sec-violet .s-eye { color:rgba(196,174,232,0.8); }
+.sec-violet .s-eye::before { background:rgba(196,174,232,0.5); }
+
+.s-h2 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,4vw,46px); font-weight:900; line-height:1.15;
+  color:var(--ink); margin-bottom:32px;
+}
+.s-h2 em { font-style:italic; color:var(--violet); }
+.sec-violet .s-h2 { color:#fff; }
+.sec-violet .s-h2 em { color:rgba(196,174,232,0.9); }
+
+p.bd { font-size:17px; font-weight:300; color:var(--ink3); line-height:1.9; margin-bottom:22px; }
+p.bd strong { color:var(--ink); font-weight:500; }
+.sec-violet p.bd { color:rgba(247,244,240,0.75); }
+.sec-violet p.bd strong { color:#fff; }
+
+/* ── PAIN LIST ── */
+.pain { list-style:none; margin:32px 0; }
+.pain li {
+  display:flex; gap:16px; align-items:flex-start;
+  padding:15px 0; border-bottom:1px solid var(--border);
+  font-size:16px; font-weight:300; color:var(--ink3); line-height:1.7;
+}
+.pain li:last-child { border-bottom:none; }
+.pain .x { color:var(--red); font-size:15px; flex-shrink:0; margin-top:2px; }
+
+/* ── PROMISE ── */
+.promise {
+  background:var(--violet-p);
+  border-left:4px solid var(--violet);
+  padding:36px 40px; margin:40px 0;
+  position:relative; overflow:hidden;
+}
+.promise::before {
+  content:'"'; position:absolute; top:-15px; left:12px;
+  font-family:'Playfair Display',serif; font-size:160px;
+  color:var(--violet); opacity:0.07; line-height:1;
+}
+.promise p {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(18px,2.5vw,24px); font-style:italic;
+  font-weight:400; color:var(--violet); line-height:1.6; margin:0;
+  position:relative; z-index:1;
+}
+
+/* ── PILLAR GRID ── */
+.pg-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; margin:36px 0; background:var(--border); }
+.pg-card { background:var(--bg); padding:32px 28px; }
+.pg-ico { font-size:24px; margin-bottom:12px; }
+.pg-name { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:var(--ink); margin-bottom:10px; }
+.pg-desc { font-size:14px; font-weight:300; color:var(--ink3); line-height:1.7; margin:0; }
+
+/* ── GET LIST ── */
+.get { list-style:none; margin:28px 0; }
+.get li {
+  display:flex; gap:14px; align-items:flex-start;
+  padding:14px 0; border-bottom:1px solid var(--border);
+  font-size:16px; font-weight:300; color:var(--ink2); line-height:1.7;
+}
+.get li:last-child { border-bottom:none; }
+.get .chk { color:var(--green); font-size:16px; flex-shrink:0; margin-top:2px; }
+
+/* ── TESTIMONIALS ── */
+.tg { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:36px 0; }
+.testi { background:var(--bg); border:1px solid var(--border); padding:28px 24px; }
+.t-stars { color:var(--gold); letter-spacing:3px; font-size:13px; margin-bottom:14px; }
+.t-text { font-family:'Playfair Display',serif; font-size:15px; font-style:italic; color:var(--ink2); line-height:1.75; margin-bottom:16px; }
+.t-auth { font-size:11px; font-weight:400; letter-spacing:0.22em; color:var(--gray); text-transform:uppercase; }
+
+/* ── PRICE BLOCK ── */
+.price-block {
+  border:1px solid var(--border); padding:52px 40px;
+  text-align:center; margin:48px 0;
+  position:relative; background:var(--bg2);
+}
+.pb-tag {
+  position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+  background:var(--gold); color:#fff;
+  font-size:10px; font-weight:600; letter-spacing:0.3em;
+  text-transform:uppercase; padding:6px 22px; white-space:nowrap;
+}
+.price-was { font-size:15px; font-weight:300; color:var(--gray); text-decoration:line-through; margin-bottom:8px; }
+.price-big { font-family:'Bebas Neue',sans-serif; font-size:88px; color:var(--violet); line-height:1; }
+.price-per { font-size:12px; font-weight:300; color:var(--gray); letter-spacing:0.2em; margin-bottom:36px; }
+.guar { font-size:13px; font-weight:300; color:var(--gray); margin-top:18px; display:flex; align-items:center; justify-content:center; gap:8px; }
+
+/* ── URGENCY ── */
+.urgency {
+  background:#FFF5F5; border:1px solid rgba(184,50,50,0.2);
+  border-left:4px solid var(--red);
+  padding:24px 32px; margin:28px 0;
+  display:flex; align-items:flex-start; gap:16px;
+}
+.urg-ico { font-size:22px; flex-shrink:0; }
+.urg-txt { font-size:14px; font-weight:300; color:#5A2020; line-height:1.8; }
+.urg-txt strong { color:#3A1010; font-weight:500; }
+
+/* ── FAQ ── */
+.faq-item { border-bottom:1px solid var(--border); padding:24px 0; }
+.fq { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:var(--ink); margin-bottom:10px; }
+.fa { font-size:15px; font-weight:300; color:var(--ink3); line-height:1.85; }
+
+/* ── BUMP PAGE ── */
+.bump-wrap { max-width:680px; margin:0 auto; padding:60px 24px; }
+.bump-box {
+  border:2px dashed var(--gold);
+  background:var(--gold-bg); padding:40px;
+  margin:32px 0;
+}
+.bh { display:flex; align-items:flex-start; gap:16px; margin-bottom:26px; }
+.bh-check {
+  width:26px; height:26px; border:2px solid var(--gold);
+  background:#fff; flex-shrink:0; margin-top:3px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; color:var(--gold);
+}
+.bh-title { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--ink); }
+.bh-tag { font-size:10px; font-weight:500; letter-spacing:0.3em; color:var(--gold); text-transform:uppercase; margin-top:4px; }
+.bump-body { font-size:16px; font-weight:300; color:var(--ink3); line-height:1.85; margin-bottom:24px; }
+.bump-list { list-style:none; }
+.bump-list li {
+  display:flex; gap:10px; font-size:15px; font-weight:300;
+  color:var(--ink2); padding:9px 0;
+  border-bottom:1px solid rgba(184,144,42,0.12); line-height:1.6;
+}
+.bump-list li:last-child { border-bottom:none; }
+.bc { color:var(--gold); flex-shrink:0; }
+.bump-pr-row {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-top:28px; padding-top:24px;
+  border-top:1px solid rgba(184,144,42,0.2);
+  flex-wrap:wrap; gap:16px;
+}
+.bump-price-was { font-size:13px; color:var(--gray); text-decoration:line-through; }
+.bump-price { font-family:'Bebas Neue',sans-serif; font-size:44px; color:var(--gold); line-height:1; }
+.bump-price-lbl { font-size:10px; color:var(--gray); letter-spacing:0.2em; text-transform:uppercase; }
+
+/* ── SKIP ── */
+.skip {
+  font-size:12px; font-weight:300; color:var(--gray);
+  text-decoration:underline; cursor:pointer;
+  display:block; margin-top:14px; letter-spacing:0.08em;
+}
+
+/* ── UPSELL PAGE ── */
+.up-hero {
+  background:linear-gradient(160deg, #F4F0FF 0%, #FFF8EF 70%, #FFFFFF 100%);
+  padding:100px 24px 80px; text-align:center;
+  border-bottom:1px solid var(--border);
+  position:relative; overflow:hidden;
+}
+.up-hero::before {
+  content:'';
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 50% 50% at 15% 25%, rgba(45,27,105,0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 85% 70%, rgba(184,144,42,0.05) 0%, transparent 55%);
+}
+.up-inner { max-width:760px; margin:0 auto; position:relative; z-index:1; }
+
+/* ── VS ── */
+.vs { display:grid; grid-template-columns:1fr 40px 1fr; gap:0; margin:40px 0; }
+.vs-b { border:1px solid var(--border); padding:28px 24px; }
+.vs-b.before { border-right:none; background:#FFF5F5; }
+.vs-b.after { border-left:none; background:#F0FFF6; }
+.vs-mid-col {
+  background:var(--bg3); display:flex; align-items:center;
+  justify-content:center;
+  font-family:'Bebas Neue',sans-serif; font-size:20px;
+  color:var(--gray-l); letter-spacing:0.1em;
+  border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+}
+.vs-lbl { font-size:10px; font-weight:500; letter-spacing:0.35em; text-transform:uppercase; margin-bottom:18px; }
+.vs-b.before .vs-lbl { color:rgba(184,50,50,0.8); }
+.vs-b.after .vs-lbl { color:rgba(42,122,74,0.8); }
+.vs-list { list-style:none; }
+.vs-list li {
+  font-size:14px; font-weight:300; color:var(--ink3); padding:8px 0;
+  border-bottom:1px solid rgba(0,0,0,0.04); display:flex; gap:10px; line-height:1.6;
+}
+.vs-list li:last-child { border-bottom:none; }
+.vx { color:rgba(184,50,50,0.7); flex-shrink:0; }
+.vc { color:rgba(42,122,74,0.7); flex-shrink:0; }
+
+/* ── SECRET CARDS ── */
+.sc-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; margin:36px 0; background:var(--border); }
+.sc { background:var(--bg); padding:28px 24px; }
+.sc-num { font-family:'Bebas Neue',sans-serif; font-size:44px; color:var(--violet-m); opacity:0.15; line-height:1; margin-bottom:4px; }
+.sc-title { font-family:'Playfair Display',serif; font-size:17px; font-weight:700; color:var(--ink); margin-bottom:8px; }
+.sc-desc { font-size:13px; font-weight:300; color:var(--ink3); line-height:1.7; }
+
+/* ── FOOTER ── */
+.foot { text-align:center; padding:32px 24px; border-top:1px solid var(--border); background:var(--bg2); }
+.foot p { font-size:12px; font-weight:300; color:var(--gray); letter-spacing:0.08em; }
+
+@media(max-width:640px) {
+  .pg-grid,.tg,.sc-grid { grid-template-columns:1fr; }
+  .vs { grid-template-columns:1fr; }
+  .vs-mid-col { display:none; }
+  .vs-b.before { border-right:1px solid var(--border); }
+  .vs-b.after { border-left:1px solid var(--border); }
+  .bump-pr-row { flex-direction:column; }
+  .price-block { padding:36px 20px; }
+  .promise { padding:28px 24px; }
+  .proof-bar { gap:24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="tnav">
+  <button class="tnav-btn active" onclick="show('p1')">① Ebook Principal</button>
+  <button class="tnav-btn" onclick="show('p2')">② Order Bump</button>
+  <button class="tnav-btn" onclick="show('p3')">③ Upsell Level 2</button>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     PAGE 1 — EBOOK AURA
+     ══════════════════════════════════════════ -->
+<div id="p1" class="pg active">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">Accès immédiat · Téléchargement instantané</div>
+      <h1 class="hero-h1">
+        Pourquoi certaines personnes<br>
+        <em>attirent sans effort</em><br>
+        — et comment tu peux<br>
+        <span>faire pareil.</span>
+      </h1>
+      <p class="hero-sub">La méthode complète pour développer une présence magnétique authentique. Sans masque. Sans performance. Sans technique de séduction.</p>
+      <a href="#prix1" class="cta cta-gold">Oui, je veux mon aura — 27€ →</a>
+      <p class="cta-note">✓ Accès immédiat &nbsp;·&nbsp; ✓ PDF téléchargeable &nbsp;·&nbsp; ✓ Garantie 30 jours</p>
+    </div>
+  </div>
+
+  <!-- PROOF BAR -->
+  <div class="proof-bar">
+    <div class="pb-item"><div class="pb-num">4</div><div class="pb-lbl">Piliers fondamentaux</div></div>
+    <div class="pb-item"><div class="pb-num">8</div><div class="pb-lbl">Chapitres complets</div></div>
+    <div class="pb-item"><div class="pb-num">90</div><div class="pb-lbl">Jours de protocole</div></div>
+    <div class="pb-item"><div class="pb-num">100%</div><div class="pb-lbl">Satisfait ou remboursé</div></div>
+  </div>
+
+  <!-- PROBLEM -->
+  <div class="sec">
+    <div class="s-eye">Le problème réel</div>
+    <h2 class="s-h2">Tu travailles. Tu progresses.<br><em>Et pourtant quelque chose manque.</em></h2>
+    <p class="bd">Il y a des gens qui entrent dans une pièce et que tout le monde remarque. Pas les plus beaux. Pas les plus riches. Pas nécessairement les plus intelligents. Juste ceux qui ont <strong>quelque chose.</strong> Et quelque part, en silence, tu te demandes : est-ce qu'on naît avec ça, ou est-ce que ça se construit ?</p>
+    <ul class="pain">
+      <li><span class="x">—</span>Tu travailles ta posture, ton style, ton image — et pourtant dans une pièce, tu passes encore inaperçu</li>
+      <li><span class="x">—</span>On te dit d'être "confiant" mais personne ne t'explique concrètement comment y arriver</li>
+      <li><span class="x">—</span>Tu regardes des gens qui ont moins que toi exercer une attraction naturelle sur leur entourage — sans logique apparente</li>
+      <li><span class="x">—</span>Tu as appliqué des conseils de développement personnel. Pendant quelques jours, ça marchait. Puis ça retombait.</li>
+      <li><span class="x">—</span>Tu te retrouves à performer un personnage plutôt qu'à être toi-même — et les gens le ressentent</li>
+    </ul>
+    <div class="promise">
+      <p>Ces frustrations ne signalent pas un manque de potentiel. Elles signalent que tu cherches au bon endroit — mais avec la mauvaise carte. Ce programme est la bonne carte.</p>
+    </div>
+  </div>
+
+
+  <!-- QUIZ AURA -->
+  <div style="background:linear-gradient(160deg,#0E0814 0%,#1C1040 55%,#0A0814 100%);padding:80px 24px;position:relative;overflow:hidden;" id="quiz-section">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 35% 40%,rgba(45,27,105,.55) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 75% 65%,rgba(184,144,42,.06) 0%,transparent 55%);pointer-events:none;"></div>
+    <div style="max-width:760px;margin:0 auto;text-align:center;position:relative;z-index:2;">
+      <div style="font-size:10px;font-weight:500;letter-spacing:.5em;color:rgba(196,174,232,.7);text-transform:uppercase;margin-bottom:20px;">Évaluation Gratuite — Incluse</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,4.5vw,52px);font-weight:900;color:#F7F4F0;line-height:1.1;margin-bottom:18px;">Avant d'acheter —<br><em style="font-style:italic;color:rgba(196,174,232,.85);">découvre ton niveau exact.</em></h2>
+      <p style="font-family:'Playfair Display',serif;font-size:17px;font-style:italic;color:rgba(247,244,240,.55);line-height:1.75;max-width:520px;margin:0 auto 40px;">28 questions sur tes comportements réels. 4 piliers évalués. 7 niveaux de progression. Une analyse personnalisée par IA — gratuite, en 8 minutes.</p>
+
+      <!-- QUIZ EMBED -->
+      <div id="qz-wrap" style="text-align:left;">
+
+        <!-- INTRO CARD -->
+        <div id="qz-intro" style="background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.2);padding:40px 36px;text-align:center;">
+          <div style="display:flex;justify-content:center;gap:32px;margin-bottom:36px;flex-wrap:wrap;">
+            <div style="text-align:center;"><div style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:rgba(196,174,232,.85);line-height:1;">28</div><div style="font-size:10px;font-weight:300;letter-spacing:.25em;color:rgba(247,244,240,.35);text-transform:uppercase;margin-top:4px;">Questions</div></div>
+            <div style="text-align:center;"><div style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:rgba(196,174,232,.85);line-height:1;">4</div><div style="font-size:10px;font-weight:300;letter-spacing:.25em;color:rgba(247,244,240,.35);text-transform:uppercase;margin-top:4px;">Piliers</div></div>
+            <div style="text-align:center;"><div style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:rgba(196,174,232,.85);line-height:1;">7</div><div style="font-size:10px;font-weight:300;letter-spacing:.25em;color:rgba(247,244,240,.35);text-transform:uppercase;margin-top:4px;">Niveaux</div></div>
+            <div style="text-align:center;"><div style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:rgba(196,174,232,.85);line-height:1;">~8</div><div style="font-size:10px;font-weight:300;letter-spacing:.25em;color:rgba(247,244,240,.35);text-transform:uppercase;margin-top:4px;">Minutes</div></div>
+          </div>
+          <button onclick="qzStart()" style="background:#B8902A;color:#fff;font-size:13px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;padding:18px 52px;border:none;cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s;" onmouseover="this.style.background='#D4AA42'" onmouseout="this.style.background='#B8902A'">Faire le quiz gratuitement →</button>
+          <p style="margin-top:14px;font-size:12px;font-weight:300;color:rgba(247,244,240,.3);letter-spacing:.1em;">Réponds honnêtement — le quiz mesure ton état actuel</p>
+        </div>
+
+        <!-- QUIZ BODY -->
+        <div id="qz-body" style="display:none;">
+
+          <!-- PROGRESS -->
+          <div style="background:#09071A;padding:16px 24px;display:flex;align-items:center;gap:20px;border-bottom:1px solid rgba(201,168,76,.1);">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.1em;color:#F7F4F0;flex-shrink:0;">AURA</div>
+            <div style="flex:1;">
+              <div style="height:3px;background:rgba(255,255,255,.08);"><div id="qz-bar" style="height:100%;background:#B8902A;transition:width .4s ease;width:0%;"></div></div>
+              <div id="qz-counter" style="font-size:10px;font-weight:300;letter-spacing:.3em;color:rgba(247,244,240,.35);text-transform:uppercase;margin-top:5px;text-align:center;">Question 1 / 28</div>
+            </div>
+            <div id="qz-pillar-lbl" style="font-size:10px;font-weight:300;letter-spacing:.2em;color:rgba(247,244,240,.35);text-transform:uppercase;flex-shrink:0;">Socle Intérieur</div>
+          </div>
+
+          <!-- PILLAR BAND -->
+          <div style="background:rgba(196,174,232,.08);border-bottom:1px solid rgba(196,174,232,.12);padding:10px 24px;display:flex;align-items:center;gap:10px;">
+            <span style="font-size:10px;font-weight:500;letter-spacing:.4em;color:rgba(196,174,232,.6);text-transform:uppercase;">Pilier</span>
+            <span id="qz-pillar-name" style="font-size:13px;font-weight:500;color:rgba(196,174,232,.9);">Socle Intérieur</span>
+          </div>
+
+          <!-- QUESTION -->
+          <div style="background:rgba(255,255,255,.03);padding:44px 28px 28px;">
+            <div id="qz-qnum" style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.5em;color:#B8902A;margin-bottom:14px;text-transform:uppercase;">Question 01</div>
+            <div id="qz-qtext" style="font-family:'Playfair Display',serif;font-size:clamp(17px,2.5vw,22px);font-weight:700;color:#F7F4F0;line-height:1.4;margin-bottom:30px;"></div>
+            <div id="qz-answers" style="display:flex;flex-direction:column;gap:8px;"></div>
+          </div>
+
+          <!-- NAV -->
+          <div style="background:rgba(255,255,255,.02);border-top:1px solid rgba(255,255,255,.06);padding:20px 28px;display:flex;justify-content:space-between;align-items:center;">
+            <button id="qz-prev" onclick="qzPrev()" style="background:transparent;color:rgba(196,174,232,.7);border:1px solid rgba(196,174,232,.3);font-size:11px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;padding:12px 24px;cursor:pointer;font-family:'Jost',sans-serif;visibility:hidden;">← Précédent</button>
+            <div id="qz-navinfo" style="font-size:12px;font-weight:300;color:rgba(247,244,240,.35);letter-spacing:.1em;">Sélectionne une réponse</div>
+            <button id="qz-next" onclick="qzNext()" disabled style="background:#2D1B69;color:#fff;font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;padding:12px 28px;border:none;cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s;opacity:.4;">Suivant →</button>
+          </div>
+        </div>
+
+        <!-- RESULTS -->
+        <div id="qz-results" style="display:none;">
+
+          <!-- HERO RESULT -->
+          <div id="qz-res-hero" style="padding:52px 28px;text-align:center;position:relative;overflow:hidden;">
+            <div style="width:140px;height:140px;border-radius:50%;border:3px solid rgba(255,255,255,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px;">
+              <div id="qz-score-num" style="font-family:'Bebas Neue',sans-serif;font-size:56px;color:#F7F4F0;line-height:1;">0</div>
+              <div style="font-size:10px;font-weight:300;letter-spacing:.3em;color:rgba(247,244,240,.4);text-transform:uppercase;">/ 100</div>
+            </div>
+            <div id="qz-level-badge" style="display:inline-block;font-size:10px;font-weight:500;letter-spacing:.45em;text-transform:uppercase;padding:7px 20px;border:1px solid;margin-bottom:16px;"></div>
+            <div id="qz-level-name" style="font-family:'Playfair Display',serif;font-size:clamp(24px,4vw,42px);font-weight:900;color:#F7F4F0;line-height:1.1;margin-bottom:14px;"></div>
+            <p id="qz-tagline" style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(247,244,240,.55);line-height:1.7;max-width:440px;margin:0 auto;"></p>
+          </div>
+
+          <!-- PILLAR BARS -->
+          <div style="background:rgba(255,255,255,.03);border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);padding:28px;">
+            <div style="font-size:10px;font-weight:500;letter-spacing:.4em;color:rgba(196,174,232,.6);text-transform:uppercase;margin-bottom:20px;">Tes 4 piliers</div>
+            <div id="qz-pillars" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;"></div>
+          </div>
+
+          <!-- LEVEL MAP -->
+          <div style="background:rgba(255,255,255,.02);padding:28px;">
+            <div style="font-size:10px;font-weight:500;letter-spacing:.4em;color:rgba(196,174,232,.6);text-transform:uppercase;margin-bottom:16px;">Ta position sur les 7 niveaux</div>
+            <div id="qz-level-map" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:rgba(255,255,255,.08);"></div>
+          </div>
+
+          <!-- AI ANALYSIS -->
+          <div style="padding:28px;border-top:1px solid rgba(255,255,255,.06);">
+            <div style="font-size:10px;font-weight:500;letter-spacing:.4em;color:rgba(196,174,232,.6);text-transform:uppercase;margin-bottom:14px;">Analyse personnalisée</div>
+            <div id="qz-analysis" style="background:rgba(45,27,105,.2);border-left:3px solid #B8902A;padding:24px;min-height:80px;">
+              <div id="qz-loading" style="display:flex;align-items:center;gap:10px;font-size:14px;font-weight:300;color:rgba(247,244,240,.45);font-style:italic;">
+                <span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:rgba(196,174,232,.6);animation:qdot .8s ease-in-out infinite;"></span>
+                <span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:rgba(196,174,232,.6);animation:qdot .8s ease-in-out .15s infinite;"></span>
+                <span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:rgba(196,174,232,.6);animation:qdot .8s ease-in-out .3s infinite;"></span>
+                <span>Analyse en cours…</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA POST-QUIZ -->
+          <div style="padding:36px 28px;text-align:center;background:linear-gradient(135deg,rgba(45,27,105,.4),rgba(184,144,42,.08));border-top:1px solid rgba(201,168,76,.15);">
+            <div style="font-size:10px;font-weight:500;letter-spacing:.4em;color:#B8902A;text-transform:uppercase;margin-bottom:14px;">Ce quiz n'est qu'un aperçu</div>
+            <p style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:rgba(247,244,240,.8);line-height:1.7;max-width:460px;margin:0 auto 28px;">Le programme complet te donne les outils pour franchir chaque niveau — pilier par pilier, semaine par semaine.</p>
+            <a href="#prix1" style="display:inline-block;background:#B8902A;color:#fff;font-size:13px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;padding:18px 48px;text-decoration:none;transition:all .2s;" onmouseover="this.style.background='#D4AA42'" onmouseout="this.style.background='#B8902A'">Accéder au programme — 27€ →</a>
+            <p style="margin-top:14px;font-size:12px;font-weight:300;color:rgba(247,244,240,.3);letter-spacing:.08em;">✓ Garantie 30 jours &nbsp;·&nbsp; ✓ Accès immédiat</p>
+            <button onclick="qzReset()" style="display:block;margin:16px auto 0;background:transparent;border:none;color:rgba(247,244,240,.35);font-size:12px;font-weight:300;cursor:pointer;text-decoration:underline;font-family:'Jost',sans-serif;letter-spacing:.08em;">Refaire le quiz</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+  @keyframes qdot{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+  .qz-ans{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:15px 18px;cursor:pointer;text-align:left;display:flex;align-items:flex-start;gap:12px;font-family:'Jost',sans-serif;width:100%;transition:all .15s;color:#F7F4F0;}
+  .qz-ans:hover{border-color:rgba(196,174,232,.4);background:rgba(196,174,232,.08);}
+  .qz-ans.qz-selected{border-color:rgba(196,174,232,.7);background:rgba(45,27,105,.4);}
+  .qz-letter{width:26px;height:26px;flex-shrink:0;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:rgba(247,244,240,.5);transition:all .15s;}
+  .qz-ans.qz-selected .qz-letter{background:#4A2E9E;color:#fff;border-color:#4A2E9E;}
+  .qz-ans-text{font-size:14px;font-weight:300;line-height:1.6;padding-top:3px;color:rgba(247,244,240,.8);}
+  </style>
+
+  <script>
+  // ── QUIZ DATA (inline dans la page de vente) ──
+  const QZ_PILLARS=[
+    {id:'socle',name:'Socle Intérieur',icon:'🧠',color:'#7B5EA7'},
+    {id:'signal',name:'Signal Physique',icon:'⚡',color:'#1A9E8A'},
+    {id:'social',name:'Présence Sociale',icon:'🌊',color:'#C9A84C'},
+    {id:'leadership',name:'Leadership Naturel',icon:'🎯',color:'#A855A8'}
+  ];
+  const QZ_QUESTIONS=[
+    {p:'socle',t:"Quand tu reçois une critique de quelqu'un que tu respectes, quelle est ta réaction instinctive ?",o:["Je me sens profondément remis en question, parfois pendant des jours","Ça me touche mais je relativise progressivement","J'écoute, je filtre ce qui est utile et je l'intègre calmement","Je la reçois comme de l'information neutre — elle ne touche pas qui je suis"]},
+    {p:'socle',t:"À quelle fréquence prends-tu des décisions importantes sans chercher l'approbation d'autrui ?",o:["Rarement — j'ai besoin de plusieurs avis pour avancer","Parfois — pour les décisions mineures, j'y arrive seul","Souvent — je consulte mais la décision finale vient de moi","Presque toujours — mes décisions viennent de mes valeurs, rien d'autre"]},
+    {p:'socle',t:"Peux-tu formuler tes 3 valeurs absolues en moins de 30 secondes ?",o:["Non — je n'ai jamais vraiment réfléchi à ça","Vaguement — j'en ai une idée générale mais elles ne guident pas mes actes","Oui — elles existent et je les consulte dans les moments importants","Oui, précises, vécues au quotidien et non négociables en toute circonstance"]},
+    {p:'socle',t:"Comment te sens-tu seul, sans stimulation externe, pendant 30 minutes ?",o:["Mal à l'aise — j'ai besoin de m'occuper immédiatement","Neutre — je le tolère mais je ne le recherche pas","Bien — j'en profite pour réfléchir ou me ressourcer","Très bien — le silence seul est l'endroit où je me trouve le mieux"]},
+    {p:'socle',t:"À quelle fréquence identifies-tu activement des comportements qui trahissent ta version idéale de toi-même ?",o:["Jamais — je ne pratique pas vraiment d'introspection","Rarement — surtout après un échec ou une crise","Souvent — j'ai une pratique d'auto-observation régulière","Quotidiennement — c'est une discipline ancrée qui ne cède pas"]},
+    {p:'socle',t:"Dans une situation sociale inconfortable, que fais-tu ?",o:["Je m'adapte au maximum pour être accepté, quitte à trahir qui je suis","Je joue un rôle en attendant que la situation se termine","Je reste globalement moi-même tout en faisant des ajustements mineurs","Je suis identique à ce que je suis partout — l'inconfort ne change pas mon identité"]},
+    {p:'socle',t:"Si une personne te décrivait à quelqu'un qui ne te connaît pas, la description correspondrait-elle à qui tu es vraiment ?",o:["Probablement non — je montre des faces très différentes selon les contextes","Partiellement — certaines dimensions restent cachées ou déformées","Globalement oui — les gens me perçoivent assez justement","Oui totalement — il n'y a aucun décalage entre ce que je suis et ce que je projette"]},
+    {p:'signal',t:"Comment est ta posture au quotidien, sans que tu y penses ?",o:["Voûtée ou contractée — je prends peu de place naturellement","Variable — ça dépend de mon état et du contexte","Globalement droite — j'y pense et je me corrige régulièrement","Naturellement ouverte et ancrée — c'est automatique depuis longtemps"]},
+    {p:'signal',t:"Comment gères-tu le contact visuel en conversation ?",o:["Je l'évite souvent ou je regarde ailleurs sans le vouloir","Je le maintiens par intermittence — ça me demande un effort conscient","Je le maintiens naturellement la plupart du temps","Je regarde dans les yeux avec aisance et intention — sans forcer, sans fuir"]},
+    {p:'signal',t:"Comment est ton rythme de parole dans une situation importante ou stressante ?",o:["J'accélère et je comble tous les silences — c'est automatique","Je parle trop vite sous pression mais je m'en rends compte après","Je maintiens un rythme correct même sous pression","Je parle lentement et posément — les silences font partie de ma communication"]},
+    {p:'signal',t:"Quelle est ta relation à l'activité physique en ce moment ?",o:["Inexistante ou très irrégulière — moins d'une fois par semaine","Présente mais sans engagement réel — je fais le minimum","Régulière — j'ai une discipline physique claire et tenue","Centrale — mon corps est un outil de développement global, pas juste de santé"]},
+    {p:'signal',t:"Quand tu entres dans une pièce que tu ne connais pas, que se passe-t-il ?",o:["Je cherche immédiatement une place discrète et j'attends","Je scanne l'environnement avec une légère anxiété avant d'agir","J'entre calmement, j'observe sans précipitation avant d'interagir","J'entre en prenant naturellement l'espace — ma présence précède mes mots"]},
+    {p:'signal',t:"Comment est ta voix quand tu parles en public ou devant un groupe ?",o:["Haute, rapide ou chevrotante — je le ressens moi-même","Correcte mais sans impact particulier","Posée et audible — les gens m'écoutent sans effort visible","Grave, résonante et lente — ma voix crée naturellement de l'attention"]},
+    {p:'signal',t:"As-tu une routine matinale que tu tiens au moins 5 jours sur 7 ?",o:["Non — chaque matin est différent selon mon humeur","En théorie oui, en pratique elle cède à la première contrainte","Oui — une routine simple mais réelle et tenue","Oui — incluant mouvement, silence et intention claire"]},
+    {p:'social',t:"Quand quelqu'un te parle, que fais-tu mentalement pendant qu'il s'exprime ?",o:["Je prépare ma réponse en attendant qu'il finisse","J'écoute mais mon attention décroche régulièrement","J'écoute vraiment la plupart du temps","J'écoute avec tout mon corps — je ressens ce qu'il transmet au-delà des mots"]},
+    {p:'social',t:"À quelle fréquence exprimes-tu un désaccord clairement, sans te justifier à l'excès ?",o:["Rarement — j'évite le conflit et cherche le consensus systématiquement","Parfois — mais ça me coûte beaucoup d'énergie","Souvent — j'ai appris à exprimer mes positions avec calme et fermeté","Naturellement — ma position existe indépendamment de l'accord des autres"]},
+    {p:'social',t:"Comment gères-tu les silences dans une conversation ?",o:["Je les comble immédiatement — le silence me rend profondément anxieux","Je les tolère mais je suis soulagé quand quelqu'un parle","Je les laisse exister sans inconfort majeur","Je les utilise activement — le silence fait partie de mon leadership conversationnel"]},
+    {p:'social',t:"Après une interaction sociale importante, quelle est ton émotion dominante ?",o:["Anxiété — je me demande constamment comment j'ai été perçu","Soulagement — content que ce soit terminé","Satisfaction — je sens que l'échange a été authentique","Énergie — les interactions profondes me rechargent"]},
+    {p:'social',t:"Quelle est ta capacité à faire sentir aux autres qu'ils comptent vraiment ?",o:["Faible — j'ai tendance à ramener les conversations à ma propre expérience","Moyenne — j'y pense mais c'est un effort","Bonne — les gens me disent qu'ils se sentent vraiment écoutés","Naturelle — voir les autres profondément est instinctif chez moi"]},
+    {p:'social',t:"Comment réagis-tu quand quelqu'un essaie de te faire changer de position par pression sociale ?",o:["Je cède souvent pour éviter la tension","Je résiste mais avec inconfort et justifications excessives","Je maintiens ma position tout en écoutant l'autre avec calme","Je reste ancré sans effort — la pression sociale ne touche pas mes convictions"]},
+    {p:'social',t:"Comment qualifierais-tu ton cercle social actuel ?",o:["Il me draine plus qu'il ne m'élève","Neutre — ni inspirant ni toxique","Globalement positif — la majorité des gens autour de moi m'élèvent","Exigeant et choisi — je le protège activement"]},
+    {p:'leadership',t:"Quand tu entres dans un groupe sans statut défini, quelle est ton attitude spontanée ?",o:["Je m'efface et j'attends que les dynamiques se dessinent sans moi","Je cherche progressivement à me positionner sans trop me dévoiler","Je prends naturellement ma place sans chercher à dominer","Le groupe s'organise naturellement autour de moi sans que je l'aie cherché"]},
+    {p:'leadership',t:"As-tu une vision personnelle claire — formulable en une phrase en moins de 15 secondes ?",o:["Non — je n'ai pas encore de direction vraiment définie","Vague — j'ai des aspirations mais elles ne guident pas mes décisions","Oui — j'ai une direction claire qui oriente mes choix","Oui, précise, incarnée, formulable immédiatement — elle structure chaque décision"]},
+    {p:'leadership',t:"Comment te comportes-tu sous pression intense ?",o:["Je m'agite, j'accélère et je perds de vue l'essentiel","Je gère mais mon stress est clairement visible par les autres","Je reste globalement calme et opérationnel sous pression","Je ralentis quand les autres accélèrent — le calme est ma réponse naturelle"]},
+    {p:'leadership',t:"Es-tu la même personne en réunion professionnelle, entre amis proches et seul chez toi ?",o:["Non — je joue des rôles très différents selon les contextes","Partiellement — il existe des décalages significatifs","Globalement oui — les différences sont mineures","Oui totalement — il n'y a aucune version de moi selon les contextes"]},
+    {p:'leadership',t:"Quand tu parles, les autres s'arrêtent-ils naturellement pour t'écouter ?",o:["Rarement — j'ai du mal à me faire entendre dans un groupe","Parfois — quand le sujet me tient vraiment à cœur","Souvent — les gens savent que quand je parle, ça vaut la peine d'écouter","Presque toujours — ma parole crée de l'attention avant même d'avoir commencé"]},
+    {p:'leadership',t:"As-tu travaillé sur tes héritages familiaux — identifié des peurs ou schémas transgénérationnels ?",o:["Non — ce sujet ne fait pas partie de mon travail sur moi","Légèrement — j'ai une intuition de certains héritages sans travail structuré","Sérieusement — j'ai identifié des patterns et commencé à les libérer","En profondeur — ce travail a déjà transformé des espaces entiers de ma vie"]},
+    {p:'leadership',t:"Dans quelle mesure penses-tu vraiment par toi-même — formant tes opinions avant de savoir ce que les autres pensent ?",o:["Peu — je m'aligne souvent sur les opinions de mon environnement","Partiellement — je m'en rends compte mais le conformisme reste fort","Souvent — j'ai développé une pensée assez autonome","Profondément — mon signal personnel est clairement distinct du bruit collectif"]}
+  ];
+  const QZ_LEVELS=[
+    {n:1,name:"L'Endormi",color:'#9CA3AF',range:[0,19],tagline:"Tu es encore avant le départ — et c'est une position honnête et rare. La prise de conscience est déjà un acte de courage."},
+    {n:2,name:"L'Éveil",color:'#6B7280',range:[20,34],tagline:"Quelque chose s'est allumé en toi. Tu commences à voir ce que tu n'avais pas vu. C'est le début de tout."},
+    {n:3,name:"Le Chercheur",color:'#3B82F6',range:[35,49],tagline:"Tu cherches activement. Tu travailles. Les premiers résultats sont là — mais tu travailles encore en surface."},
+    {n:4,name:"La Construction",color:'#2563EB',range:[50,62],tagline:"Les fondations sont solides. Les gens commencent à percevoir quelque chose de différent en toi."},
+    {n:5,name:"L'Émergence",color:'#7C3AED',range:[63,74],tagline:"Quelque chose a changé structurellement. Les autres le perçoivent avant que tu le dises."},
+    {n:6,name:"Le Rayonnement",color:'#B8902A',range:[75,86],tagline:"Tu incarnes naturellement et de façon constante. L'aura n'est plus quelque chose que tu travailles."},
+    {n:7,name:"Le Maître",color:'#C9A84C',range:[87,100],tagline:"L'aura et le leadership sont devenus ton état naturel. Tu irradies parce que tu es pleinement toi."}
+  ];
+
+  let qzCur=0, qzAns=new Array(28).fill(null);
+
+  function qzStart(){
+    document.getElementById('qz-intro').style.display='none';
+    document.getElementById('qz-body').style.display='block';
+    qzRender();
+    document.getElementById('quiz-section').scrollIntoView({behavior:'smooth'});
+  }
+
+  function qzRender(){
+    const q=QZ_QUESTIONS[qzCur], total=QZ_QUESTIONS.length;
+    const pct=(qzCur/total)*100;
+    const pillar=QZ_PILLARS.find(p=>p.id===q.p);
+    document.getElementById('qz-bar').style.width=pct+'%';
+    document.getElementById('qz-counter').textContent=`Question ${qzCur+1} / ${total}`;
+    document.getElementById('qz-pillar-lbl').textContent=pillar.name;
+    document.getElementById('qz-pillar-name').textContent=pillar.name;
+    document.getElementById('qz-qnum').textContent=`Question ${String(qzCur+1).padStart(2,'0')}`;
+    document.getElementById('qz-qtext').textContent=q.t;
+    const letters=['A','B','C','D'];
+    const cont=document.getElementById('qz-answers');
+    cont.innerHTML='';
+    q.o.forEach((opt,i)=>{
+      const btn=document.createElement('button');
+      const sel=qzAns[qzCur]===i;
+      btn.className='qz-ans'+(sel?' qz-selected':'');
+      btn.innerHTML=`<span class="qz-letter" style="${sel?'background:#4A2E9E;color:#fff;border-color:#4A2E9E;':''}">${letters[i]}</span><span class="qz-ans-text">${opt}</span>`;
+      btn.onclick=()=>qzSelect(i);
+      cont.appendChild(btn);
+    });
+    const prev=document.getElementById('qz-prev');
+    const next=document.getElementById('qz-next');
+    const info=document.getElementById('qz-navinfo');
+    prev.style.visibility=qzCur===0?'hidden':'visible';
+    next.disabled=qzAns[qzCur]===null;
+    next.style.opacity=qzAns[qzCur]===null?'.4':'1';
+    next.textContent=qzCur===total-1?'Voir mes résultats →':'Suivant →';
+    const rem=total-qzCur-1;
+    info.textContent=qzAns[qzCur]!==null?(rem>0?`${rem} question${rem>1?'s':''} restante${rem>1?'s':''}`:'Dernière question — prêt !'):'Sélectionne une réponse';
+  }
+
+  function qzSelect(idx){
+    qzAns[qzCur]=idx;
+    document.querySelectorAll('#qz-answers .qz-ans').forEach((btn,i)=>{
+      const sel=i===idx;
+      btn.className='qz-ans'+(sel?' qz-selected':'');
+      const l=btn.querySelector('.qz-letter');
+      l.style.background=sel?'#4A2E9E':'';
+      l.style.color=sel?'#fff':'';
+      l.style.borderColor=sel?'#4A2E9E':'';
+    });
+    const next=document.getElementById('qz-next');
+    next.disabled=false; next.style.opacity='1';
+    const rem=QZ_QUESTIONS.length-qzCur-1;
+    document.getElementById('qz-navinfo').textContent=rem>0?`${rem} question${rem>1?'s':''} restante${rem>1?'s':''}`:'Dernière question — prêt !';
+  }
+
+  function qzNext(){
+    if(qzAns[qzCur]===null)return;
+    if(qzCur===QZ_QUESTIONS.length-1){qzShowResults();}
+    else{qzCur++;qzRender();document.getElementById('quiz-section').scrollIntoView({behavior:'smooth'});}
+  }
+
+  function qzPrev(){
+    if(qzCur>0){qzCur--;qzRender();document.getElementById('quiz-section').scrollIntoView({behavior:'smooth'});}
+  }
+
+  function qzCalc(){
+    const ps={},pc={};
+    QZ_PILLARS.forEach(p=>{ps[p.id]=0;pc[p.id]=0;});
+    qzAns.forEach((a,i)=>{if(a===null)return;const q=QZ_QUESTIONS[i];ps[q.p]+=(a+1);pc[q.p]++;});
+    const pct={};
+    QZ_PILLARS.forEach(p=>{const mx=pc[p.id]*4;pct[p.id]=mx>0?Math.round((ps[p.id]/mx)*100):0;});
+    const g=Math.round(Object.values(pct).reduce((a,b)=>a+b,0)/QZ_PILLARS.length);
+    return{pct,g};
+  }
+
+  function qzGetLevel(s){return QZ_LEVELS.find(l=>s>=l.range[0]&&s<=l.range[1])||QZ_LEVELS[QZ_LEVELS.length-1];}
+
+  async function qzShowResults(){
+    document.getElementById('qz-body').style.display='none';
+    document.getElementById('qz-results').style.display='block';
+    document.getElementById('quiz-section').scrollIntoView({behavior:'smooth'});
+    const{pct,g}=qzCalc();
+    const lv=qzGetLevel(g);
+
+    // Hero
+    const hero=document.getElementById('qz-res-hero');
+    hero.style.background=`linear-gradient(135deg, rgba(45,27,105,.5), rgba(9,7,26,.8))`;
+    const scoreEl=document.getElementById('qz-score-num');
+    scoreEl.style.color=lv.color;
+    qzAnim(scoreEl,0,g,1200);
+    const badge=document.getElementById('qz-level-badge');
+    badge.textContent=`Niveau ${lv.n} — ${lv.name}`;
+    badge.style.color=lv.color; badge.style.borderColor=lv.color+'60';
+    document.getElementById('qz-level-name').innerHTML=`<em style="color:${lv.color}">${lv.name}</em>`;
+    document.getElementById('qz-tagline').textContent=lv.tagline;
+
+    // Pillar bars
+    const pillCont=document.getElementById('qz-pillars');
+    pillCont.innerHTML='';
+    QZ_PILLARS.forEach(p=>{
+      const v=pct[p.id];
+      const card=document.createElement('div');
+      card.style.cssText='background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:18px 16px;';
+      card.innerHTML=`<div style="font-size:10px;font-weight:500;letter-spacing:.25em;color:rgba(196,174,232,.6);text-transform:uppercase;margin-bottom:10px;">${p.icon} ${p.name}</div><div style="height:4px;background:rgba(255,255,255,.08);margin-bottom:8px;"><div id="qzbar-${p.id}" style="height:100%;width:0%;background:${p.color};transition:width 1s ease;"></div></div><div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:${p.color};line-height:1;">${v}<span style="font-size:12px;color:rgba(247,244,240,.3);font-family:'Jost',sans-serif;font-weight:300;"> / 100</span></div>`;
+      pillCont.appendChild(card);
+      setTimeout(()=>{document.getElementById(`qzbar-${p.id}`).style.width=v+'%';},400);
+    });
+
+    // Level map
+    const lmCont=document.getElementById('qz-level-map');
+    lmCont.innerHTML='';
+    QZ_LEVELS.forEach(l=>{
+      const card=document.createElement('div');
+      const isCur=l.n===lv.n, isPast=l.n<lv.n;
+      card.style.cssText=`background:${isCur?'rgba(45,27,105,.5)':'rgba(255,255,255,.02)'};padding:14px 8px;text-align:center;opacity:${(isCur||isPast)?1:.3};${isCur?'border-bottom:2px solid '+l.color+';':''}`;
+      card.innerHTML=`<div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:${l.color};line-height:1;">${l.n}</div><div style="font-size:9px;font-weight:500;color:rgba(247,244,240,${isCur?.9:.5});margin-top:4px;line-height:1.3;">${l.name}</div>`;
+      lmCont.appendChild(card);
+    });
+
+    // AI
+    await qzAI(pct,g,lv);
+  }
+
+  function qzAnim(el,from,to,dur){
+    const s=performance.now();
+    function u(now){const t=Math.min((now-s)/dur,1);el.textContent=Math.round(from+(to-from)*(1-Math.pow(1-t,3)));if(t<1)requestAnimationFrame(u);}
+    requestAnimationFrame(u);
+  }
+
+  async function qzAI(pct,g,lv){
+    const aEl=document.getElementById('qz-analysis');
+    const sum=QZ_QUESTIONS.map((q,i)=>{
+      const a=qzAns[i];if(a===null)return'';
+      const p=QZ_PILLARS.find(x=>x.id===q.p);
+      return `[${p.name}] Score ${a+1}/4 : "${q.o[a].substring(0,70)}"`;
+    }).filter(Boolean).join('\n');
+    const prompt=`Tu es expert du programme AURA en magnétisme et leadership naturel.\n\nRésultats quiz :\n- Score global : ${g}/100\n- Niveau : ${lv.n}/7 — ${lv.name}\n- Socle : ${pct.socle}/100 | Signal : ${pct.signal}/100 | Social : ${pct.social}/100 | Leadership : ${pct.leadership}/100\n\nRéponses :\n${sum}\n\nRédige une analyse en français de 200 à 250 mots, 3 paragraphes, sans titres. (1) Forces réelles identifiées. (2) Point de bascule prioritaire. (3) Ce qui t'attend au niveau suivant. Tutoiement. Direct. Prose. Commence sans introduction.`;
+    try{
+      const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:800,messages:[{role:'user',content:prompt}]})});
+      const d=await r.json();
+      const txt=d.content?.map(b=>b.text||'').join('')||'';
+      if(txt){
+        document.getElementById('qz-loading').style.display='none';
+        aEl.innerHTML+=txt.split('\n\n').filter(p=>p.trim()).map(p=>`<p style="font-size:15px;font-weight:300;color:rgba(247,244,240,.8);line-height:1.85;margin-bottom:16px;">${p}</p>`).join('');
+      } else { qzFallback(aEl,pct,lv); }
+    } catch(e){ qzFallback(aEl,pct,lv); }
+  }
+
+  function qzFallback(el,pct,lv){
+    const best=QZ_PILLARS.reduce((a,b)=>pct[a.id]>pct[b.id]?a:b);
+    const worst=QZ_PILLARS.reduce((a,b)=>pct[a.id]<pct[b.id]?a:b);
+    document.getElementById('qz-loading').style.display='none';
+    el.innerHTML+=`<p style="font-size:15px;font-weight:300;color:rgba(247,244,240,.8);line-height:1.85;margin-bottom:14px;">Ton point le plus fort est le <strong style="color:rgba(196,174,232,.9)">${best.name}</strong> (${pct[best.id]}/100). C'est une fondation réelle que les gens dans ta vie perçoivent, même s'ils ne peuvent pas le nommer.</p><p style="font-size:15px;font-weight:300;color:rgba(247,244,240,.8);line-height:1.85;">Ton prochain levier : le <strong style="color:rgba(196,174,232,.9)">${worst.name}</strong> (${pct[worst.id]}/100). C'est lui qui plafonne ton niveau global. Le programme te donne exactement les outils pour débloquer ce pilier.</p>`;
+  }
+
+  function qzReset(){
+    qzCur=0; qzAns=new Array(28).fill(null);
+    document.getElementById('qz-results').style.display='none';
+    document.getElementById('qz-body').style.display='none';
+    document.getElementById('qz-intro').style.display='block';
+    document.getElementById('quiz-section').scrollIntoView({behavior:'smooth'});
+  }
+  </script>
+
+
+  <!-- SOLUTION -->
+  <div class="sec-gray">
+    <div class="sec">
+      <div class="s-eye">La réponse</div>
+      <h2 class="s-h2">L'aura ne se construit pas.<br><em>Elle se révèle.</em></h2>
+      <p class="bd">L'aura n'est pas quelque chose qu'on ajoute — c'est quelque chose qu'on révèle en retirant tout ce qui la cache. Les peurs héritées, le besoin d'approbation, les habitudes qui trahissent ta version idéale. Ce programme t'accompagne dans ce processus, pilier par pilier, semaine par semaine, pendant 90 jours.</p>
+      <div class="pg-grid">
+        <div class="pg-card"><div class="pg-ico">🧠</div><div class="pg-name">Le Socle Intérieur</div><p class="pg-desc">Identité, valeurs, confiance non-conditionnelle. Ce que tu es quand personne ne regarde — c'est ce que tout le monde ressent quand tu es là.</p></div>
+        <div class="pg-card"><div class="pg-ico">⚡</div><div class="pg-name">Le Signal Physique</div><p class="pg-desc">Posture, regard, voix, gestuelle. Ton corps parle avant toi. Apprends à faire en sorte qu'il dise ce qui te représente vraiment.</p></div>
+        <div class="pg-card"><div class="pg-ico">🌊</div><div class="pg-name">La Présence Sociale</div><p class="pg-desc">Écoute, silence, impact. L'aura ne dépend pas de l'approbation des autres — mais elle se teste dans leur regard.</p></div>
+        <div class="pg-card"><div class="pg-ico">🌿</div><div class="pg-name">L'Environnement de Vie</div><p class="pg-desc">Routine, cercle, discipline. Tu es le produit de ce qui t'entoure. Change l'environnement, change l'aura.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CE QUE TU REÇOIS -->
+  <div class="sec">
+    <div class="s-eye">Le programme</div>
+    <h2 class="s-h2">Ce que tu reçois<br><em>immédiatement</em></h2>
+    <ul class="get">
+      <li><span class="chk">✓</span>L'ebook complet <strong>AURA — Le Code du Magnétisme</strong> (8 chapitres)</li>
+      <li><span class="chk">✓</span>Les 4 piliers développés avec exercices pratiques à chaque chapitre</li>
+      <li><span class="chk">✓</span>Le chapitre exclusif sur le sport comme laboratoire de l'aura</li>
+      <li><span class="chk">✓</span>Le Plan Concret 90 Jours en 3 phases structurées</li>
+      <li><span class="chk">✓</span>Accès à vie · Lisible sur tous supports</li>
+    </ul>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <div class="sec-gray">
+    <div class="sec">
+      <div class="s-eye">Ils l'ont vécu</div>
+      <h2 class="s-h2">Ce qu'ils disent<br><em>après 30 jours</em></h2>
+      <div class="tg">
+        <div class="testi"><div class="t-stars">★★★★★</div><p class="t-text">"En 3 semaines, des collègues m'ont demandé ce que j'avais changé. Je n'avais rien changé d'apparent. Mais quelque chose dans ma façon d'être en réunion était différent. Moins de besoin d'être validé. Plus de présence réelle."</p><div class="t-auth">— Karim M., 31 ans, chef de projet</div></div>
+        <div class="testi"><div class="t-stars">★★★★★</div><p class="t-text">"J'ai lu beaucoup de livres sur la confiance. Celui-là est différent parce qu'il ne te demande pas de jouer un personnage. Il te demande d'être toi, vraiment. Et c'est beaucoup plus efficace."</p><div class="t-auth">— Sarah L., 27 ans, entrepreneuse</div></div>
+        <div class="testi"><div class="t-stars">★★★★★</div><p class="t-text">"Le chapitre sur le silence actif a changé mes interactions professionnelles en 10 jours. Je parle moins. Mais quand je parle, on m'écoute vraiment. C'est une sensation que je n'avais jamais connue avant."</p><div class="t-auth">— Thomas R., 34 ans, commercial</div></div>
+        <div class="testi"><div class="t-stars">★★★★★</div><p class="t-text">"Ce qui m'a frappée c'est la cohérence du programme. Les 4 piliers s'alimentent mutuellement. Tout est connecté et tout fait sens."</p><div class="t-auth">— Leila B., 29 ans, coach sportive</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- URGENCY + PRIX -->
+  <div class="sec">
+    <div class="urgency">
+      <div class="urg-ico">⚠</div>
+      <div class="urg-txt"><strong>Prix de lancement limité.</strong> L'ebook sera proposé à 47€ au tarif normal. Tu bénéficies aujourd'hui du tarif fondateur à 27€, disponible uniquement pendant la phase de lancement.</div>
+    </div>
+
+    <div id="prix1" class="price-block">
+      <div class="pb-tag">Offre de lancement</div>
+      <p class="price-was">Valeur réelle : 47€</p>
+      <div class="price-big">27€</div>
+      <p class="price-per">Accès à vie · Téléchargement immédiat</p>
+      <a href="#" class="cta cta-gold" style="font-size:15px;">Accéder à AURA maintenant →</a>
+      <p class="guar">🔒 Garantie 30 jours satisfait ou remboursé — sans question</p>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="sec-gray">
+    <div class="sec">
+      <div class="s-eye">Questions fréquentes</div>
+      <h2 class="s-h2">Ce que tu te<br><em>demandes peut-être</em></h2>
+      <div class="faq-item"><div class="fq">Est-ce que ça marche si je suis introverti ?</div><div class="fa">Absolument — et peut-être encore mieux. L'aura authentique n'est pas de l'extraversion. Certaines des présences les plus magnétiques sont les plus silencieuses dans une pièce. Ce programme travaille ta nature réelle, pas un personnage à jouer.</div></div>
+      <div class="faq-item"><div class="fq">Combien de temps avant de voir des résultats ?</div><div class="fa">La plupart des lecteurs rapportent un changement dans leurs interactions dans les 2 à 3 premières semaines. Les résultats profonds s'installent sur les 90 jours du plan.</div></div>
+      <div class="faq-item"><div class="fq">C'est quoi la garantie exactement ?</div><div class="fa">30 jours. Si tu estimes que le programme ne t'a pas apporté de valeur, tu envoies un email et tu es remboursé intégralement. Aucune question posée.</div></div>
+      <div class="faq-item"><div class="fq">C'est du développement personnel classique ?</div><div class="fa">Non. Pas de "fake it till you make it". Le programme s'appuie sur des mécanismes réels — psychologie, neuroscience, biomécanique — pour des changements durables.</div></div>
+    </div>
+  </div>
+
+  <!-- FINAL CTA -->
+  <div class="sec" style="text-align:center; padding-bottom:100px;">
+    <h2 class="s-h2" style="text-align:center;">Dans 90 jours,<br><em>qui veux-tu être ?</em></h2>
+    <p class="bd" style="text-align:center; max-width:500px; margin:0 auto 40px;">Le seul moment où rien ne change, c'est quand on ne fait rien. Tu es là. Tu as lu jusqu'ici. C'est déjà un signal.</p>
+    <a href="#prix1" class="cta cta-gold" style="font-size:15px;">Je commence aujourd'hui — 27€ →</a>
+    <p class="cta-note" style="margin-top:14px;">✓ Accès immédiat · ✓ Garantie 30 jours · ✓ Prix fondateur</p>
+  </div>
+
+  <div class="foot"><p>© AURA Programme &nbsp;·&nbsp; Mentions légales &nbsp;·&nbsp; Confidentialité &nbsp;·&nbsp; Support</p></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 2 — ORDER BUMP
+     ══════════════════════════════════════════ -->
+<div id="p2" class="pg">
+
+  <div class="bump-wrap">
+
+    <div style="text-align:center; margin-bottom:48px;">
+      <div class="eyebrow" style="justify-content:center;">Étape 2 · Avant de finaliser ta commande</div>
+      <h2 style="font-family:'Playfair Display',serif; font-size:clamp(26px,4vw,44px); font-weight:900; color:var(--ink); line-height:1.2; margin-bottom:20px;">
+        Tu as le programme.<br><em style="color:var(--violet);">Voici ce qui t'empêchera d'abandonner.</em>
+      </h2>
+      <p style="font-size:17px; font-weight:300; color:var(--ink3); line-height:1.85; font-family:'Playfair Display',serif; font-style:italic; max-width:520px; margin:0 auto;">
+        La vérité sur le développement personnel : lire un programme ne change rien. Le pratiquer, jour après jour, avec une structure claire — c'est là que tout se passe.
+      </p>
+    </div>
+
+    <div style="display:flex; justify-content:center; gap:48px; margin-bottom:48px; flex-wrap:wrap;">
+      <div style="text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:60px; color:var(--violet); line-height:1;">92%</div>
+        <div style="font-size:10px; font-weight:400; letter-spacing:0.2em; color:var(--gray); text-transform:uppercase; margin-top:6px; max-width:140px;">des ebooks achetés<br>ne sont jamais terminés</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:60px; color:var(--violet); line-height:1;">3×</div>
+        <div style="font-size:10px; font-weight:400; letter-spacing:0.2em; color:var(--gray); text-transform:uppercase; margin-top:6px; max-width:140px;">plus de résultats<br>avec un suivi structuré</div>
+      </div>
+    </div>
+
+    <!-- BUMP BOX -->
+    <div class="bump-box">
+      <div class="bh">
+        <div class="bh-check">✓</div>
+        <div>
+          <div class="bh-title">Ajouter le Tracker 90 Jours AURA</div>
+          <div class="bh-tag">◈ Complément officiel du programme</div>
+        </div>
+      </div>
+
+      <p class="bump-body">L'ebook te donne la méthode. Le Tracker te donne la <strong>structure quotidienne</strong> pour l'appliquer sans perdre le fil. Chaque semaine, chaque pilier, chaque rituel — prêt à être coché, évalué, ancré.</p>
+
+      <ul class="bump-list">
+        <li><span class="bc">◈</span>12 semaines de suivi structuré — rituels quotidiens organisés par pilier</li>
+        <li><span class="bc">◈</span>Score d'aura hebdomadaire sur 10 pour visualiser ta progression</li>
+        <li><span class="bc">◈</span>Espace intention hebdomadaire — pour ne jamais perdre le cap</li>
+        <li><span class="bc">◈</span>3 bilans mensuels complets avec score des 4 piliers</li>
+        <li><span class="bc">◈</span>Lettre finale à ton moi du Jour 1 — l'exercice le plus puissant du programme</li>
+        <li><span class="bc">◈</span>Format imprimable premium — conçu pour être utilisé, pas consulté</li>
+      </ul>
+
+      <div class="bump-pr-row">
+        <div>
+          <div class="bump-price-was">Valeur normale : 17€</div>
+          <div class="bump-price">+ 9€</div>
+          <div class="bump-price-lbl">Ajouté à ta commande · Une case à cocher</div>
+        </div>
+        <p style="font-size:13px; font-weight:300; color:var(--ink3); line-height:1.7; max-width:210px;">Une seule case à cocher pour ajouter le Tracker. Aucune autre action requise.</p>
+      </div>
+    </div>
+
+    <div class="promise">
+      <p>La discipline naît de la preuve, pas de la motivation. Chaque case cochée est une preuve que tu es quelqu'un qui fait ce qu'il dit.</p>
+    </div>
+
+    <div style="text-align:center; margin-top:48px;">
+      <p style="font-size:14px; font-weight:300; color:var(--ink3); margin-bottom:24px; line-height:1.7;">
+        ☐ &nbsp;Oui, j'ajoute le Tracker 90 Jours pour seulement <strong style="color:var(--gold);">9€ supplémentaires</strong>
+      </p>
+      <a href="#" class="cta cta-gold">Oui, j'ajoute le Tracker → 36€ au total</a>
+      <span class="skip">Non merci, je préfère avancer sans structure de suivi</span>
+    </div>
+
+  </div>
+  <div class="foot"><p>© AURA Programme &nbsp;·&nbsp; Mentions légales &nbsp;·&nbsp; Support</p></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 3 — UPSELL LEVEL 2
+     ══════════════════════════════════════════ -->
+<div id="p3" class="pg">
+
+  <!-- HERO -->
+  <div class="up-hero">
+    <div class="up-inner">
+      <div class="eyebrow" style="justify-content:center;">AURA Level 2 · Offre unique</div>
+      <p style="font-family:'Playfair Display',serif; font-size:17px; font-style:italic; color:var(--ink3); margin-bottom:28px; line-height:1.8;">Tu viens d'accéder au programme. Bien. Maintenant, une question directe :</p>
+      <h1 class="hero-h1">
+        Tu veux une aura de surface —<br>
+        ou tu veux comprendre<br>
+        <em>ce que personne ne dit ?</em>
+      </h1>
+      <p class="hero-sub">Le Level 1 travaille la surface. Le Level 2 travaille la source. La différence entre les deux explique pourquoi certaines personnes rayonnent d'une façon que les autres ne peuvent pas imiter.</p>
+      <a href="#prix3" class="cta">Je veux les vrais secrets — 47€ →</a>
+      <p class="cta-note">✓ Accès immédiat · ✓ Offre valable sur cette page uniquement · ✓ Garantie 30 jours</p>
+    </div>
+  </div>
+
+  <!-- TRANSITION -->
+  <div class="sec">
+    <div class="s-eye">Le niveau supérieur</div>
+    <h2 class="s-h2">Il existe une raison pour laquelle<br><em>le développement personnel ne suffit pas.</em></h2>
+    <p class="bd">Tu peux travailler ta posture. Affiner ton style. Maîtriser ta voix. Optimiser ta routine. Et malgré tout ça — malgré tous ces efforts logiques et mesurables — quelque chose ne se déclenche pas.</p>
+    <p class="bd">La raison ? <strong>Le vrai problème n'est pas en surface. Il est dans ce à quoi tu es branché.</strong> Il existe un champ d'énergie partagé dans lequel baignent les pensées, les peurs et les croyances de l'ensemble de l'humanité. Et la quasi-totalité des humains y est connectée en permanence — sans le savoir, sans l'avoir choisi.</p>
+    <div class="promise"><p>Les personnes à haute aura ont opéré une désolidarisation partielle de ce champ. Dans le vide laissé, leur propre signal émerge sans interférence. C'est précisément ce signal que les autres perçoivent comme de l'aura.</p></div>
+  </div>
+
+  <!-- BEFORE / AFTER -->
+  <div class="sec-gray">
+    <div class="sec">
+      <div class="s-eye">La distinction fondamentale</div>
+      <h2 class="s-h2">Level 1 seul<br><em>vs. Level 1 + Level 2</em></h2>
+      <div class="vs">
+        <div class="vs-b before">
+          <div class="vs-lbl">Aura de surface</div>
+          <ul class="vs-list">
+            <li><span class="vx">—</span>Travaille des comportements</li>
+            <li><span class="vx">—</span>Impressionne parfois</li>
+            <li><span class="vx">—</span>Dépend du contexte</li>
+            <li><span class="vx">—</span>Toujours branché au champ</li>
+            <li><span class="vx">—</span>Porte des peurs héritées</li>
+            <li><span class="vx">—</span>Leadership appris</li>
+          </ul>
+        </div>
+        <div class="vs-mid-col">VS</div>
+        <div class="vs-b after">
+          <div class="vs-lbl">Aura profonde</div>
+          <ul class="vs-list">
+            <li><span class="vc">✓</span>Change le champ énergétique</li>
+            <li><span class="vc">✓</span>Envoûte sans effort</li>
+            <li><span class="vc">✓</span>Constant dans tous les contextes</li>
+            <li><span class="vc">✓</span>Signal propre, sans interférence</li>
+            <li><span class="vc">✓</span>Libéré des transmissions ancestrales</li>
+            <li><span class="vc">✓</span>Leadership comme fréquence naturelle</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECRETS -->
+  <div class="sec">
+    <div class="s-eye">Le contenu</div>
+    <h2 class="s-h2">Les 7 secrets que<br><em>ce programme révèle</em></h2>
+    <div class="sc-grid">
+      <div class="sc"><div class="sc-num">01</div><div class="sc-title">Le Champ Collectif</div><p class="sc-desc">La prison invisible à laquelle tu es branché — et comment en sortir. Base : Jung, Sheldrake, HeartMath Institute.</p></div>
+      <div class="sc"><div class="sc-num">02</div><div class="sc-title">La TFT</div><p class="sc-desc">Protocole complet de Thought Field Therapy pour dissoudre les peurs sociales enkystées. Résultats dès la 1ère séance.</p></div>
+      <div class="sc"><div class="sc-num">03</div><div class="sc-title">Penser par soi-même</div><p class="sc-desc">La neurobiologie du conformisme — et les techniques pour reconstruire une pensée autonome dans une civilisation de masse.</p></div>
+      <div class="sc"><div class="sc-num">04</div><div class="sc-title">Leadership — Fréquence</div><p class="sc-desc">La synchronisation neuronale qui crée le vrai leadership. Protocole de cohérence interne sur 21 jours.</p></div>
+      <div class="sc"><div class="sc-num">05</div><div class="sc-title">Charisme Quantique</div><p class="sc-desc">La physique de l'attraction humaine. Le protocole Quick Coherence pour émettre un champ magnétique mesurable.</p></div>
+      <div class="sc"><div class="sc-num">06</div><div class="sc-title">Mémoires Transgénérationnelles</div><p class="sc-desc">Identifier et libérer les peurs portées pour des ancêtres disparus. Épigénétique, génosociogramme, libération.</p></div>
+    </div>
+    <div class="sc" style="border:1px solid var(--border); background:var(--bg2); padding:28px 24px;">
+      <div class="sc-num">07</div>
+      <div class="sc-title">Le Silence — Technologie de Puissance</div>
+      <p class="sc-desc">3 niveaux de pratique du silence actif pour désolidariser ton signal du bruit collectif. Plus le chapitre bonus sur la Communication Énergétique.</p>
+    </div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <div class="sec-gray">
+    <div class="sec">
+      <div class="tg">
+        <div class="testi"><div class="t-stars">★★★★★</div><p class="t-text">"La session TFT sur la peur du regard — j'ai senti quelque chose se dénouer physiquement. Le lendemain, j'ai pris la parole en réunion sans l'anxiété habituelle. Ce n'était pas de la confiance. C'était l'absence de peur. Complètement différent."</p><div class="t-auth">— Alexandre D., 38 ans, directeur commercial</div></div>
+        <div class="testi"><div class="t-stars">★★★★★</div><p class="t-text">"Le chapitre sur les mémoires transgénérationnelles a été un choc. J'ai réalisé que la honte autour du succès venait de mon grand-père. Ce n'était pas ma honte. La libérer a pris 20 minutes. L'effet a duré."</p><div class="t-auth">— Inès M., 33 ans, dirigeante</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BONUS LEADERSHIP -->
+  <div class="sec">
+    <div class="s-eye">Bonus inclus</div>
+    <h2 class="s-h2">Le Manifeste du<br><em>Leadership Naturel</em></h2>
+    <p class="bd">Inclus gratuitement avec AURA Level 2 — ce bonus standalone est la synthèse la plus directe et la plus actionnable que tu trouveras sur le vrai leadership. Pas le leadership appris. Pas le leadership de performance. Celui qui émerge quand tu n'as plus besoin de le chercher.</p>
+
+    <div style="border:1px solid var(--border); background:var(--gold-bg); margin:36px 0; overflow:hidden;">
+
+      <div style="background:var(--gold); padding:20px 32px; display:flex; align-items:center; gap:16px;">
+        <div style="font-size:24px;">⚡</div>
+        <div>
+          <div style="font-size:10px; font-weight:500; letter-spacing:0.4em; color:rgba(255,255,255,0.75); text-transform:uppercase; margin-bottom:4px;">Bonus Exclusif</div>
+          <div style="font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:#fff; line-height:1.2;">Le Manifeste du Leadership Naturel</div>
+        </div>
+        <div style="margin-left:auto; text-align:right; flex-shrink:0;">
+          <div style="font-size:11px; color:rgba(255,255,255,0.6); text-decoration:line-through;">Valeur : 27€</div>
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:28px; color:#fff; line-height:1;">OFFERT</div>
+        </div>
+      </div>
+
+      <div style="padding:32px;">
+        <p style="font-family:'Playfair Display',serif; font-size:17px; font-style:italic; color:var(--ink2); line-height:1.8; margin-bottom:28px;">
+          "Le vrai leader n'entre pas dans une pièce pour prendre le pouvoir. Il entre — et le pouvoir se réorganise autour de lui, naturellement, sans qu'il ait rien demandé."
+        </p>
+
+        <ul class="get" style="margin:0;">
+          <li><span class="chk">✓</span><div><strong>La Synchronisation Neuronale</strong> — Comprendre pourquoi les cerveaux s'alignent sur la personne la plus cohérente dans la pièce, et comment devenir cette personne</div></li>
+          <li><span class="chk">✓</span><div><strong>Le Protocole 21 Jours de Cohérence Interne</strong> — Éliminer les contradictions entre tes valeurs et tes actes. C'est cette cohérence que les autres perçoivent comme de l'autorité naturelle</div></li>
+          <li><span class="chk">✓</span><div><strong>La Voix comme Signal de Puissance</strong> — La neurobiologie du timbre grave et du rythme lent. Pourquoi une voix qui résonne dans la poitrine active le nerf vague de l'auditeur et induit un état de réceptivité</div></li>
+          <li><span class="chk">✓</span><div><strong>Le Calme sous Pression</strong> — La technique du "décalage de rythme" : ralentir quand les autres s'emballent. Le mécanisme neurologique qui crée instantanément une hiérarchie perçue sans un mot</div></li>
+          <li><span class="chk">✓</span><div><strong>Le Paradoxe du Leadership</strong> — Pourquoi le désir de diriger est lui-même ce qui t'en empêche — et comment le dissoudre pour que le leadership émerge naturellement</div></li>
+          <li><span class="chk">✓</span><div><strong>Les 3 Signatures du Leader Silencieux</strong> — Ce que les leaders les plus puissants ont en commun et que personne ne formule jamais explicitement</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="background:var(--violet-p); border-left:4px solid var(--violet); padding:28px 36px; margin:32px 0;">
+      <div style="font-size:10px; font-weight:500; letter-spacing:0.4em; color:var(--violet-m); text-transform:uppercase; margin-bottom:14px;">Ce que tu reçois avec AURA Level 2</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
+        <div style="font-size:15px; font-weight:300; color:var(--ink2); display:flex; gap:10px; align-items:flex-start;"><span style="color:var(--violet-m); flex-shrink:0;">◈</span>Programme AURA Level 2 <span style="color:var(--gray); font-size:12px; margin-left:auto;">97€</span></div>
+        <div style="font-size:15px; font-weight:300; color:var(--ink2); display:flex; gap:10px; align-items:flex-start;"><span style="color:var(--violet-m); flex-shrink:0;">◈</span>Manifeste du Leadership Naturel <span style="color:var(--gray); font-size:12px; margin-left:auto;">27€</span></div>
+      </div>
+      <div style="border-top:1px solid rgba(45,27,105,0.12); padding-top:16px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-size:12px; color:var(--gray); margin-bottom:4px;">Valeur totale</div>
+          <div style="font-size:13px; text-decoration:line-through; color:var(--gray);">124€</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:12px; color:var(--violet-m); margin-bottom:2px; letter-spacing:0.2em; text-transform:uppercase; font-weight:500;">Ton prix aujourd'hui</div>
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:44px; color:var(--violet); line-height:1;">47€</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICE -->
+  <div class="sec" style="padding-top:0;">
+    <div id="prix3" class="price-block">
+      <div class="pb-tag">Offre unique — cette page seulement</div>
+      <p class="price-was">Valeur totale : 124€</p>
+      <div class="price-big">47€</div>
+      <p class="price-per">AURA Level 2 + Manifeste du Leadership · Accès à vie</p>
+      <a href="#" class="cta">Oui, j'accède à AURA Level 2 + le Bonus — 47€ →</a>
+      <p class="guar">🔒 Garantie 30 jours · Offre valable uniquement sur cette page</p>
+    </div>
+
+    <div class="urgency">
+      <div class="urg-ico">◈</div>
+      <div class="urg-txt">Cette offre à 47€ est <strong>exclusive à cette page</strong>, immédiatement après ton achat. Si tu quittes cette page, le programme sera au tarif normal de 97€. Aucune exception.</div>
+    </div>
+
+    <div style="text-align:center; margin-top:40px;">
+      <a href="#prix3" class="cta" style="font-size:15px;">Oui, je veux Level 2 + le Manifeste du Leadership — 47€ →</a>
+      <span class="skip">Non merci, le Level 1 me suffit pour l'instant</span>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="sec-gray">
+    <div class="sec">
+      <div class="faq-item"><div class="fq">Dois-je avoir fini le Level 1 avant ?</div><div class="fa">Non. Les deux programmes sont complémentaires mais indépendants. Certains lecteurs commencent directement par le Level 2 — notamment ceux qui ont déjà fait du développement personnel et cherchent quelque chose de plus profond.</div></div>
+      <div class="faq-item"><div class="fq">La TFT, est-ce sérieux ?</div><div class="fa">Oui. La TFT est une thérapie reconnue, développée par le Dr Roger Callahan, avec des validations cliniques publiées dans des revues scientifiques. Le programme explique l'ensemble du contexte scientifique avant les protocoles pratiques.</div></div>
+      <div class="faq-item"><div class="fq">C'est spirituel ou scientifique ?</div><div class="fa">Les deux — et c'est sa force. Chaque concept est ancré dans des recherches réelles (épigénétique, neurosciences, physique quantique) tout en ouvrant des dimensions que la science cartographie encore. On ne te demande pas de croire — on te donne les faits et les techniques.</div></div>
+    </div>
+  </div>
+
+  <div class="foot"><p>© AURA Programme &nbsp;·&nbsp; Mentions légales &nbsp;·&nbsp; Confidentialité &nbsp;·&nbsp; Support</p></div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tnav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.tnav-btn')[{p1:0,p2:1,p3:2}[id]].classList.add('active');
+  window.scrollTo({top:56,behavior:'smooth'});
+}
+</script>
+
+<!-- Barre de démo hub-copyrighting -->
+<div style="position:fixed;left:0;right:0;bottom:0;z-index:2147483000;display:flex;align-items:center;gap:10px;justify-content:center;padding:10px 14px;background:rgba(20,20,30,.92);color:#fff;font:600 13px/1.2 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;backdrop-filter:blur(6px)"><span style="opacity:.7">Démo · étape 1/1</span><a href="espace-client/" style="background:#6c63ff;color:#fff;text-decoration:none;padding:8px 16px;border-radius:8px">Espace client →</a></div>
+</body>
+</html>

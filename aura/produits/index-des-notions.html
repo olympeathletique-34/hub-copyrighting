@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURA — Index Complet des Notions</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Jost:wght@200;300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #FFFFFF;
+  --bg2:      #F7F5F2;
+  --bg3:      #EFECE8;
+  --ink:      #0E0C14;
+  --ink2:     #2A2635;
+  --ink3:     #4A4758;
+  --violet:   #2D1B69;
+  --violet-m: #4A2E9E;
+  --violet-l: #7B5EA7;
+  --violet-p: #EDE8F8;
+  --gold:     #B8902A;
+  --gold-l:   #D4AA42;
+  --gold-bg:  #FBF6EC;
+  --gray:     #8A8798;
+  --gray-l:   #C4C2CC;
+  --border:   #E8E5E0;
+  --l1:       #2D1B69;   /* violet — Level 1 */
+  --l2:       #1A5C5C;   /* teal   — Level 2 */
+  --lm:       #8B4513;   /* amber  — Manifeste */
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:'Jost',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  font-size:15px;
+  line-height:1.8;
+  overflow-x:hidden;
+}
+
+/* ── COVER ── */
+.cover {
+  background: linear-gradient(160deg, #0E0814 0%, #1C1040 50%, #0A0814 100%);
+  min-height: 60vh;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center; padding:80px 32px;
+  position:relative; overflow:hidden;
+}
+.cover-bg {
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 70% 60% at 30% 40%, rgba(45,27,105,0.5) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 75% 65%, rgba(184,144,42,0.08) 0%, transparent 55%);
+  pointer-events:none;
+}
+.cover-inner { position:relative; z-index:2; max-width:640px; }
+.cover-series {
+  font-size:10px; font-weight:300; letter-spacing:0.55em;
+  color:rgba(196,174,232,0.7); text-transform:uppercase; margin-bottom:24px;
+}
+.cover-h1 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(36px,6vw,72px); font-weight:900;
+  color:#F7F4F0; line-height:1.1; margin-bottom:20px;
+}
+.cover-h1 em { font-style:italic; color:rgba(196,174,232,0.85); }
+.cover-sub {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(15px,2vw,19px); font-style:italic;
+  color:rgba(247,244,240,0.5); line-height:1.75;
+  max-width:480px; margin:0 auto 40px;
+}
+.cover-rule { width:60px; height:1px; background:linear-gradient(90deg,transparent,#B8902A,transparent); margin:0 auto 32px; }
+
+/* LEGEND PILLS */
+.legend {
+  display:flex; justify-content:center; gap:12px; flex-wrap:wrap;
+}
+.pill {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 18px; font-size:11px; font-weight:400;
+  letter-spacing:0.25em; text-transform:uppercase;
+  border:1px solid; border-radius:0;
+}
+.pill-l1 { color:rgba(196,174,232,0.9); border-color:rgba(196,174,232,0.25); }
+.pill-l2 { color:rgba(100,200,190,0.9); border-color:rgba(100,200,190,0.25); }
+.pill-lm { color:rgba(220,180,100,0.9); border-color:rgba(220,180,100,0.25); }
+.pill-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.dot-l1 { background:rgba(196,174,232,0.9); }
+.dot-l2 { background:rgba(100,200,190,0.9); }
+.dot-lm { background:rgba(220,180,100,0.9); }
+
+/* ── NAV ── */
+.sticky-nav {
+  position:sticky; top:0; z-index:100;
+  background:#fff; border-bottom:1px solid var(--border);
+  padding:0 24px;
+  display:flex; align-items:center; gap:0;
+  overflow-x:auto; white-space:nowrap;
+  -webkit-overflow-scrolling:touch;
+}
+.snav-btn {
+  padding:14px 20px; font-size:10px; font-weight:500;
+  letter-spacing:0.3em; text-transform:uppercase;
+  color:var(--gray); border:none; background:transparent;
+  cursor:pointer; border-bottom:2px solid transparent;
+  transition:all .2s; flex-shrink:0; text-decoration:none;
+}
+.snav-btn:hover { color:var(--violet); }
+
+/* ── PAGE ── */
+.wrap { max-width:1040px; margin:0 auto; padding:80px 32px; }
+.wrap + .wrap { border-top:1px solid var(--border); }
+.wrap-gray { background:var(--bg2); }
+.wrap-gray .wrap { padding:80px 32px; }
+
+/* ── SECTION HEADER ── */
+.sec-hd {
+  display:grid; grid-template-columns:auto 1fr;
+  gap:24px; align-items:flex-start; margin-bottom:52px;
+}
+.sec-hd-num {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:80px; line-height:1; color:var(--violet-m);
+  opacity:0.08; user-select:none; flex-shrink:0;
+}
+.sec-hd-content {}
+.sec-eye {
+  font-size:10px; font-weight:500; letter-spacing:0.45em;
+  color:var(--violet-m); text-transform:uppercase;
+  margin-bottom:8px; display:flex; align-items:center; gap:10px;
+}
+.sec-eye::before { content:''; width:24px; height:1px; background:var(--violet-m); opacity:0.5; }
+.sec-h2 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(26px,3.5vw,40px); font-weight:900;
+  color:var(--ink); line-height:1.15;
+}
+.sec-h2 em { font-style:italic; color:var(--violet); }
+.sec-desc {
+  font-size:15px; font-weight:300; color:var(--ink3);
+  line-height:1.8; margin-top:14px; max-width:600px;
+}
+
+/* ── SOURCE BADGES ── */
+.src {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:9px; font-weight:500; letter-spacing:0.25em;
+  text-transform:uppercase; padding:3px 10px;
+  border-radius:0; flex-shrink:0;
+}
+.src-l1 { background:rgba(45,27,105,0.08); color:var(--l1); border:1px solid rgba(45,27,105,0.15); }
+.src-l2 { background:rgba(26,92,92,0.08); color:var(--l2); border:1px solid rgba(26,92,92,0.15); }
+.src-lm { background:rgba(139,69,19,0.08); color:var(--lm); border:1px solid rgba(139,69,19,0.15); }
+
+/* ── NOTION CARD ── */
+.notion-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr));
+  gap:1px; background:var(--border);
+}
+.notion-card {
+  background:var(--bg); padding:28px 26px;
+  display:flex; flex-direction:column; gap:12px;
+}
+.nc-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.nc-title {
+  font-family:'Playfair Display',serif;
+  font-size:17px; font-weight:700; color:var(--ink);
+  line-height:1.3; flex:1;
+}
+.nc-def {
+  font-size:14px; font-weight:300; color:var(--ink3);
+  line-height:1.75;
+}
+.nc-context {
+  font-size:12px; font-weight:300; color:var(--gray);
+  font-style:italic; line-height:1.6;
+  border-top:1px solid var(--border); padding-top:10px;
+  margin-top:auto;
+}
+
+/* ── WIDE NOTION (full row) ── */
+.notion-wide {
+  background:var(--bg); border:1px solid var(--border);
+  padding:32px 32px; margin-bottom:1px;
+  display:grid; grid-template-columns:1fr 1fr 1fr;
+  gap:32px;
+}
+.nw-main {}
+.nw-title {
+  font-family:'Playfair Display',serif;
+  font-size:20px; font-weight:700; color:var(--ink);
+  margin-bottom:10px; line-height:1.25;
+}
+.nw-def { font-size:14px; font-weight:300; color:var(--ink3); line-height:1.75; }
+.nw-col-title {
+  font-size:10px; font-weight:500; letter-spacing:0.3em;
+  color:var(--gray); text-transform:uppercase; margin-bottom:10px;
+}
+.nw-col-body { font-size:13px; font-weight:300; color:var(--ink3); line-height:1.75; }
+
+/* ── ALPHA INDEX ── */
+.alpha-section { margin-bottom:48px; }
+.alpha-letter {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:52px; color:var(--violet-m); opacity:0.12;
+  line-height:1; margin-bottom:12px; user-select:none;
+}
+.alpha-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(240px,1fr));
+  gap:1px; background:var(--border);
+}
+.alpha-item {
+  background:var(--bg); padding:16px 20px;
+  display:flex; align-items:flex-start; gap:10px;
+}
+.ai-title {
+  font-size:14px; font-weight:500; color:var(--ink2);
+  line-height:1.4; flex:1;
+}
+.ai-sub { font-size:12px; font-weight:300; color:var(--gray); margin-top:3px; line-height:1.5; }
+.ai-src { flex-shrink:0; margin-top:2px; }
+
+/* ── AUTEURS ── */
+.author-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:16px; margin-top:8px;
+}
+.author-card {
+  border:1px solid var(--border); padding:24px 22px;
+  background:var(--bg);
+}
+.a-name {
+  font-family:'Playfair Display',serif;
+  font-size:18px; font-weight:700; color:var(--ink);
+  margin-bottom:6px;
+}
+.a-field { font-size:11px; font-weight:400; letter-spacing:0.25em; color:var(--gray); text-transform:uppercase; margin-bottom:12px; }
+.a-works { font-size:13px; font-weight:300; color:var(--ink3); line-height:1.7; }
+.a-src-row { display:flex; gap:6px; margin-top:14px; flex-wrap:wrap; }
+
+/* ── TECHNIQUES INDEX ── */
+.tech-list { list-style:none; margin:0; }
+.tech-item {
+  display:grid; grid-template-columns:1fr auto;
+  gap:16px; align-items:flex-start;
+  padding:18px 0; border-bottom:1px solid var(--border);
+}
+.tech-item:last-child { border-bottom:none; }
+.ti-content {}
+.ti-name {
+  font-family:'Playfair Display',serif;
+  font-size:16px; font-weight:700; color:var(--ink);
+  margin-bottom:6px;
+}
+.ti-desc { font-size:13px; font-weight:300; color:var(--ink3); line-height:1.7; }
+.ti-src-col { display:flex; flex-direction:column; gap:4px; align-items:flex-end; }
+
+/* ── CROSS-REF TABLE ── */
+.xref-table { width:100%; border-collapse:collapse; }
+.xref-table th {
+  font-size:10px; font-weight:500; letter-spacing:0.3em;
+  text-transform:uppercase; color:var(--gray);
+  padding:12px 16px; text-align:left;
+  border-bottom:2px solid var(--border);
+  background:var(--bg2);
+}
+.xref-table td {
+  padding:14px 16px; font-size:14px; font-weight:300;
+  color:var(--ink3); border-bottom:1px solid var(--border);
+  vertical-align:top; line-height:1.6;
+}
+.xref-table td:first-child { font-weight:500; color:var(--ink2); }
+.xref-table tr:hover td { background:var(--bg2); }
+.xref-dot {
+  width:8px; height:8px; border-radius:50%;
+  display:inline-block; margin:0 2px;
+}
+
+/* ── FOOTER ── */
+.foot {
+  text-align:center; padding:40px 24px;
+  border-top:1px solid var(--border);
+  background:var(--bg2);
+}
+.foot p { font-size:12px; font-weight:300; color:var(--gray); letter-spacing:0.08em; }
+
+@media(max-width:640px) {
+  .notion-wide { grid-template-columns:1fr; }
+  .wrap { padding:60px 20px; }
+  .sec-hd { grid-template-columns:1fr; }
+  .sec-hd-num { font-size:50px; }
+  .sticky-nav { gap:0; }
+}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-bg"></div>
+  <div class="cover-inner">
+    <div class="cover-series">Programme AURA — Documentation Complète</div>
+    <h1 class="cover-h1">Index Complet<br><em>des Notions</em></h1>
+    <div class="cover-rule"></div>
+    <p class="cover-sub">L'ensemble des concepts, techniques, auteurs et protocoles évoqués dans les trois volumes du programme AURA.</p>
+    <div class="legend">
+      <div class="pill pill-l1"><span class="pill-dot dot-l1"></span>Level 1 — Le Code du Magnétisme</div>
+      <div class="pill pill-l2"><span class="pill-dot dot-l2"></span>Level 2 — La Déconnexion</div>
+      <div class="pill pill-lm"><span class="pill-dot dot-lm"></span>Manifeste du Leadership Naturel</div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="sticky-nav">
+  <a class="snav-btn" href="#concepts">Concepts Clés</a>
+  <a class="snav-btn" href="#techniques">Techniques & Protocoles</a>
+  <a class="snav-btn" href="#auteurs">Auteurs & Sources</a>
+  <a class="snav-btn" href="#alpha">Index Alphabétique</a>
+  <a class="snav-btn" href="#xref">Table Croisée</a>
+</nav>
+
+<!-- ══════════════════════════
+     SECTION 1 — CONCEPTS CLÉS
+     ══════════════════════════ -->
+<div id="concepts">
+<div class="wrap">
+  <div class="sec-hd">
+    <div class="sec-hd-num">01</div>
+    <div class="sec-hd-content">
+      <div class="sec-eye">Section 1</div>
+      <h2 class="sec-h2">Concepts <em>Fondamentaux</em></h2>
+      <p class="sec-desc">Les notions centrales qui structurent l'ensemble du programme — classées par domaine thématique.</p>
+    </div>
+  </div>
+
+  <!-- AURA & MAGNÉTISME -->
+  <div style="margin-bottom:48px;">
+    <div style="font-size:10px;font-weight:500;letter-spacing:0.4em;color:var(--violet-m);text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--violet-p);">Aura & Magnétisme</div>
+    <div class="notion-grid">
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Aura</div><span class="src src-l1">L1</span></div>
+        <div class="nc-def">Ensemble des signaux conscients et inconscients émis par un individu, construisant dans l'esprit des autres une perception globale de sa présence avant toute interaction verbale.</div>
+        <div class="nc-context">Définie non comme un phénomène mystique mais comme une réalité fonctionnelle enracinée dans la psychologie et la biomécanique.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Halo Effect</div><span class="src src-l1">L1</span></div>
+        <div class="nc-def">Biais cognitif par lequel le cerveau forme une impression globale à partir d'indices fragmentaires (posture, regard, voix) en quelques secondes — impression difficile à inverser une fois formée.</div>
+        <div class="nc-context">Base neurologique de la perception de l'aura. Explique pourquoi la première impression est déterminante.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Signal pur</div><span class="src src-l2">L2</span></div>
+        <div class="nc-def">Fréquence personnelle d'un individu déconnecté du champ collectif, perceptible par les autres comme une présence distincte et magnétique.</div>
+        <div class="nc-context">Concept central du Level 2 — l'aura profonde est décrite comme un signal qui émerge quand le bruit du champ collectif se retire.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Cohérence vibratoire</div><span class="src src-l2">L2</span></div>
+        <div class="nc-def">État d'alignement entre pensées, émotions, corps et actions produisant une fréquence cohérente perçue comme du charisme par les autres systèmes nerveux.</div>
+        <div class="nc-context">Analogie avec le laser : la lumière cohérente (laser) est infiniment plus puissante que la lumière incohérente de même intensité.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Magnétisme authentique</div><span class="src src-l1">L1</span></div>
+        <div class="nc-def">Attraction exercée sur les autres non par des techniques mais par la complétude intérieure — l'absence de besoin d'approbation étant elle-même la source de l'attraction.</div>
+        <div class="nc-context">Opposé au magnétisme performé, qui impressionne à court terme mais ne dure pas.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Présence</div><span class="src src-l1">L1</span></div>
+        <div class="nc-def">Qualité d'attention totale à l'instant et à l'interlocuteur, sans préoccupation de l'effet produit — perçue par les autres comme une forme rare et magnétique d'existence.</div>
+        <div class="nc-context">Concept de Amy Cuddy développé dans "Presence" (2015), cité dans le corpus de ressources.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAMP COLLECTIF -->
+  <div style="margin-bottom:48px;">
+    <div style="font-size:10px;font-weight:500;letter-spacing:0.4em;color:var(--l2);text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid rgba(26,92,92,0.2);">Champ Collectif & Conscience</div>
+    <div class="notion-grid">
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Champ collectif</div><span class="src src-l2">L2</span></div>
+        <div class="nc-def">Réservoir d'énergie partagée dans lequel baignent les pensées, peurs et croyances de l'ensemble de l'humanité — accessible et influençable sans contact physique.</div>
+        <div class="nc-context">Nommé "inconscient collectif" par Jung, "champ morphique" par Sheldrake. Base du programme de désolidarisation.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Inconscient collectif</div><span class="src src-l2">L2</span></div>
+        <div class="nc-def">Concept jungien désignant le réservoir de schémas, archétypes et mémoires partagées par l'ensemble de l'humanité, transcendant l'individu.</div>
+        <div class="nc-context">Carl Gustav Jung, psychiatre suisse. Fondement théorique du concept de champ collectif dans le Level 2.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Champ morphique</div><span class="src src-l2">L2</span></div>
+        <div class="nc-def">Champ de résonance proposé par Rupert Sheldrake qui transcende le temps et l'espace, transmettant comportements et patterns entre individus sans contact physique.</div>
+        <div class="nc-context">Rupert Sheldrake, biologiste de Cambridge. Formalisation scientifique contemporaine du champ collectif.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Désolidarisation</div><span class="src src-l2">L2</span></div>
+        <div class="nc-def">Processus de déconnexion partielle et intentionnelle du champ collectif, permettant au signal personnel d'émerger sans interférences.</div>
+        <div class="nc-context">Concept central du Level 2. Opérée via TFT, silence actif, pensée autonome et travail transgénérationnel.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Conformisme neurologique</div><span class="src src-l2">L2</span></div>
+        <div class="nc-def">Mécanisme cérébral par lequel l'expression d'une opinion différente de son groupe active les mêmes zones que la douleur physique — rendant la conformité automatique et non consciente.</div>
+        <div class="nc-context">Base neurobiologique du chapitre "Penser par soi-même". Explique pourquoi la pensée autonome demande un entraînement réel.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Champ personnel</div><span class="src src-l2">L2</span></div>
+        <div class="nc-def">Bulle d'énergie cohérente, stable et identifiable construite par un individu aligné — précédant sa présence physique et persistant après son départ.</div>
+        <div class="nc-context">État cible du Level 2 : remplacer la connexion au champ collectif par un champ personnel souverain.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PSYCHOLOGIE & NEUROSCIENCES -->
+  <div style="margin-bottom:48px;">
+    <div style="font-size:10px;font-weight:500;letter-spacing:0.4em;color:var(--ink3);text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--border);">Psychologie & Neurosciences</div>
+    <div class="notion-grid">
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Cohérence cardiaque</div><span class="src src-l2">L2</span></div>
+        <div class="nc-def">État de synchronisation entre rythme cardiaque, respiration et activité cérébrale produisant un champ électromagnétique optimal — perceptible par les autres jusqu'à 3 mètres.</div>
+        <div class="nc-context">HeartMath Institute. Mesurable via la variabilité cardiaque (HRV). Base biologique du charisme conscient.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Synchronisation neuronale</div><span class="src src-l2">L2</span></div>
+        <div class="nc-def">Phénomène par lequel les cerveaux d'un groupe s'alignent sur l'activité cérébrale de l'individu présentant la cohérence interne la plus élevée.</div>
+        <div class="nc-context">Démontré en hyperscanning (IRM simultanée de plusieurs personnes). Base neurologique du leadership naturel.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Contagion émotionnelle</div><span class="src src-l2">L2</span></div>
+        <div class="nc-def">Transmission automatique d'états émotionnels d'un individu à un autre via des mécanismes non verbaux (micro-expressions, tonus musculaire, pattern vocal).</div>
+        <div class="nc-context">Explique pourquoi le calme d'un leader se propage dans un groupe sous pression.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Épigénétique</div><span class="src src-l2">L2</span></div>
+        <div class="nc-def">Science étudiant les modifications de l'expression génétique sans altération de la séquence ADN — notamment induites par l'environnement informationnel et émotionnel.</div>
+        <div class="nc-context">Bruce Lipton. Démontre que les croyances et l'environnement absorbé du champ collectif modifient littéralement la biologie cellulaire.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Mémoire transgénérationnelle</div><span class="src src-l2">L2</span></div>
+        <div class="nc-def">Transmission épigénétique de traumatismes, peurs et schémas de limitation entre générations via des marqueurs sur l'ADN — sans transmission verbale ni consciente.</div>
+        <div class="nc-context">Rachel Yehuda (descendants de survivants de l'Holocauste). Explique des limites "inexpliquées" portées pour des ancêtres.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Neurogenèse</div><span class="src src-l2">L2</span></div>
+        <div class="nc-def">Développement de nouveaux neurones dans le cerveau adulte — stimulé notamment par deux heures de silence quotidien dans l'hippocampe selon les recherches d'Imke Kirste (Duke, 2013).</div>
+        <div class="nc-context">Fondement scientifique du silence comme technologie active de développement cognitif.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Nerf vague</div><span class="src src-l2">L2</span></div>
+        <div class="nc-def">Nerf principal du système nerveux parasympathique — activé par les voix graves et résonantes, la cohérence cardiaque et la respiration lente, induisant calme et réceptivité.</div>
+        <div class="nc-context">Présent dans les chapitres Charisme Quantique (L2) et Voix comme champ de force (Manifeste).</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Neuroacoustique</div><span class="src src-lm">LM</span></div>
+        <div class="nc-def">Étude de l'effet des caractéristiques sonores de la voix (fréquence, rythme, résonance) sur le système nerveux de l'auditeur — traitées par le système limbique avant le sens des mots.</div>
+        <div class="nc-context">Base scientifique de la Loi III du Manifeste sur la voix comme champ de force.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEADERSHIP & PRÉSENCE SOCIALE -->
+  <div style="margin-bottom:48px;">
+    <div style="font-size:10px;font-weight:500;letter-spacing:0.4em;color:var(--lm);text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid rgba(139,69,19,0.15);">Leadership & Présence Sociale</div>
+    <div class="notion-grid">
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Leadership naturel</div><span class="src src-lm">LM</span></div>
+        <div class="nc-def">État de leadership émergeant de la cohérence interne et de l'absence de besoin de reconnaissance — non performé mais incarné, produisant une influence durable et non contrainte.</div>
+        <div class="nc-context">Thèse centrale du Manifeste. Opposé au leadership appris qui impressionne sans transformer.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Cohérence interne</div><span class="src src-lm">LM</span></div>
+        <div class="nc-def">Alignement entre valeurs déclarées, pensées, émotions et comportements réels — fondement de l'autorité naturelle et de la synchronisation neuronale.</div>
+        <div class="nc-context">Loi II du Manifeste. Objet du Protocole 21 jours.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Leadership silencieux</div><span class="src src-lm">LM</span></div>
+        <div class="nc-def">Forme de leadership perçu avant d'être vu — exercé sans chercher à diriger, par la qualité de présence, la tenue des positions et la constance de l'identité dans tous les contextes.</div>
+        <div class="nc-context">Loi VI du Manifeste — les Trois Signatures.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Paradoxe du leadership</div><span class="src src-lm">LM</span></div>
+        <div class="nc-def">Le désir de diriger est lui-même ce qui empêche le leadership naturel d'émerger — parce qu'il trahit une dépendance au champ collectif et au regard des autres.</div>
+        <div class="nc-context">Loi I du Manifeste. Résolu par l'orientation vers le don plutôt que vers la réception.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Vision comme fréquence</div><span class="src src-lm">LM</span></div>
+        <div class="nc-def">Direction personnelle suffisamment ancrée et claire pour créer un courant vers lequel les autres s'alignent naturellement — sans persuasion.</div>
+        <div class="nc-context">Loi V du Manifeste. Distillée en une phrase pratiquée à voix haute jusqu'à être aussi naturelle que son prénom.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Présence sociale</div><span class="src src-l1">L1</span></div>
+        <div class="nc-def">Pilier 3 du Level 1 — qualité d'interaction centrée sur l'impact ressenti par l'autre plutôt que sur l'image de soi, incluant écoute totale, silence actif et prise de position.</div>
+        <div class="nc-context">Développé dans le chapitre 5 du Level 1. Évolue vers le leadership silencieux dans le Manifeste.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IDENTITÉ & TRAVAIL INTÉRIEUR -->
+  <div>
+    <div style="font-size:10px;font-weight:500;letter-spacing:0.4em;color:var(--ink3);text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--border);">Identité & Travail Intérieur</div>
+    <div class="notion-grid">
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Socle intérieur</div><span class="src src-l1">L1</span></div>
+        <div class="nc-def">Pilier 1 du Level 1 — fondation identitaire constituée de valeurs claires et d'une confiance non-conditionnelle, indépendante du contexte ou de la validation externe.</div>
+        <div class="nc-context">Ce que tu es quand personne ne regarde — c'est ce que tout le monde ressent quand tu es là.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Identité intentionnelle</div><span class="src src-l1">L1</span></div>
+        <div class="nc-def">Décision consciente de qui on est, ce qu'on défend et ce qu'on refuse — maintenue sous pression sociale comme fondement de l'aura.</div>
+        <div class="nc-context">Chapitre 3 du Level 1. Exercice d'audit d'identité : 10 comportements, 20 minutes, feuille blanche.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Confiance non-conditionnelle</div><span class="src src-l1">L1</span></div>
+        <div class="nc-def">Certitude interne indépendante du résultat ou de l'approbation — fondée sur la preuve des traversées passées plutôt que sur l'absence de doute.</div>
+        <div class="nc-context">Distinctions de la confiance "apprise" (performée) vs la confiance "réelle" (certitude).</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Pensée autonome</div><span class="src src-l2">L2</span></div>
+        <div class="nc-def">Capacité à former une opinion avant de savoir ce que les autres pensent — habiter ses convictions même seul contre tous, sans validation externe.</div>
+        <div class="nc-context">Secret 3 du Level 2. La pensée née de l'intérieur a une texture différente — et les autres la perçoivent.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Authenticité totale</div><span class="src src-lm">LM</span></div>
+        <div class="nc-def">État d'identité unifiée dans lequel aucun rôle n'est joué selon le contexte — vécu comme une liberté rare et perçu comme magnétique par les autres.</div>
+        <div class="nc-context">Signature III du Manifeste. Opposée à la constance rigide — c'est une liberté, pas une contrainte.</div>
+      </div>
+      <div class="notion-card">
+        <div class="nc-top"><div class="nc-title">Fuites énergétiques</div><span class="src src-l2">L2</span></div>
+        <div class="nc-def">Perturbations dans le champ personnel créées par des traumatismes non résolus, des contradictions identitaires ou des mémoires transgénérationnelles non libérées.</div>
+        <div class="nc-context">Concept clé pour comprendre pourquoi le travail de surface ne suffit pas — le champ perd de l'énergie par des brèches invisibles.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════
+     SECTION 2 — TECHNIQUES & PROTOCOLES
+     ══════════════════════════════ -->
+<div id="techniques">
+<div class="wrap-gray">
+<div class="wrap">
+  <div class="sec-hd">
+    <div class="sec-hd-num">02</div>
+    <div class="sec-hd-content">
+      <div class="sec-eye">Section 2</div>
+      <h2 class="sec-h2">Techniques & <em>Protocoles</em></h2>
+      <p class="sec-desc">Toutes les techniques pratiques évoquées dans les trois volumes — avec leur volume d'origine et leur contexte d'application.</p>
+    </div>
+  </div>
+
+  <ul class="tech-list">
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">TFT — Thought Field Therapy</div>
+        <div class="ti-desc">Tapotements sur des points méridiens spécifiques (VE1, Rate, Reins, V1, VB1, GV26, CV24) dans un ordre algorithme précis pour neutraliser les charges émotionnelles enkystées. Inclut le pont neurologique (point gamut) et la séquence de clôture. Validé cliniquement pour le PTSD avec des taux de rémission de 80–90% sur des populations traumatisées.</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-l2">L2</span></div>
+    </li>
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">Quick Coherence — HeartMath</div>
+        <div class="ti-desc">Protocole en 2 étapes : (1) Focus cardiaque avec respiration rythmée 5s/5s. (2) Activation d'une émotion positive authentique (gratitude, appréciation). 3 à 5 minutes avant une interaction importante. Porte la cohérence cardiaque à un niveau mesurable et détectable par les autres systèmes nerveux.</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-l2">L2</span></div>
+    </li>
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">Reset Physique 5 minutes</div>
+        <div class="ti-desc">Protocole matinal : debout, pieds écartés à largeur d'épaules, 5 respirations profondes, colonne redressée, regard droit, visualisation de la version idéale de soi, marche intentionnelle. Reprogrammation neuronale par le corps.</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-l1">L1</span></div>
+    </li>
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">Protocole 4-7-8</div>
+        <div class="ti-desc">Technique respiratoire : inspirer 4 secondes, retenir 7 secondes, expirer 8 secondes. Active le nerf vague et bascule le système nerveux en mode parasympathique en moins de 90 secondes. À pratiquer discrètement avant les situations de pression.</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-lm">LM</span></div>
+    </li>
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">Protocole 21 jours de cohérence interne</div>
+        <div class="ti-desc">Phase 1 (J1-7) : journaling soir des contradictions valeurs/actes. Phase 2 (J8-14) : un acte d'alignement quotidien, small mais réel. Phase 3 (J15-21) : règle du miroir — n'affirmer que ce qu'on s'applique à soi-même.</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-lm">LM</span></div>
+    </li>
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">Silence actif — 3 niveaux</div>
+        <div class="ti-desc">Niveau 1 : 20 min/jour sans stimulus sonore. Niveau 2 : pause de 3 secondes systématique avant chaque réponse en conversation. Niveau 3 : 30 min de méditation de pleine conscience quotidienne avec discrimination entre pensées internes et pensées importées du champ.</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-l2">L2</span></div>
+    </li>
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">Génosociogramme simplifié</div>
+        <div class="ti-desc">Cartographie de 3 générations familiales notant traumatismes, morts prématurées, honte sociale, secrets, ruptures et migrations. Identification de patterns répétés entre générations. Suivi par la phrase de libération.</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-l2">L2</span></div>
+    </li>
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">Phrase de libération transgénérationnelle</div>
+        <div class="ti-desc">Prononcée debout à voix haute : "Je t'honore, [prénom]. Je reçois l'amour que tu m'as transmis. Et je te rends ce qui t'appartient — cette peur n'est pas la mienne à porter." Simple. Souvent profondément libérateur.</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-l2">L2</span></div>
+    </li>
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">4 Leviers de la Voix qui Commande</div>
+        <div class="ti-desc">(1) Résonance thoracique : parler depuis la poitrine, main sur le sternum, 5 min de lecture orale matinale. (2) Rythme à 70% : ralentir délibérément. (3) Fin de phrase descendante : affirmer plutôt que demander une validation. (4) Pause de 2 secondes avant les mots importants.</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-lm">LM</span></div>
+    </li>
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">Protocole Quick Coherence — pré-interaction</div>
+        <div class="ti-desc">Avant chaque conversation importante : 60 secondes de cohérence cardiaque (Quick Coherence), puis intention de service formulée intérieurement ("Qu'est-ce que je veux que l'autre reçoive ?").</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-l2">L2</span></div>
+    </li>
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">Audit des Masques</div>
+        <div class="ti-desc">3 colonnes (professionnel / social / intime) listant comportements, opinions et attitudes modifiés selon le contexte. Cartographie des personas. Identification des zones d'identité non-unifiée — chantiers, pas fautes.</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-lm">LM</span></div>
+    </li>
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">Phrase-Ancre vocale</div>
+        <div class="ti-desc">Formulation à voix haute chaque matin d'une phrase résumant son identité indépendamment du contexte. Ex : "Je suis quelqu'un qui dit la vérité, qui prend soin des gens et qui avance vers [vision]." 30 secondes. 30 jours pour intégration profonde.</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-lm">LM</span></div>
+    </li>
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">Exercice de la Page Blanche</div>
+        <div class="ti-desc">Former une opinion sur un sujet avant toute référence externe. Puis formuler pourquoi on la pense. Si impossible sans citer quelqu'un d'autre — c'est une appartenance, pas une conviction. Pratiqué quotidiennement sur n'importe quel sujet.</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-l2">L2</span></div>
+    </li>
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">Décalage de rythme</div>
+        <div class="ti-desc">Technique de leadership sous pression : quand le groupe accélère, ralentir physiquement — gestes moins fréquents, voix plus lente, respiration abdominale consciente. Crée une hiérarchie perçue immédiate sans un mot.</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-lm">LM</span></div>
+    </li>
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">Ancrage somatique</div>
+        <div class="ti-desc">En situation de stress, ramener l'attention dans les pieds et leur contact avec le sol. Coupe le circuit de rumination mentale, maintient la présence dans le corps et le calme dans le regard.</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-lm">LM</span></div>
+    </li>
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">Vision en une phrase</div>
+        <div class="ti-desc">Exercice de clarification en 3 questions : (1) Dans 10 ans, qu'est-il arrivé ? (2) Que construis-tu qui persistera ? (3) Si tu pouvais changer une chose ? Synthèse en une phrase formulable en moins de 15 secondes sous pression.</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-lm">LM</span></div>
+    </li>
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">Désaccord respectueux — formule</div>
+        <div class="ti-desc">"Je comprends ton point de vue. Voilà où je me situe différemment : [position, une phrase]. Je maintiens cette position." Suivi d'un silence. Pratiqué une fois par semaine face à un désaccord habituellemnt tu.</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-lm">LM</span></div>
+    </li>
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">Miroir inversé — pré-interaction</div>
+        <div class="ti-desc">Avant chaque réunion ou moment de leadership : "Qu'est-ce que je veux que cette personne reçoive ?" (pas : obtienne de moi). Inverse l'orientation du besoin vers le don. Modifie instantanément le tonus et le regard.</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-lm">LM</span></div>
+    </li>
+    <li class="tech-item">
+      <div class="ti-content">
+        <div class="ti-name">Stack quotidien — 90 jours avancés</div>
+        <div class="ti-desc">Matin : 5 min Quick Coherence + 10 min silence actif + 5 min journaling autonome. Journée : 1 séance TFT hebdomadaire + pause 3s systématique + 1 pensée du champ questionnée. Soir : 10 min bilan de cohérence. Mensuel : travail transgénérationnel + jeûne informationnel 48h.</div>
+      </div>
+      <div class="ti-src-col"><span class="src src-l2">L2</span></div>
+    </li>
+  </ul>
+</div>
+</div>
+</div>
+
+<!-- ══════════════════════════
+     SECTION 3 — AUTEURS & SOURCES
+     ══════════════════════════ -->
+<div id="auteurs">
+<div class="wrap">
+  <div class="sec-hd">
+    <div class="sec-hd-num">03</div>
+    <div class="sec-hd-content">
+      <div class="sec-eye">Section 3</div>
+      <h2 class="sec-h2">Auteurs & <em>Sources</em></h2>
+      <p class="sec-desc">Tous les chercheurs, auteurs et praticiens cités ou référencés dans les trois volumes.</p>
+    </div>
+  </div>
+
+  <div class="author-grid">
+    <div class="author-card">
+      <div class="a-name">Carl Gustav Jung</div>
+      <div class="a-field">Psychiatrie · Psychologie analytique · Suisse</div>
+      <div class="a-works">Fondateur de la psychologie analytique. Concept d'"inconscient collectif" et d'archétypes partagés par l'humanité. Base théorique du champ collectif dans le Level 2.</div>
+      <div class="a-src-row"><span class="src src-l2">L2</span></div>
+    </div>
+    <div class="author-card">
+      <div class="a-name">Rupert Sheldrake</div>
+      <div class="a-field">Biologie · Cambridge · Champs morphiques</div>
+      <div class="a-works">Biologiste britannique. Théorie des champs morphiques — champs de résonance transmettant comportements et patterns entre individus sans contact physique. Ouvrage principal : "A New Science of Life".</div>
+      <div class="a-src-row"><span class="src src-l2">L2</span></div>
+    </div>
+    <div class="author-card">
+      <div class="a-name">Dr Roger Callahan</div>
+      <div class="a-field">Psychologie clinique · TFT · États-Unis</div>
+      <div class="a-works">Psychologue américain, fondateur de la Thought Field Therapy (TFT) dans les années 80. Protocoles de tapotements sur points méridiens pour neutraliser les perturbations émotionnelles. Validé cliniquement pour le PTSD.</div>
+      <div class="a-src-row"><span class="src src-l2">L2</span></div>
+    </div>
+    <div class="author-card">
+      <div class="a-name">HeartMath Institute</div>
+      <div class="a-field">Neurosciences · Cohérence cardiaque · Californie</div>
+      <div class="a-works">Institut de recherche californien. Découverte que le champ électromagnétique du cœur est 5000x plus puissant que celui du cerveau, perceptible jusqu'à 3m. Protocole Quick Coherence. Mesure de la variabilité cardiaque (HRV).</div>
+      <div class="a-src-row"><span class="src src-l2">L2</span></div>
+    </div>
+    <div class="author-card">
+      <div class="a-name">Rachel Yehuda</div>
+      <div class="a-field">Neurosciences · Épigénétique · Mt Sinai NY</div>
+      <div class="a-works">Chercheuse pionnière en épigénétique transgénérationnelle. Étude sur les enfants de survivants de l'Holocauste montrant la transmission de marqueurs épigénétiques du trauma sans vécu personnel.</div>
+      <div class="a-src-row"><span class="src src-l2">L2</span></div>
+    </div>
+    <div class="author-card">
+      <div class="a-name">Bruce Lipton</div>
+      <div class="a-field">Biologie cellulaire · Épigénétique · États-Unis</div>
+      <div class="a-works">Biologiste et auteur de "La Biologie des croyances". Démontre que l'environnement informationnel (croyances, champ collectif absorbé) modifie l'expression génétique des cellules.</div>
+      <div class="a-src-row"><span class="src src-l2">L2</span></div>
+    </div>
+    <div class="author-card">
+      <div class="a-name">Imke Kirste</div>
+      <div class="a-field">Neurosciences · Duke University · 2013</div>
+      <div class="a-works">Chercheuse ayant découvert que deux heures de silence quotidien stimulent la neurogenèse dans l'hippocampe — développement de nouveaux neurones dans la zone dédiée à la mémoire et l'orientation.</div>
+      <div class="a-src-row"><span class="src src-l2">L2</span></div>
+    </div>
+    <div class="author-card">
+      <div class="a-name">Amy Cuddy</div>
+      <div class="a-field">Psychologie sociale · Harvard</div>
+      <div class="a-works">Chercheuse à Harvard. Théorie des "power poses" : des postures de puissance adoptées 2 minutes modifient les niveaux de cortisol et de testostérone. Ouvrage : "Presence" (2015).</div>
+      <div class="a-src-row"><span class="src src-l1">L1</span></div>
+    </div>
+    <div class="author-card">
+      <div class="a-name">Bert Hellinger</div>
+      <div class="a-field">Thérapie familiale · Constellations familiales</div>
+      <div class="a-works">Thérapeute allemand, fondateur des Constellations Familiales. Approche permettant d'identifier et de libérer les charges transgénérationnelles portées pour des membres de la famille décédés.</div>
+      <div class="a-src-row"><span class="src src-l2">L2</span></div>
+    </div>
+    <div class="author-card">
+      <div class="a-name">Anne Ancelin Schützenberger</div>
+      <div class="a-field">Psychologie · Psychogénéalogie · France</div>
+      <div class="a-works">Psychologue française, fondatrice de la psychogénéalogie. Ouvrage : "Aïe, mes aïeux !" Étude des répétitions transgénérationnelles dans les familles et leur impact sur les descendants.</div>
+      <div class="a-src-row"><span class="src src-l2">L2</span></div>
+    </div>
+    <div class="author-card">
+      <div class="a-name">Dacher Keltner</div>
+      <div class="a-field">Psychologie sociale · UC Berkeley</div>
+      <div class="a-works">Directeur du Greater Good Science Center. Recherches sur la psychologie du pouvoir montrant que les individus à haute autorité naturelle sont orientés vers autrui — et non vers leur propre image.</div>
+      <div class="a-src-row"><span class="src src-lm">LM</span></div>
+    </div>
+    <div class="author-card">
+      <div class="a-name">Richard Boyatzis</div>
+      <div class="a-field">Leadership · Case Western Reserve University</div>
+      <div class="a-works">Chercheur en leadership inspirant. Distinction entre leaders orientés vers l'idéal positif (activation parasympathique, créativité, loyauté) vs leaders orientés problème (stress, conformité).</div>
+      <div class="a-src-row"><span class="src src-lm">LM</span></div>
+    </div>
+    <div class="author-card">
+      <div class="a-name">Michael Meaney</div>
+      <div class="a-field">Neurosciences · McGill University</div>
+      <div class="a-works">Chercheur en épigénétique. Travaux sur la transmission de marqueurs épigénétiques entre générations chez les mammifères — base de la compréhension des mémoires transgénérationnelles.</div>
+      <div class="a-src-row"><span class="src src-l2">L2</span></div>
+    </div>
+    <div class="author-card">
+      <div class="a-name">Olivia Fox Cabane</div>
+      <div class="a-field">Charisme · Leadership · Auteure</div>
+      <div class="a-works">Auteure de "The Charisma Myth". Déconstruction du charisme en composants apprenables : présence, pouvoir, chaleur. Référence dans les ressources du Level 1.</div>
+      <div class="a-src-row"><span class="src src-l1">L1</span></div>
+    </div>
+    <div class="author-card">
+      <div class="a-name">Tim Grover</div>
+      <div class="a-field">Performance mentale · Coach de Kobe & MJ</div>
+      <div class="a-works">Coach mental de Michael Jordan et Kobe Bryant. Auteur de "Relentless". Concept du "Cleaner" — individu qui ne cherche pas à performer mais à être. Référence dans le chapitre Sport de Level 1.</div>
+      <div class="a-src-row"><span class="src src-l1">L1</span></div>
+    </div>
+    <div class="author-card">
+      <div class="a-name">David Goggins</div>
+      <div class="a-field">Performance · Mentalité · Auteur</div>
+      <div class="a-works">Navy SEAL, ultramarathonien, auteur de "Can't Hurt Me". Incarnation du principe de discipline comme identité — la souffrance choisie comme outil de construction de l'aura.</div>
+      <div class="a-src-row"><span class="src src-l1">L1</span></div>
+    </div>
+    <div class="author-card">
+      <div class="a-name">Masaru Emoto</div>
+      <div class="a-field">Recherche sur l'eau · Japon</div>
+      <div class="a-works">Chercheur japonais dont les travaux sur la mémoire de l'eau et l'influence des intentions sur les cristaux d'eau sont cités comme convergents avec la théorie du champ collectif.</div>
+      <div class="a-src-row"><span class="src src-l2">L2</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════
+     SECTION 4 — INDEX ALPHABÉTIQUE
+     ══════════════════════════ -->
+<div id="alpha">
+<div class="wrap-gray">
+<div class="wrap">
+  <div class="sec-hd">
+    <div class="sec-hd-num">04</div>
+    <div class="sec-hd-content">
+      <div class="sec-eye">Section 4</div>
+      <h2 class="sec-h2">Index <em>Alphabétique</em></h2>
+      <p class="sec-desc">Toutes les notions du programme classées de A à Z pour une recherche rapide.</p>
+    </div>
+  </div>
+
+  <!-- A -->
+  <div class="alpha-section">
+    <div class="alpha-letter">A</div>
+    <div class="alpha-grid">
+      <div class="alpha-item"><div><div class="ai-title">Ancrage somatique</div><div class="ai-sub">Technique de calme sous pression</div></div><div class="ai-src"><span class="src src-lm">LM</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Audit d'identité</div><div class="ai-sub">10 comportements, feuille blanche</div></div><div class="ai-src"><span class="src src-l1">L1</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Audit des masques</div><div class="ai-sub">3 colonnes de contextes</div></div><div class="ai-src"><span class="src src-lm">LM</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Authenticité totale</div><div class="ai-sub">Signature III du Manifeste</div></div><div class="ai-src"><span class="src src-lm">LM</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Aura</div><div class="ai-sub">Définition centrale du programme</div></div><div class="ai-src"><span class="src src-l1">L1</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Autorité naturelle</div><div class="ai-sub">Émergente, non performée</div></div><div class="ai-src"><span class="src src-lm">LM</span></div></div>
+    </div>
+  </div>
+
+  <!-- C -->
+  <div class="alpha-section">
+    <div class="alpha-letter">C</div>
+    <div class="alpha-grid">
+      <div class="alpha-item"><div><div class="ai-title">Calme sous pression</div><div class="ai-sub">Loi IV du Manifeste</div></div><div class="ai-src"><span class="src src-lm">LM</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Champ collectif</div><div class="ai-sub">Prison invisible — Secret 1 L2</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Champ morphique</div><div class="ai-sub">Rupert Sheldrake</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Champ personnel</div><div class="ai-sub">Signal propre post-déconnexion</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Charisme</div><div class="ai-sub">Résonance, pas extraversion</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Charisme quantique</div><div class="ai-sub">Secret 5 du Level 2</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Cohérence cardiaque</div><div class="ai-sub">HeartMath Institute</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Cohérence interne</div><div class="ai-sub">Loi II du Manifeste</div></div><div class="ai-src"><span class="src src-lm">LM</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Cohérence vibratoire</div><div class="ai-sub">Base du charisme authentique</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Communication énergétique</div><div class="ai-sub">Parler depuis le champ de plénitude</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Confiance non-conditionnelle</div><div class="ai-sub">Certitude vs absence de doute</div></div><div class="ai-src"><span class="src src-l1">L1</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Conformisme neurologique</div><div class="ai-sub">Douleur sociale du désaccord</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Constellations familiales</div><div class="ai-sub">Bert Hellinger</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Contagion émotionnelle</div><div class="ai-sub">Transmission non verbale d'états</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+    </div>
+  </div>
+
+  <!-- D -->
+  <div class="alpha-section">
+    <div class="alpha-letter">D</div>
+    <div class="alpha-grid">
+      <div class="alpha-item"><div><div class="ai-title">Décalage de rythme</div><div class="ai-sub">Ralentir quand les autres accélèrent</div></div><div class="ai-src"><span class="src src-lm">LM</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Désolidarisation</div><div class="ai-sub">Déconnexion du champ collectif</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Discipline comme identité</div><div class="ai-sub">Angle sport du Level 1</div></div><div class="ai-src"><span class="src src-l1">L1</span></div></div>
+    </div>
+  </div>
+
+  <!-- E -->
+  <div class="alpha-section">
+    <div class="alpha-letter">E</div>
+    <div class="alpha-grid">
+      <div class="alpha-item"><div><div class="ai-title">Écoute totale</div><div class="ai-sub">Signature I du Manifeste</div></div><div class="ai-src"><span class="src src-lm">LM</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Environnement de vie</div><div class="ai-sub">Pilier 4 du Level 1</div></div><div class="ai-src"><span class="src src-l1">L1</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Épigénétique</div><div class="ai-sub">Bruce Lipton, Rachel Yehuda</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Épigénétique transgénérationnelle</div><div class="ai-sub">Transmission ADN des traumatismes</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+    </div>
+  </div>
+
+  <!-- F-G -->
+  <div class="alpha-section">
+    <div class="alpha-letter">F · G</div>
+    <div class="alpha-grid">
+      <div class="alpha-item"><div><div class="ai-title">Fuites énergétiques</div><div class="ai-sub">Brèches dans le champ personnel</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Génosociogramme</div><div class="ai-sub">Cartographie 3 générations</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+    </div>
+  </div>
+
+  <!-- H-I -->
+  <div class="alpha-section">
+    <div class="alpha-letter">H · I</div>
+    <div class="alpha-grid">
+      <div class="alpha-item"><div><div class="ai-title">Halo Effect</div><div class="ai-sub">Biais cognitif de la première impression</div></div><div class="ai-src"><span class="src src-l1">L1</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Hyperscanning</div><div class="ai-sub">IRM simultanée — synchronisation neuronale</div></div><div class="ai-src"><span class="src src-lm">LM</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Identité intentionnelle</div><div class="ai-sub">Décision consciente de qui on est</div></div><div class="ai-src"><span class="src src-l1">L1</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Inconscient collectif</div><div class="ai-sub">Carl Jung</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+    </div>
+  </div>
+
+  <!-- J-L -->
+  <div class="alpha-section">
+    <div class="alpha-letter">J · L</div>
+    <div class="alpha-grid">
+      <div class="alpha-item"><div><div class="ai-title">Jeûne informationnel</div><div class="ai-sub">48h sans médias — désolidarisation</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Leadership naturel</div><div class="ai-sub">Thèse centrale du Manifeste</div></div><div class="ai-src"><span class="src src-lm">LM</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Leadership silencieux</div><div class="ai-sub">Trois signatures</div></div><div class="ai-src"><span class="src src-lm">LM</span></div></div>
+    </div>
+  </div>
+
+  <!-- M-N -->
+  <div class="alpha-section">
+    <div class="alpha-letter">M · N</div>
+    <div class="alpha-grid">
+      <div class="alpha-item"><div><div class="ai-title">Mamba Mentality</div><div class="ai-sub">Kobe Bryant — discipline comme identité</div></div><div class="ai-src"><span class="src src-l1">L1</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Mémoire cellulaire</div><div class="ai-sub">Traumatismes enkystés dans le corps</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Mémoires transgénérationnelles</div><div class="ai-sub">Secret 6 du Level 2</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Méridiens énergétiques</div><div class="ai-sub">Base de la TFT</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Neuroacoustique</div><div class="ai-sub">Effet de la voix sur le système nerveux</div></div><div class="ai-src"><span class="src src-lm">LM</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Neurogenèse</div><div class="ai-sub">Imke Kirste — silence et nouveaux neurones</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Nerf vague</div><div class="ai-sub">Voix grave, cohérence cardiaque</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+    </div>
+  </div>
+
+  <!-- P-Q -->
+  <div class="alpha-section">
+    <div class="alpha-letter">P · Q</div>
+    <div class="alpha-grid">
+      <div class="alpha-item"><div><div class="ai-title">Paradoxe du leadership</div><div class="ai-sub">Loi I du Manifeste</div></div><div class="ai-src"><span class="src src-lm">LM</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Pensée autonome</div><div class="ai-sub">Secret 3 du Level 2</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Phrase de libération</div><div class="ai-sub">Technique transgénérationnelle</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Phrase-Ancre</div><div class="ai-sub">Identité vocale quotidienne</div></div><div class="ai-src"><span class="src src-lm">LM</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Présence</div><div class="ai-sub">Amy Cuddy — état vs performance</div></div><div class="ai-src"><span class="src src-l1">L1</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Présence sociale</div><div class="ai-sub">Pilier 3 du Level 1</div></div><div class="ai-src"><span class="src src-l1">L1</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Psychogénéalogie</div><div class="ai-sub">Anne Ancelin Schützenberger</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Quick Coherence</div><div class="ai-sub">Protocole HeartMath 2 étapes</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+    </div>
+  </div>
+
+  <!-- R-S -->
+  <div class="alpha-section">
+    <div class="alpha-letter">R · S</div>
+    <div class="alpha-grid">
+      <div class="alpha-item"><div><div class="ai-title">Résonance thoracique</div><div class="ai-sub">Voix — levier 1 du Manifeste</div></div><div class="ai-src"><span class="src src-lm">LM</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Rituel du champion</div><div class="ai-sub">Protocole sport & aura</div></div><div class="ai-src"><span class="src src-l1">L1</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Signal physique</div><div class="ai-sub">Pilier 2 du Level 1</div></div><div class="ai-sub"></div><div class="ai-src"><span class="src src-l1">L1</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Silence actif</div><div class="ai-sub">Secret 7 du Level 2</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Socle intérieur</div><div class="ai-sub">Pilier 1 du Level 1</div></div><div class="ai-src"><span class="src src-l1">L1</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Synchronisation neuronale</div><div class="ai-sub">Hyperscanning — leadership naturel</div></div><div class="ai-src"><span class="src src-lm">LM</span></div></div>
+    </div>
+  </div>
+
+  <!-- T-V -->
+  <div class="alpha-section">
+    <div class="alpha-letter">T · V</div>
+    <div class="alpha-grid">
+      <div class="alpha-item"><div><div class="ai-title">TFT</div><div class="ai-sub">Thought Field Therapy — Dr Callahan</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Variabilité cardiaque (HRV)</div><div class="ai-sub">Mesure de la cohérence cardiaque</div></div><div class="ai-src"><span class="src src-l2">L2</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Vision comme fréquence</div><div class="ai-sub">Loi V du Manifeste</div></div><div class="ai-src"><span class="src src-lm">LM</span></div></div>
+      <div class="alpha-item"><div><div class="ai-title">Voix comme champ de force</div><div class="ai-sub">Loi III du Manifeste</div></div><div class="ai-src"><span class="src src-lm">LM</span></div></div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ══════════════════════════
+     SECTION 5 — TABLE CROISÉE
+     ══════════════════════════ -->
+<div id="xref">
+<div class="wrap">
+  <div class="sec-hd">
+    <div class="sec-hd-num">05</div>
+    <div class="sec-hd-content">
+      <div class="sec-eye">Section 5</div>
+      <h2 class="sec-h2">Table <em>Croisée</em></h2>
+      <p class="sec-desc">Les grandes thématiques du programme et leur traitement dans chacun des trois volumes.</p>
+    </div>
+  </div>
+
+  <div style="overflow-x:auto;">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Thématique</th>
+        <th><span class="src src-l1">L1</span> &nbsp;Level 1</th>
+        <th><span class="src src-l2">L2</span> &nbsp;Level 2</th>
+        <th><span class="src src-lm">LM</span> &nbsp;Manifeste</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Confiance en soi</td>
+        <td>Pilier fondateur. Confiance non-conditionnelle basée sur les traversées passées, non sur la validation externe.</td>
+        <td>Libération des peurs sociales enkystées via TFT. La confiance comme conséquence de la désolidarisation.</td>
+        <td>Dissolution du besoin de reconnaissance. La confiance comme absence de besoin, non comme force.</td>
+      </tr>
+      <tr>
+        <td>Corps & Signal physique</td>
+        <td>Pilier 2 complet : posture, regard, voix, gestuelle. Reset physique 5 min. Corps comme premier langage.</td>
+        <td>Cohérence cardiaque mesurable. Champ électromagnétique du cœur. Quick Coherence.</td>
+        <td>Voix comme champ de force (Loi III). 4 leviers : résonance, rythme, fin descendante, pause. Neuroacoustique.</td>
+      </tr>
+      <tr>
+        <td>Champ collectif</td>
+        <td>Non mentionné explicitement — abordé via la notion de pression sociale et de conformisme.</td>
+        <td>Concept central. Prison invisible. Désolidarisation via TFT, silence, pensée autonome, libération transgénérationnelle.</td>
+        <td>Évoqué comme base du paradoxe du leadership (désir de diriger = dépendance au champ).</td>
+      </tr>
+      <tr>
+        <td>Leadership</td>
+        <td>Présence comme autorité naturelle dans les interactions. Chapitre sur le sport et le leadership d'athlètes.</td>
+        <td>Leadership comme fréquence — synchronisation neuronale. Protocole de cohérence interne 21 jours.</td>
+        <td>Six lois complètes. Trois signatures du leader silencieux. Paradoxe, cohérence, voix, calme, vision, constance.</td>
+      </tr>
+      <tr>
+        <td>Communication</td>
+        <td>Écoute totale, silence actif, économie verbale, prise de position. Chapitre 5.</td>
+        <td>Chapitre bonus complet sur la Communication Énergétique. 5 principes. Parler depuis la plénitude.</td>
+        <td>Désaccord respectueux. La question qui va plus loin. Mémo de reconnaissance. Formule du désaccord.</td>
+      </tr>
+      <tr>
+        <td>Héritage & Famille</td>
+        <td>Non traité.</td>
+        <td>Secret 6 complet. Épigénétique transgénérationnelle. Génosociogramme. Phrase de libération. Constellations.</td>
+        <td>Non traité directement — abordé via la notion de constance et de masques hérités.</td>
+      </tr>
+      <tr>
+        <td>Silence & Introspection</td>
+        <td>Silence actif comme outil social. Parler moins pour peser plus.</td>
+        <td>Secret 7 complet. 3 niveaux de silence. Neurogenèse. Jeûne informationnel. Silence comme désolidarisation.</td>
+        <td>Signature du leader silencieux. Silence avant les mots importants (levier 4 voix). Calme sous pression.</td>
+      </tr>
+      <tr>
+        <td>Sport & Performance</td>
+        <td>Chapitre 7 complet. Kobe, Jordan, Djokovic, Serena. Rituel du champion. Sport comme laboratoire de l'aura.</td>
+        <td>Non traité spécifiquement — la discipline sportive est sous-jacente au protocole 90 jours.</td>
+        <td>Calme sous pression — langage des champions. La performance publique comme test des signatures.</td>
+      </tr>
+      <tr>
+        <td>Identité & Authenticité</td>
+        <td>Pilier 1. Identité intentionnelle. 3 valeurs absolues. Comportements qui trahissent la version idéale.</td>
+        <td>Pensée autonome. Champ personnel souverain. Audit du champ collectif.</td>
+        <td>Signature III. Authenticité totale. Audit des masques. Phrase-Ancre. Test du comportement privé.</td>
+      </tr>
+      <tr>
+        <td>Outils thérapeutiques</td>
+        <td>Miroir sans jugement. Audit d'identité.</td>
+        <td>TFT complète. Génosociogramme. Phrase de libération. Cohérence cardiaque. Silence actif 3 niveaux.</td>
+        <td>Protocole 4-7-8. Ancrage somatique. Miroir inversé. Pression sociale simulée.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+</div>
+
+<div class="foot">
+  <p>Index complet · AURA Level 1 — Le Code du Magnétisme &nbsp;·&nbsp; AURA Level 2 — La Déconnexion &nbsp;·&nbsp; Le Manifeste du Leadership Naturel</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURA — Tracker 90 Jours</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #B8902A;
+    --gold-light: #C9A84C;
+    --gold-pale: #F5EDD4;
+    --black: #FFFFFF;
+    --dark: #F8F6F2;
+    --dark2: #F2EFE9;
+    --dark3: #E8E4DC;
+    --gray: #666666;
+    --gray-light: #888888;
+    --white: #1A1A1A;
+    --cream: #2C2C2C;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #FFFFFF; color: var(--white); font-family: 'Cormorant Garamond', serif; font-size: 17px; line-height: 1.8; overflow-x: hidden; }
+
+  .cover { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: #FFFFFF; overflow: hidden; padding: 60px 40px; text-align: center; }
+  .cover-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(184,144,42,0.07) 0%, transparent 70%), repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(184,144,42,0.015) 60px, rgba(184,144,42,0.015) 61px), repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(184,144,42,0.015) 60px, rgba(184,144,42,0.015) 61px); pointer-events: none; }
+  .cover-content { position: relative; z-index: 2; }
+  .cover-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.5em; color: var(--gold); text-transform: uppercase; margin-bottom: 36px; opacity: 0.8; }
+  .cover-main-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(80px, 16vw, 150px); letter-spacing: 0.06em; line-height: 0.9; color: var(--white); }
+  .cover-sub { font-family: 'Bebas Neue', sans-serif; font-size: clamp(28px, 5vw, 48px); letter-spacing: 0.15em; color: var(--gold); margin-top: 8px; }
+  .cover-desc { font-size: 19px; font-style: italic; font-weight: 300; color: var(--cream); max-width: 480px; margin: 36px auto 0; line-height: 1.7; }
+  .cover-line { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, #B8902A, transparent); margin: 36px auto; }
+  .cover-badge { display: inline-flex; align-items: center; gap: 12px; border: 1px solid rgba(184,144,42,0.3); padding: 12px 28px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; margin-top: 20px; }
+
+  .section-break { height: 100px; display: flex; align-items: center; justify-content: center; }
+  .section-break-inner { width: 1px; height: 60px; background: linear-gradient(180deg, transparent, var(--gold), transparent); }
+
+  .page { max-width: 820px; margin: 0 auto; padding: 90px 60px; position: relative; }
+  .page + .page { border-top: 1px solid rgba(184,144,42,0.08); }
+
+  .chapter-marker { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.45em; color: var(--gold); text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 14px; }
+  .chapter-marker::before { content: ''; display: inline-block; width: 36px; height: 1px; background: var(--gold); opacity: 0.5; }
+  .chapter-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(44px, 7vw, 66px); line-height: 1; letter-spacing: 0.03em; color: var(--white); margin-bottom: 46px; }
+  .chapter-title span { color: var(--gold); }
+  .lead { font-size: 21px; font-style: italic; font-weight: 300; color: var(--cream); line-height: 1.7; margin-bottom: 36px; padding-left: 22px; border-left: 2px solid var(--gold); }
+  p { font-size: 17px; color: #333333; line-height: 1.9; margin-bottom: 24px; font-weight: 300; }
+  strong { color: var(--white); font-weight: 600; }
+  em { color: #8B6914; font-style: italic; }
+
+  .how-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; margin: 40px 0; background: rgba(184,144,42,0.1); }
+  .how-card { background: var(--dark); padding: 32px 28px; }
+  .how-num { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--gold); opacity: 0.18; line-height: 1; margin-bottom: 6px; }
+  .how-title { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase; margin-bottom: 12px; }
+  .how-desc { font-size: 15px; color: var(--gray); line-height: 1.7; margin: 0; }
+
+  .phase-header { display: flex; align-items: flex-start; gap: 24px; margin-bottom: 50px; padding: 36px; background: var(--dark2); border-left: 3px solid var(--gold); }
+  .phase-num-big { font-family: 'Bebas Neue', sans-serif; font-size: 80px; color: var(--gold); opacity: 0.2; line-height: 1; flex-shrink: 0; }
+  .phase-info { flex: 1; }
+  .phase-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.4em; color: var(--gold); text-transform: uppercase; margin-bottom: 6px; }
+  .phase-name { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 0.05em; color: var(--white); margin-bottom: 10px; }
+  .phase-desc { font-size: 15px; color: var(--gray); margin: 0; line-height: 1.7; }
+
+  .week-card { background: var(--dark2); border: 1px solid rgba(184,144,42,0.1); margin-bottom: 3px; overflow: hidden; }
+  .week-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 28px; border-bottom: 1px solid rgba(184,144,42,0.08); background: var(--dark3); }
+  .week-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.08em; color: var(--white); }
+  .week-dates { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--gray); text-transform: uppercase; }
+  .week-body { padding: 24px 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  .ritual-group-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; margin-bottom: 12px; }
+  .ritual-item { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 14px; color: #444444; line-height: 1.4; }
+  .ritual-item:last-child { border-bottom: none; }
+  .checkbox { width: 16px; height: 16px; border: 1px solid rgba(184,144,42,0.35); flex-shrink: 0; }
+
+  .score-band { padding: 16px 28px; background: rgba(184,144,42,0.04); border-top: 1px solid rgba(184,144,42,0.08); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .score-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.3em; color: var(--gray-light); text-transform: uppercase; }
+  .score-dots { display: flex; gap: 6px; align-items: center; }
+  .dot { width: 28px; height: 28px; border: 1px solid rgba(184,144,42,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gray-light); }
+  .dot-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gray-light); letter-spacing: 0.1em; }
+
+  .intention-box { padding: 18px 28px; border-top: 1px solid rgba(184,144,42,0.06); background: rgba(184,144,42,0.03); }
+  .intention-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.3em; color: var(--gold); opacity: 0.6; text-transform: uppercase; margin-bottom: 10px; }
+  .write-line { height: 1px; background: rgba(0,0,0,0.08); margin-bottom: 14px; }
+
+  .monthly-review { background: var(--dark); border: 1px solid rgba(184,144,42,0.2); padding: 40px; margin: 40px 0; }
+  .monthly-review-header { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.08em; color: var(--gold); margin-bottom: 28px; display: flex; align-items: center; gap: 16px; }
+  .monthly-review-header::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); opacity: 0.3; }
+  .review-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .review-item-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.3em; color: var(--gold); opacity: 0.7; text-transform: uppercase; margin-bottom: 10px; }
+  .review-lines { display: flex; flex-direction: column; gap: 10px; }
+  .review-line { height: 1px; background: rgba(0,0,0,0.08); width: 100%; }
+
+  .aura-score-card { margin: 50px 0; background: var(--dark2); border: 1px solid rgba(184,144,42,0.15); overflow: hidden; }
+  .aura-score-title { background: rgba(184,144,42,0.08); padding: 20px 32px; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.1em; color: var(--gold); border-bottom: 1px solid rgba(184,144,42,0.12); }
+  .aura-score-body { padding: 28px 32px; }
+  .pillar-row { display: flex; align-items: center; gap: 16px; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+  .pillar-row:last-child { border-bottom: none; }
+  .pillar-row-name { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: var(--gray); text-transform: uppercase; width: 160px; flex-shrink: 0; }
+  .pillar-row-dots { display: flex; gap: 5px; flex: 1; }
+  .score-dot { width: 22px; height: 22px; border: 1px solid rgba(184,144,42,0.2); border-radius: 50%; }
+  .pillar-row-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--gray-light); width: 30px; text-align: right; flex-shrink: 0; }
+
+  .victory-box { background: rgba(184,144,42,0.05); border: 1px solid rgba(184,144,42,0.15); border-left: 3px solid var(--gold); padding: 28px 32px; margin-top: 24px; }
+  .victory-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.35em; color: var(--gold); text-transform: uppercase; margin-bottom: 16px; }
+
+  .pullquote { margin: 56px -20px; padding: 44px 40px; background: linear-gradient(135deg, rgba(184,144,42,0.05), rgba(184,144,42,0.02)); border-left: 3px solid var(--gold); position: relative; }
+  .pullquote::before { content: '"'; position: absolute; top: -20px; left: 16px; font-family: 'Cormorant Garamond', serif; font-size: 180px; color: var(--gold); opacity: 0.05; line-height: 1; pointer-events: none; }
+  .pullquote p { font-size: 24px; font-style: italic; font-weight: 300; color: #8B6914; line-height: 1.5; margin: 0; }
+
+  .final-page { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 100px 60px; position: relative; overflow: hidden; }
+  .final-glow { position: absolute; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(184,144,42,0.07) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); }
+  .final-page h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(44px, 7vw, 72px); letter-spacing: 0.05em; color: var(--white); position: relative; z-index: 1; margin-bottom: 20px; }
+  .final-page p { font-size: 19px; font-style: italic; color: #8B6914; max-width: 500px; position: relative; z-index: 1; font-weight: 300; margin-bottom: 0; }
+  .final-sig { margin-top: 56px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.35em; color: var(--gray); text-transform: uppercase; position: relative; z-index: 1; }
+
+  @media (max-width: 620px) {
+    .page { padding: 60px 24px; }
+    .how-grid, .review-grid, .week-body { grid-template-columns: 1fr; }
+    .phase-header { flex-direction: column; gap: 10px; }
+    .pillar-row-name { width: 120px; }
+    .score-dots { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-bg"></div>
+  <div class="cover-content">
+    <div class="cover-eyebrow">Order Bump Exclusif — Programme Aura</div>
+    <div class="cover-main-title">AURA</div>
+    <div class="cover-sub">Tracker 90 Jours</div>
+    <div class="cover-line"></div>
+    <p class="cover-desc">Ton carnet de bord pour ancrer chaque pilier, mesurer ta progression et ne jamais perdre le fil de qui tu deviens.</p>
+    <div class="cover-badge">◈ &nbsp; 90 jours · 4 piliers · 1 transformation</div>
+  </div>
+</div>
+
+<div class="section-break"><div class="section-break-inner"></div></div>
+
+<!-- MODE D'EMPLOI -->
+<div class="page">
+  <div class="chapter-marker">Mode d'emploi</div>
+  <h2 class="chapter-title">Comment <span>utiliser</span> ce tracker</h2>
+  <p class="lead">Ce tracker n'est pas un journal. C'est un miroir. Il ne te demande pas d'écrire des romans — il te demande d'être honnête avec toi-même, chaque jour, pendant 90 jours. C'est tout.</p>
+  <p>La discipline ne naît pas de la motivation — elle naît de la <strong>preuve</strong>. Chaque case cochée est une preuve. Chaque semaine complétée est une preuve. Après 90 jours, tu n'auras plus besoin d'y croire : tu verras.</p>
+  <div class="how-grid">
+    <div class="how-card"><div class="how-num">01</div><div class="how-title">Chaque matin</div><p class="how-desc">Lis ton intention de la semaine. 30 secondes. Rappelle-toi qui tu construis aujourd'hui avant que la journée ne commence.</p></div>
+    <div class="how-card"><div class="how-num">02</div><div class="how-title">Chaque soir</div><p class="how-desc">Coche tes rituels. Pas de jugement — juste de l'honnêteté. Une case non cochée est une information, pas un échec.</p></div>
+    <div class="how-card"><div class="how-num">03</div><div class="how-title">Chaque dimanche</div><p class="how-desc">Score tes 4 piliers sur 10. Note une victoire. Rédige l'intention de la semaine suivante. 10 minutes maximum.</p></div>
+    <div class="how-card"><div class="how-num">04</div><div class="how-title">Fin de phase</div><p class="how-desc">Remplis la review mensuelle. Compare avec la phase précédente. L'évolution devient visible — et visible, elle devient motivante.</p></div>
+  </div>
+  <div class="pullquote"><p>Ce que tu mesures, tu l'améliores. Ce que tu ignores, tu le subis.</p></div>
+</div>
+
+<div class="section-break"><div class="section-break-inner"></div></div>
+
+<!-- PHASE I -->
+<div class="page">
+  <div class="chapter-marker">Jours 1 à 30</div>
+  <h2 class="chapter-title">Phase I — <span>Le Nettoyage</span></h2>
+  <div class="phase-header">
+    <div class="phase-num-big">I</div>
+    <div class="phase-info">
+      <div class="phase-label">Focus de la phase</div>
+      <div class="phase-name">Éliminer ce qui bloque l'aura</div>
+      <p class="phase-desc">Avant de construire, on retire. Cette phase est inconfortable — parce qu'elle te demande de regarder en face les habitudes, les comportements et les environnements qui sabotent silencieusement ton magnétisme.</p>
+    </div>
+  </div>
+
+  <div class="week-card">
+    <div class="week-header"><div class="week-title">Semaine 1 — L'Audit</div><div class="week-dates">Jours 1 → 7</div></div>
+    <div class="week-body">
+      <div class="ritual-group">
+        <div class="ritual-group-title">Rituels Quotidiens</div>
+        <div class="ritual-item"><div class="checkbox"></div>Posture vérifiée au réveil</div>
+        <div class="ritual-item"><div class="checkbox"></div>Téléphone évité la 1ère heure</div>
+        <div class="ritual-item"><div class="checkbox"></div>1 comportement anti-aura identifié</div>
+        <div class="ritual-item"><div class="checkbox"></div>Regard direct maintenu en conversation</div>
+        <div class="ritual-item"><div class="checkbox"></div>Couché avant minuit</div>
+      </div>
+      <div class="ritual-group">
+        <div class="ritual-group-title">Travail de fond</div>
+        <div class="ritual-item"><div class="checkbox"></div>Audit d'identité complété</div>
+        <div class="ritual-item"><div class="checkbox"></div>3 valeurs écrites et affichées</div>
+        <div class="ritual-item"><div class="checkbox"></div>1 personne drainante identifiée</div>
+        <div class="ritual-item"><div class="checkbox"></div>Espace de vie rangé / ordonné</div>
+        <div class="ritual-item"><div class="checkbox"></div>Miroir sans jugement pratiqué</div>
+      </div>
+    </div>
+    <div class="intention-box"><div class="intention-label">Intention de la semaine</div><div class="write-line"></div><div class="write-line"></div></div>
+    <div class="score-band"><div class="score-label">Score d'aura perçu</div><div class="score-dots"><div class="dot">1</div><div class="dot">2</div><div class="dot">3</div><div class="dot">4</div><div class="dot">5</div><div class="dot">6</div><div class="dot">7</div><div class="dot">8</div><div class="dot">9</div><div class="dot">10</div></div><div class="dot-label">/10</div></div>
+  </div>
+
+  <div class="week-card">
+    <div class="week-header"><div class="week-title">Semaine 2 — L'Élimination</div><div class="week-dates">Jours 8 → 14</div></div>
+    <div class="week-body">
+      <div class="ritual-group">
+        <div class="ritual-group-title">Rituels Quotidiens</div>
+        <div class="ritual-item"><div class="checkbox"></div>Routine matinale respectée</div>
+        <div class="ritual-item"><div class="checkbox"></div>Corps bougé 20 min minimum</div>
+        <div class="ritual-item"><div class="checkbox"></div>Parole économe (30% moins)</div>
+        <div class="ritual-item"><div class="checkbox"></div>Justifications évitées</div>
+        <div class="ritual-item"><div class="checkbox"></div>Sommeil 7h+ respecté</div>
+      </div>
+      <div class="ritual-group">
+        <div class="ritual-group-title">Travail de fond</div>
+        <div class="ritual-item"><div class="checkbox"></div>1 habitude toxique supprimée</div>
+        <div class="ritual-item"><div class="checkbox"></div>Réseaux sociaux &lt; 45 min/jour</div>
+        <div class="ritual-item"><div class="checkbox"></div>Limite posée à une personne drainante</div>
+        <div class="ritual-item"><div class="checkbox"></div>Vestiaire revu — 1 pièce retirée</div>
+        <div class="ritual-item"><div class="checkbox"></div>Avis personnel assumé en groupe</div>
+      </div>
+    </div>
+    <div class="intention-box"><div class="intention-label">Intention de la semaine</div><div class="write-line"></div><div class="write-line"></div></div>
+    <div class="score-band"><div class="score-label">Score d'aura perçu</div><div class="score-dots"><div class="dot">1</div><div class="dot">2</div><div class="dot">3</div><div class="dot">4</div><div class="dot">5</div><div class="dot">6</div><div class="dot">7</div><div class="dot">8</div><div class="dot">9</div><div class="dot">10</div></div><div class="dot-label">/10</div></div>
+  </div>
+
+  <div class="week-card">
+    <div class="week-header"><div class="week-title">Semaine 3 — Le Signal Physique</div><div class="week-dates">Jours 15 → 21</div></div>
+    <div class="week-body">
+      <div class="ritual-group">
+        <div class="ritual-group-title">Rituels Quotidiens</div>
+        <div class="ritual-item"><div class="checkbox"></div>Reset physique 5 min au réveil</div>
+        <div class="ritual-item"><div class="checkbox"></div>Voix posée, rythme lent</div>
+        <div class="ritual-item"><div class="checkbox"></div>Gestes économes observés</div>
+        <div class="ritual-item"><div class="checkbox"></div>Posture vérifiée 3x dans la journée</div>
+        <div class="ritual-item"><div class="checkbox"></div>Corps entretenu (sport ou marche)</div>
+      </div>
+      <div class="ritual-group">
+        <div class="ritual-group-title">Travail de fond</div>
+        <div class="ritual-item"><div class="checkbox"></div>Entraînement physique 3x cette semaine</div>
+        <div class="ritual-item"><div class="checkbox"></div>Vidéo de soi filmée et analysée</div>
+        <div class="ritual-item"><div class="checkbox"></div>1 situation inconfortable acceptée</div>
+        <div class="ritual-item"><div class="checkbox"></div>Contact visuel maintenu en conv.</div>
+        <div class="ritual-item"><div class="checkbox"></div>Entrée dans une pièce travaillée</div>
+      </div>
+    </div>
+    <div class="intention-box"><div class="intention-label">Intention de la semaine</div><div class="write-line"></div><div class="write-line"></div></div>
+    <div class="score-band"><div class="score-label">Score d'aura perçu</div><div class="score-dots"><div class="dot">1</div><div class="dot">2</div><div class="dot">3</div><div class="dot">4</div><div class="dot">5</div><div class="dot">6</div><div class="dot">7</div><div class="dot">8</div><div class="dot">9</div><div class="dot">10</div></div><div class="dot-label">/10</div></div>
+  </div>
+
+  <div class="week-card">
+    <div class="week-header"><div class="week-title">Semaine 4 — La Présence Sociale</div><div class="week-dates">Jours 22 → 30</div></div>
+    <div class="week-body">
+      <div class="ritual-group">
+        <div class="ritual-group-title">Rituels Quotidiens</div>
+        <div class="ritual-item"><div class="checkbox"></div>Écoute totale pratiquée</div>
+        <div class="ritual-item"><div class="checkbox"></div>1 opinion ferme exprimée</div>
+        <div class="ritual-item"><div class="checkbox"></div>Silences acceptés sans les combler</div>
+        <div class="ritual-item"><div class="checkbox"></div>Approbation non-cherchée</div>
+        <div class="ritual-item"><div class="checkbox"></div>Journaling 5 min le soir</div>
+      </div>
+      <div class="ritual-group">
+        <div class="ritual-group-title">Travail de fond</div>
+        <div class="ritual-item"><div class="checkbox"></div>Défi social 7 jours complété</div>
+        <div class="ritual-item"><div class="checkbox"></div>Cercle social évalué honnêtement</div>
+        <div class="ritual-item"><div class="checkbox"></div>Non dit à quelque chose de non-aligné</div>
+        <div class="ritual-item"><div class="checkbox"></div>Désaccord exprimé respectueusement</div>
+        <div class="ritual-item"><div class="checkbox"></div>Bilan Phase I rédigé</div>
+      </div>
+    </div>
+    <div class="intention-box"><div class="intention-label">Intention de la semaine</div><div class="write-line"></div><div class="write-line"></div></div>
+    <div class="score-band"><div class="score-label">Score d'aura perçu</div><div class="score-dots"><div class="dot">1</div><div class="dot">2</div><div class="dot">3</div><div class="dot">4</div><div class="dot">5</div><div class="dot">6</div><div class="dot">7</div><div class="dot">8</div><div class="dot">9</div><div class="dot">10</div></div><div class="dot-label">/10</div></div>
+  </div>
+
+  <div class="monthly-review">
+    <div class="monthly-review-header">Bilan Phase I — Jour 30</div>
+    <div class="aura-score-card" style="margin:0 0 28px 0;">
+      <div class="aura-score-title">Score des 4 Piliers — Jour 30</div>
+      <div class="aura-score-body">
+        <div class="pillar-row"><div class="pillar-row-name">Socle Intérieur</div><div class="pillar-row-dots"><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div><div class="pillar-row-num">/10</div></div>
+        <div class="pillar-row"><div class="pillar-row-name">Signal Physique</div><div class="pillar-row-dots"><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div><div class="pillar-row-num">/10</div></div>
+        <div class="pillar-row"><div class="pillar-row-name">Présence Sociale</div><div class="pillar-row-dots"><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div><div class="pillar-row-num">/10</div></div>
+        <div class="pillar-row"><div class="pillar-row-name">Environnement</div><div class="pillar-row-dots"><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div><div class="pillar-row-num">/10</div></div>
+      </div>
+    </div>
+    <div class="review-grid">
+      <div class="review-item"><div class="review-item-label">Ma plus grande victoire du mois</div><div class="review-lines"><div class="review-line"></div><div class="review-line"></div><div class="review-line"></div></div></div>
+      <div class="review-item"><div class="review-item-label">Ce que j'ai le plus résisté</div><div class="review-lines"><div class="review-line"></div><div class="review-line"></div><div class="review-line"></div></div></div>
+      <div class="review-item"><div class="review-item-label">Comment les autres me perçoivent différemment</div><div class="review-lines"><div class="review-line"></div><div class="review-line"></div><div class="review-line"></div></div></div>
+      <div class="review-item"><div class="review-item-label">Mon intention pour la Phase II</div><div class="review-lines"><div class="review-line"></div><div class="review-line"></div><div class="review-line"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section-break"><div class="section-break-inner"></div></div>
+
+<!-- PHASE II -->
+<div class="page">
+  <div class="chapter-marker">Jours 31 à 60</div>
+  <h2 class="chapter-title">Phase II — <span>La Construction</span></h2>
+  <div class="phase-header">
+    <div class="phase-num-big">II</div>
+    <div class="phase-info">
+      <div class="phase-label">Focus de la phase</div>
+      <div class="phase-name">Installer les rituels qui bâtissent l'aura</div>
+      <p class="phase-desc">Le nettoyage est fait. Place à la fondation. Cette phase est celle de la routine matinale, de l'engagement physique, de la discipline quotidienne. Ce que tu installes ici devient ton identité.</p>
+    </div>
+  </div>
+
+  <div class="week-card">
+    <div class="week-header"><div class="week-title">Semaine 5 — La Routine Ancrante</div><div class="week-dates">Jours 31 → 37</div></div>
+    <div class="week-body">
+      <div class="ritual-group">
+        <div class="ritual-group-title">Rituels Quotidiens</div>
+        <div class="ritual-item"><div class="checkbox"></div>Lever à heure fixe (même le week-end)</div>
+        <div class="ritual-item"><div class="checkbox"></div>30 min de mouvement au réveil</div>
+        <div class="ritual-item"><div class="checkbox"></div>Création avant consommation</div>
+        <div class="ritual-item"><div class="checkbox"></div>Intention matinale posée à l'écrit</div>
+        <div class="ritual-item"><div class="checkbox"></div>Visualisation du soi à haute aura</div>
+      </div>
+      <div class="ritual-group">
+        <div class="ritual-group-title">Travail de fond</div>
+        <div class="ritual-item"><div class="checkbox"></div>Routine matinale tenue 7j/7</div>
+        <div class="ritual-item"><div class="checkbox"></div>Domaine de maîtrise pratiqué</div>
+        <div class="ritual-item"><div class="checkbox"></div>Lecture 20 min/jour (fond, pas news)</div>
+        <div class="ritual-item"><div class="checkbox"></div>Repas préparé, pas commandé 5x</div>
+        <div class="ritual-item"><div class="checkbox"></div>Énergie protégée — 1 refus posé</div>
+      </div>
+    </div>
+    <div class="intention-box"><div class="intention-label">Intention de la semaine</div><div class="write-line"></div><div class="write-line"></div></div>
+    <div class="score-band"><div class="score-label">Score d'aura perçu</div><div class="score-dots"><div class="dot">1</div><div class="dot">2</div><div class="dot">3</div><div class="dot">4</div><div class="dot">5</div><div class="dot">6</div><div class="dot">7</div><div class="dot">8</div><div class="dot">9</div><div class="dot">10</div></div><div class="dot-label">/10</div></div>
+  </div>
+
+  <div class="week-card">
+    <div class="week-header"><div class="week-title">Semaine 6 — L'Identité Physique</div><div class="week-dates">Jours 38 → 44</div></div>
+    <div class="week-body">
+      <div class="ritual-group">
+        <div class="ritual-group-title">Rituels Quotidiens</div>
+        <div class="ritual-item"><div class="checkbox"></div>Rituel du champion avant sport</div>
+        <div class="ritual-item"><div class="checkbox"></div>Corps utilisé, pas subi</div>
+        <div class="ritual-item"><div class="checkbox"></div>Alimentation consciente</div>
+        <div class="ritual-item"><div class="checkbox"></div>Posture vérifiée en position assise</div>
+        <div class="ritual-item"><div class="checkbox"></div>Récupération active (sommeil, calme)</div>
+      </div>
+      <div class="ritual-group">
+        <div class="ritual-group-title">Travail de fond</div>
+        <div class="ritual-item"><div class="checkbox"></div>Défi physique semaine relevé</div>
+        <div class="ritual-item"><div class="checkbox"></div>Entraînement 4x cette semaine</div>
+        <div class="ritual-item"><div class="checkbox"></div>Question "ai-je été qui j'admire ?" posée</div>
+        <div class="ritual-item"><div class="checkbox"></div>Style vestimentaire cohérent</div>
+        <div class="ritual-item"><div class="checkbox"></div>Environnement physique amélioré</div>
+      </div>
+    </div>
+    <div class="intention-box"><div class="intention-label">Intention de la semaine</div><div class="write-line"></div><div class="write-line"></div></div>
+    <div class="score-band"><div class="score-label">Score d'aura perçu</div><div class="score-dots"><div class="dot">1</div><div class="dot">2</div><div class="dot">3</div><div class="dot">4</div><div class="dot">5</div><div class="dot">6</div><div class="dot">7</div><div class="dot">8</div><div class="dot">9</div><div class="dot">10</div></div><div class="dot-label">/10</div></div>
+  </div>
+
+  <div class="week-card">
+    <div class="week-header"><div class="week-title">Semaine 7 — Le Magnétisme Social</div><div class="week-dates">Jours 45 → 51</div></div>
+    <div class="week-body">
+      <div class="ritual-group">
+        <div class="ritual-group-title">Rituels Quotidiens</div>
+        <div class="ritual-item"><div class="checkbox"></div>1 connexion authentique créée</div>
+        <div class="ritual-item"><div class="checkbox"></div>Compliment sincère donné</div>
+        <div class="ritual-item"><div class="checkbox"></div>Question profonde posée (pas "ça va")</div>
+        <div class="ritual-item"><div class="checkbox"></div>Présence dans une pièce travaillée</div>
+        <div class="ritual-item"><div class="checkbox"></div>Téléphone rangé en social</div>
+      </div>
+      <div class="ritual-group">
+        <div class="ritual-group-title">Travail de fond</div>
+        <div class="ritual-item"><div class="checkbox"></div>1 situation de leadership assumée</div>
+        <div class="ritual-item"><div class="checkbox"></div>Cercle social : 1 relation renforcée</div>
+        <div class="ritual-item"><div class="checkbox"></div>Interaction nouvelle initiée</div>
+        <div class="ritual-item"><div class="checkbox"></div>Feedback honnête demandé à un proche</div>
+        <div class="ritual-item"><div class="checkbox"></div>Limite maintenue face à la pression</div>
+      </div>
+    </div>
+    <div class="intention-box"><div class="intention-label">Intention de la semaine</div><div class="write-line"></div><div class="write-line"></div></div>
+    <div class="score-band"><div class="score-label">Score d'aura perçu</div><div class="score-dots"><div class="dot">1</div><div class="dot">2</div><div class="dot">3</div><div class="dot">4</div><div class="dot">5</div><div class="dot">6</div><div class="dot">7</div><div class="dot">8</div><div class="dot">9</div><div class="dot">10</div></div><div class="dot-label">/10</div></div>
+  </div>
+
+  <div class="week-card">
+    <div class="week-header"><div class="week-title">Semaine 8 — La Pression</div><div class="week-dates">Jours 52 → 60</div></div>
+    <div class="week-body">
+      <div class="ritual-group">
+        <div class="ritual-group-title">Rituels Quotidiens</div>
+        <div class="ritual-item"><div class="checkbox"></div>1 chose difficile faite en premier</div>
+        <div class="ritual-item"><div class="checkbox"></div>Calme maintenu sous stress</div>
+        <div class="ritual-item"><div class="checkbox"></div>Décision prise sans surexplication</div>
+        <div class="ritual-item"><div class="checkbox"></div>Peur identifiée et traversée</div>
+        <div class="ritual-item"><div class="checkbox"></div>Bilan soir : qui ai-je été aujourd'hui ?</div>
+      </div>
+      <div class="ritual-group">
+        <div class="ritual-group-title">Travail de fond</div>
+        <div class="ritual-item"><div class="checkbox"></div>Situation inconfortable choisie volontairement</div>
+        <div class="ritual-item"><div class="checkbox"></div>Performance publique tentée</div>
+        <div class="ritual-item"><div class="checkbox"></div>Réaction sous critique gérée avec calme</div>
+        <div class="ritual-item"><div class="checkbox"></div>Routine maintenue malgré obstacles</div>
+        <div class="ritual-item"><div class="checkbox"></div>Bilan Phase II rédigé</div>
+      </div>
+    </div>
+    <div class="intention-box"><div class="intention-label">Intention de la semaine</div><div class="write-line"></div><div class="write-line"></div></div>
+    <div class="score-band"><div class="score-label">Score d'aura perçu</div><div class="score-dots"><div class="dot">1</div><div class="dot">2</div><div class="dot">3</div><div class="dot">4</div><div class="dot">5</div><div class="dot">6</div><div class="dot">7</div><div class="dot">8</div><div class="dot">9</div><div class="dot">10</div></div><div class="dot-label">/10</div></div>
+  </div>
+
+  <div class="monthly-review">
+    <div class="monthly-review-header">Bilan Phase II — Jour 60</div>
+    <div class="aura-score-card" style="margin:0 0 28px 0;">
+      <div class="aura-score-title">Score des 4 Piliers — Jour 60</div>
+      <div class="aura-score-body">
+        <div class="pillar-row"><div class="pillar-row-name">Socle Intérieur</div><div class="pillar-row-dots"><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div><div class="pillar-row-num">/10</div></div>
+        <div class="pillar-row"><div class="pillar-row-name">Signal Physique</div><div class="pillar-row-dots"><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div><div class="pillar-row-num">/10</div></div>
+        <div class="pillar-row"><div class="pillar-row-name">Présence Sociale</div><div class="pillar-row-dots"><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div><div class="pillar-row-num">/10</div></div>
+        <div class="pillar-row"><div class="pillar-row-name">Environnement</div><div class="pillar-row-dots"><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div><div class="pillar-row-num">/10</div></div>
+      </div>
+    </div>
+    <div class="review-grid">
+      <div class="review-item"><div class="review-item-label">Ce qui a le plus changé en moi</div><div class="review-lines"><div class="review-line"></div><div class="review-line"></div><div class="review-line"></div></div></div>
+      <div class="review-item"><div class="review-item-label">La routine devenue naturelle</div><div class="review-lines"><div class="review-line"></div><div class="review-line"></div><div class="review-line"></div></div></div>
+      <div class="review-item"><div class="review-item-label">Comparaison avec le score Jour 30</div><div class="review-lines"><div class="review-line"></div><div class="review-line"></div><div class="review-line"></div></div></div>
+      <div class="review-item"><div class="review-item-label">Mon intention pour la Phase III</div><div class="review-lines"><div class="review-line"></div><div class="review-line"></div><div class="review-line"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section-break"><div class="section-break-inner"></div></div>
+
+<!-- PHASE III -->
+<div class="page">
+  <div class="chapter-marker">Jours 61 à 90</div>
+  <h2 class="chapter-title">Phase III — <span>L'Intégration</span></h2>
+  <div class="phase-header">
+    <div class="phase-num-big">III</div>
+    <div class="phase-info">
+      <div class="phase-label">Focus de la phase</div>
+      <div class="phase-name">Incarner l'aura dans chaque contexte</div>
+      <p class="phase-desc">Ce n'est plus un programme. C'est qui tu es. Cette phase te confronte aux situations réelles — pression, friction, exposition publique — pour ancrer définitivement ce que tu as construit.</p>
+    </div>
+  </div>
+
+  <div class="week-card">
+    <div class="week-header"><div class="week-title">Semaine 9 — La Friction</div><div class="week-dates">Jours 61 → 67</div></div>
+    <div class="week-body">
+      <div class="ritual-group">
+        <div class="ritual-group-title">Rituels Quotidiens</div>
+        <div class="ritual-item"><div class="checkbox"></div>Routine matinale — sans exception</div>
+        <div class="ritual-item"><div class="checkbox"></div>Corps : entraînement ou mouvement</div>
+        <div class="ritual-item"><div class="checkbox"></div>1 interaction sociale intentionnelle</div>
+        <div class="ritual-item"><div class="checkbox"></div>Posture active maintenue</div>
+        <div class="ritual-item"><div class="checkbox"></div>Journaling 5 min — victoire du jour</div>
+      </div>
+      <div class="ritual-group">
+        <div class="ritual-group-title">Défis d'incarnation</div>
+        <div class="ritual-item"><div class="checkbox"></div>Prise de parole publique volontaire</div>
+        <div class="ritual-item"><div class="checkbox"></div>Leadership assumé dans un groupe</div>
+        <div class="ritual-item"><div class="checkbox"></div>Conflit géré avec calme et fermeté</div>
+        <div class="ritual-item"><div class="checkbox"></div>Zone d'inconfort étendue volontairement</div>
+        <div class="ritual-item"><div class="checkbox"></div>Aura testée dans un nouvel environnement</div>
+      </div>
+    </div>
+    <div class="intention-box"><div class="intention-label">Intention de la semaine</div><div class="write-line"></div><div class="write-line"></div></div>
+    <div class="score-band"><div class="score-label">Score d'aura perçu</div><div class="score-dots"><div class="dot">1</div><div class="dot">2</div><div class="dot">3</div><div class="dot">4</div><div class="dot">5</div><div class="dot">6</div><div class="dot">7</div><div class="dot">8</div><div class="dot">9</div><div class="dot">10</div></div><div class="dot-label">/10</div></div>
+  </div>
+
+  <div class="week-card">
+    <div class="week-header"><div class="week-title">Semaine 10 — L'Exposition</div><div class="week-dates">Jours 68 → 74</div></div>
+    <div class="week-body">
+      <div class="ritual-group">
+        <div class="ritual-group-title">Rituels Quotidiens</div>
+        <div class="ritual-item"><div class="checkbox"></div>Ancrage matinal : qui suis-je aujourd'hui ?</div>
+        <div class="ritual-item"><div class="checkbox"></div>Corps soigné, style assumé</div>
+        <div class="ritual-item"><div class="checkbox"></div>Silence actif pratiqué en groupe</div>
+        <div class="ritual-item"><div class="checkbox"></div>Impact mesuré sur les autres</div>
+        <div class="ritual-item"><div class="checkbox"></div>Gratitude pour le chemin parcouru</div>
+      </div>
+      <div class="ritual-group">
+        <div class="ritual-group-title">Défis d'incarnation</div>
+        <div class="ritual-item"><div class="checkbox"></div>Événement social nouveau fréquenté</div>
+        <div class="ritual-item"><div class="checkbox"></div>Rencontre initiée avec un inconnu</div>
+        <div class="ritual-item"><div class="checkbox"></div>Opinion maintenue sous pression de groupe</div>
+        <div class="ritual-item"><div class="checkbox"></div>Projet ou création exposé publiquement</div>
+        <div class="ritual-item"><div class="checkbox"></div>Feedback spontané reçu — noté ici</div>
+      </div>
+    </div>
+    <div class="intention-box"><div class="intention-label">Intention de la semaine</div><div class="write-line"></div><div class="write-line"></div></div>
+    <div class="score-band"><div class="score-label">Score d'aura perçu</div><div class="score-dots"><div class="dot">1</div><div class="dot">2</div><div class="dot">3</div><div class="dot">4</div><div class="dot">5</div><div class="dot">6</div><div class="dot">7</div><div class="dot">8</div><div class="dot">9</div><div class="dot">10</div></div><div class="dot-label">/10</div></div>
+  </div>
+
+  <div class="week-card">
+    <div class="week-header"><div class="week-title">Semaine 11 — La Constance</div><div class="week-dates">Jours 75 → 81</div></div>
+    <div class="week-body">
+      <div class="ritual-group">
+        <div class="ritual-group-title">Rituels Quotidiens</div>
+        <div class="ritual-item"><div class="checkbox"></div>Routine tenue — même sous stress</div>
+        <div class="ritual-item"><div class="checkbox"></div>Valeurs vécues, pas seulement pensées</div>
+        <div class="ritual-item"><div class="checkbox"></div>Énergie protégée activement</div>
+        <div class="ritual-item"><div class="checkbox"></div>Environnement maintenu en ordre</div>
+        <div class="ritual-item"><div class="checkbox"></div>Cohérence : même en privé qu'en public</div>
+      </div>
+      <div class="ritual-group">
+        <div class="ritual-group-title">Défis d'incarnation</div>
+        <div class="ritual-item"><div class="checkbox"></div>Routine maintenue sous pression externe</div>
+        <div class="ritual-item"><div class="checkbox"></div>Pilier le plus faible travaillé en priorité</div>
+        <div class="ritual-item"><div class="checkbox"></div>1 personne inspirée par ton évolution</div>
+        <div class="ritual-item"><div class="checkbox"></div>Rôle de mentor joué — savoir transmis</div>
+        <div class="ritual-item"><div class="checkbox"></div>Prochain défi de 90j planifié</div>
+      </div>
+    </div>
+    <div class="intention-box"><div class="intention-label">Intention de la semaine</div><div class="write-line"></div><div class="write-line"></div></div>
+    <div class="score-band"><div class="score-label">Score d'aura perçu</div><div class="score-dots"><div class="dot">1</div><div class="dot">2</div><div class="dot">3</div><div class="dot">4</div><div class="dot">5</div><div class="dot">6</div><div class="dot">7</div><div class="dot">8</div><div class="dot">9</div><div class="dot">10</div></div><div class="dot-label">/10</div></div>
+  </div>
+
+  <div class="week-card">
+    <div class="week-header"><div class="week-title">Semaine 12 — L'Ancrage Final</div><div class="week-dates">Jours 82 → 90</div></div>
+    <div class="week-body">
+      <div class="ritual-group">
+        <div class="ritual-group-title">Rituels Quotidiens</div>
+        <div class="ritual-item"><div class="checkbox"></div>Chaque matin : lire ses 3 valeurs</div>
+        <div class="ritual-item"><div class="checkbox"></div>Corps : ultime semaine de défi physique</div>
+        <div class="ritual-item"><div class="checkbox"></div>Présence sociale : qualité sur quantité</div>
+        <div class="ritual-item"><div class="checkbox"></div>Journaling : lettre à soi-même du Jour 1</div>
+        <div class="ritual-item"><div class="checkbox"></div>Célébration consciente du chemin</div>
+      </div>
+      <div class="ritual-group">
+        <div class="ritual-group-title">Rituels de clôture</div>
+        <div class="ritual-item"><div class="checkbox"></div>Comparaison Jour 1 vs Jour 90 rédigée</div>
+        <div class="ritual-item"><div class="checkbox"></div>Bilan des 4 piliers — score final</div>
+        <div class="ritual-item"><div class="checkbox"></div>Prochain défi de 90j défini</div>
+        <div class="ritual-item"><div class="checkbox"></div>Engagement public ou intime pris</div>
+        <div class="ritual-item"><div class="checkbox"></div>Bilan Phase III complet rédigé</div>
+      </div>
+    </div>
+    <div class="intention-box"><div class="intention-label">Intention finale</div><div class="write-line"></div><div class="write-line"></div></div>
+    <div class="score-band"><div class="score-label">Score d'aura perçu</div><div class="score-dots"><div class="dot">1</div><div class="dot">2</div><div class="dot">3</div><div class="dot">4</div><div class="dot">5</div><div class="dot">6</div><div class="dot">7</div><div class="dot">8</div><div class="dot">9</div><div class="dot">10</div></div><div class="dot-label">/10</div></div>
+  </div>
+
+  <div class="monthly-review">
+    <div class="monthly-review-header">Bilan Final — Jour 90</div>
+    <div class="aura-score-card" style="margin:0 0 28px 0;">
+      <div class="aura-score-title">Score des 4 Piliers — Jour 90 vs Jour 1</div>
+      <div class="aura-score-body">
+        <div class="pillar-row"><div class="pillar-row-name">Socle Intérieur</div><div class="pillar-row-dots"><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div><div class="pillar-row-num">/10</div></div>
+        <div class="pillar-row"><div class="pillar-row-name">Signal Physique</div><div class="pillar-row-dots"><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div><div class="pillar-row-num">/10</div></div>
+        <div class="pillar-row"><div class="pillar-row-name">Présence Sociale</div><div class="pillar-row-dots"><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div><div class="pillar-row-num">/10</div></div>
+        <div class="pillar-row"><div class="pillar-row-name">Environnement</div><div class="pillar-row-dots"><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div><div class="score-dot"></div></div><div class="pillar-row-num">/10</div></div>
+      </div>
+    </div>
+    <div class="victory-box">
+      <div class="victory-label">✦ Lettre à mon moi du Jour 1</div>
+      <div class="review-lines" style="display:flex;flex-direction:column;gap:14px;">
+        <div class="review-line"></div><div class="review-line"></div><div class="review-line"></div><div class="review-line"></div><div class="review-line"></div><div class="review-line"></div>
+      </div>
+    </div>
+    <div class="review-grid" style="margin-top:28px;">
+      <div class="review-item"><div class="review-item-label">Ce que je ne suis plus</div><div class="review-lines"><div class="review-line"></div><div class="review-line"></div><div class="review-line"></div></div></div>
+      <div class="review-item"><div class="review-item-label">Ce que je suis devenu</div><div class="review-lines"><div class="review-line"></div><div class="review-line"></div><div class="review-line"></div></div></div>
+      <div class="review-item"><div class="review-item-label">Mon prochain défi</div><div class="review-lines"><div class="review-line"></div><div class="review-line"></div><div class="review-line"></div></div></div>
+      <div class="review-item"><div class="review-item-label">Ce que je transmettrais à quelqu'un qui commence</div><div class="review-lines"><div class="review-line"></div><div class="review-line"></div><div class="review-line"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="final-page">
+  <div class="final-glow"></div>
+  <div class="chapter-marker" style="justify-content:center;margin-bottom:28px;">Jour 90</div>
+  <h2>Tu n'es plus<br>celui qui cherchait.</h2>
+  <div class="cover-line" style="margin:32px auto;width:60px;height:1px;background:linear-gradient(90deg,transparent,#C9A84C,transparent);"></div>
+  <p>Tu es celui qui a prouvé — à lui-même, chaque jour, pendant 90 jours — qu'il était capable de devenir qui il voulait être. C'est ça, l'aura. Et elle ne part plus.</p>
+  <div class="final-sig">AURA — Tracker 90 Jours &nbsp;·&nbsp; Programme Premium</div>
+</div>
+
+</body>
+</html>

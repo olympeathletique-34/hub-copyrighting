@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURA Level 3 — La Source</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#FFFFFF;--night2:#FBF9F4;--night3:#F4EFE4;
+  --ink:#1A1626;--ink2:#3B3547;--ink3:#7C7469;
+  --gold:#A8842A;--gold-l:#8B6914;--gold-d:#6E520E;
+  --violet:#6A4C96;--violet-l:#6A4C96;--violet-bg:#F6F2FA;
+  --red:#A02E2E;--green:#2F7A5A;
+  --line:rgba(139,105,20,.25);--line2:rgba(139,105,20,.12);--card:#FBF9F4;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--night);color:var(--ink);font-family:'EB Garamond',serif;font-size:19px;line-height:1.85;overflow-x:hidden}
+a{color:var(--gold-l)}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+
+/* COVER */
+.cover{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 20px;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(123,94,167,.12) 0%,transparent 65%),radial-gradient(ellipse 50% 40% at 50% 85%,rgba(200,168,75,.14) 0%,transparent 60%),linear-gradient(180deg,#FFFFFF 0%,#FBF9F4 100%)}
+.halo{width:220px;height:220px;border-radius:50%;position:relative;margin-bottom:44px}
+.halo::before,.halo::after{content:'';position:absolute;inset:0;border-radius:50%;border:1px solid rgba(168,132,42,.45)}
+.halo::before{animation:pulse 6s ease-in-out infinite}
+.halo::after{inset:30px;border-color:rgba(106,76,150,.45);animation:pulse 6s ease-in-out infinite 1.5s}
+.halo .core{position:absolute;inset:78px;border-radius:50%;background:radial-gradient(circle,#E2C470 0%,rgba(200,168,75,.25) 55%,transparent 75%);filter:blur(2px);animation:glow 4s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.12);opacity:1}}
+@keyframes glow{0%,100%{opacity:.7}50%{opacity:1}}
+.seal{font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--red);border:1px solid var(--red);padding:6px 14px;margin-bottom:28px;display:inline-block}
+.cover h1{font-family:'Cinzel',serif;font-weight:700;font-size:clamp(34px,8vw,64px);letter-spacing:.08em;line-height:1.15}
+.cover h1 span{display:block;font-size:.42em;letter-spacing:.4em;color:var(--gold);font-weight:600;margin-bottom:14px}
+.cover .sub{font-style:italic;font-size:21px;color:var(--ink2);margin-top:22px;max-width:520px}
+.cover .meta{font-family:'Jost',sans-serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);margin-top:44px}
+
+/* TYPO */
+section{padding:72px 0;border-top:1px solid var(--line2)}
+.eyebrow{font-family:'Jost',sans-serif;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+h2{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(26px,5.5vw,38px);line-height:1.25;margin-bottom:26px}
+h2 em{font-family:'EB Garamond',serif;font-style:italic;font-weight:400;color:var(--gold-l)}
+h3{font-family:'Cinzel',serif;font-weight:600;font-size:21px;letter-spacing:.03em;margin:44px 0 14px;color:var(--gold-l)}
+h4{font-family:'Jost',sans-serif;font-weight:500;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--violet);margin:22px 0 10px}
+p{margin-bottom:20px;color:var(--ink2)}
+p strong,li strong{color:var(--ink);font-weight:600}
+.lead{font-size:22px;color:var(--ink);font-style:italic}
+ul,ol{margin:0 0 20px 24px;color:var(--ink2)}
+li{margin-bottom:8px}
+.drop::first-letter{font-family:'Cinzel',serif;float:left;font-size:64px;line-height:.9;padding:6px 10px 0 0;color:var(--gold)}
+
+/* BOXES */
+.box{border:1px solid var(--line);background:var(--card);padding:24px 22px;margin:28px 0;border-radius:2px}
+.box.warn{border-color:rgba(160,46,46,.4);background:#FCF4F3}.box.warn .bt{color:#A02E2E}
+.box.ok{border-color:rgba(47,122,90,.35);background:#F2F8F5}.box.ok .bt{color:#2F7A5A}
+.box.violet{border-color:rgba(106,76,150,.3);background:var(--violet-bg)}.box.violet .bt{color:var(--violet)}
+.bt{font-family:'Jost',sans-serif;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;font-weight:500}
+.box p:last-child,.box ul:last-child,.box ol:last-child{margin-bottom:0}
+.quote{border-left:2px solid var(--gold);padding:6px 0 6px 20px;margin:30px 0;font-style:italic;font-size:21px;color:var(--ink)}
+.quote small{display:block;font-style:normal;font-family:'Jost',sans-serif;font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3);margin-top:8px}
+
+/* CHAPITRE (étape / palier) */
+.chap{margin:70px 0}
+.chap-head{display:flex;align-items:baseline;gap:16px;margin-bottom:6px}
+.chap-num{font-family:'Cinzel',serif;font-size:46px;color:var(--gold);line-height:1;opacity:.85}
+.chap-title{font-family:'Cinzel',serif;font-size:24px;line-height:1.25;color:var(--ink)}
+.chap-meta{font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink3);margin:0 0 26px 0;padding-bottom:16px;border-bottom:1px solid var(--line2)}
+.recit p{font-size:20px;line-height:1.95;color:#2E2838}
+.recit p:first-child::first-letter{font-family:'Cinzel',serif;float:left;font-size:56px;line-height:.9;padding:6px 10px 0 0;color:var(--gold)}
+.whisper{font-style:italic;text-align:center;font-size:21px;color:var(--violet);margin:30px auto;max-width:520px}
+
+/* GESTE (procédure repliable) */
+details.geste{border:1px solid var(--line);border-radius:4px;background:var(--night2);margin:26px 0 10px}
+details.geste summary{list-style:none;cursor:pointer;padding:16px 46px 16px 20px;font-family:'Jost',sans-serif;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-d);position:relative}
+details.geste summary::-webkit-details-marker{display:none}
+details.geste summary::after{content:'+';position:absolute;right:18px;top:10px;font-size:24px;color:var(--gold);transition:.2s}
+details.geste[open] summary::after{transform:rotate(45deg)}
+details.geste summary small{display:block;text-transform:none;letter-spacing:.02em;font-size:14px;color:var(--ink3);margin-top:2px;font-family:'EB Garamond',serif;font-style:italic}
+.geste-body{padding:4px 22px 20px;font-size:17px}
+.geste-body ol,.geste-body ul{font-size:17px}
+.dark{border-top:1px dashed rgba(160,46,46,.35);margin-top:16px;padding-top:12px;font-size:16px;color:#7E3434}
+.dark b{font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#A02E2E;font-weight:500;display:block;margin-bottom:4px}
+.valid{border-top:1px dashed rgba(47,122,90,.35);margin-top:16px;padding-top:12px;font-size:16px;color:#2D5E48}
+.valid b{font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#2F7A5A;font-weight:500;display:block;margin-bottom:4px}
+.inv-link{font-family:'Jost',sans-serif;font-size:13px;color:var(--violet);margin-top:12px;display:block}
+.biblio{border-left:2px solid var(--gold);background:#FDFAF2;padding:18px 20px;margin:26px 0 14px}
+.biblio .bl{font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-d);margin-bottom:8px;font-weight:500}
+.biblio p{font-size:17px;line-height:1.75;margin-bottom:10px}
+.biblio p:last-child{margin-bottom:0}
+.biblio .why{color:var(--ink)}
+.biblio .why::before{content:'Pourquoi ici — ';font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet)}
+.inv-note{border-left:2px solid var(--violet);background:var(--violet-bg);padding:12px 16px;margin:0 0 14px;font-family:'Jost',sans-serif;font-size:14px;line-height:1.6;color:var(--ink2)}
+.inv-note b{color:var(--violet);font-weight:500}
+.inv-note a{color:var(--violet)}
+.src-item{padding:20px 0;border-bottom:1px solid var(--line2)}
+.src-item h4{margin:0 0 4px;color:var(--ink);font-family:'Cinzel',serif;font-size:17px;letter-spacing:.02em;text-transform:none}
+.src-item .au{font-family:'Jost',sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+.src-item p{font-size:17px;margin-bottom:6px}
+.src-item .used{font-size:15px;color:var(--violet);font-family:'Jost',sans-serif}
+
+/* IMMERSION */
+.immersion{position:relative;margin:56px 0;padding:46px 26px 34px;background:linear-gradient(160deg,#F7F2FB 0%,#FDF9EF 100%);border:1px solid rgba(106,76,150,.18);border-radius:3px;overflow:hidden}
+.immersion::before{content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(200,168,75,.22),transparent 70%)}
+.imm-head{display:flex;align-items:center;gap:14px;margin-bottom:22px;position:relative}
+.breath{width:30px;height:30px;min-width:30px;border-radius:50%;background:radial-gradient(circle,rgba(168,132,42,.55),rgba(106,76,150,.18));animation:breath 10s ease-in-out infinite}
+@keyframes breath{0%,100%{transform:scale(.6);opacity:.5}40%{transform:scale(1.15);opacity:1}}
+.imm-label{font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--violet)}
+.imm-title{font-family:'Cinzel',serif;font-size:22px;color:var(--ink);line-height:1.3;margin-top:2px}
+.immersion p{font-size:20px;line-height:1.95;color:#2E2838;font-style:italic;position:relative}
+.immersion p.pause{font-style:normal;font-family:'Jost',sans-serif;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);text-align:center;margin:26px 0}
+.immersion .hint{font-family:'Jost',sans-serif;font-size:13px;font-style:normal;color:var(--ink3);letter-spacing:.04em;border-top:1px solid rgba(106,76,150,.15);padding-top:14px;margin-top:10px;margin-bottom:0}
+.voyage-time{font-family:'Cinzel',serif;color:var(--gold);font-size:15px;letter-spacing:.15em;margin:34px 0 8px}
+
+/* CHECKLIST */
+.check{list-style:none;margin:0 0 10px 0}
+.check li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line2);cursor:pointer;font-size:18px}
+.check input{appearance:none;-webkit-appearance:none;width:20px;height:20px;min-width:20px;border:1px solid var(--gold);margin-top:5px;cursor:pointer;position:relative;background:transparent}
+.check input:checked{background:var(--gold)}
+.check input:checked::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;font-family:'Jost',sans-serif}
+.gate{font-family:'Jost',sans-serif;font-size:14px;letter-spacing:.06em;padding:14px 16px;margin-top:14px;border:1px solid var(--line);color:var(--ink3);transition:.3s}
+.gate.open{border-color:var(--green);color:#2F7A5A;background:#F2F8F5}
+
+/* TOC */
+.toc{list-style:none;margin:0}
+.toc li{border-bottom:1px solid var(--line2);margin:0}
+.toc a{display:flex;gap:12px;padding:14px 0;text-decoration:none;color:var(--ink2);transition:.2s}
+.toc a:hover{color:var(--gold-l);padding-left:6px}
+.toc .n{font-family:'Cinzel',serif;color:var(--gold);min-width:52px}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;margin:24px 0;font-size:16px}
+.tbl th{font-family:'Jost',sans-serif;font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}
+.tbl td{padding:12px 8px;border-bottom:1px solid var(--line2);color:var(--ink2);vertical-align:top}
+.tbl td:first-child{font-family:'Cinzel',serif;color:var(--ink);white-space:nowrap}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+/* SCALE */
+.scale{display:grid;grid-template-columns:repeat(11,1fr);gap:3px;margin:18px 0 6px}
+.scale div{height:26px;display:flex;align-items:center;justify-content:center;font-family:'Jost',sans-serif;font-size:11px;color:#fff}
+.scale-legend{display:flex;justify-content:space-between;font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+
+/* TFT */
+.points{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:30px 0}
+.points figure{background:var(--night2);border:1px solid var(--line2);border-radius:4px;padding:14px;text-align:center}
+.points figcaption{font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);margin-top:8px}
+.points svg{width:100%;height:auto;max-width:260px}
+.pt-list{list-style:none;margin:0 0 24px 0;counter-reset:pt}
+.pt-list li{counter-increment:pt;display:grid;grid-template-columns:38px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line2);font-size:17px}
+.pt-list li::before{content:counter(pt);font-family:'Cinzel',serif;font-size:20px;color:#fff;background:var(--gold);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.algo{margin:34px 0}
+.algo-step{position:relative;padding:0 0 30px 46px;border-left:1px solid var(--line);margin-left:16px}
+.algo-step:last-child{border-left-color:transparent;padding-bottom:0}
+.algo-step .dot{position:absolute;left:-17px;top:0;width:34px;height:34px;border-radius:50%;background:#fff;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;color:var(--gold-d);font-size:15px}
+.algo-step h5{font-family:'Cinzel',serif;font-size:18px;color:var(--ink);margin-bottom:4px;font-weight:600}
+.algo-step .if{font-family:'Jost',sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--violet);margin-bottom:8px}
+.algo-step p{font-size:17px;margin-bottom:8px}
+
+/* PROGRESS + PARTS */
+.prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--violet),var(--gold));width:0;z-index:50}
+.part{text-align:center;padding:90px 20px;background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(123,94,167,.08),transparent 70%),var(--night2);border-top:1px solid var(--line2)}
+.part .roman{font-family:'Cinzel',serif;font-size:72px;color:var(--gold);line-height:1;opacity:.85}
+.part h2{margin:18px 0 10px}
+.part p{font-style:italic;max-width:520px;margin:0 auto}
+footer{text-align:center;padding:70px 20px 90px;border-top:1px solid var(--line)}
+footer .s{font-family:'Cinzel',serif;letter-spacing:.2em;color:var(--gold);font-size:14px}
+footer p{font-size:15px;color:var(--ink3);margin-top:12px}
+
+@media (max-width:560px){
+  body{font-size:18px}
+  .recit p,.immersion p{font-size:19px}
+  .points{grid-template-columns:1fr}
+  .tbl{font-size:15px}.tbl td:first-child{white-space:normal}
+  .chap-num{font-size:38px}.chap-title{font-size:21px}
+}
+@media print{
+  .halo,.prog{display:none}
+  .cover{min-height:auto;page-break-after:always}
+  details.geste{display:block}details.geste>*{display:block}
+  .immersion,.chap{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+
+<!-- ═══════════ COUVERTURE ═══════════ -->
+<header class="cover">
+  <div class="halo"><div class="core"></div></div>
+  <div class="seal">Réservé aux initiés · Niveaux 1 &amp; 2 validés</div>
+  <h1><span>AURA · LEVEL 3</span>La Source</h1>
+  <p class="sub">Libérer ce qui est figé. Déposer ce qui se défend. Puis rayonner — au service de l'autre.</p>
+  <div class="meta">Bibliothèque Secrète des Initiés</div>
+</header>
+
+<!-- ═══════════ SOMMAIRE ═══════════ -->
+<section>
+<div class="wrap">
+  <div class="eyebrow">Sommaire</div>
+  <h2>Les neuf <em>portes</em></h2>
+  <ul class="toc">
+    <li><a href="#seuil"><span class="n">0</span><span>Le Seuil</span></a></li>
+    <li><a href="#pacte"><span class="n">I</span><span>Le Pacte — rester du bon côté de la force</span></a></li>
+    <li><a href="#liberation"><span class="n">II</span><span>La Grande Libération — traumas et ego</span></a></li>
+    <li><a href="#inversions"><span class="n">III</span><span>La Clé — lever les inversions (TFT)</span></a></li>
+    <li><a href="#puissance"><span class="n">IV</span><span>La Puissance Supérieure — les 7 paliers</span></a></li>
+    <li><a href="#protocole"><span class="n">V</span><span>Le chemin des 12 semaines</span></a></li>
+    <li><a href="#ombre"><span class="n">VI</span><span>Les signes de l'ombre</span></a></li>
+    <li><a href="#devenir"><span class="n">VII</span><span>Celui que tu deviens</span></a></li>
+    <li><a href="#sources"><span class="n">VIII</span><span>Les sources des initiés</span></a></li>
+  </ul>
+</div>
+</section>
+
+<!-- ═══════════ OUVERTURE ═══════════ -->
+<section>
+<div class="wrap">
+  <div class="eyebrow">Ouverture</div>
+  <h2>Ce qui reste <em>à traverser</em></h2>
+  <p class="drop">Tu te souviens du premier jour. Tu croyais que l'aura était une affaire de posture, de regard, de voix. Le niveau 1 t'a montré que c'était vrai — et que ce n'était qu'une surface. Derrière chaque signal, il y avait un état. Puis le niveau 2 t'a appris à te taire. À sentir le bruit du groupe sans t'y dissoudre. À porter ta propre fréquence.</p>
+  <p>Et pourtant, tu le sais. Il reste quelque chose.</p>
+  <p>Un endroit où ta voix monte encore d'un demi-ton face à une certaine autorité. Un souvenir qui serre toujours la gorge. Une part de toi qui, même calme, même cohérente, surveille du coin de l'œil l'effet qu'elle produit. Ce sont les deux dernières réserves d'énergie bloquée : <strong>ce qui est resté figé en toi</strong>, et <strong>ce qui veut encore être vu</strong>.</p>
+  <p>Ce livre les libère. Et une fois libérée, cette énergie ne revient pas vers toi. Elle se tourne vers l'extérieur. C'est là que l'aura change de nature : elle cesse d'attirer pour prendre, elle commence à rayonner pour donner.</p>
+  <div class="quote">Le magnétisme personnel est la faculté d'attirer la confiance, l'intérêt, l'amitié.<small>D'après Victor Turnbull — <i>La Puissance en soi</i></small></div>
+
+  <div class="box violet">
+    <div class="bt">Comment lire ce livre</div>
+    <p>Lis-le d'abord comme un récit. Chaque chapitre commence par une histoire, la tienne en devenir. Les gestes précis sont rangés dans des encadrés <strong>« Le geste »</strong> qui s'ouvrent d'une touche : tu y reviendras au moment de pratiquer. Les encadrés dorés <strong>« Ce que dit la Bibliothèque »</strong> expliquent d'où vient chaque pratique et pourquoi elle est placée là. Les encadrés violets <strong>« Si ça ne prend pas »</strong> te disent quelle inversion lever quand un protocole résiste. Les passages sur fond violet, marqués d'un cercle qui respire, sont des immersions. Lis-les lentement, cale ton souffle sur le cercle, et arrête-toi aux <em>· · ·</em>.</p>
+  </div>
+
+  <div class="immersion">
+    <div class="imm-head"><div class="breath"></div><div><div class="imm-label">Immersion · Avant de commencer</div><div class="imm-title">Un an plus tard</div></div></div>
+    <p>Installe-toi. Sens le poids de ton corps sur ce qui te porte. Laisse tes épaules descendre d'un centimètre.</p>
+    <p>Imagine que tu te réveilles un matin, dans un an. La même lumière par la fenêtre, le même bruit de la rue. Mais quelque chose a changé à l'intérieur, et tu le remarques avant même d'ouvrir les yeux.</p>
+    <p>Il n'y a pas de poids sur ta poitrine. Pas de liste d'inquiétudes qui se met en marche toute seule. Ton souffle descend jusqu'au ventre sans que tu le lui demandes. Tu te sens disponible, comme une maison dont on aurait ouvert toutes les fenêtres.</p>
+    <p class="pause">· · ·</p>
+    <p>Tu repenses à celui que tu étais il y a un an. Celui qui préparait ses phrases à l'avance. Celui qui sentait sa mâchoire se serrer à la moindre critique. Tu ne le juges pas. Tu as même de la tendresse pour lui. Il a fait ce qu'il pouvait avec ce qu'il portait.</p>
+    <p>Toi, tu ne portes plus la même chose.</p>
+    <p class="hint">Ce livre est le chemin entre celui qui lit ces lignes et celui qui s'est réveillé ce matin-là.</p>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════ 0 — LE SEUIL ═══════════ -->
+<section id="seuil">
+<div class="wrap">
+  <div class="eyebrow">Porte 0</div>
+  <h2>Le Seuil — <em>es-tu prêt ?</em></h2>
+  <p>Ce niveau n'est pas verrouillé par un mot de passe. Il est verrouillé par ta propre honnêteté. Coche uniquement ce qui est vrai aujourd'hui.</p>
+  <ul class="check" data-group="seuil">
+    <li><input type="checkbox" id="s1"><label for="s1">Je pratique mon rituel du matin depuis au moins <strong>60 jours</strong>, avec moins de 5 jours manqués.</label></li>
+    <li><input type="checkbox" id="s2"><label for="s2">Je sais déclencher une <strong>cohérence cardiaque</strong> en moins de 2 minutes, même sous légère pression.</label></li>
+    <li><input type="checkbox" id="s3"><label for="s3">Je peux tenir <strong>une demi-journée de silence</strong> sans agitation.</label></li>
+    <li><input type="checkbox" id="s4"><label for="s4">J'ai réalisé mon <strong>génosociogramme simplifié</strong> et identifié au moins un schéma hérité.</label></li>
+    <li><input type="checkbox" id="s5"><label for="s5">Je sais <strong>nommer mon état</strong> en temps réel sans m'y perdre.</label></li>
+    <li><input type="checkbox" id="s6"><label for="s6">Je tiens un regard calme <strong>sans chercher à dominer</strong> ni à fuir.</label></li>
+    <li><input type="checkbox" id="s7"><label for="s7">Je n'ai jamais utilisé AURA pour <strong>obtenir de quelqu'un quelque chose contre son intérêt</strong> — ou je l'ai reconnu et réparé.</label></li>
+  </ul>
+  <div class="gate" id="gate">0 / 7 — Le seuil reste fermé.</div>
+
+  <div class="box warn">
+    <div class="bt">⚠ Sécurité</div>
+    <p>La Grande Libération travaille sur des charges émotionnelles réelles. Elle est conçue pour les <strong>blessures du quotidien</strong> : humiliations, rejets, peurs anciennes, conflits non digérés. Elle n'est <strong>pas</strong> un traitement des traumatismes graves.</p>
+    <p>Si tu portes une agression, des violences répétées, une expérience de guerre, un deuil brutal, ou si tu as des flashbacks, des cauchemars récurrents, des crises de panique ou des moments de déconnexion de la réalité : fais ce travail <strong>avec un praticien formé</strong> (Somatic Experiencing, EMDR, thérapie des traumas). Ce livre peut accompagner ce suivi, jamais le remplacer.</p>
+    <p>En France, en cas de détresse ou d'idées noires, le <strong>3114</strong> répond 24h/24, gratuitement.</p>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════ I — LE PACTE ═══════════ -->
+<div class="part" id="pacte">
+  <div class="roman">I</div>
+  <h2>Le Pacte</h2>
+  <p>Toute puissance amplifiée amplifie aussi l'intention qui la porte. Avant d'augmenter la force, on fixe la direction.</p>
+</div>
+<section>
+<div class="wrap">
+  <div class="recit">
+    <p>Il y a plus d'un siècle, des hommes ont écrit des cours de magnétisme personnel. Ils avaient compris, avant les neurosciences, que la respiration, la maîtrise des nerfs et la volonté produisent une présence que les autres ressentent. Leurs exercices sont précieux. Mais certains ont glissé. O. Hashnu Hara, en 1906, conseillait de fixer l'autre en lui ordonnant mentalement d'obéir, comme un maître face à un esprit plus faible.</p>
+    <p>Ce livre refuse cette voie. Pas par morale abstraite : parce qu'elle échoue. La domination produit de la méfiance dès que l'effet retombe. Et elle abîme celui qui l'exerce, en le rendant dépendant de la soumission des autres. Hara lui-même posait une condition : que le but soit louable. Nous partons de cette condition et nous en faisons la loi.</p>
+  </div>
+
+  <h3>Les trois lois</h3>
+  <p><strong>Le consentement.</strong> Ton champ invite, il ne contraint jamais. Si quelqu'un se sent piégé, pressé ou diminué en ta présence, ce n'est pas du magnétisme : c'est de la pression.</p>
+  <p><strong>Le miroir.</strong> Ce que tu émets, tu le respires. Émettre du mépris, c'est habiter le mépris toute la journée. Émettre de la bienveillance, c'est s'y baigner.</p>
+  <p><strong>Le service.</strong> Une puissance qui ne sert que toi s'épuise : il en faut toujours plus pour se sentir fort. Une puissance tournée vers l'autre se renouvelle à chaque rencontre qui laisse quelqu'un plus fort.</p>
+
+  <div class="box violet">
+    <div class="bt">Le test des trois questions</div>
+    <p>Avant tout usage conscient de ta présence : <strong>Est-ce que ça sert aussi l'autre ? Pourrais-je le faire à visage découvert ? Accepterais-je qu'on me le fasse ?</strong> Trois oui : avance. Un seul non : c'est l'ombre qui parle.</p>
+  </div>
+
+  <div class="immersion">
+    <div class="imm-head"><div class="breath"></div><div><div class="imm-label">Immersion · Le Pacte</div><div class="imm-title">La force qui ne prend rien</div></div></div>
+    <p>Tu es assis à une table de négociation. En face, un homme plus jeune, visiblement nerveux. Il a besoin de ce contrat plus que toi. Tu le sens à sa voix trop rapide, à ses doigts qui tournent un stylo.</p>
+    <p>Tu sais exactement ce qu'il faudrait faire pour obtenir plus. Un silence un peu trop long. Un regard qui ne cède pas. Il plierait.</p>
+    <p class="pause">· · ·</p>
+    <p>Tu ne le fais pas.</p>
+    <p>Tu poses ton stylo. Tu respires. « Prends ton temps. On cherche un accord qui tienne pour nous deux. » Ses épaules redescendent. Sa voix ralentit. Pour la première fois, il te dit vraiment ce dont il a besoin.</p>
+    <p>L'accord est juste. En sortant, il te serre la main un peu plus longtemps que nécessaire. Dans six mois, c'est lui qui te recommandera. Et toi, tu rentres avec une sensation rare : une force <strong>propre</strong>. Rien à cacher, rien à surveiller.</p>
+    <p class="hint">Rester du bon côté n'est pas une contrainte. C'est une liberté.</p>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════ II — LA GRANDE LIBÉRATION ═══════════ -->
+<div class="part" id="liberation">
+  <div class="roman">II</div>
+  <h2>La Grande Libération</h2>
+  <p>Décharger ce qui est figé. Déposer ce qui se défend.</p>
+</div>
+<section>
+<div class="wrap">
+  <div class="recit">
+    <p>Dans la savane, une impala échappe à un guépard. Elle s'est figée, elle a fait la morte, puis elle a bondi. Une fois à l'abri, elle fait une chose étrange : elle tremble. Tout son corps se secoue pendant de longues secondes. Puis elle se remet à brouter, comme si rien ne s'était passé.</p>
+    <p>Peter Levine, à l'origine du Somatic Experiencing, a passé sa vie à observer ce tremblement. Pour lui, c'est la clé. L'animal <strong>décharge</strong> l'énergie de survie qu'il a mobilisée. L'humain, lui, la retient souvent : par honte, par sidération, parce qu'il fallait « tenir ». Et ce résidu reste dans le système nerveux comme un moteur à plein régime avec le frein serré.</p>
+    <p>Ce frein serré, les autres le sentent. C'est la mâchoire qui se crispe quand on te contredit. Le regard qui décroche au moment précis où tu voudrais le tenir. Les deux premiers niveaux t'ont appris à corriger ces signaux par la conscience. Ici, on enlève leur cause.</p>
+    <p>Eugene Gendlin, philosophe et psychologue, a montré la porte d'entrée : le <strong>sens ressenti</strong>. Une sensation globale, floue au départ, qui contient tout ce que tu sais d'une situation sans pouvoir encore le dire. Quand on reste avec elle correctement, elle bouge. Un soupir vient tout seul, quelque chose se décoince dans la poitrine. Gendlin appelle ça le <strong>déplacement corporel</strong>. C'est le signe que quelque chose se libère.</p>
+  </div>
+
+  <div class="box">
+    <div class="bt">Une promesse honnête</div>
+    <p>On ne supprime pas un souvenir. Ce qui change, c'est sa <strong>charge</strong>. Un événement libéré reste dans ta mémoire comme un fait, plus comme une alarme. C'est ça, l'élimination dont parle ce livre : le passé cesse de commander.</p>
+  </div>
+
+  <h3>L'échelle de charge</h3>
+  <p>Quand tu penses à un événement, note de 0 à 10 l'intensité de la réaction dans ton corps maintenant — pas l'importance de l'événement.</p>
+  <div class="scale">
+    <div style="background:#4E9A7A">0</div><div style="background:#5BA07A">1</div><div style="background:#7AA872">2</div><div style="background:#98AE68">3</div><div style="background:#B7B05C">4</div><div style="background:#C8A84B">5</div><div style="background:#C88E44">6</div><div style="background:#C2723E">7</div><div style="background:#BA5A3C">8</div><div style="background:#B4483B">9</div><div style="background:#B03A3A">10</div>
+  </div>
+  <div class="scale-legend"><span>Neutre</span><span>Seul jusqu'à 4</span><span>Accompagné</span></div>
+  <p style="margin-top:14px">En autonomie, on ne travaille que des charges de <strong>4 ou moins</strong>.</p>
+
+  <h3>Phase A — Ce qui est figé</h3>
+
+  <!-- ÉTAPE 1 -->
+  <div class="chap">
+    <div class="chap-head"><div class="chap-num">1</div><div class="chap-title">Le contenant</div></div>
+    <div class="chap-meta">Semaine 1 · 15 minutes par jour</div>
+    <div class="recit">
+      <p>Personne n'ouvre une vanne sans avoir un réservoir pour recevoir l'eau. Avant de toucher au passé, tu vas apprendre à ton corps qu'il existe des endroits sûrs, et qu'il peut y revenir à tout moment.</p>
+      <p>Tu t'assois. Pour la première fois depuis longtemps, tu prends le temps de sentir la chaise sous toi. Le sol sous tes pieds. Le tissu de tes vêtements sur ta peau. C'est presque trop simple. Et pourtant, quelque chose dans ton ventre se pose. Puis un souvenir revient : un lieu, une personne, un moment où tu t'es senti entier. Tu ne le racontes pas. Tu le laisses habiter ton corps. Une chaleur, un espace, un poids rassurant.</p>
+      <p>Ce sont tes portes de retour. Tout le reste du chemin s'appuie sur elles.</p>
+    </div>
+    <div class="biblio"><div class="bl">◈ Ce que dit la Bibliothèque</div>
+      <p><strong>Levine, <i>Waking the Tiger</i>.</strong> Avant d'approcher l'événement, Levine fait toujours commencer par le corps présent : sentir ses appuis, sa peau, les sensations neutres ou agréables. Pour lui, le sens ressenti du corps est l'outil de guérison lui-même. Un système nerveux qui n'a que l'alarme pour repère y retourne dès qu'on touche la blessure.</p>
+      <p class="why">On construit les ancres en premier, parce que toute la suite repose sur un aller-retour. Sans « retour », l'aller submerge.</p>
+    </div>
+    <div class="inv-note"><b>Si ça ne prend pas</b> — tu ne sens rien, ou le calme ne vient jamais malgré plusieurs essais : inversion massive possible. 15 tapotements sur le point karaté, puis recommence. → <a href="#inversions">La Clé</a></div>
+    <details class="geste"><summary>Le geste<small>Construire tes trois ancres</small></summary><div class="geste-body">
+      <ol>
+        <li>Deux minutes de contact : chaise, sol, vêtements sur la peau.</li>
+        <li>Rappelle un lieu, une personne ou un moment de sécurité. Note où il se manifeste dans le corps.</li>
+        <li>Trouve une ressource physique : tes mains posées sur tes cuisses, ton dos contre le dossier, ton souffle au ventre.</li>
+        <li>Écris ces trois ancres dans ton journal.</li>
+      </ol>
+      <div class="valid"><b>Validé quand</b>Tu reviens au calme en moins de 60 secondes en touchant une ancre.</div>
+    </div></details>
+  </div>
+
+  <!-- ÉTAPE 2 -->
+  <div class="chap">
+    <div class="chap-head"><div class="chap-num">2</div><div class="chap-title">La carte</div></div>
+    <div class="chap-meta">Semaine 1 · une séance de 40 minutes</div>
+    <div class="recit">
+      <p>Un soir, tu ouvres ton carnet et tu fais quelque chose que tu as évité toute ta vie : tu regardes. Pas pour te raconter ton histoire. Pour dresser une carte. Ce professeur qui t'a humilié devant la classe. Ce refus qui t'a sonné. Cette dispute qui n'a jamais été réglée. Cette phrase entendue à douze ans et qui tourne encore.</p>
+      <p>À chaque souvenir, tu y penses cinq secondes, puis tu reviens à une ancre. Et tu notes un chiffre. Petit à petit, la carte apparaît, avec ses collines douces et ses quelques sommets. Tu commenceras par les collines.</p>
+    </div>
+    <div class="biblio"><div class="bl">◈ Ce que dit la Bibliothèque</div>
+      <p><strong>Gendlin, <i>Focusing</i>.</strong> Le premier mouvement du Focusing consiste à « faire de la place » : passer en revue ce qui pèse, sans entrer dans aucun problème, pour le poser à côté de soi. On regarde l'ensemble avant de choisir un sujet.</p>
+      <p><strong>Levine, <i>Waking the Tiger</i>.</strong> Levine met en garde contre l'idée de revivre l'événement le plus intense : la guérison passe par de petites doses, jamais par l'inondation.</p>
+      <p class="why">La carte combine les deux : voir le paysage entier sans y plonger, puis commencer par les collines. Chaque petite victoire apprend au système qu'il peut lâcher sans danger.</p>
+    </div>
+    <div class="inv-note"><b>Si ça ne prend pas</b> — page blanche, aucun souvenir ne vient, ou tu repousses la séance : c'est souvent une inversion, pas un manque de matière. Point karaté, 15 fois, puis réessaie. → <a href="#inversions">La Clé</a></div>
+    <details class="geste"><summary>Le geste<small>Dresser la carte des charges</small></summary><div class="geste-body">
+      <ol>
+        <li>Liste 10 à 20 moments qui piquent encore.</li>
+        <li>Pour chacun : 5 secondes d'évocation, retour à une ancre, note de 0 à 10.</li>
+        <li>Classe par charge croissante.</li>
+        <li>Marque tout ce qui dépasse 6 : ce sera pour plus tard, ou avec un accompagnement.</li>
+      </ol>
+      <div class="dark"><b>Piège</b>Commencer par le plus gros morceau. C'est le meilleur moyen de renforcer la charge au lieu de la décharger.</div>
+    </div></details>
+  </div>
+
+  <!-- ÉTAPE 3 -->
+  <div class="chap">
+    <div class="chap-head"><div class="chap-num">3</div><div class="chap-title">Écouter le corps</div></div>
+    <div class="chap-meta">Semaines 2–3 · 20 minutes, 4 fois par semaine</div>
+    <div class="recit">
+      <p>Tu choisis une colline sur ta carte. Tu fermes les yeux. Et au lieu de penser à l'histoire, tu descends dans ton corps et tu demandes : <em>qu'est-ce que tout ça me fait, là, maintenant ?</em></p>
+      <p>D'abord rien. Puis une impression floue, quelque part entre la gorge et le sternum. Tu attends. Un mot finit par monter : « serré ». Non, pas tout à fait. « Une boule. » Oui. Quelque chose répond, comme un petit acquiescement à l'intérieur. Tu restes avec la boule, tu lui demandes doucement ce dont elle a besoin. Et soudain, sans que tu l'aies décidé, un long soupir sort de toi. Tes épaules descendent. Quelque chose vient de bouger.</p>
+      <p>Tu n'as rien compris avec ta tête. Ton corps, lui, a lâché un peu.</p>
+    </div>
+    <div class="biblio"><div class="bl">◈ Ce que dit la Bibliothèque</div>
+      <p><strong>Gendlin, <i>Focusing</i>.</strong> Gendlin est parti d'une question simple : pourquoi certaines personnes changent-elles en thérapie et d'autres non ? Ses recherches ont montré que la différence ne tenait ni à la méthode ni au thérapeute, mais à ce que faisait la personne : celles qui progressaient s'arrêtaient pour chercher une impression corporelle encore floue, au lieu de parler seulement de leurs idées. Il a transformé ce geste intérieur en six mouvements que chacun peut apprendre.</p>
+      <p class="why">L'ego défend des histoires. Le corps, lui, n'argumente pas. Entrer par la sensation contourne les explications toutes faites et touche directement ce qui est figé.</p>
+    </div>
+    <div class="inv-note"><b>Si ça ne prend pas</b> — trois séances sans le moindre déplacement : inversion spécifique probable. Pense au sujet et tapote le point karaté 15 fois avant de reprendre le Focusing.</div>
+    <details class="geste"><summary>Le geste<small>Le Focusing en six mouvements, d'après Gendlin</small></summary><div class="geste-body">
+      <ol>
+        <li><strong>Faire de la place</strong> : « comment je vais ? » — pose chaque préoccupation mentalement à côté de toi.</li>
+        <li><strong>Sens ressenti</strong> : l'impression globale du sujet dans le corps, sans détails.</li>
+        <li><strong>Poignée</strong> : laisse monter un mot ou une image, n'invente pas.</li>
+        <li><strong>Résonner</strong> : va-et-vient entre le mot et la sensation jusqu'au petit « oui ».</li>
+        <li><strong>Demander</strong> : « de quoi ça a besoin ? » — et attends, sans répondre avec la tête.</li>
+        <li><strong>Recevoir</strong> : accueille ce qui vient, même minuscule.</li>
+      </ol>
+      <div class="valid"><b>Validé quand</b>Tu as vécu au moins trois déplacements corporels nets.</div>
+      <a class="inv-link" href="#inversions">Rien ne bouge malgré plusieurs séances ? → La Clé des inversions</a>
+    </div></details>
+  </div>
+
+  <!-- ÉTAPE 4 -->
+  <div class="chap">
+    <div class="chap-head"><div class="chap-num">4</div><div class="chap-title">Le balancier</div></div>
+    <div class="chap-meta">Semaines 3–5 · 30 minutes, 3 fois par semaine</div>
+    <div class="recit">
+      <p>Cette fois, tu t'approches du souvenir lui-même. Mais pas de face. Par le côté, à petites doses — Levine appelle ça la <strong>titration</strong>, comme un chimiste qui verse une goutte à la fois.</p>
+      <p>Tu commences par ce qui s'est passé juste avant : le trajet, la lumière, l'heure. Tu sens. Puis tu reviens à ton ancre. Tu passes à l'après. Tu reviens. Tu approches le moment où tu as compris que ça allait mal tourner. Tu reviens encore. Chaque fois, ton corps apprend qu'il peut toucher la brûlure <em>et revenir</em>. C'est le <strong>balancier</strong>.</p>
+      <p>Et puis, au milieu d'un aller-retour, ça arrive. Tes mains se mettent à chauffer. Un léger tremblement parcourt tes jambes. Tu bâilles, une larme coule sans drame. Tu laisses faire. Tu es l'impala qui se secoue après la course. Quand c'est fini, tu respires comme tu n'as pas respiré depuis des années.</p>
+    </div>
+    <div class="biblio"><div class="bl">◈ Ce que dit la Bibliothèque</div>
+      <p><strong>Levine, <i>Waking the Tiger</i>.</strong> Selon Levine, l'énergie figée est comprimée comme un ressort : la relâcher d'un coup produit un nouveau débordement. On l'approche donc par petites quantités, en laissant le corps osciller entre la contraction (la sensation difficile) et l'expansion (la ressource). C'est ce rythme naturel, comme une respiration, qui permet la décharge : tremblements, chaleur, souffle qui s'ouvre, exactement ce que fait l'animal après la fuite.</p>
+      <p class="why">Commencer par « l'avant » et « l'après », c'est approcher par les bords. Le système nerveux apprend qu'il peut toucher la brûlure et revenir. C'est ce retour qui guérit, pas l'intensité.</p>
+    </div>
+    <div class="inv-note"><b>Si ça ne prend pas</b> — la charge descend puis se bloque vers 3 ou 4 : mini-inversion. Point karaté 15 fois en pensant « même s'il en reste un peu », puis reprends le balancier là où tu l'avais laissé.</div>
+    <details class="geste"><summary>Le geste<small>Titration et balancier — charge de 4 maximum</small></summary><div class="geste-body">
+      <ol>
+        <li>Ancre-toi. Note la charge de départ.</li>
+        <li><strong>L'avant</strong> de l'événement → sensations → 30 secondes d'ancre.</li>
+        <li><strong>L'après</strong> → sensations → ancre.</li>
+        <li><strong>Le juste-avant</strong> (le moment où tu as compris) → ancre.</li>
+        <li><strong>Le moment</strong> lui-même, par fragments : une image, une sensation à la fois.</li>
+        <li>À chaque montée (cœur rapide, souffle court) : stop récit, retour au corps présent jusqu'à la redescente.</li>
+      </ol>
+      <p><strong>Signes de décharge</strong> : tremblements, chaleur aux extrémités, bâillements, larmes calmes, souffle qui s'approfondit seul. Ne les provoque pas, ne les bloque pas.</p>
+      <div class="dark"><b>Stop immédiat si</b>Tu te sens engourdi, absent, ou si la charge dépasse 7. Regarde autour de toi, nomme cinq objets, bouge les pieds, bois de l'eau. Reprends un autre jour sur un fragment plus petit.</div>
+      <a class="inv-link" href="#inversions">La charge stagne au même chiffre ? → La Clé des inversions</a>
+    </div></details>
+  </div>
+
+  <!-- ÉTAPE 5 -->
+  <div class="chap">
+    <div class="chap-head"><div class="chap-num">5</div><div class="chap-title">Le geste inachevé</div></div>
+    <div class="chap-meta">Semaines 5–6 · intégré aux séances du balancier</div>
+    <div class="recit">
+      <p>Dans chaque moment où tu t'es figé, il y avait un mouvement prêt à partir. Repousser. Fuir. Crier. Dire non. Il n'est jamais sorti. Il attend toujours, quelque part dans tes bras, tes jambes, ta gorge.</p>
+      <p>Tu reviens au souvenir, et tu demandes à ton corps : <em>qu'est-ce que tu aurais voulu faire ?</em> Tes mains se soulèvent légèrement. Alors, très lentement, tu les pousses vers l'avant. Tu sens la force monter dans tes épaules. À voix basse, tu dis le « non » qui est resté coincé pendant des années.</p>
+      <p>Les faits ne changent pas. Mais ton corps, lui, vient de terminer ce qu'il avait commencé. Levine appelle ça la <strong>renégociation</strong>. Toi, tu sens juste que tu te tiens plus droit.</p>
+    </div>
+    <div class="biblio"><div class="bl">◈ Ce que dit la Bibliothèque</div>
+      <p><strong>Levine, <i>Waking the Tiger</i>.</strong> Pour Levine, ce qui fige n'est pas l'événement, c'est la réponse de défense qui n'a pas pu aller au bout : fuir ou se battre, interrompu par la sidération. Le corps garde ce mouvement « en suspens ». La renégociation consiste à laisser ce mouvement se compléter lentement, en conscience, sans revivre la scène, pour que le système passe enfin de la survie au repos.</p>
+      <p class="why">Ce chapitre ne réécrit pas ton histoire. Il permet à ton corps de finir la phrase qu'il avait commencée. C'est souvent là que la posture change d'elle-même.</p>
+    </div>
+    <div class="inv-note"><b>Si ça ne prend pas</b> — aucune impulsion ne vient, ou le geste te semble « faux », « ridicule » : c'est une inversion spécifique déguisée en jugement. Point karaté 15 fois, puis la séquence complète des 6 points si besoin.</div>
+    <details class="geste"><summary>Le geste<small>Achever le mouvement de protection</small></summary><div class="geste-body">
+      <ol>
+        <li>Au moment du figement : « qu'est-ce que tu aurais voulu faire ? »</li>
+        <li>Sens l'impulsion dans les bras, les jambes ou la gorge.</li>
+        <li>Fais le geste très lentement : pousser, sentir les jambes prêtes à courir, prononcer le « non ».</li>
+        <li>Savoure ce qui suit : force, redressement, souffle plein.</li>
+      </ol>
+      <div class="valid"><b>Validé quand</b>En repensant à l'événement, tu sens d'abord le geste accompli avant la sidération.</div>
+    </div></details>
+  </div>
+
+  <!-- ÉTAPE 6 -->
+  <div class="chap">
+    <div class="chap-head"><div class="chap-num">6</div><div class="chap-title">Le contre-test</div></div>
+    <div class="chap-meta">Fin de chaque cycle</div>
+    <div class="recit">
+      <p>Quelques jours plus tard, tu racontes l'histoire en entier, à voix haute. Tu t'attends à sentir la boule revenir. Tu observes. Ta voix reste égale. Ton souffle ne bouge pas. Tu notes : 1. Peut-être 0.</p>
+      <p>Tu barres la ligne sur ta carte. Et tu remarques une chose étonnante : les sommets plus hauts, ceux que tu n'as pas encore touchés, ont baissé d'eux-mêmes d'un ou deux points. Comme si tout le système respirait mieux.</p>
+    </div>
+    <div class="biblio"><div class="bl">◈ Ce que dit la Bibliothèque</div>
+      <p><strong>Callahan, Thought Field Therapy.</strong> Callahan ne travaille jamais sans mesure : avant chaque séquence, la personne note son malaise de 0 à 10, et elle le note à nouveau après. C'est le chiffre qui dit si l'on avance, si l'on stagne, ou si une inversion bloque. Notre échelle de charge vient directement de cette pratique.</p>
+      <p class="why">Sans mesure, on se raconte des histoires dans les deux sens : on croit avoir fini alors qu'il reste un fragment, ou on croit avoir échoué alors que la charge est passée de 4 à 2.</p>
+    </div>
+    <div class="inv-note"><b>Si ça ne prend pas</b> — la charge était tombée à 1 et elle est remontée la semaine suivante : inversion profonde. Tapote <b>sous le nez</b> 15 fois en pensant « même si une part de moi ne se sent pas en sécurité de lâcher ça ».</div>
+    <details class="geste"><summary>Le geste<small>Mesurer ce qui reste</small></summary><div class="geste-body">
+      <ul>
+        <li><strong>0 à 1</strong> : libéré. Barre-le, passe au suivant.</li>
+        <li><strong>2 à 3</strong> : un fragment résiste. Une séance dessus seul.</li>
+        <li><strong>4 ou plus</strong> : retour à l'étape 3. Pas un échec, un rythme.</li>
+      </ul>
+      <a class="inv-link" href="#inversions">La charge remonte d'une fois sur l'autre ? → La Clé des inversions</a>
+    </div></details>
+  </div>
+
+  <div class="immersion">
+    <div class="imm-head"><div class="breath"></div><div><div class="imm-label">Immersion · Phase A</div><div class="imm-title">Le jour où le frein lâche</div></div></div>
+    <p>C'est une réunion ordinaire. Quelqu'un, au bout de la table, critique ton travail. Pas méchamment. Mais avec ce ton précis, un peu sec, un peu supérieur, qui autrefois déclenchait tout : la chaleur dans la nuque, le cœur qui accélère, la phrase de défense qui sort trop vite.</p>
+    <p>Tu attends la vague.</p>
+    <p class="pause">· · ·</p>
+    <p>Elle ne vient pas.</p>
+    <p>Tu sens tes pieds sur le sol. Ta respiration, lente, au ventre. Tu entends la critique comme une information. Tu peux même te demander, sincèrement : est-ce qu'il a raison ?</p>
+    <p>Plus tard, en marchant seul, un vieux souvenir remonte : une voix d'enfance, un « tu n'y arriveras jamais ». Autrefois, il te serrait la gorge. Aujourd'hui, il passe comme une vieille photo retrouvée dans un tiroir. Tu la regardes. Tu la reposes.</p>
+    <p>Et l'énergie qui servait à tenir le frein serré est là, disponible, tiède, dans tes mains et dans tes jambes.</p>
+    <p class="hint">Chaque charge libérée te rend cette énergie.</p>
+  </div>
+
+  <h3>Phase B — Ce qui se défend</h3>
+  <div class="recit">
+    <p>Quand les charges s'allègent, une seconde structure apparaît. Elle ne vient pas d'un événement : elle s'est construite <em>autour</em> de tous ces événements, pour te protéger. Freud décrivait déjà le moi comme une économie défensive, toujours en alerte face à ce qui vient du dehors. Utile quand tu étais exposé. Encombrant quand tu ne l'es plus. Il continue de défendre une image alors que plus personne ne t'attaque.</p>
+    <p>On ne détruit pas l'ego : sans lui tu ne pourrais ni décider ni agir. On le <strong>dépose</strong>. Il quitte le poste de commandement et redevient un outil.</p>
+  </div>
+
+  <!-- ÉTAPE 7 -->
+  <div class="chap">
+    <div class="chap-head"><div class="chap-num">7</div><div class="chap-title">Les cinq gardiens</div></div>
+    <div class="chap-meta">Semaine 7 · journal du soir</div>
+    <div class="recit">
+      <p>Tu commences à les voir passer, comme des sentinelles qui se relaient à la porte. Le gardien qui veut <strong>avoir raison</strong> et argumente encore quand l'enjeu a disparu. Celui qui veut <strong>être vu</strong> et glisse une réussite dans la conversation. Celui qui veut <strong>contrôler</strong> et supporte mal l'imprévu. Celui qui veut <strong>éviter le rejet</strong> et dit oui pour ne pas déplaire. Et le plus discret, celui qui <strong>se compare</strong>, et te situe au-dessus ou au-dessous de chaque personne croisée.</p>
+      <p>Le soir, tu en prends un et tu lui demandes, avec le Focusing : <em>qu'est-ce que tu protèges ?</em> Presque toujours, la réponse est une vieille charge. Souvent une que tu as déjà allégée. Le gardien n'a plus vraiment de raison de veiller si fort. Tu le remercies. Il baisse un peu sa lance.</p>
+    </div>
+    <div class="biblio"><div class="bl">◈ Ce que dit la Bibliothèque</div>
+      <p><strong>Boynton &amp; Capretto (dir.), <i>Trauma and Transcendence</i>.</strong> Plusieurs auteurs du recueil reviennent à Freud : le moi s'organise comme un bouclier contre ce qui vient du dehors, une économie qui cherche à éviter le déplaisir. Le traumatisme, chez Freud, c'est précisément ce qui perce ce bouclier. Après la brèche, le bouclier se renforce, parfois bien au-delà du nécessaire.</p>
+      <p class="why">Tes gardiens sont ce bouclier épaissi. Ils ne sont pas des défauts à combattre : ce sont des protections devenues trop zélées. Quand la charge qu'ils couvraient est libérée, ils peuvent enfin se reposer.</p>
+    </div>
+    <div class="inv-note"><b>Si ça ne prend pas</b> — tu « oublies » ton journal chaque soir, ou tu ne trouves jamais aucun gardien : l'évitement est lui-même un signe d'inversion. Point karaté 15 fois avant d'ouvrir le carnet.</div>
+    <details class="geste"><summary>Le geste<small>Le journal des gardiens</small></summary><div class="geste-body">
+      <ol>
+        <li>Chaque soir, note les moments où un gardien a pris la main.</li>
+        <li>Choisis-en un. Focusing : « qu'est-ce que tu protèges ? »</li>
+        <li>Si une charge apparaît, ajoute-la à ta carte.</li>
+      </ol>
+      <div class="valid"><b>Validé quand</b>Tu repères le gardien pendant qu'il agit, plus seulement le soir.</div>
+    </div></details>
+  </div>
+
+  <!-- ÉTAPE 8 -->
+  <div class="chap">
+    <div class="chap-head"><div class="chap-num">8</div><div class="chap-title">Le Témoin</div></div>
+    <div class="chap-meta">Semaine 8 · 3 × 5 minutes par jour, et en situation</div>
+    <div class="recit">
+      <p>Tu es assis, les yeux mi-clos. Une pensée passe : « je dois rappeler ce client ». Tu la remarques. Une sensation : une gêne dans l'épaule. Tu la remarques. Une image, un bruit, une envie. Tu remarques. Puis tu poses la question qui change tout : <strong>qui remarque ?</strong></p>
+      <p>Tu ne trouves pas de réponse. Tu trouves un espace. Calme, stable, un peu en retrait. Il était là depuis toujours, derrière tout le bruit. Ce Témoin ne s'énerve pas, ne se vexe pas, ne se défend pas. Il regarde.</p>
+      <p>Le lendemain, au milieu d'une dispute, tu t'en souviens une seconde. <em>Je me vois faire.</em> Et ta phrase suivante n'est plus la même.</p>
+    </div>
+    <div class="biblio"><div class="bl">◈ Ce que dit la Bibliothèque</div>
+      <p><strong>Dumont, <i>The Art and Science of Personal Magnetism</i>.</strong> Pour Dumont, le magnétisme commence par la maîtrise de soi : l'homme magnétique est celui qui dirige son attention au lieu d'être tiré par chaque pensée ou chaque émotion. Ses exercices de concentration visent un centre stable, d'où l'on choisit au lieu de réagir.</p>
+      <p><strong>Gendlin, <i>Focusing</i>.</strong> Le premier mouvement, « faire de la place », installe déjà cette distance : tu n'es pas tes problèmes, tu es celui qui peut les poser à côté de lui.</p>
+      <p class="why">Le Témoin est ce centre stable. Sans lui, chaque gardien reprend le pouvoir dès que la pression monte. Avec lui, tu le vois arriver.</p>
+    </div>
+    <div class="inv-note"><b>Si ça ne prend pas</b> — tu es emporté à chaque fois, sans jamais réussir à « te voir faire » : fais la séquence complète des 6 points avant la séance, puis la respiration de la clavicule si l'esprit reste dispersé.</div>
+    <details class="geste"><summary>Le geste<small>Installer l'observateur</small></summary><div class="geste-body">
+      <ol>
+        <li>Assis : nomme ce qui passe — « pensée », « sensation », « image ».</li>
+        <li>Puis : « qui remarque ? » Ne cherche pas de réponse, sens l'espace.</li>
+        <li>Trois fois par jour en situation : « je me vois faire ». Une seconde suffit.</li>
+      </ol>
+      <div class="valid"><b>Validé quand</b>Au milieu d'une émotion forte, tu la vois sans qu'elle décide de tes mots.</div>
+    </div></details>
+  </div>
+
+  <!-- ÉTAPE 9 -->
+  <div class="chap">
+    <div class="chap-head"><div class="chap-num">9</div><div class="chap-title">La mort de l'image</div></div>
+    <div class="chap-meta">Semaine 9 · un rituel, puis 7 jours d'épreuve</div>
+    <div class="recit">
+      <p>Tu portes un personnage depuis si longtemps que tu as oublié que c'en était un. Le fort. Le drôle. Le compétent. Celui qui ne craque jamais. Ce soir, tu lui écris une lettre.</p>
+      <p>Tu le remercies d'abord. Pour toutes les fois où il t'a protégé. Puis tu écris ce qu'il t'a coûté : les moments où tu n'as pas pu dire que tu avais peur, les relations où tu n'as jamais été tout à fait là. Et enfin la phrase : <em>je n'ai plus besoin que tu sois en première ligne.</em> Tu plies la lettre. Tu la brûles. Le corps a besoin d'un acte.</p>
+      <p>Les sept jours qui suivent sont étranges. Tu ne te justifies plus. Tu ne glisses plus tes réussites. Tu dis « je ne sais pas » quand c'est vrai. Les premiers jours, tu te sens nu. Puis, sans prévenir, tu te sens léger.</p>
+    </div>
+    <div class="biblio"><div class="bl">◈ Ce que dit la Bibliothèque</div>
+      <p><strong>Callahan, Thought Field Therapy.</strong> Callahan a remarqué que certaines inversions touchent l'identité même : une part de la personne craint de ne plus savoir qui elle est si le problème disparaît. Le personnage que tu portes est exactement ce genre d'identité protectrice.</p>
+      <p><strong>Boynton &amp; Capretto (dir.), <i>Trauma and Transcendence</i>.</strong> Le recueil interroge la transcendance non comme une élévation de soi, mais comme une sortie de soi. Pour sortir, il faut d'abord accepter de ne plus être défini par son rôle.</p>
+      <p class="why">Le rituel donne au corps un acte concret pour dire adieu. Les 7 jours d'épreuve vérifient que le personnage n'a pas simplement changé de costume.</p>
+    </div>
+    <div class="inv-note"><b>Si ça ne prend pas</b> — tu repousses le rituel, ou tu flanches dès le deuxième jour d'épreuve : c'est l'inversion d'identité. Tapote <b>sous le nez</b> 15 fois en pensant « même si j'ai peur de ne plus savoir qui je suis sans ce rôle ».</div>
+    <details class="geste"><summary>Le geste<small>Le rituel et les 7 jours d'épreuve</small></summary><div class="geste-body">
+      <ol>
+        <li>Lettre au personnage : remerciement, coût, « je n'ai plus besoin que tu sois en première ligne ».</li>
+        <li>Brûle-la ou range-la. Le geste compte.</li>
+      </ol>
+      <p><strong>Pendant 7 jours</strong> : aucune justification défensive ; aucune réussite mentionnée sans qu'on te le demande ; au moins un « je ne sais pas » par jour quand c'est vrai ; laisser quelqu'un avoir raison sur un point sans importance.</p>
+      <div class="dark"><b>Piège</b>Remplacer l'ancien personnage par « celui qui a dépassé son ego ». Si tu te sens supérieur à ceux qui jouent encore, le gardien de la comparaison a juste changé de costume.</div>
+      <a class="inv-link" href="#inversions">Tu reportes le rituel encore et encore ? → La Clé des inversions</a>
+    </div></details>
+  </div>
+
+  <!-- ÉTAPE 10 -->
+  <div class="chap">
+    <div class="chap-head"><div class="chap-num">10</div><div class="chap-title">Le Retournement</div></div>
+    <div class="chap-meta">Semaine 10 · chaque jour</div>
+    <div class="recit">
+      <p>Dans l'ouvrage collectif <i>Trauma and Transcendence</i>, la psychanalyste Donna Orange, s'appuyant sur Levinas, propose une idée simple et vertigineuse : la vraie transcendance n'est pas de s'élever au-dessus des autres, mais de se laisser toucher par leur souffrance au point de ne plus pouvoir y rester indifférent. Ses exemples sont minuscules. Aider une mère à porter une poussette dans un escalier. Prendre le temps de rassurer quelqu'un. Leur point commun : l'oubli de soi.</p>
+      <p>Voilà où mène toute cette libération. L'énergie qui servait à te défendre devient disponible pour l'autre. Ce matin, tu tiens la porte à quelqu'un chargé de sacs. Personne ne te voit. Tu n'en parleras à personne. Et pourtant, tu te sens plus vaste qu'après n'importe quelle victoire.</p>
+    </div>
+    <div class="biblio"><div class="bl">◈ Ce que dit la Bibliothèque</div>
+      <p><strong>Donna Orange, dans <i>Trauma and Transcendence</i>.</strong> En s'appuyant sur Levinas, Orange décrit la responsabilité envers l'autre comme quelque chose qui nous précède : le visage de celui qui souffre nous concerne avant même que nous ayons choisi. Elle nomme cela la non-indifférence, et elle la place dans des gestes ordinaires plutôt que dans de grandes théories.</p>
+      <p><strong>Levine, <i>Waking the Tiger</i>.</strong> Levine montre l'envers du décor : un système nerveux en alerte rétrécit l'attention sur la survie, donc sur soi. Libérer la charge, c'est aussi rouvrir le champ de l'attention.</p>
+      <p class="why">Le Retournement n'est pas une règle morale ajoutée à la fin. C'est la conséquence naturelle de tout le travail précédent : une attention libérée se tourne d'elle-même vers les autres.</p>
+    </div>
+    <div class="inv-note"><b>Si ça ne prend pas</b> — tu n'arrives pas à t'intéresser à l'autre, tout te semble lourd : vérifie d'abord le terrain (sommeil, fatigue, surmenage). Puis inversion massive, point karaté 15 fois.</div>
+    <details class="geste"><summary>Le geste<small>Tourner l'attention vers l'autre</small></summary><div class="geste-body">
+      <ol>
+        <li>Chaque jour, un acte d'aide discret que personne ne t'attribuera.</li>
+        <li>En conversation, cherche ce dont l'autre a besoin avant ce que tu veux dire.</li>
+        <li>Le soir : « qui ai-je vraiment vu aujourd'hui ? »</li>
+      </ol>
+      <div class="valid"><b>Validé quand</b>Tu oublies de te demander comment tu es perçu, parce que ton attention est ailleurs.</div>
+    </div></details>
+  </div>
+
+  <div class="immersion">
+    <div class="imm-head"><div class="breath"></div><div><div class="imm-label">Immersion · Phase B</div><div class="imm-title">Sans armure</div></div></div>
+    <p>Un dîner entre amis. Quelqu'un raconte sa promotion, ses voyages, sa nouvelle voiture. Il parle fort. Il occupe tout l'espace.</p>
+    <p>Avant, tu aurais senti le gardien se lever. Le besoin de placer, mine de rien, ta propre réussite. De le remettre à sa place d'un trait d'humour un peu piquant.</p>
+    <p class="pause">· · ·</p>
+    <p>Ce soir, rien ne se lève.</p>
+    <p>Tu le regardes et tu vois autre chose derrière le bruit : un homme qui a besoin qu'on le voie. Tu le connais bien, ce besoin. Alors tu lui poses une vraie question, une seule, sur ce qui compte pour lui dans tout ça. Il s'arrête. Sa voix baisse. Il te répond pour de vrai.</p>
+    <p>Personne autour de la table n'a remarqué ce qui vient de se passer. Toi si. Tu n'as rien défendu, rien prouvé, rien gagné. Et tu te sens plus léger que depuis des années.</p>
+    <p class="hint">Poser l'armure, ce n'est pas devenir vulnérable. C'est découvrir qu'il n'y avait plus personne à combattre.</p>
+  </div>
+
+  <div class="box ok">
+    <div class="bt">Critères de sortie de la Grande Libération</div>
+    <ul class="check" data-group="sortie">
+      <li><input type="checkbox" id="o1"><label for="o1">Au moins <strong>10 charges</strong> de ma carte sont à 0–1.</label></li>
+      <li><input type="checkbox" id="o2"><label for="o2">Les charges restantes ont baissé d'au moins 2 points, ou sont suivies avec un praticien.</label></li>
+      <li><input type="checkbox" id="o3"><label for="o3">Je repère mes gardiens en temps réel.</label></li>
+      <li><input type="checkbox" id="o4"><label for="o4">J'ai tenu les 7 jours d'épreuve.</label></li>
+      <li><input type="checkbox" id="o5"><label for="o5">Mon attention se tourne naturellement vers l'autre en conversation.</label></li>
+    </ul>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════ III — LA CLÉ DES INVERSIONS (TFT) ═══════════ -->
+<div class="part" id="inversions">
+  <div class="roman">III</div>
+  <h2>La Clé</h2>
+  <p>Quand tu fais tout juste et que rien ne bouge. Lever les inversions avec la TFT.</p>
+</div>
+<section>
+<div class="wrap">
+  <div class="recit">
+    <p>Il y aura des soirs comme celui-là. Tu t'es assis, tu t'es ancré, tu as fait chaque mouvement du Focusing. Et rien. La charge reste à 4, obstinément. Ou pire : tu repousses la séance depuis une semaine sans comprendre pourquoi. Tu as même une petite voix qui murmure : <em>à quoi bon, ça ne marchera pas pour moi.</em></p>
+    <p>Roger Callahan, le psychologue qui a créé la Thought Field Therapy, a rencontré ce mur des centaines de fois. Il lui a donné un nom : l'<strong>inversion psychologique</strong>. C'est l'état dans lequel une partie de toi, sans que tu le saches, travaille dans le sens contraire de ce que tu veux. Tu veux guérir, et quelque chose freine. Tu veux avancer, et quelque chose sabote. Callahan la considérait comme l'une de ses découvertes les plus importantes : tant qu'elle est active, même le meilleur protocole patine.</p>
+    <p>Tu as rencontré la TFT au niveau 2, pour dissoudre les peurs sociales. Ici, tu vas apprendre son outil le plus fin : la clé qui déverrouille tous les autres protocoles de ce livre.</p>
+  </div>
+
+  <h3>Reconnaître une inversion</h3>
+  <p>Une inversion ne se sent pas comme une résistance. Elle se sent comme une évidence : « c'est comme ça », « je n'y arrive pas », « ce n'est pas le moment ». Voici ses signes :</p>
+  <ul>
+    <li>La charge <strong>ne baisse pas</strong> après une séance correctement faite.</li>
+    <li>Elle <strong>baisse puis se bloque</strong> à mi-chemin (souvent vers 3 ou 4).</li>
+    <li>Elle <strong>revient</strong> d'une séance à l'autre.</li>
+    <li>Tu <strong>évites</strong> la pratique sans raison claire, tu « oublies » ton journal.</li>
+    <li>Tu entends des pensées de sabotage : « à quoi bon », « je ne mérite pas d'aller mieux », « si je lâche ça, qui je serai ? ».</li>
+  </ul>
+  <div class="box violet">
+    <div class="bt">Le test de la phrase</div>
+    <p>Dis à voix haute, lentement : <strong>« Je veux être complètement libéré de ça. »</strong> Puis : <strong>« Je veux garder ça. »</strong> Observe ton corps. Si la deuxième phrase sonne plus vrai, plus facile, plus « juste » que la première — ou si la première te serre la gorge — une inversion est probablement active.</p>
+  </div>
+
+  <h3>Les six points de la clé</h3>
+  <p>On tapote avec le bout de deux doigts (index et majeur), fermement mais sans douleur, environ 7 à 15 fois par point. Un côté du corps suffit.</p>
+
+  <div class="points">
+    <figure>
+      <svg viewBox="0 0 220 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Points du visage et du haut du torse">
+        <path d="M110 18c-38 0-62 30-62 72 0 46 26 82 62 82s62-36 62-82c0-42-24-72-62-72z" fill="#FBF9F4" stroke="#A8842A" stroke-width="1.4"/>
+        <path d="M78 82q14-8 26 0M116 82q14-8 26 0" fill="none" stroke="#7C7469" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M110 92v28q-6 6 0 8" fill="none" stroke="#7C7469" stroke-width="1.2"/>
+        <path d="M94 140q16 9 32 0" fill="none" stroke="#7C7469" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M30 236q8-44 80-48q72 4 80 48" fill="#FBF9F4" stroke="#A8842A" stroke-width="1.4"/>
+        <path d="M60 208q30-8 46 2M160 208q-30-8-46 2" fill="none" stroke="#7C7469" stroke-width="1.2"/>
+        <circle cx="150" cy="84" r="7" fill="#6A4C96"/><text x="150" y="88" font-size="9" text-anchor="middle" fill="#fff" font-family="Jost">5</text>
+        <circle cx="110" cy="133" r="7" fill="#6A4C96"/><text x="110" y="137" font-size="9" text-anchor="middle" fill="#fff" font-family="Jost">2</text>
+        <circle cx="110" cy="157" r="7" fill="#6A4C96"/><text x="110" y="161" font-size="9" text-anchor="middle" fill="#fff" font-family="Jost">3</text>
+        <circle cx="94" cy="218" r="7" fill="#6A4C96"/><text x="94" y="222" font-size="9" text-anchor="middle" fill="#fff" font-family="Jost">6</text>
+      </svg>
+      <figcaption>Visage &amp; clavicule</figcaption>
+    </figure>
+    <figure>
+      <svg viewBox="0 0 220 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Points de la main">
+        <path d="M70 230V140l-22-40q-6-14 6-18 10-2 16 10l14 26V60q0-12 11-12t11 12v58V40q0-12 11-12t11 12v78V52q0-12 11-12t11 12v70V72q0-11 10-11t10 11v90q0 40-30 68z" fill="#FBF9F4" stroke="#A8842A" stroke-width="1.4" stroke-linejoin="round"/>
+        <circle cx="174" cy="150" r="7" fill="#6A4C96"/><text x="174" y="154" font-size="9" text-anchor="middle" fill="#fff" font-family="Jost">1</text>
+        <circle cx="121" cy="38" r="7" fill="#6A4C96"/><text x="121" y="42" font-size="9" text-anchor="middle" fill="#fff" font-family="Jost">4</text>
+        <circle cx="150" cy="128" r="6" fill="none" stroke="#A8842A" stroke-width="1.5" stroke-dasharray="2 2"/><text x="150" y="112" font-size="9" text-anchor="middle" fill="#7C7469" font-family="Jost">gamut</text>
+      </svg>
+      <figcaption>Main</figcaption>
+    </figure>
+  </div>
+
+  <ol class="pt-list">
+    <li><div><strong>Le point karaté</strong> — tranche de la main, la partie charnue entre la base du petit doigt et le poignet, celle qui frapperait dans un coup de karaté.</div></li>
+    <li><div><strong>Sous le nez</strong> — le creux entre le nez et la lèvre supérieure.</div></li>
+    <li><div><strong>Sous la bouche</strong> — le creux du menton, juste sous la lèvre inférieure.</div></li>
+    <li><div><strong>Le majeur</strong> — sur le côté du majeur, au coin de l'ongle, du côté du pouce.</div></li>
+    <li><div><strong>Le coin de l'œil</strong> — sur l'os, au coin extérieur de l'œil.</div></li>
+    <li><div><strong>La clavicule</strong> — environ 2 à 3 cm sous le creux en U à la base du cou, puis 2 à 3 cm sur le côté, sous l'os de la clavicule.</div></li>
+  </ol>
+  <p style="font-size:16px;color:var(--ink3)">Le point « gamut », sur le dos de la main entre les jointures de l'annulaire et de l'auriculaire, un peu en arrière, sert à la respiration de la clavicule (étape 6 de l'algorithme).</p>
+
+  <h3>L'algorithme de levée</h3>
+  <p>On monte d'un niveau seulement si le précédent n'a pas suffi. Après chaque niveau, <strong>reprends le protocole qui bloquait</strong> (Focusing, balancier…) et mesure la charge. Si elle bouge, l'inversion est levée : continue normalement.</p>
+
+  <div class="algo">
+    <div class="algo-step"><div class="dot">1</div>
+      <div class="if">Si tu bloques sur tout, partout</div>
+      <h5>L'inversion massive</h5>
+      <p>C'est le blocage global : tout te semble lourd, rien ne marche ces jours-ci. Tapote le <strong>point karaté</strong> 15 fois, en respirant normalement. Tu peux dire en même temps : « Je m'accepte complètement, même si une part de moi ne veut pas changer. »</p>
+    </div>
+    <div class="algo-step"><div class="dot">2</div>
+      <div class="if">Si tu bloques sur un souvenir précis</div>
+      <h5>L'inversion spécifique</h5>
+      <p>Pense au souvenir ou à la charge visée, et tapote à nouveau le <strong>point karaté</strong> 15 fois. Tu peux nommer : « Même si une part de moi veut garder <em>[ce souvenir]</em>, je m'accepte. »</p>
+    </div>
+    <div class="algo-step"><div class="dot">3</div>
+      <div class="if">Si la charge baisse puis cale à mi-chemin</div>
+      <h5>La mini-inversion</h5>
+      <p>Au moment où ça cale (souvent vers 3 ou 4), une nouvelle inversion s'est levée : « ça va déjà mieux, c'est assez ». Tapote le <strong>point karaté</strong> 15 fois en pensant : « même s'il en reste un peu ». Puis reprends le protocole là où tu l'avais laissé.</p>
+    </div>
+    <div class="algo-step"><div class="dot">4</div>
+      <div class="if">Si la charge revient d'une séance à l'autre</div>
+      <h5>L'inversion profonde</h5>
+      <p>Callahan l'appelait aussi inversion de second niveau : elle touche souvent la sécurité et l'identité (« si je guéris, je ne serai plus moi », « ce n'est pas sûr d'aller bien »). Tapote <strong>sous le nez</strong> 15 fois en pensant : « même si une part de moi ne se sent pas en sécurité de lâcher ça ».</p>
+    </div>
+    <div class="algo-step"><div class="dot">5</div>
+      <div class="if">Si rien n'a encore bougé</div>
+      <h5>La séquence complète de déblocage</h5>
+      <p>Tapote les six points dans l'ordre, environ 7 fois chacun, en gardant le sujet en tête : <strong>karaté → sous le nez → sous la bouche → majeur → coin de l'œil → clavicule</strong>. Respire profondément. Refais la séquence une deuxième fois si la charge n'a pas bougé d'au moins un point.</p>
+    </div>
+    <div class="algo-step"><div class="dot">6</div>
+      <div class="if">Si tu te sens confus, dispersé, « à l'envers »</div>
+      <h5>La respiration de la clavicule</h5>
+      <p>C'est l'exercice de réorganisation de Callahan, pour les jours où même le tapotement semble ne pas « prendre ». Il dure environ 3 minutes.</p>
+      <p>Pose deux doigts sur ton point clavicule droit. Avec l'autre main, tapote le point gamut 5 fois dans chacune de ces cinq respirations : respiration normale · poumons pleins, retenu · à moitié vidé, retenu · poumons vides, retenu · à moitié rempli, retenu. Recommence sur la clavicule gauche. Puis refais les deux côtés en touchant la clavicule avec les <strong>jointures</strong> repliées au lieu du bout des doigts. Enfin, change de main et refais l'ensemble.</p>
+    </div>
+    <div class="algo-step"><div class="dot">7</div>
+      <div class="if">Si l'inversion revient chaque jour</div>
+      <h5>Le terrain</h5>
+      <p>Une inversion qui revient sans cesse a souvent une cause extérieure : manque de sommeil, alcool, surmenage, une substance mal tolérée, un environnement épuisant. Callahan parlait de « toxines » au sens large. Corrige le terrain avant d'insister. Et si malgré tout le blocage persiste plusieurs semaines sur un sujet, c'est un signe à prendre au sérieux : <strong>ce sujet demande un accompagnement</strong>.</p>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="bt">La clé au quotidien</div>
+    <p>Prends l'habitude d'une <strong>correction préventive</strong> : 15 tapotements sur le point karaté avant chaque séance de la Grande Libération, et avant tout palier de la Puissance qui te semble « ne pas vouloir rentrer ». Cela prend vingt secondes.</p>
+  </div>
+
+  <div class="immersion">
+    <div class="imm-head"><div class="breath"></div><div><div class="imm-label">Immersion · La Clé</div><div class="imm-title">La porte qui résistait</div></div></div>
+    <p>C'est la troisième fois cette semaine que tu travailles ce souvenir. Et la charge est toujours là, à 4. Tu sens monter le découragement, et cette petite voix familière : <em>tu vois, chez toi, ça ne marche pas.</em></p>
+    <p>Tu t'arrêtes. Tu la reconnais. Ce n'est pas la vérité : c'est une inversion.</p>
+    <p class="pause">· · ·</p>
+    <p>Tu poses deux doigts sur la tranche de ta main et tu tapotes. Une fois, deux fois… quinze fois. Tu murmures : « même si une part de moi ne veut pas lâcher ça ». Quelque chose se détend à peine. Tu remontes sous le nez. Puis la séquence entière, point après point, comme on essaie une à une les clés d'un trousseau.</p>
+    <p>Au coin de l'œil, tu bâilles. À la clavicule, un soupir sort tout seul.</p>
+    <p>Tu reprends le Focusing. La boule est là, mais elle n'est plus fermée. Tu lui demandes ce dont elle a besoin, et cette fois elle répond. Dix minutes plus tard, tu notes : 1.</p>
+    <p>Tu souris. La porte n'était pas murée. Elle était seulement verrouillée de l'intérieur.</p>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════ IV — LA PUISSANCE ═══════════ -->
+<div class="part" id="puissance">
+  <div class="roman">IV</div>
+  <h2>La Puissance Supérieure</h2>
+  <p>Le frein est desserré, le gardien a quitté son poste. L'énergie change d'échelle.</p>
+</div>
+<section>
+<div class="wrap">
+  <div class="immersion">
+    <div class="imm-head"><div class="breath"></div><div><div class="imm-label">Immersion · La Puissance</div><div class="imm-title">Entrer dans une pièce</div></div></div>
+    <p>Tu es devant une porte. Derrière, une salle pleine : des gens que tu ne connais pas, du bruit.</p>
+    <p>Tu t'arrêtes une seconde sur le seuil. Ta respiration descend. Une chaleur s'installe au centre de ta poitrine, comme une petite lampe qu'on allume. Tu penses à quelqu'un que tu aimes. Et tu formules, sans un mot : <em>que cette soirée serve tout le monde.</em></p>
+    <p class="pause">· · ·</p>
+    <p>Tu entres. Tu ne cherches personne du regard. Tu marches un peu plus lentement que la pièce.</p>
+    <p>Quelques têtes se tournent. Pas parce que tu fais quelque chose. Parce que tu ne fais rien d'agité dans un endroit où tout le monde s'agite. Quelqu'un vient vers toi. Tu le regardes vraiment. Il ne sait pas pourquoi, mais il se sent à l'aise. Il reste.</p>
+    <p class="hint">Les sept paliers qui suivent construisent chacun une pièce de cette scène.</p>
+  </div>
+
+  <!-- PALIER 1 -->
+  <div class="chap">
+    <div class="chap-head"><div class="chap-num">1</div><div class="chap-title">La Charge Vitale</div></div>
+    <div class="chap-meta">Produire l'énergie · 2 semaines · 20 à 30 minutes chaque matin</div>
+    <div class="recit">
+      <p>La fenêtre est ouverte. L'air du matin est frais. Tu inspires par le nez et tu le sens descendre, d'abord dans le ventre, puis dans les côtes qui s'écartent, enfin jusqu'en haut de la poitrine. Tu expires lentement. Aucune force, aucun effort : les vieux maîtres le répétaient, une respiration brutale fatigue au lieu de charger.</p>
+      <p>Puis tu ajoutes le cycle. À l'inspiration, ton bras droit se contracte peu à peu, jusqu'à vibrer. Tu retiens. À l'expiration, tu lâches tout. Le bras devient lourd, tiède. L'autre bras, les jambes, le tronc, la nuque. Enfin le corps entier. Tension à l'inspire, abandon à l'expire. À la fin, tu te laisses tomber dans le relâchement comme un tissu mouillé.</p>
+      <p>Quand tu rouvres les yeux, une chaleur diffuse circule jusque dans tes mains. Tu n'as pas encore regardé ton téléphone. Tu n'en as pas envie.</p>
+    </div>
+    <div class="biblio"><div class="bl">◈ Ce que dit la Bibliothèque</div>
+      <p><strong>Hara, <i>Personal Magnetism — A Practical Course</i> (1906).</strong> Pour Hara, la santé et la respiration sont le socle du magnétisme : un corps épuisé ne rayonne pas. Il fait respirer par le nez, en commençant par le bas des poumons, et associe la tension des muscles à l'inspiration et leur relâchement total à l'expiration. Il insiste aussi : jamais de respiration violente, qui fatigue au lieu de fortifier. La « nage à sec » vient directement de son cours.</p>
+      <p class="why">Le relâchement total est ici aussi important que la tension. C'est lui qui t'apprend à passer de l'action au calme en une expiration, la qualité la plus visible d'une présence forte.</p>
+    </div>
+    <div class="inv-note"><b>Si ça ne prend pas</b> — la chaleur ne vient jamais, ou tu sautes les séances sans raison : inversion massive. Point karaté 15 fois avant la séance, pendant une semaine.</div>
+    <details class="geste"><summary>Le geste<small>Respiration en trois étages et cycle de charge</small></summary><div class="geste-body">
+      <ol>
+        <li>Debout, épaules ouvertes, menton légèrement rentré.</li>
+        <li>Respiration ventre → côtes → poitrine, par le nez. 6 cycles par minute, 5 minutes.</li>
+        <li>Cycle de charge : tension progressive à l'inspiration, 3 secondes de maintien, relâchement total à l'expiration. Bras, jambes, tronc, nuque, corps entier.</li>
+        <li>2 minutes de relâchement complet, corps et mental.</li>
+        <li>2 à 3 fois par semaine, la <strong>nage à sec</strong> : poumons vides, accroupi sur les talons, bras devant ; inspire en montant sur la pointe des pieds et en ouvrant les bras vers l'arrière ; redescends en expirant. 15 à 20 répétitions lentes.</li>
+      </ol>
+      <div class="valid"><b>Validé quand</b>Tu passes de la tension totale au relâchement total en une seule expiration.</div>
+      <div class="dark"><b>Ombre</b>Transformer la séance en performance. Au moindre vertige, reviens à une respiration normale.</div>
+    </div></details>
+  </div>
+
+  <!-- PALIER 2 -->
+  <div class="chap">
+    <div class="chap-head"><div class="chap-num">2</div><div class="chap-title">Le Réservoir</div></div>
+    <div class="chap-meta">Contenir l'énergie · 2 semaines</div>
+    <div class="recit">
+      <p>Produire de l'énergie ne sert à rien si elle fuit. Pendant trois jours, tu deviens le détective de tes propres fuites. La jambe qui bat sous la table. Le téléphone saisi sans raison, dix fois par heure. Le « tu vois ce que je veux dire » en fin de phrase. La justification que personne n'a demandée. Les vieux traités parlaient de l'inquiétude, des gestes nerveux, des excès. Notre époque en a ajouté quelques-unes.</p>
+      <p>Puis vient l'exercice le plus simple et le plus difficile : dix minutes d'immobilité. Pas un seul muscle volontaire ne bouge. Une démangeaison apparaît. Tu la regardes avec le Témoin. Elle grandit, culmine, disparaît. Tu découvres que tu n'es pas obligé d'obéir à chaque impulsion.</p>
+      <p>Une semaine plus tard, quelqu'un te dit : « T'as l'air posé, en ce moment. »</p>
+    </div>
+    <div class="biblio"><div class="bl">◈ Ce que dit la Bibliothèque</div>
+      <p><strong>Hara, <i>Personal Magnetism</i>.</strong> Hara consacre une part de son cours à ce qui fait perdre le magnétisme : l'inquiétude, la peur, les mouvements nerveux, le manque de maîtrise de soi, les excès en tout genre. Selon lui, on ne manque pas d'énergie : on la laisse s'échapper.</p>
+      <p><strong>Dumont, <i>The Art and Science of Personal Magnetism</i>.</strong> Dumont relie lui aussi le magnétisme au contrôle des nerfs et au calme du corps : la personne qui s'agite disperse ce que la personne immobile concentre.</p>
+      <p class="why">Avant d'apprendre à diriger l'énergie, on apprend à ne plus la perdre. L'immobilité est l'entraînement direct de ce « réservoir ».</p>
+    </div>
+    <div class="inv-note"><b>Si ça ne prend pas</b> — une fuite résiste à tout (le téléphone, la justification) : inversion spécifique. Pense à cette fuite précise et tapote le point karaté 15 fois, plusieurs fois par jour pendant quelques jours.</div>
+    <details class="geste"><summary>Le geste<small>Audit des fuites et immobilité</small></summary><div class="geste-body">
+      <ol>
+        <li>3 jours d'audit : note chaque tic, chaque fuite.</li>
+        <li>Choisis les 3 plus fréquentes. Pour chacune, un signal et une réponse (« je saisis mon téléphone → je le repose et j'expire »).</li>
+        <li>10 minutes d'immobilité consciente par jour.</li>
+        <li>En conversation : une seconde de silence avant chaque réponse.</li>
+      </ol>
+      <div class="valid"><b>Validé quand</b>Tes trois fuites principales ont diminué de moitié.</div>
+    </div></details>
+  </div>
+
+  <!-- PALIER 3 -->
+  <div class="chap">
+    <div class="chap-head"><div class="chap-num">3</div><div class="chap-title">Le Regard qui Accueille</div></div>
+    <div class="chap-meta">Diriger l'énergie · 2 semaines</div>
+    <div class="recit">
+      <p>Devant le miroir, tu te regardes dans les yeux. Au bout de quelques secondes, le malaise arrive : l'envie de détourner, de faire une grimace, de partir. Tu ne le combats pas. Tu relâches le visage. Tu adoucis le regard. Et tu restes.</p>
+      <p>Les anciens entraînaient un regard perçant, capable de retenir l'autre contre sa volonté. Tu gardes l'entraînement, tu changes l'intention. Car un regard qui domine provoque une défense. Un regard stable <em>et</em> chaleureux provoque de la confiance.</p>
+      <p>Dans la rue, au travail, tu pratiques les trois temps. Tu <strong>vois</strong> vraiment la personne : sa fatigue, sa joie, sa hâte. Tu <strong>reçois</strong> ce que tu vois, tu le laisses te toucher un peu. Et tu <strong>souhaites</strong>, en silence : que ça aille bien pour toi. La caissière lève les yeux. Elle sourit sans savoir pourquoi.</p>
+    </div>
+    <div class="biblio"><div class="bl">◈ Ce que dit la Bibliothèque</div>
+      <p><strong>Hara et Dumont.</strong> Les deux auteurs consacrent des exercices entiers au regard : fixer un point, puis ses propres yeux dans un miroir, jusqu'à tenir un regard calme sans ciller nerveusement. Chez Hara, ce regard sert à imposer sa volonté.</p>
+      <p><strong>Turnbull, <i>La Puissance en soi</i>.</strong> Le livre définit le magnétisme comme la capacité d'attirer la confiance, l'intérêt et l'amitié.</p>
+      <p class="why">On garde l'entraînement des anciens, et on remplace leur intention par celle de Turnbull. Un regard qui impose provoque une défense. Un regard qui accueille provoque la confiance. Les « trois temps » sont cette correction.</p>
+    </div>
+    <div class="inv-note"><b>Si ça ne prend pas</b> — le malaise au miroir ne baisse pas après une semaine : inversion spécifique liée au fait d'être vu. Point karaté en pensant « même si j'ai du mal à me regarder », puis la séquence complète des 6 points.</div>
+    <details class="geste"><summary>Le geste<small>Le miroir et les trois temps du regard</small></summary><div class="geste-body">
+      <ol>
+        <li>5 minutes de miroir par jour : relâche le visage quand le malaise vient.</li>
+        <li>Avec chaque personne : voir, recevoir, souhaiter.</li>
+        <li>Tiens le regard, mais laisse-le respirer : on détourne brièvement pour réfléchir, puis on revient.</li>
+      </ol>
+      <div class="dark"><b>Ombre</b>Tenir le regard pour gagner. Si tu attends que l'autre baisse les yeux, tu es revenu à la domination.</div>
+    </div></details>
+  </div>
+
+  <!-- PALIER 4 -->
+  <div class="chap">
+    <div class="chap-head"><div class="chap-num">4</div><div class="chap-title">Le Champ du Cœur</div></div>
+    <div class="chap-meta">Rayonner l'intention · 2 semaines</div>
+    <div class="recit">
+      <p>Au niveau 2, la cohérence cardiaque était un outil de stabilité. Ici, elle devient un porteur. Une fois installée, tu lui confies une intention, et c'est la différence entre être calme et être apaisant.</p>
+      <p>Avant d'entrer quelque part, tu t'arrêtes. Quatre-vingt-dix secondes. Ton souffle ralentit, ton attention descend dans la poitrine. Tu rappelles un visage aimé, une gratitude sincère, et la chaleur vient. Tu formules : <em>que cette rencontre serve tout le monde.</em> Puis tu entres, l'intention derrière le regard, sans la montrer.</p>
+      <p>Au bout de quelques semaines, tu remarques que les réunions tendues se tendent moins vite autour de toi. Personne ne sait pourquoi. Toi, tu commences à te douter.</p>
+    </div>
+    <div class="biblio"><div class="bl">◈ Ce que dit la Bibliothèque</div>
+      <p><strong>Dumont, <i>The Art and Science of Personal Magnetism</i>.</strong> Dumont décrit l'atmosphère mentale que chacun porte autour de lui, colorée par ses pensées et ses dispositions dominantes. Les autres la perçoivent avant même qu'on ait parlé.</p>
+      <p><strong>Turnbull, <i>La Puissance en soi</i>.</strong> Si le magnétisme attire la confiance et l'amitié, l'état intérieur qu'on porte doit lui-même être fait de confiance et de bienveillance.</p>
+      <p class="why">La cohérence cardiaque du niveau 2 stabilise ton état. L'intention bienveillante lui donne sa couleur. Le rituel du seuil rassemble les deux juste avant la rencontre, au moment où ton « atmosphère » compte le plus.</p>
+    </div>
+    <div class="inv-note"><b>Si ça ne prend pas</b> — impossible de ressentir la moindre gratitude, tout reste froid : inversion massive, puis la respiration de la clavicule le soir pendant quelques jours.</div>
+    <details class="geste"><summary>Le geste<small>Le rituel du seuil</small></summary><div class="geste-body">
+      <ol>
+        <li>90 secondes de respiration lente centrée sur la poitrine.</li>
+        <li>Une sensation sincère de gratitude ou d'affection.</li>
+        <li>« Que cette rencontre serve tout le monde. »</li>
+        <li>Entre, l'intention derrière le regard.</li>
+      </ol>
+      <div class="valid"><b>Validé quand</b>Tu as fait le rituel 30 fois.</div>
+    </div></details>
+  </div>
+
+  <!-- PALIER 5 -->
+  <div class="chap">
+    <div class="chap-head"><div class="chap-num">5</div><div class="chap-title">Le Contact</div></div>
+    <div class="chap-meta">Transmettre par la présence physique · 1 semaine</div>
+    <div class="recit">
+      <p>Une main se tend. Tu la prends entière, paume contre paume, avec la même pression que celle qu'on te donne. Tes yeux dans les siens. Une expiration pendant le contact. Et tu gardes la main une demi-seconde de plus que l'automatisme, le temps de <em>voir</em> la personne.</p>
+      <p>Les vieux traités voyaient un centre magnétique sous l'annulaire. Laisse la légende, garde l'essentiel : une main pleine transmet une présence qu'une main molle ou écrasante ne transmet jamais. Et plus ton champ est fort, moins tu as besoin d'envahir l'espace de l'autre. Tu peux rester à bonne distance. On te sent quand même.</p>
+    </div>
+    <div class="biblio"><div class="bl">◈ Ce que dit la Bibliothèque</div>
+      <p><strong>Hara, <i>Personal Magnetism</i>.</strong> Hara accorde une attention particulière à la poignée de main : les paumes doivent entrer pleinement en contact, et il localise un « centre magnétique » à la base de l'annulaire. La symbolique est datée, mais l'observation est juste : le contact incomplet transmet de l'hésitation.</p>
+      <p class="why">On retient le contact plein et égal, et on écarte toute idée de domination physique. Le contact juste dit « je suis là, avec toi », pas « je suis au-dessus de toi ».</p>
+    </div>
+    <div class="inv-note"><b>Si ça ne prend pas</b> — le contact physique te met mal à l'aise au point de l'éviter : inversion spécifique. Point karaté en pensant à ce malaise, et ajoute-le à ta carte des charges.</div>
+    <details class="geste"><summary>Le geste<small>La poignée de main pleine</small></summary><div class="geste-body">
+      <ol>
+        <li>Paume pleine, pression égale, regard dans les yeux, expiration.</li>
+        <li>Une demi-seconde de plus que d'habitude.</li>
+        <li>Respect des distances.</li>
+      </ol>
+      <div class="dark"><b>Ombre</b>Main par-dessus, poignée qui écrase, main sur l'épaule pour marquer sa position. Le contact juste est d'égal à égal.</div>
+    </div></details>
+  </div>
+
+  <!-- PALIER 6 -->
+  <div class="chap">
+    <div class="chap-head"><div class="chap-num">6</div><div class="chap-title">La Parole Juste</div></div>
+    <div class="chap-meta">Parler depuis le corps · 2 semaines</div>
+    <div class="recit">
+      <p>On te pose une question difficile. Avant, tu aurais répondu vite, pour ne pas laisser de blanc. Aujourd'hui, tu laisses le silence s'installer une seconde. Ton attention descend dans le ventre. <em>Qu'est-ce qui est vrai, là ?</em></p>
+      <p>Une phrase monte. Une seule. Tu la dis, la voix posée sur l'expiration, sans monter en fin de phrase. Puis tu t'arrêtes. Tu la laisses se poser dans la pièce. Le silence qui suit n'est pas gênant : il est plein.</p>
+      <p>Et quand tu ne sais pas, tu le dis : « Je sens quelque chose, mais je n'ai pas encore les mots. » Tu découvres que cette phrase désarme plus que n'importe quelle répartie. Tu parles moins. On t'écoute davantage.</p>
+    </div>
+    <div class="biblio"><div class="bl">◈ Ce que dit la Bibliothèque</div>
+      <p><strong>Gendlin, <i>Focusing</i>.</strong> Gendlin observe que les mots qui viennent du sens ressenti ont une qualité particulière : on les reconnaît comme justes, parce que le corps répond par un petit relâchement. Les mots qui ne viennent que de la tête, eux, tournent en rond.</p>
+      <p class="why">La Parole Juste, c'est le Focusing en direct : consulter le corps une seconde, laisser monter la phrase qui « résonne », et s'arrêter là. L'autre entend la différence, même sans pouvoir la nommer.</p>
+    </div>
+    <div class="inv-note"><b>Si ça ne prend pas</b> — les mots restent coincés dans la gorge, ou tu reviens toujours à la réponse rapide : séquence complète des 6 points avant les échanges importants (le point sous la bouche est souvent celui qui « débloque » la parole).</div>
+    <details class="geste"><summary>Le geste<small>Une seconde, une phrase, un silence</small></summary><div class="geste-body">
+      <ol>
+        <li>Une seconde de silence, attention au ventre : « qu'est-ce qui est vrai ? »</li>
+        <li>Une phrase qui vient de là. Puis stop.</li>
+        <li>Si tu ne sais pas, dis-le.</li>
+        <li>Voix posée sur l'expiration, sans montée finale.</li>
+      </ol>
+    </div></details>
+  </div>
+
+  <!-- PALIER 7 -->
+  <div class="chap">
+    <div class="chap-head"><div class="chap-num">7</div><div class="chap-title">Le Rayonnement sans Objet</div></div>
+    <div class="chap-meta">L'aboutissement · pratique continue</div>
+    <div class="recit">
+      <p>Le dernier palier n'ajoute aucune technique. Il en retire une chose : l'intention d'obtenir. Tu es chargé, posé, cohérent — et tu ne veux <strong>rien</strong> de la personne en face. C'est ce paradoxe qui produit le magnétisme le plus fort : les gens se sentent mieux après t'avoir croisé, sans savoir pourquoi.</p>
+      <p>Et parce que tu as traversé tes propres charges, tu sais maintenant ce dont a besoin quelqu'un qui souffre. Pas de conseils. Pas d'interprétation. Une présence qui ne s'effraie pas. Une respiration lente que son système nerveux peut lire. Une voix qui dit : « tu es là, avec moi ». Et, quand c'est plus lourd qu'un ami ne peut porter, le courage de l'orienter vers une aide adaptée — ce n'est pas un abandon, c'est le respect de sa douleur.</p>
+      <p>Pendant trente jours, à la fin de chaque rencontre, tu te poses une seule question : <em>est-ce que cette personne repart plus forte qu'elle n'est arrivée ?</em></p>
+    </div>
+    <div class="biblio"><div class="bl">◈ Ce que dit la Bibliothèque</div>
+      <p><strong>Levine, <i>Waking the Tiger</i>.</strong> Levine consacre des pages aux premiers secours émotionnels, après un accident ou un choc : rester calme, garder la personne au chaud et immobile, la rassurer, la laisser trembler si son corps en a besoin, sans la presser de parler. Ta présence apaisée aide son système nerveux à retrouver le sien.</p>
+      <p><strong>Turnbull et Orange.</strong> Le magnétisme attire la confiance ; la non-indifférence la mérite. Le palier 7 réunit les deux.</p>
+      <p class="why">C'est le point d'arrivée de tout le livre : ce que tu as libéré en toi devient un abri pour les autres. Le rayonnement sans objet n'est pas une technique de plus, c'est ce qui reste quand tu n'as plus rien à défendre.</p>
+    </div>
+    <div class="inv-note"><b>Si ça ne prend pas</b> — tu te sens envahi par la souffrance des autres, ou vidé après chaque échange : reviens à tes ancres, vérifie le terrain (fatigue, surmenage), puis point karaté 15 fois. Donner sans recharger mène à l'ombre de « l'épuisé ».</div>
+
+    <div class="immersion">
+      <div class="imm-head"><div class="breath"></div><div><div class="imm-label">Immersion · Palier 7</div><div class="imm-title">Celui qu'on appelle</div></div></div>
+      <p>Il est tard. Ton téléphone vibre. Un ami. Sa voix tremble : quelque chose s'est effondré dans sa vie aujourd'hui.</p>
+      <p>Tu ne paniques pas avec lui. Tu ne cherches pas tout de suite la solution. Tu t'assois. Tu ralentis ta propre respiration et tu laisses le silence exister entre ses phrases.</p>
+      <p class="pause">· · ·</p>
+      <p>Quand il s'emballe, tu lui dis doucement : « Je suis là. Sens tes pieds par terre. On n'a rien à régler ce soir. » Tu l'entends respirer un peu plus lentement. Puis encore un peu plus.</p>
+      <p>Au bout d'une heure, il dit : « Je ne sais pas ce que t'as fait, mais ça va mieux. »</p>
+      <p>Tu n'as rien fait. Tu étais seulement quelqu'un qui ne s'effraie plus. Quelqu'un dont le système nerveux est devenu un abri.</p>
+      <p>Tu raccroches, et tu comprends ce que tu cherchais depuis le début sans le savoir : pas être admiré. Être <strong>quelqu'un sur qui on peut compter</strong>.</p>
+    </div>
+    <div class="valid"><b>Validé quand</b>La réponse est oui la plupart du temps — et que tu as cessé de compter.</div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════ V — LE CHEMIN ═══════════ -->
+<div class="part" id="protocole">
+  <div class="roman">V</div>
+  <h2>Le chemin des 12 semaines</h2>
+  <p>Le matin, on charge. Le soir, on libère.</p>
+</div>
+<section>
+<div class="wrap">
+  <div class="scroll">
+  <table class="tbl">
+    <thead><tr><th>Semaines</th><th>Matin</th><th>Soir</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Rituel Level 2 maintenu</td><td>Le contenant + la carte</td></tr>
+      <tr><td>2–3</td><td>Palier 1 · Charge vitale</td><td>Écouter le corps (Focusing)</td></tr>
+      <tr><td>4–5</td><td>Palier 2 · Réservoir</td><td>Le balancier</td></tr>
+      <tr><td>6</td><td>Palier 3 · Regard (miroir)</td><td>Geste inachevé + contre-tests</td></tr>
+      <tr><td>7</td><td>Palier 3 · Regard (dehors)</td><td>Les cinq gardiens</td></tr>
+      <tr><td>8</td><td>Palier 4 · Champ du cœur</td><td>Le Témoin</td></tr>
+      <tr><td>9</td><td>Paliers 4 + 5 · Contact</td><td>Mort de l'image + 7 jours</td></tr>
+      <tr><td>10</td><td>Palier 6 · Parole juste</td><td>Le Retournement</td></tr>
+      <tr><td>11</td><td>Palier 6 consolidé</td><td>Charges restantes (sous 4)</td></tr>
+      <tr><td>12</td><td>Palier 7 · Rayonnement</td><td>Contre-test de toute la carte</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="box">
+    <div class="bt">Les règles du chemin</div>
+    <ul>
+      <li><strong>Correction préventive</strong> : 15 tapotements sur le point karaté avant chaque séance du soir.</li>
+      <li><strong>Une seule séance de libération par jour.</strong> Le système nerveux intègre pendant le sommeil.</li>
+      <li><strong>Un jour sans travail émotionnel par semaine</strong> : seulement la charge du matin et une marche.</li>
+      <li><strong>Si une semaine est trop dense, elle dure deux semaines.</strong></li>
+      <li><strong>Le mouvement physique est un allié</strong> : course, marche en nature, entraînement aident à décharger ce qui a été remué.</li>
+    </ul>
+  </div>
+  <h3>Suivi des paliers</h3>
+  <ul class="check" data-group="paliers">
+    <li><input type="checkbox" id="p1"><label for="p1">Palier 1 — La Charge Vitale</label></li>
+    <li><input type="checkbox" id="p2"><label for="p2">Palier 2 — Le Réservoir</label></li>
+    <li><input type="checkbox" id="p3"><label for="p3">Palier 3 — Le Regard qui Accueille</label></li>
+    <li><input type="checkbox" id="p4"><label for="p4">Palier 4 — Le Champ du Cœur</label></li>
+    <li><input type="checkbox" id="p5"><label for="p5">Palier 5 — Le Contact</label></li>
+    <li><input type="checkbox" id="p6"><label for="p6">Palier 6 — La Parole Juste</label></li>
+    <li><input type="checkbox" id="p7"><label for="p7">Palier 7 — Le Rayonnement sans Objet</label></li>
+  </ul>
+  <div class="gate" id="gate2">0 / 7 paliers validés</div>
+</div>
+</section>
+
+<!-- ═══════════ VI — L'OMBRE ═══════════ -->
+<div class="part" id="ombre">
+  <div class="roman">VI</div>
+  <h2>Les signes de l'ombre</h2>
+  <p>Plus la puissance grandit, plus la dérive est subtile. Relis cette page chaque mois.</p>
+</div>
+<section>
+<div class="wrap">
+  <div class="scroll">
+  <table class="tbl">
+    <thead><tr><th>Signe</th><th>Ce qui se passe</th><th>Remède</th></tr></thead>
+    <tbody>
+      <tr><td>L'initié</td><td>Tu regardes de haut ceux qui « ne savent pas ».</td><td>Retour à la mort de l'image. « Je ne sais pas » pendant 7 jours.</td></tr>
+      <tr><td>Le collectionneur</td><td>Tu comptes les effets que tu produis.</td><td>Ne note plus que ce que l'autre a gagné.</td></tr>
+      <tr><td>Le dominateur</td><td>Regard pour faire céder, silences pour mettre mal à l'aise.</td><td>Le test des trois questions.</td></tr>
+      <tr><td>Le contournement</td><td>La « paix intérieure » pour éviter un conflit nécessaire.</td><td>Focusing sur ce que tu évites. La bienveillance n'est pas l'absence de non.</td></tr>
+      <tr><td>Le sauveur</td><td>Tu veux réparer tout le monde.</td><td>Orienter vers une aide fait partie du rayonnement.</td></tr>
+      <tr><td>L'épuisé</td><td>Tu donnes sans recharger.</td><td>Retour au Palier 1 et au jour de repos.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="quote">La seule mesure fiable de ton aura : ce que deviennent les gens après t'avoir rencontré.</div>
+</div>
+</section>
+
+<!-- ═══════════ VII — CELUI QUE TU DEVIENS ═══════════ -->
+<div class="part" id="devenir">
+  <div class="roman">VII</div>
+  <h2>Celui que tu deviens</h2>
+  <p>Un chapitre à lire, pas à pratiquer. Une journée ordinaire, un an plus tard.</p>
+</div>
+<section>
+<div class="wrap">
+  <p>Choisis un moment calme. Éteins les notifications. Lis d'une traite, lentement. Reviens-y chaque fois que la pratique te paraît longue : il te rappelle où elle mène.</p>
+
+  <div class="immersion">
+    <div class="imm-head"><div class="breath"></div><div><div class="imm-label">Immersion longue · 15 minutes</div><div class="imm-title">Une journée dans ta vie</div></div></div>
+
+    <div class="voyage-time">6 H 40 — LE RÉVEIL</div>
+    <p>Tu ouvres les yeux avant le réveil. Pas parce que tu es tendu : parce que tu as assez dormi. Ton premier contact avec la journée, c'est ta respiration. Elle est déjà lente. Tu restes allongé une minute, à sentir le poids de ton corps, la chaleur des draps, la lumière grise derrière les rideaux.</p>
+    <p>Aucune pensée ne te tire hors du lit. Tu te lèves parce que tu en as envie.</p>
+
+    <div class="voyage-time">7 H 00 — LA CHARGE</div>
+    <p>Fenêtre ouverte. L'air frais entre par le nez, descend jusqu'au ventre, remplit les côtes, puis le haut de la poitrine. Tu contractes en inspirant, tu relâches en expirant. Ton corps te répond comme un instrument bien accordé. Une chaleur douce circule jusque dans tes mains.</p>
+
+    <p class="pause">· · ·</p>
+
+    <div class="voyage-time">8 H 30 — LE MONDE</div>
+    <p>Dans la rue, les gens marchent vite, regard baissé. Tu marches à ton pas. À la boulangerie, la vendeuse a l'air épuisée. Tu la regardes vraiment, tu lui souris, tu la remercies par son prénom. Elle se redresse un peu. C'est minuscule. C'est exactement ça.</p>
+
+    <div class="voyage-time">10 H 00 — LA TENSION</div>
+    <p>Une réunion qui dérape. Deux collègues haussent le ton. Tout le monde se crispe et cherche du regard qui va trancher.</p>
+    <p>Toi, tu sens la tension monter dans la pièce, et tu sens qu'elle ne rentre pas en toi. Tu attends une seconde de silence. Puis tu dis, d'une voix posée, une seule phrase qui vient du ventre : « Je crois que vous voulez tous les deux la même chose. »</p>
+    <p>Le silence change de nature. Les épaules redescendent. À la sortie, l'un des deux te dit : « Merci. J'étais en train de m'enfoncer. »</p>
+
+    <p class="pause">· · ·</p>
+
+    <div class="voyage-time">13 H 00 — LE SOUVENIR</div>
+    <p>En déjeunant seul, tu passes devant un lieu lié à une vieille blessure. Il y a deux ans, tu aurais changé de trottoir. Tu ralentis. Tu regardes. Le souvenir est là, intact, mais il ne commande plus rien. Il fait partie de ton histoire comme une cicatrice fait partie de la peau : tu sais d'où elle vient, elle ne fait plus mal.</p>
+    <p>Tu ressens même quelque chose qui ressemble à de la gratitude. C'est en traversant ça que tu es devenu capable d'aider les autres à traverser.</p>
+
+    <div class="voyage-time">16 H 00 — LE NON</div>
+    <p>Quelqu'un te demande un service qui ne te convient pas. Tu sens la vieille envie de dire oui pour être aimé. Tu la vois. Elle passe. « Non, je ne peux pas. Mais voilà ce que je peux faire. » Sans excuse en trop. Et la personne, étrangement, te respecte davantage.</p>
+
+    <p class="pause">· · ·</p>
+
+    <div class="voyage-time">19 H 30 — CEUX QUE TU AIMES</div>
+    <p>Le soir, tu es avec les tiens. Pas à moitié là, la tête encore au travail. Tu es <strong>là</strong>. Tu écoutes une histoire déjà racontée comme si c'était la première fois. Tu ris pour de vrai.</p>
+    <p>Quelqu'un te dit : « T'as changé, toi. » — « En quoi ? » Il cherche ses mots. « Je sais pas… on se sent bien avec toi. »</p>
+    <p>Il ne parle pas de ton charisme. Il parle de ta paix.</p>
+
+    <div class="voyage-time">23 H 00 — LE BILAN</div>
+    <p>Allongé dans le noir, une seule question : <em>qui ai-je vraiment vu aujourd'hui ?</em> La vendeuse. Les deux collègues. Celui qui t'a demandé un service. Les tiens.</p>
+    <p>Tu n'as rien cherché à obtenir. Et pourtant tu te sens plein, comme si l'énergie donnée était revenue, multipliée.</p>
+    <p class="pause">· · ·</p>
+    <p>Ton souffle ralentit. Ton corps devient lourd. Tu t'endors sans rien à défendre, sans rien à prouver, sans rien à cacher.</p>
+    <p>C'est ça, la Source. Ce n'est pas un pouvoir que tu possèdes. C'est un endroit d'où tu vis.</p>
+    <p class="hint">Relis cette immersion au début de chaque semaine. Remarque quelle scène te semble déjà un peu plus proche de ta réalité.</p>
+  </div>
+
+  <div class="box">
+    <div class="bt">Prolonger — ton propre récit</div>
+    <p>Une fois par mois, écris ta propre version de cette journée, au présent, avec les détails de ta vie : ton travail, tes proches, tes lieux. Enregistre-toi en la lisant lentement et écoute-la avant de dormir. Ton récit sera toujours plus puissant que celui-ci.</p>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════ VIII — SOURCES ═══════════ -->
+<section id="sources">
+<div class="wrap">
+  <div class="eyebrow">Porte VIII</div>
+  <h2>La Bibliothèque <em>des initiés</em></h2>
+  <p>Ce livre n'invente rien. Il assemble, dans un ordre précis, ce que sept auteurs ont découvert chacun de leur côté. Les anciens maîtres du magnétisme savaient produire la présence, mais ignoraient ce qui la bloque. Les chercheurs du trauma savaient libérer ce qui est figé, mais ne parlaient pas de rayonnement. AURA Level 3 relie les deux rives. Les idées sont reformulées et adaptées ; reviens aux textes pour approfondir.</p>
+
+  <div class="src-item">
+    <h4>Waking the Tiger: Healing Trauma</h4>
+    <div class="au">Peter A. Levine</div>
+    <p>Le livre fondateur du Somatic Experiencing. À partir de l'observation des animaux sauvages, Levine montre que les symptômes viennent de l'énergie de survie restée bloquée dans le corps, et qu'on la libère par petites doses, en suivant les sensations plutôt que le récit.</p>
+    <p class="used">Utilisé pour : le contenant, la carte, le balancier, le geste inachevé, le Retournement, la présence auprès de quelqu'un en choc.</p>
+  </div>
+  <div class="src-item">
+    <h4>Focusing</h4>
+    <div class="au">Eugene T. Gendlin</div>
+    <p>Né d'une recherche sur ce qui distingue les personnes qui changent vraiment en thérapie : leur capacité à écouter une impression corporelle encore floue. Gendlin en a tiré une méthode en six mouvements accessible à tous.</p>
+    <p class="used">Utilisé pour : écouter le corps, le Témoin, les gardiens, la Parole Juste.</p>
+  </div>
+  <div class="src-item">
+    <h4>Trauma and Transcendence</h4>
+    <div class="au">Eric Boynton &amp; Peter Capretto (dir.)</div>
+    <p>Un recueil de philosophes, théologiens et psychanalystes qui se demandent ce que le trauma fait à notre rapport au monde et aux autres. On y retrouve la lecture freudienne du moi comme bouclier, et la réflexion de Donna Orange, inspirée de Levinas, sur la non-indifférence à la souffrance d'autrui.</p>
+    <p class="used">Utilisé pour : les cinq gardiens, la mort de l'image, le Retournement, le Rayonnement sans Objet.</p>
+  </div>
+  <div class="src-item">
+    <h4>Thought Field Therapy</h4>
+    <div class="au">Roger J. Callahan</div>
+    <p>La méthode de tapotement de points d'acupuncture conçue par le psychologue Roger Callahan. Son apport le plus original est la notion d'inversion psychologique : une part de nous qui travaille, à notre insu, contre le changement que nous voulons. Méthode empirique, dont l'efficacité scientifique reste débattue.</p>
+    <p class="used">Utilisé pour : toute La Clé — détection et levée des inversions, échelle de mesure, respiration de la clavicule.</p>
+  </div>
+  <div class="src-item">
+    <h4>Personal Magnetism — A Practical Course (1906)</h4>
+    <div class="au">O. Hashnu Hara</div>
+    <p>Un cours confidentiel du début du XXe siècle, très pratique : respiration, alternance de tension et de relâchement, maîtrise des nerfs, regard, poignée de main. Ses exercices physiques sont remarquablement justes ; son usage de la volonté pour contraindre autrui est ce que ce livre écarte.</p>
+    <p class="used">Utilisé pour : la Charge Vitale, le Réservoir, le Regard, le Contact — et comme contre-exemple dans le Pacte.</p>
+  </div>
+  <div class="src-item">
+    <h4>The Art and Science of Personal Magnetism (1913)</h4>
+    <div class="au">Theron Q. Dumont (William Walker Atkinson)</div>
+    <p>Un traité qui relie le magnétisme à la maîtrise de soi : concentration, contrôle des nerfs, atmosphère mentale que chacun porte autour de lui.</p>
+    <p class="used">Utilisé pour : le Témoin, le Réservoir, le Regard, le Champ du Cœur.</p>
+  </div>
+  <div class="src-item">
+    <h4>La Puissance en soi</h4>
+    <div class="au">Victor Turnbull et al. · Gallica / BnF</div>
+    <p>Un ouvrage français ancien sur la force intérieure, qui donne la définition la plus juste du magnétisme : la faculté d'attirer la confiance, l'intérêt et l'amitié.</p>
+    <p class="used">Utilisé pour : la boussole de tout le livre — ce qui distingue le rayonnement de la domination.</p>
+  </div>
+  <div class="box warn">
+    <div class="bt">Rappel</div>
+    <p>Ce programme est un outil de développement personnel. Il ne constitue ni un diagnostic ni un traitement médical ou psychologique. La TFT et les techniques de tapotement sont des méthodes empiriques dont l'efficacité scientifique reste débattue ; utilise-les comme un complément, jamais à la place d'un suivi. Pour tout symptôme traumatique important, consulte un professionnel. En cas de détresse : <strong>3114</strong>.</p>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="s">◈ AURA · LEVEL 3 · LA SOURCE ◈</div>
+  <p>Ce qui a été libéré ne revient pas en toi. Il rayonne.</p>
+</footer>
+
+<script>
+(function(){
+  var KEY='aura-l3-progress',store={};
+  try{store=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){store={}}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}}
+  document.querySelectorAll('.check input[type=checkbox]').forEach(function(b){
+    if(store[b.id])b.checked=true;
+    b.addEventListener('change',function(){store[b.id]=b.checked;save();update()});
+  });
+  document.querySelectorAll('.check li').forEach(function(li){
+    li.addEventListener('click',function(e){
+      if(e.target.tagName==='INPUT'||e.target.tagName==='LABEL')return;
+      var i=li.querySelector('input');i.checked=!i.checked;i.dispatchEvent(new Event('change'));
+    });
+  });
+  function count(g){return document.querySelectorAll('[data-group="'+g+'"] input:checked').length}
+  function update(){
+    var n=count('seuil'),g=document.getElementById('gate');
+    if(n===7){g.textContent='7 / 7 — Le seuil est ouvert. Tu peux entrer.';g.classList.add('open')}
+    else{g.textContent=n+' / 7 — Le seuil reste fermé. Retourne aux niveaux 1 et 2 pour les points manquants.';g.classList.remove('open')}
+    var p=count('paliers'),g2=document.getElementById('gate2');
+    g2.textContent=p+' / 7 paliers validés'+(p===7?' — La Source est atteinte.':'');
+    g2.classList.toggle('open',p===7);
+  }
+  update();
+  window.addEventListener('beforeprint',function(){document.querySelectorAll('details').forEach(function(d){d.open=true})});
+  var bar=document.getElementById('prog');
+  window.addEventListener('scroll',function(){
+    var h=document.documentElement,max=h.scrollHeight-h.clientHeight;
+    bar.style.width=(max>0?(h.scrollTop/max*100):0)+'%';
+  },{passive:true});
+})();
+</script>
+</body>
+</html>

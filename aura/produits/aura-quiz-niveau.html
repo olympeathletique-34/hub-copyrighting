@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURA — Quiz de Niveau</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Jost:wght@200;300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#FFFFFF; --bg2:#F7F5F2; --bg3:#EFECE8;
+  --ink:#0E0C14; --ink2:#2A2635; --ink3:#4A4758;
+  --violet:#2D1B69; --violet-m:#4A2E9E; --violet-l:#7B5EA7; --violet-p:#EDE8F8;
+  --gold:#B8902A; --gold-l:#D4AA42; --gold-bg:#FBF6EC;
+  --gray:#8A8798; --border:#E8E5E0; --deep:#09071A;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;}
+
+/* SCREENS */
+.screen{display:none;}
+.screen.active{display:block;}
+#screen-cover.active{display:flex;}
+
+/* COVER */
+#screen-cover{
+  min-height:100vh;
+  background:linear-gradient(160deg,#0E0814 0%,#1C1040 55%,#0A0814 100%);
+  flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:80px 28px;position:relative;overflow:hidden;
+}
+.cover-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 35% 40%,rgba(45,27,105,.6) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 75% 65%,rgba(184,144,42,.07) 0%,transparent 55%);pointer-events:none;}
+.cover-orb{position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle at 40% 35%,rgba(74,46,158,.2) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:breathe 7s ease-in-out infinite;pointer-events:none;}
+@keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.6}50%{transform:translate(-50%,-50%) scale(1.06);opacity:1}}
+.cover-inner{position:relative;z-index:2;max-width:660px;}
+.cover-series{font-size:10px;font-weight:300;letter-spacing:.55em;color:rgba(196,174,232,.7);text-transform:uppercase;margin-bottom:24px;}
+.cover-h1{font-family:'Playfair Display',serif;font-size:clamp(38px,7vw,76px);font-weight:900;color:#F7F4F0;line-height:1.05;margin-bottom:20px;}
+.cover-h1 em{font-style:italic;color:rgba(196,174,232,.85);}
+.cover-rule{width:60px;height:1px;background:linear-gradient(90deg,transparent,#B8902A,transparent);margin:28px auto;}
+.cover-sub{font-family:'Playfair Display',serif;font-size:clamp(15px,2vw,19px);font-style:italic;color:rgba(247,244,240,.5);line-height:1.75;max-width:500px;margin:0 auto 40px;}
+.cover-info{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;margin-bottom:40px;}
+.ci-num{font-family:'Bebas Neue',sans-serif;font-size:36px;color:rgba(196,174,232,.8);line-height:1;}
+.ci-lbl{font-size:10px;font-weight:300;letter-spacing:.25em;color:rgba(247,244,240,.4);text-transform:uppercase;margin-top:4px;}
+
+/* BUTTONS */
+.btn-gold{background:var(--gold);color:#fff;font-size:13px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;padding:18px 52px;border:none;cursor:pointer;transition:all .2s;font-family:'Jost',sans-serif;}
+.btn-gold:hover{background:var(--gold-l);transform:translateY(-2px);}
+.btn-primary{background:var(--violet);color:#fff;font-size:13px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;padding:18px 48px;border:none;cursor:pointer;transition:all .2s;font-family:'Jost',sans-serif;}
+.btn-primary:hover{background:var(--violet-m);transform:translateY(-2px);}
+.btn-outline{background:transparent;color:var(--violet);border:1px solid var(--violet);font-size:12px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;padding:14px 32px;cursor:pointer;transition:all .2s;font-family:'Jost',sans-serif;}
+.btn-outline:hover{background:var(--violet-p);}
+
+/* QUIZ HEADER */
+#screen-quiz{min-height:100vh;background:var(--bg);}
+.quiz-header{background:var(--deep);padding:18px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.qh-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.1em;color:#F7F4F0;}
+.qh-progress-wrap{flex:1;max-width:320px;margin:0 28px;}
+.qh-progress-bar{height:3px;background:rgba(255,255,255,.1);}
+.qh-progress-fill{height:100%;background:var(--gold);transition:width .4s ease;}
+.qh-counter{font-size:10px;font-weight:300;letter-spacing:.3em;color:rgba(247,244,240,.4);text-transform:uppercase;margin-top:6px;text-align:center;}
+.qh-pillar{font-size:11px;font-weight:300;letter-spacing:.2em;color:rgba(247,244,240,.4);text-transform:uppercase;}
+
+/* DOMAINE */
+.domaine-header{background:var(--violet-p);border-bottom:1px solid rgba(45,27,105,.1);padding:12px 28px;display:flex;align-items:center;gap:12px;}
+.dh-label{font-size:10px;font-weight:500;letter-spacing:.4em;color:var(--violet-m);text-transform:uppercase;}
+.dh-name{font-size:13px;font-weight:500;color:var(--violet);}
+
+/* QUESTION */
+.question-wrap{max-width:720px;margin:0 auto;padding:56px 28px 32px;}
+.q-num{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.5em;color:var(--gold);margin-bottom:16px;text-transform:uppercase;}
+.q-text{font-family:'Playfair Display',serif;font-size:clamp(19px,2.8vw,26px);font-weight:700;color:var(--ink);line-height:1.35;margin-bottom:36px;}
+.answers{display:flex;flex-direction:column;gap:10px;}
+.answer-btn{background:var(--bg2);border:1px solid var(--border);padding:18px 22px;cursor:pointer;text-align:left;transition:all .15s;display:flex;align-items:flex-start;gap:14px;font-family:'Jost',sans-serif;width:100%;}
+.answer-btn:hover{border-color:var(--violet-l);background:var(--violet-p);}
+.answer-btn.selected{border-color:var(--violet);background:var(--violet-p);}
+.ab-letter{width:28px;height:28px;flex-shrink:0;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--gray);transition:all .15s;}
+.answer-btn.selected .ab-letter{background:var(--violet);color:#fff;border-color:var(--violet);}
+.ab-text{font-size:15px;font-weight:300;color:var(--ink2);line-height:1.6;padding-top:4px;}
+.q-nav{display:flex;justify-content:space-between;align-items:center;padding:28px 28px;max-width:720px;margin:0 auto;border-top:1px solid var(--border);}
+.q-nav-info{font-size:12px;font-weight:300;color:var(--gray);letter-spacing:.1em;}
+
+/* RESULTS */
+#screen-results{background:var(--bg);min-height:100vh;}
+.results-hero{background:linear-gradient(160deg,#0E0814 0%,#1C1040 60%,#0A0814 100%);padding:80px 28px 60px;text-align:center;position:relative;overflow:hidden;}
+.rh-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(45,27,105,.5) 0%,transparent 65%);}
+.rh-inner{position:relative;z-index:2;max-width:640px;margin:0 auto;}
+.rh-level-badge{display:inline-block;font-size:10px;font-weight:500;letter-spacing:.5em;text-transform:uppercase;padding:8px 24px;border:1px solid;margin-bottom:28px;}
+.rh-score-ring{width:160px;height:160px;border-radius:50%;border:3px solid rgba(255,255,255,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 28px;}
+.rh-score-num{font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:1;color:#F7F4F0;}
+.rh-score-lbl{font-size:10px;font-weight:300;letter-spacing:.3em;color:rgba(247,244,240,.5);text-transform:uppercase;}
+.rh-level-name{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,52px);font-weight:900;color:#F7F4F0;line-height:1.1;margin-bottom:16px;}
+.rh-level-name em{font-style:italic;}
+.rh-tagline{font-family:'Playfair Display',serif;font-size:17px;font-style:italic;color:rgba(247,244,240,.6);line-height:1.7;max-width:480px;margin:0 auto;}
+
+.results-body{max-width:780px;margin:0 auto;padding:60px 28px;}
+.rb-section{margin-bottom:52px;}
+.rb-eye{font-size:10px;font-weight:500;letter-spacing:.45em;color:var(--violet-m);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.rb-eye::before{content:'';width:24px;height:1px;background:var(--violet-m);opacity:.5;}
+.rb-title{font-family:'Playfair Display',serif;font-size:clamp(22px,3vw,34px);font-weight:900;color:var(--ink);margin-bottom:20px;line-height:1.2;}
+.rb-title em{font-style:italic;color:var(--violet);}
+
+/* PILLAR SCORES */
+.pillar-scores{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:28px 0;}
+.ps-card{border:1px solid var(--border);padding:22px 20px;background:var(--bg2);}
+.ps-name{font-size:10px;font-weight:500;letter-spacing:.3em;color:var(--gray);text-transform:uppercase;margin-bottom:12px;}
+.ps-bar-wrap{height:6px;background:var(--border);margin-bottom:10px;}
+.ps-bar{height:100%;transition:width 1s ease;}
+.ps-val{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--violet);line-height:1;}
+.ps-val span{font-size:13px;color:var(--gray);font-family:'Jost',sans-serif;font-weight:300;}
+
+/* LEVEL MAP — 7 niveaux */
+.level-map{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);margin:28px 0;}
+.lm-card{background:var(--bg);padding:18px 10px;text-align:center;opacity:.35;transition:opacity .3s;}
+.lm-card.unlocked{opacity:.7;}
+.lm-card.current{background:var(--violet-p);border-bottom:3px solid var(--violet);opacity:1;}
+.lm-num{font-family:'Bebas Neue',sans-serif;font-size:30px;line-height:1;margin-bottom:5px;}
+.lm-name{font-size:10px;font-weight:500;color:var(--ink2);line-height:1.3;}
+.lm-score{font-size:9px;font-weight:300;color:var(--gray);letter-spacing:.1em;margin-top:5px;}
+
+/* AI */
+.ai-analysis{background:var(--bg2);border:1px solid var(--border);border-left:4px solid var(--violet);padding:32px;margin:28px 0;min-height:120px;}
+.ai-loading{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:300;color:var(--gray);font-style:italic;}
+.ai-dots span{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--violet-l);animation:dot-bounce .8s ease-in-out infinite;margin-right:3px;}
+.ai-dots span:nth-child(2){animation-delay:.15s;}
+.ai-dots span:nth-child(3){animation-delay:.3s;}
+@keyframes dot-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.ai-text{font-size:16px;font-weight:300;color:var(--ink2);line-height:1.9;}
+
+/* RECOS */
+.reco-list{list-style:none;}
+.reco-item{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--border);font-size:15px;font-weight:300;color:var(--ink2);line-height:1.7;}
+.reco-item:last-child{border-bottom:none;}
+.reco-ico{font-size:18px;flex-shrink:0;margin-top:2px;}
+
+.results-actions{text-align:center;padding:40px 28px;border-top:1px solid var(--border);background:var(--bg2);}
+
+@media(max-width:640px){
+  .pillar-scores{grid-template-columns:1fr;}
+  .level-map{grid-template-columns:repeat(4,1fr);}
+  .cover-info{gap:20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div id="screen-cover" class="screen active">
+  <div class="cover-bg"></div>
+  <div class="cover-orb"></div>
+  <div class="cover-inner">
+    <div class="cover-series">Programme AURA — Évaluation Personnelle</div>
+    <h1 class="cover-h1">Quel est ton<br><em>niveau d'Aura</em><br>& de Leadership ?</h1>
+    <div class="cover-rule"></div>
+    <p class="cover-sub">28 questions sur tes comportements réels. 4 piliers évalués. 7 niveaux de progression. Une analyse IA personnalisée.</p>
+    <div class="cover-info">
+      <div class="ci"><div class="ci-num">28</div><div class="ci-lbl">Questions</div></div>
+      <div class="ci"><div class="ci-num">4</div><div class="ci-lbl">Piliers</div></div>
+      <div class="ci"><div class="ci-num">7</div><div class="ci-lbl">Niveaux</div></div>
+      <div class="ci"><div class="ci-num">~8</div><div class="ci-lbl">Minutes</div></div>
+    </div>
+    <button class="btn-gold" onclick="startQuiz()">Découvrir mon niveau →</button>
+    <p style="margin-top:16px;font-size:12px;font-weight:300;color:rgba(247,244,240,.35);letter-spacing:.1em;">Réponds honnêtement — le quiz mesure ton état actuel, pas ton idéal</p>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="screen-quiz" class="screen">
+  <div class="quiz-header">
+    <div class="qh-logo">AURA</div>
+    <div class="qh-progress-wrap">
+      <div class="qh-progress-bar"><div class="qh-progress-fill" id="progress-fill" style="width:0%"></div></div>
+      <div class="qh-counter" id="q-counter">Question 1 / 28</div>
+    </div>
+    <div class="qh-pillar" id="pillar-label">Socle Intérieur</div>
+  </div>
+  <div class="domaine-header">
+    <div class="dh-label">Pilier</div>
+    <div class="dh-name" id="domaine-name">Socle Intérieur</div>
+  </div>
+  <div class="question-wrap">
+    <div class="q-num" id="q-num">Question 01</div>
+    <div class="q-text" id="q-text"></div>
+    <div class="answers" id="answers-container"></div>
+  </div>
+  <div class="q-nav">
+    <button class="btn-outline" id="btn-prev" onclick="prevQuestion()" style="visibility:hidden">← Précédent</button>
+    <div class="q-nav-info" id="q-nav-info">Sélectionne une réponse</div>
+    <button class="btn-primary" id="btn-next" onclick="nextQuestion()" disabled>Suivant →</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="screen-results" class="screen">
+  <div class="results-hero">
+    <div class="rh-bg"></div>
+    <div class="rh-inner">
+      <div class="rh-level-badge" id="rh-badge">Niveau 1</div>
+      <div class="rh-score-ring" id="score-ring">
+        <div class="rh-score-num" id="rh-score">0</div>
+        <div class="rh-score-lbl">/ 100</div>
+      </div>
+      <div class="rh-level-name" id="rh-level-name"></div>
+      <p class="rh-tagline" id="rh-tagline"></p>
+    </div>
+  </div>
+  <div class="results-body">
+
+    <div class="rb-section">
+      <div class="rb-eye">Analyse par pilier</div>
+      <h2 class="rb-title">Tes 4 dimensions <em>évaluées</em></h2>
+      <div class="pillar-scores" id="pillar-scores"></div>
+    </div>
+
+    <div class="rb-section">
+      <div class="rb-eye">Ta progression</div>
+      <h2 class="rb-title">Les 7 niveaux <em>du programme</em></h2>
+      <div class="level-map" id="level-map"></div>
+    </div>
+
+    <div class="rb-section">
+      <div class="rb-eye">Analyse personnalisée</div>
+      <h2 class="rb-title">Ce que révèlent <em>tes réponses</em></h2>
+      <div class="ai-analysis" id="ai-analysis">
+        <div class="ai-loading"><div class="ai-dots"><span></span><span></span><span></span></div><span>Analyse en cours…</span></div>
+      </div>
+    </div>
+
+    <div class="rb-section">
+      <div class="rb-eye">Plan d'action</div>
+      <h2 class="rb-title">Tes priorités <em>pour progresser</em></h2>
+      <ul class="reco-list" id="reco-list"></ul>
+    </div>
+
+  </div>
+  <div class="results-actions">
+    <p style="font-size:13px;font-weight:300;color:var(--gray);margin-bottom:16px;letter-spacing:.1em;">Refais le quiz dans 30 jours pour mesurer ton évolution</p>
+    <button class="btn-primary" onclick="resetQuiz()">Refaire le quiz →</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// PILLARS
+// ══════════════════════════════════════════
+const PILLARS = [
+  { id:'socle',      name:'Socle Intérieur',    icon:'🧠', color:'#4A2E9E' },
+  { id:'signal',     name:'Signal Physique',     icon:'⚡', color:'#1A6B5C' },
+  { id:'social',     name:'Présence Sociale',    icon:'🌊', color:'#B8902A' },
+  { id:'leadership', name:'Leadership Naturel',  icon:'🎯', color:'#8B3A8B' }
+];
+
+// ══════════════════════════════════════════
+// 28 QUESTIONS — 4 réponses calibrées 1→4
+// ══════════════════════════════════════════
+const QUESTIONS = [
+
+  /* ── SOCLE INTÉRIEUR (7 questions) ── */
+  {
+    pillar:'socle',
+    text:"Quand tu reçois une critique de quelqu'un que tu respectes, quelle est ta réaction instinctive ?",
+    options:[
+      "Je me sens profondément remis en question, parfois pendant des jours",
+      "Ça me touche mais je relativise progressivement",
+      "J'écoute, je filtre ce qui est utile et je l'intègre calmement",
+      "Je la reçois comme de l'information neutre — elle ne touche pas qui je suis"
+    ]
+  },
+  {
+    pillar:'socle',
+    text:"À quelle fréquence prends-tu des décisions importantes sans chercher l'approbation d'autrui ?",
+    options:[
+      "Rarement — j'ai besoin de plusieurs avis pour avancer",
+      "Parfois — pour les décisions mineures, j'y arrive seul",
+      "Souvent — je consulte mais la décision finale vient de moi",
+      "Presque toujours — mes décisions viennent de mes valeurs, rien d'autre"
+    ]
+  },
+  {
+    pillar:'socle',
+    text:"Peux-tu formuler tes 3 valeurs absolues en moins de 30 secondes ?",
+    options:[
+      "Non — je n'ai jamais vraiment réfléchi à ça",
+      "Vaguement — j'en ai une idée générale mais elles ne guident pas mes actes",
+      "Oui — elles existent et je les consulte dans les moments importants",
+      "Oui, précises, vécues au quotidien et non négociables en toute circonstance"
+    ]
+  },
+  {
+    pillar:'socle',
+    text:"Comment te sens-tu seul, sans stimulation externe, pendant 30 minutes ?",
+    options:[
+      "Mal à l'aise — j'ai besoin de m'occuper immédiatement",
+      "Neutre — je le tolère mais je ne le recherche pas",
+      "Bien — j'en profite pour réfléchir ou me ressourcer",
+      "Très bien — le silence seul est l'endroit où je me trouve le mieux"
+    ]
+  },
+  {
+    pillar:'socle',
+    text:"À quelle fréquence identifies-tu activement des comportements qui trahissent ta version idéale de toi-même ?",
+    options:[
+      "Jamais — je ne pratique pas vraiment d'introspection",
+      "Rarement — surtout après un échec ou une crise",
+      "Souvent — j'ai une pratique d'auto-observation régulière",
+      "Quotidiennement — c'est une discipline ancrée qui ne cède pas"
+    ]
+  },
+  {
+    pillar:'socle',
+    text:"Dans une situation sociale inconfortable, que fais-tu ?",
+    options:[
+      "Je m'adapte au maximum pour être accepté, quitte à trahir qui je suis",
+      "Je joue un rôle en attendant que la situation se termine",
+      "Je reste globalement moi-même tout en faisant des ajustements mineurs",
+      "Je suis identique à ce que je suis partout — l'inconfort ne change pas mon identité"
+    ]
+  },
+  {
+    pillar:'socle',
+    text:"Si une personne te décrivait à quelqu'un qui ne te connaît pas, la description correspondrait-elle à qui tu es vraiment ?",
+    options:[
+      "Probablement non — je montre des faces très différentes selon les contextes",
+      "Partiellement — certaines dimensions restent cachées ou déformées",
+      "Globalement oui — les gens me perçoivent assez justement",
+      "Oui totalement — il n'y a aucun décalage entre ce que je suis et ce que je projette"
+    ]
+  },
+
+  /* ── SIGNAL PHYSIQUE (7 questions) ── */
+  {
+    pillar:'signal',
+    text:"Comment est ta posture au quotidien — dans une réunion, un repas, une conversation — sans que tu y penses ?",
+    options:[
+      "Voûtée ou contractée — je prends peu de place naturellement",
+      "Variable — ça dépend de mon état et du contexte",
+      "Globalement droite — j'y pense et je me corrige régulièrement",
+      "Naturellement ouverte et ancrée — c'est automatique depuis longtemps"
+    ]
+  },
+  {
+    pillar:'signal',
+    text:"Comment gères-tu le contact visuel en conversation ?",
+    options:[
+      "Je l'évite souvent ou je regarde ailleurs sans le vouloir",
+      "Je le maintiens par intermittence — ça me demande un effort conscient",
+      "Je le maintiens naturellement la plupart du temps",
+      "Je regarde dans les yeux avec aisance, intention et chaleur — sans forcer, sans fuir"
+    ]
+  },
+  {
+    pillar:'signal',
+    text:"Comment est ton rythme de parole dans une situation importante ou stressante ?",
+    options:[
+      "J'accélère et je comble tous les silences — c'est automatique",
+      "Je parle trop vite sous pression mais je m'en rends compte après",
+      "Je maintiens un rythme correct même sous pression",
+      "Je parle lentement et posément — les silences font partie de ma communication"
+    ]
+  },
+  {
+    pillar:'signal',
+    text:"Quelle est ta relation à l'activité physique en ce moment ?",
+    options:[
+      "Inexistante ou très irrégulière — moins d'une fois par semaine",
+      "Présente mais sans engagement réel — je fais le minimum",
+      "Régulière — j'ai une discipline physique claire et tenue",
+      "Centrale — mon corps est un outil de développement global, pas juste de santé"
+    ]
+  },
+  {
+    pillar:'signal',
+    text:"Quand tu entres dans une pièce que tu ne connais pas, que se passe-t-il ?",
+    options:[
+      "Je cherche immédiatement une place discrète et j'attends",
+      "Je scanne l'environnement avec une légère anxiété avant d'agir",
+      "J'entre calmement, j'observe sans précipitation avant d'interagir",
+      "J'entre en prenant naturellement l'espace — ma présence précède mes mots"
+    ]
+  },
+  {
+    pillar:'signal',
+    text:"Comment est ta voix quand tu parles en public ou devant un groupe ?",
+    options:[
+      "Haute, rapide ou chevrotante — je le ressens moi-même",
+      "Correcte mais sans impact particulier — les gens m'écoutent poliment",
+      "Posée et audible — les gens m'écoutent sans effort visible",
+      "Grave, résonante et lente — ma voix crée naturellement de l'attention et de la confiance"
+    ]
+  },
+  {
+    pillar:'signal',
+    text:"As-tu une routine matinale que tu tiens au moins 5 jours sur 7, sans exception ?",
+    options:[
+      "Non — chaque matin est différent selon mon humeur ou mes contraintes",
+      "En théorie oui, en pratique elle cède à la première contrainte extérieure",
+      "Oui — une routine simple mais réelle et tenue",
+      "Oui — une routine ancrée incluant mouvement, silence et intention claire"
+    ]
+  },
+
+  /* ── PRÉSENCE SOCIALE (7 questions) ── */
+  {
+    pillar:'social',
+    text:"Quand quelqu'un te parle, que fais-tu mentalement pendant qu'il s'exprime ?",
+    options:[
+      "Je prépare ma réponse en attendant qu'il finisse",
+      "J'écoute mais mon attention décroche régulièrement",
+      "J'écoute vraiment la plupart du temps, en cherchant à comprendre",
+      "J'écoute avec tout mon corps — je ressens ce qu'il transmet au-delà des mots"
+    ]
+  },
+  {
+    pillar:'social',
+    text:"À quelle fréquence exprimes-tu un désaccord clairement, sans te justifier à l'excès ni renoncer à ta position ?",
+    options:[
+      "Rarement — j'évite le conflit et cherche le consensus systématiquement",
+      "Parfois — mais ça me coûte beaucoup d'énergie et j'évite quand je peux",
+      "Souvent — j'ai appris à exprimer mes positions avec calme et fermeté",
+      "Naturellement — ma position existe indépendamment du regard ou de l'accord des autres"
+    ]
+  },
+  {
+    pillar:'social',
+    text:"Comment gères-tu les silences dans une conversation ?",
+    options:[
+      "Je les comble immédiatement — le silence me rend profondément anxieux",
+      "Je les tolère mais je suis soulagé quand quelqu'un prend la parole",
+      "Je les laisse exister sans inconfort majeur",
+      "Je les utilise activement — le silence fait partie de mon leadership conversationnel"
+    ]
+  },
+  {
+    pillar:'social',
+    text:"Après une interaction sociale importante, quelle est ton émotion dominante ?",
+    options:[
+      "Anxiété — je me demande constamment comment j'ai été perçu",
+      "Soulagement — content que ce soit terminé",
+      "Satisfaction — je sens que l'échange a été authentique et utile",
+      "Énergie — les interactions profondes me rechargent plutôt qu'elles ne me vident"
+    ]
+  },
+  {
+    pillar:'social',
+    text:"Quelle est ta capacité à faire sentir aux autres qu'ils comptent vraiment pour toi ?",
+    options:[
+      "Faible — j'ai tendance à ramener les conversations à ma propre expérience",
+      "Moyenne — j'y pense mais c'est un effort et je l'oublie souvent",
+      "Bonne — les gens me disent régulièrement qu'ils se sentent vraiment écoutés",
+      "Naturelle — voir les autres profondément est quelque chose que je fais instinctivement"
+    ]
+  },
+  {
+    pillar:'social',
+    text:"Comment réagis-tu quand quelqu'un essaie de te faire changer de position par pression sociale — pas par argument rationnel ?",
+    options:[
+      "Je cède souvent pour éviter la tension et retrouver la paix",
+      "Je résiste mais avec inconfort, justifications excessives et parfois amertume",
+      "Je maintiens ma position tout en écoutant l'autre avec calme",
+      "Je reste ancré sans effort — la pression sociale ne touche pas mes convictions"
+    ]
+  },
+  {
+    pillar:'social',
+    text:"Comment qualifierais-tu ton cercle social actuel en termes d'énergie et d'exigence ?",
+    options:[
+      "Il me draine plus qu'il ne m'élève — je le sais mais je ne change rien",
+      "Neutre — ni vraiment inspirant ni vraiment toxique",
+      "Globalement positif — la majorité des gens autour de moi m'élèvent",
+      "Exigeant et choisi — je le protège activement et il m'élève constamment"
+    ]
+  },
+
+  /* ── LEADERSHIP NATUREL (7 questions) ── */
+  {
+    pillar:'leadership',
+    text:"Quand tu entres dans un groupe sans statut défini, quelle est ton attitude spontanée ?",
+    options:[
+      "Je m'efface et j'attends que les dynamiques se dessinent sans moi",
+      "Je cherche progressivement à me positionner sans trop me dévoiler",
+      "Je prends naturellement ma place sans chercher à dominer",
+      "Le groupe s'organise naturellement autour de moi sans que je l'aie cherché"
+    ]
+  },
+  {
+    pillar:'leadership',
+    text:"As-tu une vision personnelle claire — formulable en une phrase en moins de 15 secondes ?",
+    options:[
+      "Non — je n'ai pas encore de direction vraiment définie dans ma vie",
+      "Vague — j'ai des aspirations mais elles ne guident pas mes décisions quotidiennes",
+      "Oui — j'ai une direction claire que je consulte et qui oriente mes choix",
+      "Oui, précise, incarnée, formulable immédiatement — elle structure chaque décision"
+    ]
+  },
+  {
+    pillar:'leadership',
+    text:"Comment te comportes-tu sous pression intense — crise, conflit, urgence ?",
+    options:[
+      "Je m'agite, j'accélère et je perds de vue l'essentiel",
+      "Je gère mais mon stress est clairement visible par les autres",
+      "Je reste globalement calme et opérationnel sous pression",
+      "Je ralentis quand les autres accélèrent — le calme est ma réponse naturelle à la crise"
+    ]
+  },
+  {
+    pillar:'leadership',
+    text:"Es-tu la même personne en réunion professionnelle, entre amis proches et seul chez toi ?",
+    options:[
+      "Non — je joue des rôles très différents et parfois contradictoires selon les contextes",
+      "Partiellement — il existe des décalages significatifs entre mes différentes versions",
+      "Globalement oui — les différences sont mineures et non essentielles",
+      "Oui totalement — il n'y a aucune version de moi selon les contextes, juste moi"
+    ]
+  },
+  {
+    pillar:'leadership',
+    text:"Quand tu parles, les autres s'arrêtent-ils naturellement pour t'écouter — même sans statut hiérarchique ?",
+    options:[
+      "Rarement — j'ai du mal à me faire entendre dans un groupe",
+      "Parfois — quand le sujet me tient vraiment à cœur et que je m'y suis préparé",
+      "Souvent — les gens savent que quand je parle, ça vaut la peine d'écouter",
+      "Presque toujours — ma parole crée de l'attention avant même d'avoir commencé"
+    ]
+  },
+  {
+    pillar:'leadership',
+    text:"As-tu travaillé sur tes héritages familiaux — identifié des peurs ou schémas transgénérationnels que tu n'as pas choisis ?",
+    options:[
+      "Non — ce sujet ne fait pas partie de mon travail sur moi",
+      "Légèrement — j'ai une intuition de certains héritages sans travail structuré",
+      "Sérieusement — j'ai identifié des patterns et commencé à les libérer",
+      "En profondeur — ce travail a déjà transformé des espaces entiers de ma vie"
+    ]
+  },
+  {
+    pillar:'leadership',
+    text:"Dans quelle mesure penses-tu vraiment par toi-même — formant tes opinions avant de savoir ce que les autres pensent ?",
+    options:[
+      "Peu — je m'aligne souvent sur les opinions de mon environnement sans m'en rendre compte",
+      "Partiellement — je m'en rends compte mais le conformisme reste fort",
+      "Souvent — j'ai développé une pensée assez autonome que je défends",
+      "Profondément — mon signal personnel est clairement distinct du bruit collectif ambiant"
+    ]
+  }
+];
+
+// ══════════════════════════════════════════
+// 7 LEVELS
+// ══════════════════════════════════════════
+const LEVELS = [
+  {
+    num:1, name:"L'Endormi", em:"L'Endormi",
+    range:[0,19], color:'#9CA3AF',
+    badge_color:'rgba(156,163,175,.8)', badge_border:'rgba(156,163,175,.4)',
+    ring_color:'#9CA3AF',
+    tagline:"Tu es encore avant le départ — et c'est une position honnête et rare. La prise de conscience est déjà un acte de courage.",
+    recos:[
+      {ico:'📖', text:"Lis le chapitre 1 du Level 1 — comprends d'abord ce qu'est vraiment l'aura avant d'essayer de la travailler."},
+      {ico:'🪞', text:"Pratique l'exercice du miroir sans jugement pendant 7 jours. 3 minutes. Sans rien corriger encore."},
+      {ico:'✍', text:"Écris 10 comportements que tu observes chez toi. Pour chacun : est-ce que ça renforce ou affaiblit qui tu veux être ?"},
+      {ico:'🔇', text:"20 minutes de silence total par jour pendant 2 semaines. Téléphone éteint. Rien. Juste toi."},
+      {ico:'🎯', text:"Une seule question à tenir cette semaine : qui est-ce que je veux vraiment être ? Pas les réponses — juste tenir la question."}
+    ]
+  },
+  {
+    num:2, name:"L'Éveil", em:"L'Éveil",
+    range:[20,34], color:'#6B7280',
+    badge_color:'rgba(107,114,128,.8)', badge_border:'rgba(107,114,128,.4)',
+    ring_color:'#6B7280',
+    tagline:"Quelque chose s'est allumé en toi. Tu commences à voir ce que tu n'avais pas vu. C'est le début de tout.",
+    recos:[
+      {ico:'📝', text:"Formule tes 3 valeurs absolues par écrit. Pas des aspirations — des valeurs que tu vis déjà, même imparfaitement."},
+      {ico:'🧠', text:"Lis le chapitre sur le socle intérieur et fais l'audit d'identité complet. 20 minutes. Feuille blanche. Honnêteté totale."},
+      {ico:'⚡', text:"Installe une routine matinale minimale — 10 minutes de silence + une intention écrite. Tiens-la 14 jours."},
+      {ico:'👁', text:"Dans chaque conversation cette semaine, entraîne-toi à maintenir le contact visuel 3 secondes de plus que d'habitude."},
+      {ico:'🌿', text:"Identifie une habitude qui trahit ta version idéale. Travaille à l'éliminer pendant les 30 prochains jours."}
+    ]
+  },
+  {
+    num:3, name:"Le Chercheur", em:"Le Chercheur",
+    range:[35,49], color:'#3B82F6',
+    badge_color:'rgba(59,130,246,.8)', badge_border:'rgba(59,130,246,.4)',
+    ring_color:'#3B82F6',
+    tagline:"Tu cherches activement. Tu travailles. Les premiers résultats sont là — mais tu travailles encore en surface.",
+    recos:[
+      {ico:'⚡', text:"Lance le protocole TFT sur ta peur sociale principale. Une séance complète. Note l'intensité avant et après."},
+      {ico:'🎯', text:"Applique la technique du désaccord respectueux cette semaine — une fois, dans une vraie situation."},
+      {ico:'📊', text:"Lance le Tracker 90 Jours si ce n'est pas fait. La structure va ancrer ce qui reste encore fragile."},
+      {ico:'🗣', text:"Commence le travail vocal : lecture à voix haute 5 minutes chaque matin, main sur le sternum, cherche la vibration."},
+      {ico:'🌿', text:"Réduis le temps passé avec une personne ou un contenu qui te draine — une limite concrète cette semaine."}
+    ]
+  },
+  {
+    num:4, name:"La Construction", em:"La Construction",
+    range:[50,62], color:'#2563EB',
+    badge_color:'rgba(37,99,235,.8)', badge_border:'rgba(37,99,235,.4)',
+    ring_color:'#2563EB',
+    tagline:"Les fondations sont solides. Les gens commencent à percevoir quelque chose de différent en toi — même s'ils ne peuvent pas le nommer.",
+    recos:[
+      {ico:'📜', text:"Relis le Manifeste du Leadership et identifie la loi sur laquelle tu as le moins progressé. Protocole ciblé dessus."},
+      {ico:'🧬', text:"Commence le travail transgénérationnel — génosociogramme simplifié et phrase de libération pour un pattern identifié."},
+      {ico:'⚖', text:"Applique le décalage de rythme dans ta prochaine situation de pression. Ralentis quand les autres accélèrent."},
+      {ico:'🔮', text:"Formule ta vision en une phrase. Si tu ne peux pas en 15 secondes, c'est ton chantier prioritaire."},
+      {ico:'🎤', text:"Prends la parole dans un groupe de façon volontaire cette semaine — même petite échelle."}
+    ]
+  },
+  {
+    num:5, name:"L'Émergence", em:"L'Émergence",
+    range:[63,74], color:'#7C3AED',
+    badge_color:'rgba(124,58,237,.8)', badge_border:'rgba(124,58,237,.4)',
+    ring_color:'#7C3AED',
+    tagline:"Quelque chose a changé structurellement. Les autres le perçoivent avant que tu le dises. Ta présence précède tes mots.",
+    recos:[
+      {ico:'🌊', text:"Travaille la Signature I du Manifeste — l'écoute totale. 7 jours. Silence de 3 secondes avant chaque réponse."},
+      {ico:'⚡', text:"Pratique le Quick Coherence avant chaque interaction importante — 60 secondes, intention de service."},
+      {ico:'🧬', text:"Approfondis le travail transgénérationnel avec un praticien ou une constellation. Le niveau 5 demande ce type d'outil."},
+      {ico:'🔇', text:"Jeûne informationnel : 48h sans réseaux, news et contenus de divertissement. Note ce qui émerge dans le silence."},
+      {ico:'🏆', text:"Identifie ton prochain défi d'exposition publique — une prise de parole, une création exposée, un leadership visible."}
+    ]
+  },
+  {
+    num:6, name:"Le Rayonnement", em:"Le Rayonnement",
+    range:[75,86], color:'#B8902A',
+    badge_color:'rgba(184,144,42,.85)', badge_border:'rgba(184,144,42,.4)',
+    ring_color:'#B8902A',
+    tagline:"Tu incarnes naturellement et de façon constante. L'aura n'est plus quelque chose que tu travailles — c'est ce que tu es.",
+    recos:[
+      {ico:'🌱', text:"Transmets. Identifie une personne à qui tu peux transmettre ce que tu sais. L'enseignement est la forme la plus haute de l'intégration."},
+      {ico:'🔄', text:"Refais ce quiz dans 90 jours. L'évolution sera visible dans les scores par pilier — et dans la vie réelle."},
+      {ico:'💎', text:"Travaille le pilier le plus faible de tes 4 scores — c'est lui qui plafonne ton niveau global."},
+      {ico:'🌐', text:"Cohérence cardiaque quotidienne + jeûne informationnel mensuel + silence actif quotidien — le stack de maintien."},
+      {ico:'✍', text:"Écris la lettre à ton moi du Niveau 1. Elle servira à quelqu'un d'autre plus tard."}
+    ]
+  },
+  {
+    num:7, name:"Le Maître", em:"Le Maître",
+    range:[87,100], color:'#C9A84C',
+    badge_color:'rgba(201,168,76,.9)', badge_border:'rgba(201,168,76,.5)',
+    ring_color:'#C9A84C',
+    tagline:"L'aura et le leadership sont devenus ton état naturel. Tu ne cherches plus à rayonner — tu irradies parce que tu es pleinement toi.",
+    recos:[
+      {ico:'🌍', text:"L'étape suivante est l'impact systémique — comment ce que tu es transforme les systèmes, pas juste les individus."},
+      {ico:'🎓', text:"Crée. Enseigne. Construis quelque chose qui perdurera après toi. Le Niveau 7 demande un legs."},
+      {ico:'🔮', text:"Revois ta vision — à ce niveau, elle doit avoir évolué. Est-elle assez grande pour les prochaines années ?"},
+      {ico:'🧬', text:"Explore les dimensions les plus profondes du travail transgénérationnel — lignée complète, héritage conscient."},
+      {ico:'⚡', text:"Refais le quiz dans 6 mois. Non pour progresser — pour confirmer l'ancrage et ajuster la direction."}
+    ]
+  }
+];
+
+// ══════════════════════════════════════════
+// STATE & LOGIC
+// ══════════════════════════════════════════
+let current = 0;
+let answers = new Array(QUESTIONS.length).fill(null);
+
+function startQuiz() {
+  current = 0;
+  answers = new Array(QUESTIONS.length).fill(null);
+  document.getElementById('screen-cover').classList.remove('active');
+  document.getElementById('screen-quiz').classList.add('active');
+  renderQuestion();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[current];
+  const total = QUESTIONS.length;
+  const pct = (current / total) * 100;
+  const pillar = PILLARS.find(p => p.id === q.pillar);
+
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('q-counter').textContent = `Question ${current+1} / ${total}`;
+  document.getElementById('pillar-label').textContent = pillar.name;
+  document.getElementById('domaine-name').textContent = pillar.name;
+  document.getElementById('q-num').textContent = `Question ${String(current+1).padStart(2,'0')}`;
+  document.getElementById('q-text').textContent = q.text;
+
+  const letters = ['A','B','C','D'];
+  const container = document.getElementById('answers-container');
+  container.innerHTML = '';
+
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    const isSelected = answers[current] === i;
+    btn.className = 'answer-btn' + (isSelected ? ' selected' : '');
+    btn.innerHTML = `<span class="ab-letter" style="${isSelected?'background:var(--violet);color:#fff;border-color:var(--violet);':''}">${letters[i]}</span><span class="ab-text">${opt}</span>`;
+    btn.onclick = () => selectAnswer(i);
+    container.appendChild(btn);
+  });
+
+  const btnPrev = document.getElementById('btn-prev');
+  const btnNext = document.getElementById('btn-next');
+  const navInfo = document.getElementById('q-nav-info');
+
+  btnPrev.style.visibility = current === 0 ? 'hidden' : 'visible';
+  btnNext.disabled = answers[current] === null;
+  btnNext.textContent = current === total-1 ? 'Voir mes résultats →' : 'Suivant →';
+
+  const remaining = total - current - 1;
+  navInfo.textContent = answers[current] !== null
+    ? (remaining > 0 ? `${remaining} question${remaining>1?'s':''} restante${remaining>1?'s':''}` : 'Dernière question — prêt !')
+    : 'Sélectionne une réponse';
+}
+
+function selectAnswer(idx) {
+  answers[current] = idx;
+  document.querySelectorAll('.answer-btn').forEach((btn, i) => {
+    const isSelected = i === idx;
+    btn.className = 'answer-btn' + (isSelected ? ' selected' : '');
+    const letter = btn.querySelector('.ab-letter');
+    letter.style.background = isSelected ? 'var(--violet)' : '';
+    letter.style.color = isSelected ? '#fff' : '';
+    letter.style.borderColor = isSelected ? 'var(--violet)' : '';
+  });
+  document.getElementById('btn-next').disabled = false;
+  const remaining = QUESTIONS.length - current - 1;
+  document.getElementById('q-nav-info').textContent = remaining > 0
+    ? `${remaining} question${remaining>1?'s':''} restante${remaining>1?'s':''}`
+    : 'Dernière question — prêt !';
+}
+
+function nextQuestion() {
+  if (answers[current] === null) return;
+  if (current === QUESTIONS.length - 1) {
+    showResults();
+  } else {
+    current++;
+    renderQuestion();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+}
+
+function prevQuestion() {
+  if (current > 0) { current--; renderQuestion(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+
+// ══════════════════════════════════════════
+// SCORING
+// ══════════════════════════════════════════
+function calcScores() {
+  const pillarScores = {}, pillarCounts = {};
+  PILLARS.forEach(p => { pillarScores[p.id] = 0; pillarCounts[p.id] = 0; });
+  answers.forEach((ans, i) => {
+    if (ans === null) return;
+    const q = QUESTIONS[i];
+    pillarScores[q.pillar] += (ans + 1);
+    pillarCounts[q.pillar]++;
+  });
+  const pillarPct = {};
+  PILLARS.forEach(p => {
+    const max = pillarCounts[p.id] * 4;
+    pillarPct[p.id] = max > 0 ? Math.round((pillarScores[p.id] / max) * 100) : 0;
+  });
+  const global = Math.round(Object.values(pillarPct).reduce((a,b)=>a+b,0) / PILLARS.length);
+  return { pillarPct, global };
+}
+
+function getLevel(score) {
+  return LEVELS.find(l => score >= l.range[0] && score <= l.range[1]) || LEVELS[LEVELS.length-1];
+}
+
+// ══════════════════════════════════════════
+// RESULTS
+// ══════════════════════════════════════════
+async function showResults() {
+  document.getElementById('screen-quiz').classList.remove('active');
+  document.getElementById('screen-results').classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  const { pillarPct, global } = calcScores();
+  const level = getLevel(global);
+
+  // Badge & ring
+  const badge = document.getElementById('rh-badge');
+  badge.textContent = `Niveau ${level.num} — ${level.name}`;
+  badge.style.borderColor = level.badge_border;
+  badge.style.color = level.badge_color;
+
+  document.getElementById('score-ring').style.borderColor = level.ring_color + '60';
+  const scoreEl = document.getElementById('rh-score');
+  scoreEl.style.color = level.ring_color;
+  animateNum(scoreEl, 0, global, 1400);
+
+  document.getElementById('rh-level-name').innerHTML = `<em>${level.em}</em>`;
+  document.getElementById('rh-tagline').textContent = level.tagline;
+
+  // Pillar scores
+  const psContainer = document.getElementById('pillar-scores');
+  psContainer.innerHTML = '';
+  PILLARS.forEach(p => {
+    const val = pillarPct[p.id];
+    const card = document.createElement('div');
+    card.className = 'ps-card';
+    card.innerHTML = `
+      <div class="ps-name">${p.icon} ${p.name}</div>
+      <div class="ps-bar-wrap"><div class="ps-bar" id="bar-${p.id}" style="width:0%;background:${p.color}"></div></div>
+      <div class="ps-val">${val}<span> / 100</span></div>`;
+    psContainer.appendChild(card);
+    setTimeout(() => { document.getElementById(`bar-${p.id}`).style.width = val + '%'; }, 400);
+  });
+
+  // Level map — 7 niveaux
+  const lmContainer = document.getElementById('level-map');
+  lmContainer.innerHTML = '';
+  LEVELS.forEach(l => {
+    const card = document.createElement('div');
+    const isCurrent = l.num === level.num;
+    const isPast = l.num < level.num;
+    card.className = `lm-card${isCurrent?' current':''}${(isPast&&!isCurrent)?' unlocked':''}`;
+    card.innerHTML = `
+      <div class="lm-num" style="color:${l.color}">${l.num}</div>
+      <div class="lm-name">${l.name}</div>
+      <div class="lm-score">${l.range[0]}–${l.range[1]}</div>`;
+    lmContainer.appendChild(card);
+  });
+
+  // Recommendations
+  const recoList = document.getElementById('reco-list');
+  recoList.innerHTML = '';
+  level.recos.forEach(r => {
+    const li = document.createElement('li');
+    li.className = 'reco-item';
+    li.innerHTML = `<span class="reco-ico">${r.ico}</span><span>${r.text}</span>`;
+    recoList.appendChild(li);
+  });
+
+  // AI analysis
+  await generateAIAnalysis(pillarPct, global, level);
+}
+
+function animateNum(el, from, to, duration) {
+  const start = performance.now();
+  function update(now) {
+    const t = Math.min((now - start) / duration, 1);
+    el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1-t, 3)));
+    if (t < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+// ══════════════════════════════════════════
+// AI ANALYSIS
+// ══════════════════════════════════════════
+async function generateAIAnalysis(pillarPct, global, level) {
+  const analysisEl = document.getElementById('ai-analysis');
+
+  const answerSummary = QUESTIONS.map((q, i) => {
+    const ans = answers[i];
+    if (ans === null) return '';
+    const p = PILLARS.find(p => p.id === q.pillar);
+    return `[${p.name}] "${q.text.substring(0,70)}…" → Score ${ans+1}/4 : "${q.options[ans].substring(0,80)}"`;
+  }).filter(Boolean).join('\n');
+
+  const prompt = `Tu es un coach expert du programme AURA, spécialisé en magnétisme, aura et leadership naturel.
+
+Un utilisateur vient de compléter le quiz AURA à 7 niveaux.
+
+RÉSULTATS:
+- Score global : ${global}/100
+- Niveau atteint : ${level.num}/7 — "${level.name}"
+- Socle Intérieur : ${pillarPct.socle}/100
+- Signal Physique : ${pillarPct.signal}/100
+- Présence Sociale : ${pillarPct.social}/100
+- Leadership Naturel : ${pillarPct.leadership}/100
+
+RÉPONSES DÉTAILLÉES :
+${answerSummary}
+
+Rédige une analyse personnalisée en français de 280 à 340 mots, en 3 paragraphes distincts, sans titres :
+
+PARAGRAPHE 1 — CE QUI EST DÉJÀ LÀ : Identifie avec précision les vraies forces de cette personne basées sur ses réponses les plus élevées. Cite des comportements spécifiques que tu as détectés. Pas de généralités.
+
+PARAGRAPHE 2 — LE POINT DE BASCULE : Identifie LE pilier ou LA dimension précise qui, si travaillée en priorité, débloquera le plus. Explique le lien de cause à effet. Sois direct.
+
+PARAGRAPHE 3 — CE QUI T'ATTEND : Décris ce que cette personne va ressentir et projeter différemment une fois au niveau suivant. Évocateur, précis, incarné.
+
+Style : direct, profond, tutoiement, aucune formule générique. Prose pure. Commence directement sans introduction du style "Voici" ou "À travers".`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:1000,
+        messages:[{role:'user', content:prompt}]
+      })
+    });
+    const data = await resp.json();
+    const text = data.content?.map(b => b.text||'').join('') || '';
+    if (text) {
+      const formatted = text
+        .split('\n\n')
+        .filter(p => p.trim())
+        .map(p => `<p style="margin-bottom:18px;font-size:16px;font-weight:300;color:var(--ink2);line-height:1.9;">${p.trim()}</p>`)
+        .join('');
+      analysisEl.innerHTML = `<div class="ai-text">${formatted}</div>`;
+    } else {
+      fallbackAnalysis(analysisEl, pillarPct, level);
+    }
+  } catch(e) {
+    fallbackAnalysis(analysisEl, pillarPct, level);
+  }
+}
+
+function fallbackAnalysis(el, pillarPct, level) {
+  const best = PILLARS.reduce((a,b) => pillarPct[a.id] > pillarPct[b.id] ? a : b);
+  const worst = PILLARS.reduce((a,b) => pillarPct[a.id] < pillarPct[b.id] ? a : b);
+  el.innerHTML = `<div class="ai-text">
+    <p style="margin-bottom:18px;font-size:16px;font-weight:300;color:var(--ink2);line-height:1.9;">
+      Ton point le plus fort est le <strong>${best.name}</strong> avec un score de ${pillarPct[best.id]}/100. 
+      C'est une fondation réelle — les gens dans ta vie le perçoivent probablement, même s'ils ne peuvent pas le nommer.
+    </p>
+    <p style="margin-bottom:18px;font-size:16px;font-weight:300;color:var(--ink2);line-height:1.9;">
+      Ton prochain levier de progression est le <strong>${worst.name}</strong> avec ${pillarPct[worst.id]}/100. 
+      C'est le pilier qui plafonne l'ensemble — travailler spécifiquement dessus débloquera les autres dimensions plus vite que n'importe quelle autre action.
+    </p>
+    <p style="font-size:16px;font-weight:300;color:var(--ink2);line-height:1.9;">
+      Tu es au Niveau ${level.num} — ${level.name}. Le prochain niveau est accessible avec 30 jours de pratique ciblée sur les priorités ci-dessous.
+    </p>
+  </div>`;
+}
+
+function resetQuiz() {
+  current = 0;
+  answers = new Array(QUESTIONS.length).fill(null);
+  document.getElementById('screen-results').classList.remove('active');
+  document.getElementById('screen-cover').classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

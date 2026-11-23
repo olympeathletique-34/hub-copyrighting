@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURA — On ne te parlera plus jamais comme ça</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Jost:wght@200;300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#060508;
+  --dark:#0C0A12;
+  --dark2:#13101E;
+  --dark3:#1C1828;
+  --red:#8B1A1A;
+  --red-l:#C42A2A;
+  --red-p:#F9ECEC;
+  --gold:#C4993A;
+  --gold-l:#E0BC68;
+  --gold-p:#F5EDD4;
+  --green:#1A6B44;
+  --green-l:#2DC48A;
+  --green-p:#E8F8F0;
+  --white:#F2EDE4;
+  --gray:#8A8490;
+  --ink:#14101E;
+  --ink2:#2A2438;
+  --ink3:#4A4460;
+  --border:#DEDAD2;
+  --bg:#F8F5EF;
+  --bg2:#F0EBE2;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.8;overflow-x:hidden;}
+
+/* ══ COVER ══ */
+.cover{
+  min-height:100vh;
+  background:var(--night);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:80px 40px;
+  position:relative;overflow:hidden;
+}
+.cover-bg{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 45%,rgba(139,26,26,.22) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 35% at 15% 80%,rgba(196,153,58,.07) 0%,transparent 55%),
+    radial-gradient(ellipse 35% 30% at 85% 15%,rgba(139,26,26,.08) 0%,transparent 50%);
+}
+.cover-grid{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 44px,rgba(196,153,58,.022) 44px,rgba(196,153,58,.022) 45px),
+    repeating-linear-gradient(90deg,transparent,transparent 44px,rgba(196,153,58,.022) 44px,rgba(196,153,58,.022) 45px);
+}
+.cover-inner{position:relative;z-index:2;max-width:700px;}
+.cover-stamp{
+  display:inline-block;
+  border:1px solid rgba(139,26,26,.5);
+  color:rgba(196,42,42,.7);
+  font-size:9px;font-weight:600;letter-spacing:.55em;
+  text-transform:uppercase;padding:7px 24px;
+  margin-bottom:36px;
+  transform:rotate(-1deg);
+  box-shadow:0 0 24px rgba(139,26,26,.12);
+}
+.cover-kicker{
+  font-size:10px;font-weight:300;letter-spacing:.45em;
+  color:rgba(196,153,58,.5);text-transform:uppercase;margin-bottom:20px;
+}
+.cover-main{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(40px,7.5vw,88px);
+  font-weight:900;line-height:.96;
+  color:var(--white);
+  letter-spacing:-.01em;margin-bottom:12px;
+  text-shadow:0 0 60px rgba(139,26,26,.3);
+}
+.cover-main em{font-style:italic;color:rgba(224,188,104,.85);}
+.cover-sub-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(16px,2.2vw,22px);
+  font-style:italic;font-weight:400;
+  color:rgba(242,237,228,.38);
+  margin-bottom:32px;
+}
+.cover-rule{width:52px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 32px;}
+.cover-desc{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(15px,2vw,19px);
+  font-style:italic;font-weight:300;
+  color:rgba(242,237,228,.42);
+  line-height:1.75;max-width:500px;margin:0 auto 48px;
+}
+.cover-tags{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;}
+.ctag{
+  font-size:9px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;
+  padding:6px 16px;border:1px solid;
+}
+
+/* ══ CHAPTER PAGES ══ */
+.ch-cover{
+  min-height:52vh;
+  background:var(--dark);
+  display:flex;flex-direction:column;
+  align-items:flex-start;justify-content:flex-end;
+  padding:64px 10% 56px;
+  position:relative;overflow:hidden;
+}
+.ch-glow{
+  position:absolute;right:-60px;top:-60px;
+  width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(circle,rgba(139,26,26,.14) 0%,transparent 70%);
+  pointer-events:none;
+}
+.ch-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:130px;line-height:1;
+  color:rgba(196,153,58,.06);
+  position:absolute;right:7%;bottom:30px;
+  pointer-events:none;
+}
+.ch-eye{
+  font-size:9px;font-weight:600;letter-spacing:.55em;
+  color:var(--gold);text-transform:uppercase;
+  margin-bottom:14px;display:flex;align-items:center;gap:12px;
+}
+.ch-eye::before{content:'';width:24px;height:1px;background:var(--gold);opacity:.5;}
+.ch-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,4.5vw,54px);
+  font-weight:900;line-height:1.1;
+  color:var(--white);max-width:540px;
+}
+.ch-title em{font-style:italic;color:rgba(224,188,104,.85);}
+.ch-rule{width:56px;height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin-top:24px;opacity:.4;}
+
+/* ══ BODY ══ */
+.body-wrap{max-width:740px;margin:0 auto;padding:68px 40px 80px;}
+@media(max-width:600px){.body-wrap{padding:48px 22px 64px;}}
+
+.eye{
+  font-size:9px;font-weight:600;letter-spacing:.5em;text-transform:uppercase;
+  color:var(--red-l);margin-bottom:12px;
+  display:flex;align-items:center;gap:10px;
+}
+.eye::before{content:'';width:20px;height:1px;background:var(--red-l);opacity:.5;}
+.eye.gold{color:var(--gold);}
+.eye.gold::before{background:var(--gold);}
+.eye.green{color:var(--green);}
+.eye.green::before{background:var(--green);}
+
+h2.sec{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(24px,3.5vw,40px);
+  font-weight:900;color:var(--ink);line-height:1.1;margin-bottom:20px;
+}
+h2.sec em{font-style:italic;color:var(--red-l);}
+h2.sec.g em{color:var(--gold);}
+
+h3.sub{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(19px,2.5vw,26px);
+  font-weight:700;color:var(--ink);margin:36px 0 14px;line-height:1.2;
+}
+h3.sub em{font-style:italic;color:var(--gold);}
+
+p.lead{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(17px,2vw,20px);
+  font-style:italic;color:var(--ink2);line-height:1.75;margin-bottom:24px;
+}
+p.bd{font-size:16px;font-weight:300;color:var(--ink3);line-height:1.95;margin-bottom:18px;}
+p.bd strong{color:var(--ink2);font-weight:500;}
+p.bd em{color:var(--gold);font-style:italic;}
+
+/* ══ DIALOGUE BOX ══ */
+.dialogue{
+  background:#fff;border:1px solid var(--border);
+  margin:28px 0;overflow:hidden;
+}
+.dial-header{
+  background:var(--dark2);
+  padding:10px 20px;
+  display:flex;align-items:center;gap:10px;
+}
+.dial-situation{
+  font-size:9px;font-weight:600;letter-spacing:.35em;
+  color:rgba(196,153,58,.8);text-transform:uppercase;
+}
+.dial-body{padding:0;}
+.dial-line{
+  display:flex;gap:0;
+  border-bottom:1px solid var(--border);
+}
+.dial-line:last-child{border-bottom:none;}
+.dial-who{
+  width:120px;flex-shrink:0;
+  padding:14px 16px;
+  font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gray);border-right:1px solid var(--border);
+  display:flex;align-items:flex-start;
+  line-height:1.4;
+}
+.dial-text{
+  padding:14px 18px;flex:1;
+  font-size:15px;font-weight:300;color:var(--ink3);line-height:1.65;
+}
+.dial-text.bad{
+  background:rgba(196,42,42,.03);
+  border-left:3px solid rgba(196,42,42,.2);
+  color:var(--red-l);
+}
+.dial-text.good{
+  background:rgba(26,107,68,.04);
+  border-left:3px solid rgba(26,107,68,.25);
+  color:var(--green);
+}
+.dial-text.wrong{
+  background:rgba(100,90,60,.04);
+  border-left:3px solid rgba(100,90,60,.2);
+  color:var(--ink3);font-style:italic;
+}
+.dial-label{
+  font-size:9px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;
+  padding:6px 18px 0;
+}
+.dial-label.bad{color:var(--red-l);}
+.dial-label.good{color:var(--green);}
+.dial-label.wrong{color:var(--gray);}
+
+/* ══ TECHNIQUE BOX ══ */
+.tech{
+  background:var(--bg2);border:1px solid var(--border);
+  border-left:3px solid var(--gold);padding:26px 30px;margin:28px 0;
+}
+.tech-lbl{font-size:9px;font-weight:600;letter-spacing:.4em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
+.tech-title{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;}
+.tech-body{font-size:14px;font-weight:300;color:var(--ink3);line-height:1.8;}
+.tech-body p{margin-bottom:10px;}
+.tech-body p:last-child{margin-bottom:0;}
+.tech-body strong{color:var(--ink2);font-weight:500;}
+.tech-body em{color:var(--gold);font-style:italic;}
+
+/* ══ INSIGHT ══ */
+.insight{
+  background:var(--dark2);
+  padding:28px 32px;margin:28px 0;position:relative;
+}
+.insight-bar{position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);}
+.ins-lbl{font-size:9px;font-weight:600;letter-spacing:.4em;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+.ins-text{
+  font-family:'Playfair Display',serif;
+  font-size:17px;font-style:italic;font-weight:400;
+  color:var(--white);line-height:1.65;
+}
+
+/* ══ RULE TABLE ══ */
+.rule-table{margin:28px 0;}
+.rt-row{
+  display:grid;grid-template-columns:48px 1fr;
+  gap:0;background:var(--border);margin-bottom:2px;
+}
+.rt-num{
+  background:var(--dark);display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);
+}
+.rt-content{background:#fff;padding:16px 20px;}
+.rt-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px;}
+.rt-desc{font-size:13px;font-weight:300;color:var(--ink3);line-height:1.6;}
+
+/* ══ PROFILE CARD ══ */
+.profiles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;background:var(--border);margin:28px 0;}
+.prof{background:#fff;padding:22px 18px;}
+.prof-ico{font-size:28px;margin-bottom:10px;}
+.prof-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.prof-tag{font-size:10px;font-weight:500;letter-spacing:.2em;color:var(--gray);text-transform:uppercase;margin-bottom:10px;}
+.prof-desc{font-size:13px;font-weight:300;color:var(--ink3);line-height:1.6;}
+
+/* ══ GOLD RULE ══ */
+.grule{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:40px 0;opacity:.25;}
+
+/* ══ QUOTE DARK ══ */
+.dquote{
+  background:var(--dark3);padding:32px 36px;margin:28px 0;
+  position:relative;overflow:hidden;
+}
+.dquote::before{
+  content:'\201C';position:absolute;top:-32px;left:8px;
+  font-family:'Playfair Display',serif;font-size:160px;font-weight:900;
+  color:var(--gold);opacity:.05;line-height:1;pointer-events:none;
+}
+.dquote-bar{position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);}
+.dquote-text{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(16px,2vw,20px);font-style:italic;font-weight:400;
+  color:var(--white);line-height:1.65;position:relative;z-index:1;
+}
+
+/* ══ FINALE ══ */
+.finale{
+  min-height:80vh;background:var(--night);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:80px 40px;position:relative;overflow:hidden;
+}
+.finale-bg{
+  position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 55% 50% at 50% 50%,rgba(139,26,26,.18) 0%,transparent 65%);
+}
+.fin-inner{position:relative;z-index:2;max-width:560px;}
+.fin-kicker{font-size:9px;font-weight:600;letter-spacing:.55em;color:rgba(196,153,58,.4);text-transform:uppercase;margin-bottom:28px;}
+.fin-title{font-family:'Playfair Display',serif;font-size:clamp(36px,5.5vw,64px);font-weight:900;line-height:1.05;color:var(--white);margin-bottom:8px;}
+.fin-title em{font-style:italic;color:var(--gold-l);}
+.fin-rule{width:52px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:28px auto;}
+.fin-sub{font-family:'Playfair Display',serif;font-size:clamp(15px,2vw,18px);font-style:italic;color:rgba(242,237,228,.38);line-height:1.75;margin-bottom:0;}
+
+@media(max-width:600px){
+  .profiles{grid-template-columns:1fr;}
+  .rt-row{grid-template-columns:36px 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ COVER ══ -->
+<div class="cover">
+  <div class="cover-bg"></div>
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <div class="cover-stamp">⬥ Bonus Exclusif — Programme AURA Complet</div>
+    <div class="cover-kicker">Le dossier pratique du respect</div>
+    <h1 class="cover-main">On ne te parlera<br>plus jamais<br><em>comme ça.</em></h1>
+    <p class="cover-sub-title">Le manuel du respect en toute situation.</p>
+    <div class="cover-rule"></div>
+    <p class="cover-desc">Comment être respecté au travail, en famille, dans la rue, au sport — et quoi dire exactement quand quelqu'un franchit une ligne.</p>
+    <div class="cover-tags">
+      <div class="ctag" style="color:rgba(196,42,42,.7);border-color:rgba(196,42,42,.3);">Techniques verbales</div>
+      <div class="ctag" style="color:rgba(196,153,58,.7);border-color:rgba(196,153,58,.3);">Dialogues réels</div>
+      <div class="ctag" style="color:rgba(26,107,68,.7);border-color:rgba(26,107,68,.3);">Applicable immédiatement</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PRÉAMBULE ══ -->
+<div class="ch-cover">
+  <div class="ch-glow"></div>
+  <div class="ch-num">✦</div>
+  <div class="ch-eye">Avant de commencer</div>
+  <h2 class="ch-title">Le respect ne se<br>demande pas. Il <em>s'installe.</em></h2>
+  <div class="ch-rule"></div>
+</div>
+
+<div class="body-wrap">
+  <p class="lead">Il y a deux façons d'être mal respecté. La première, c'est de subir. La deuxième, c'est de réagir mal — et de laisser la situation empirer.</p>
+  <p class="bd">Ce manuel existe parce qu'il y a une troisième voie. Ni la passivité ni l'explosion. Une posture précise, des mots calibrés, et une façon de reprendre le contrôle d'une interaction sans jamais perdre ta dignité — ni celle de l'autre.</p>
+  <p class="bd">Ce que tu vas lire ici ne te rendra pas agressif. Ça te rendra <strong>lisible</strong>. Et quand quelqu'un te lit clairement — quand il comprend exactement où sont tes limites et que tu tiens à elles — le respect s'installe naturellement. Pas parce que tu l'as exigé. Parce que tu l'incarnes.</p>
+
+  <div class="insight">
+    <div class="insight-bar"></div>
+    <div class="ins-lbl">◈ Le principe fondateur</div>
+    <p class="ins-text">Le respect n'est pas ce que les autres te donnent. C'est ce que tu signales — par ta façon d'être, de parler, de réagir et de te tenir. Ce dossier t'apprend à émettre le bon signal.</p>
+  </div>
+</div>
+
+<!-- ══ CHAPITRE 1 ══ -->
+<div class="ch-cover">
+  <div class="ch-glow"></div>
+  <div class="ch-num">1</div>
+  <div class="ch-eye">Chapitre 1</div>
+  <h2 class="ch-title">Les 3 réflexes qui<br><em>détruisent</em> le respect.</h2>
+  <div class="ch-rule"></div>
+</div>
+
+<div class="body-wrap">
+  <p class="lead">Avant de savoir quoi faire, il faut savoir ce qu'on fait instinctivement — et pourquoi ça ne marche pas.</p>
+
+  <div class="eye">Les 3 pièges</div>
+  <h2 class="sec">Ce que la plupart des gens font<br>— et qui empire <em>tout.</em></h2>
+
+  <p class="bd">Face à quelqu'un qui nous manque de respect, trois réflexes automatiques s'activent. Tous les trois ont un point commun : ils signalent à l'interlocuteur qu'il a réussi à nous déstabiliser. Et ce signal lui donne encore plus de pouvoir.</p>
+
+  <div class="profiles">
+    <div class="prof">
+      <div class="prof-ico">🤐</div>
+      <div class="prof-name">La passivité</div>
+      <div class="prof-tag">Réflexe n°1</div>
+      <p class="prof-desc">On encaisse. On se tait pour éviter le conflit. On relativise. <strong>Résultat :</strong> l'autre comprend que c'est permis. Le manque de respect se répète, s'amplifie, devient la norme.</p>
+    </div>
+    <div class="prof">
+      <div class="prof-ico">💢</div>
+      <div class="prof-name">L'explosion</div>
+      <div class="prof-tag">Réflexe n°2</div>
+      <p class="prof-desc">On perd le contrôle. On hausse la voix. On attaque. <strong>Résultat :</strong> on devient le problème. L'autre se pose en victime. On perd toute crédibilité dans la situation.</p>
+    </div>
+    <div class="prof">
+      <div class="prof-ico">🔄</div>
+      <div class="prof-name">La justification</div>
+      <div class="prof-tag">Réflexe n°3</div>
+      <p class="prof-desc">On explique, on argumente, on se défend. <strong>Résultat :</strong> on valide implicitement que le jugement de l'autre méritait une réponse. On lui donne de l'importance.</p>
+    </div>
+  </div>
+
+  <div class="dquote">
+    <div class="dquote-bar"></div>
+    <p class="dquote-text">Chaque fois que tu te justifies face à quelqu'un qui t'a manqué de respect, tu lui signes une procuration sur ton estime de toi.</p>
+  </div>
+
+  <h3 class="sub">La 4ème voie — <em>l'assertivité ancrée</em></h3>
+  <p class="bd">Il existe une posture que les psychologues appellent l'assertivité — et que ce dossier appelle plus simplement <strong>le respect ancré</strong>. Ce n'est ni la soumission, ni l'attaque, ni la justification. C'est la capacité à nommer ce qui se passe, à poser une limite claire, et à rester dans cet espace sans en bouger.</p>
+  <p class="bd">Ce qui distingue cette posture : elle ne réagit pas à l'émotion de l'autre. Elle répond depuis un lieu de clarté intérieure. Et cette différence est immédiatement perceptible par l'interlocuteur.</p>
+</div>
+
+<!-- ══ CHAPITRE 2 ══ -->
+<div class="ch-cover">
+  <div class="ch-glow"></div>
+  <div class="ch-num">2</div>
+  <div class="ch-eye">Chapitre 2</div>
+  <h2 class="ch-title">Les 4 techniques<br><em>fondamentales.</em></h2>
+  <div class="ch-rule"></div>
+</div>
+
+<div class="body-wrap">
+  <p class="lead">Quatre outils. Simples à comprendre, puissants à maîtriser. Applicables dans n'importe quelle situation.</p>
+
+  <!-- T1 -->
+  <div class="eye gold">Technique 1</div>
+  <h2 class="sec g">Le Recadrage <em>Miroir</em></h2>
+
+  <p class="bd">Le recadrage miroir consiste à répéter exactement ce que l'autre vient de dire — lentement, calmement, en le regardant dans les yeux. Sans intonation agressive. Juste les mots, reflétés.</p>
+  <p class="bd">L'effet est immédiat et puissant. Entendre ses propres mots dans la bouche de quelqu'un d'autre, dans un silence, force l'interlocuteur à s'entendre lui-même. Souvent, il réalise seul ce qu'il vient de faire.</p>
+
+  <div class="dialogue">
+    <div class="dial-header">
+      <div class="dial-situation">Situation · Bureau — Collègue condescendant</div>
+    </div>
+    <div class="dial-body">
+      <div class="dial-label bad">Ce qui se dit</div>
+      <div class="dial-line">
+        <div class="dial-who">Collègue</div>
+        <div class="dial-text bad">"Franchement c'est un peu léger comme présentation, non ?"</div>
+      </div>
+      <div class="dial-label wrong">❌ Mauvaise réponse (justification)</div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text wrong">"Non mais j'ai manqué de temps, d'habitude je fais mieux, c'est juste que..."</div>
+      </div>
+      <div class="dial-label good">✓ Recadrage miroir</div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text good">[silence de 2 secondes, regard direct] "Un peu léger."</div>
+      </div>
+      <div class="dial-line">
+        <div class="dial-who">Collègue</div>
+        <div class="dial-text">[gêné] "Enfin je veux dire... c'est juste que certains points mériteraient plus de détails."</div>
+      </div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text good">"Lesquels ?" [calme, posé]</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tech">
+    <div class="tech-lbl">Mode d'emploi</div>
+    <div class="tech-title">Recadrage Miroir — comment l'appliquer</div>
+    <div class="tech-body">
+      <p><strong>1.</strong> Laisse un silence de 1 à 2 secondes après la remarque irrespectueuse. Ne te précipite pas.</p>
+      <p><strong>2.</strong> Répète les 3 à 5 mots les plus significatifs de ce qui vient d'être dit, avec une intonation neutre et descendante — pas interrogative.</p>
+      <p><strong>3.</strong> Maintiens le contact visuel. Ne souris pas. Ne fronce pas les sourcils. Juste présent.</p>
+      <p><strong>4.</strong> Laisse le silence s'installer. L'inconfort appartient à l'autre — pas à toi.</p>
+    </div>
+  </div>
+
+  <div class="grule"></div>
+
+  <!-- T2 -->
+  <div class="eye gold">Technique 2</div>
+  <h2 class="sec g">La Nomination <em>Calme</em></h2>
+
+  <p class="bd">Cette technique consiste à nommer explicitement ce qui vient de se passer — pas avec colère, mais avec la même neutralité qu'on décrirait un fait observable. "Ce que tu viens de dire est irrespectueux." Simple. Factuel. Sans agressivité.</p>
+  <p class="bd">L'effet est puissant parce qu'il retire à l'interlocuteur la possibilité de prétendre que rien ne s'est passé. Tu poses un fait sur la table. Et tu attends.</p>
+
+  <div class="dialogue">
+    <div class="dial-header">
+      <div class="dial-situation">Situation · Famille — Remarque blessante à table</div>
+    </div>
+    <div class="dial-body">
+      <div class="dial-label bad">Ce qui se dit</div>
+      <div class="dial-line">
+        <div class="dial-who">Proche</div>
+        <div class="dial-text bad">"T'as encore grossi toi, non ?"</div>
+      </div>
+      <div class="dial-label wrong">❌ Réponse passive</div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text wrong">[rire gêné] "Oh c'est les fêtes haha..."</div>
+      </div>
+      <div class="dial-label good">✓ Nomination calme</div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text good">[sans hausser la voix] "Ce que tu viens de dire est blessant. Je ne pense pas que tu l'aies voulu — mais c'est ce que ça fait."</div>
+      </div>
+      <div class="dial-line">
+        <div class="dial-who">Proche</div>
+        <div class="dial-text">[déstabilisé] "Je voulais pas mal faire, c'est juste..."</div>
+      </div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text good">"Je sais. On passe à autre chose."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight">
+    <div class="insight-bar"></div>
+    <div class="ins-lbl">◈ Pourquoi ça fonctionne</div>
+    <p class="ins-text">La nomination calme fait deux choses simultanément : elle pose une limite sans agressivité, et elle donne à l'autre une sortie honorable. Il peut s'excuser sans avoir perdu la face. Tu reprends la situation sans humilier.</p>
+  </div>
+
+  <div class="grule"></div>
+
+  <!-- T3 -->
+  <div class="eye gold">Technique 3</div>
+  <h2 class="sec g">La Question <em>Chirurgicale</em></h2>
+
+  <p class="bd">Quand quelqu'un dit quelque chose d'irrespectueux ou d'agressif, le réflexe est de répondre au fond. La question chirurgicale fait le contraire : elle questionne la forme, en forçant l'interlocuteur à justifier son ton ou sa formulation.</p>
+  <p class="bd">Ce n'est pas une attaque. C'est une demande de clarification parfaitement légitime — qui met en lumière le problème de communication sans l'énnoncer directement.</p>
+
+  <div class="dialogue">
+    <div class="dial-header">
+      <div class="dial-situation">Situation · Travail — Chef agressif en réunion</div>
+    </div>
+    <div class="dial-body">
+      <div class="dial-label bad">Ce qui se dit</div>
+      <div class="dial-line">
+        <div class="dial-who">Chef</div>
+        <div class="dial-text bad">"Ce chiffre c'est une blague ou quoi ? T'as vérifié ce que tu avances ?"</div>
+      </div>
+      <div class="dial-label wrong">❌ Réponse défensive</div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text wrong">"Si si j'ai vérifié, attends j'ai le fichier..."</div>
+      </div>
+      <div class="dial-label good">✓ Question chirurgicale</div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text good">[calme, regard direct] "Tu veux dire que tu doutes de la fiabilité du chiffre — ou c'est la façon dont il est présenté qui pose problème ?"</div>
+      </div>
+      <div class="dial-line">
+        <div class="dial-who">Chef</div>
+        <div class="dial-text">"La présentation surtout. Le contexte manque."</div>
+      </div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text good">"D'accord. Je t'ajoute le contexte. Dans ce cas, le chiffre tient."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tech">
+    <div class="tech-lbl">Formules de question chirurgicale</div>
+    <div class="tech-title">Les tournures qui reprennent le cadre</div>
+    <div class="tech-body">
+      <p><em>"Tu veux dire que... ?"</em> — Force à reformuler sans le ton agressif.</p>
+      <p><em>"Qu'est-ce que tu veux dire exactement par là ?"</em> — Demande de précision qui expose le flou ou l'excès.</p>
+      <p><em>"C'est la question qui te pose problème, ou la façon dont je l'ai posée ?"</em> — Sépare le fond de la forme.</p>
+      <p><em>"Tu peux reformuler ? Je veux m'assurer de bien comprendre."</em> — Oblige à un second essai — souvent plus respectueux.</p>
+    </div>
+  </div>
+
+  <div class="grule"></div>
+
+  <!-- T4 -->
+  <div class="eye gold">Technique 4</div>
+  <h2 class="sec g">Le Silence <em>Habité</em></h2>
+
+  <p class="bd">Le silence est la technique la plus sous-estimée dans la gestion du respect. Utilisé correctement — un silence habité, pas un silence gêné — il est souvent plus puissant que n'importe quelle réponse verbale.</p>
+  <p class="bd">La différence entre le silence gêné et le silence habité : ton regard. Le premier fuit. Le second reste, posé, sur l'interlocuteur. Tu n'es pas mal à l'aise. Tu attends. Et cette attente signale à l'autre que sa remarque était inappropriée et que tu ne vas pas la laisser passer.</p>
+
+  <div class="dialogue">
+    <div class="dial-header">
+      <div class="dial-situation">Situation · Sport / Club — Remarque condescendante d'un ancien</div>
+    </div>
+    <div class="dial-body">
+      <div class="dial-label bad">Ce qui se dit</div>
+      <div class="dial-line">
+        <div class="dial-who">Autre</div>
+        <div class="dial-text bad">"Pour quelqu'un qui s'entraîne autant, on voit pas vraiment les résultats hein."</div>
+      </div>
+      <div class="dial-label good">✓ Silence habité</div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text good">[silence de 4 secondes, regard posé, sans sourire] [puis] "Hmm." [tu retournes à ce que tu faisais]</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="bd">Le "Hmm" final n'est pas une faiblesse. C'est une clôture. Il signifie : "J'ai entendu. Ça ne méritait pas plus." Et l'absence de réaction émotionnelle de ta part laisse l'autre avec son commentaire — et son inconfort.</p>
+</div>
+
+<!-- ══ CHAPITRE 3 ══ -->
+<div class="ch-cover">
+  <div class="ch-glow"></div>
+  <div class="ch-num">3</div>
+  <div class="ch-eye">Chapitre 3</div>
+  <h2 class="ch-title">Par situation :<br><em>quoi dire exactement.</em></h2>
+  <div class="ch-rule"></div>
+</div>
+
+<div class="body-wrap">
+  <p class="lead">Les techniques, c'est le cadre. Ce chapitre, c'est le terrain — avec les dialogues exacts pour chaque type de situation et de relation.</p>
+
+  <!-- === PROFESSIONNEL === -->
+  <div class="eye">Au travail</div>
+  <h2 class="sec">Relations professionnelles</h2>
+
+  <h3 class="sub">Chef → Subordonné qui <em>manque de respect</em></h3>
+  <p class="bd">Quand un subordonné adopte un ton inapproprié, la tentation est soit de l'ignorer (passivité qui devient une validation), soit de rappeler sa hiérarchie brutalement (ce qui crée de la rancœur). La bonne posture : nommer, poser la limite, continuer.</p>
+
+  <div class="dialogue">
+    <div class="dial-header">
+      <div class="dial-situation">Subordonné qui coupe la parole et contredit avec arrogance</div>
+    </div>
+    <div class="dial-body">
+      <div class="dial-line">
+        <div class="dial-who">Subordonné</div>
+        <div class="dial-text bad">[interrompt] "Non mais c'est pas ça du tout, cette décision a aucun sens."</div>
+      </div>
+      <div class="dial-label good">✓ Réponse du chef</div>
+      <div class="dial-line">
+        <div class="dial-who">Toi (chef)</div>
+        <div class="dial-text good">[pause] "Je t'entends. Je finirai d'abord. Ensuite tu auras toute la place pour donner ton avis." [reprend calmement]</div>
+      </div>
+      <div class="dial-line">
+        <div class="dial-who">Toi (chef)</div>
+        <div class="dial-text good">[après avoir terminé] "Maintenant — qu'est-ce qui ne te semble pas pertinent dans cette décision ?"</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tech">
+    <div class="tech-lbl">À retenir · Chef vers subordonné</div>
+    <div class="tech-title">Ne jamais finir l'échange sans avoir repris le cadre</div>
+    <div class="tech-body">
+      <p>Une fois la limite posée, revenir au fond. Montrer qu'on peut entendre la critique — mais seulement quand elle est formulée correctement. <strong>Ça enseigne le mode de communication attendu sans le formuler comme une règle.</strong></p>
+      <p>En privé, après : "Ce matin en réunion, ton ton était inapproprié. J'entends que tu n'étais pas d'accord — et ton désaccord est le bienvenu. Mais la forme compte autant que le fond. On est d'accord ?"</p>
+    </div>
+  </div>
+
+  <h3 class="sub">Subordonné → Chef qui <em>manque de respect</em></h3>
+  <p class="bd">C'est la situation la plus délicate — parce que le rapport de force semble défavorable. Mais un chef qui manque de respect à ses équipes compte généralement sur la passivité de ces dernières. Sortir de cette passivité, avec calme et tact, est ce qui change la dynamique durablement.</p>
+
+  <div class="dialogue">
+    <div class="dial-header">
+      <div class="dial-situation">Chef qui dévalorise publiquement en réunion</div>
+    </div>
+    <div class="dial-body">
+      <div class="dial-line">
+        <div class="dial-who">Chef</div>
+        <div class="dial-text bad">"C'est du niveau débutant ce que tu proposes là franchement."</div>
+      </div>
+      <div class="dial-label good">✓ Réponse du subordonné</div>
+      <div class="dial-line">
+        <div class="dial-who">Toi (sub)</div>
+        <div class="dial-text good">[calme] "Je note que tu trouves la proposition insuffisante. Est-ce que tu peux me dire précisément ce qui te pose problème dedans ?"</div>
+      </div>
+      <div class="dial-line">
+        <div class="dial-who">Chef</div>
+        <div class="dial-text">[doit maintenant argumenter, pas juste dévaloriser]</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="bd">Plus tard, en privé, si le comportement se répète :</p>
+
+  <div class="dialogue">
+    <div class="dial-header">
+      <div class="dial-situation">Entretien en privé après la réunion</div>
+    </div>
+    <div class="dial-body">
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text good">"Je voulais te parler de ce qui s'est passé en réunion ce matin. La façon dont ma proposition a été qualifiée m'a mis mal à l'aise. Je comprends qu'elle ne t'ait pas convaincu — et j'aurais besoin de comprendre pourquoi, pour m'améliorer. Mais je travaille mieux quand le feedback est direct plutôt que dévalorisant. Est-ce qu'on peut fonctionner comme ça ?"</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="sub">Pair → Pair qui <em>dépasse les bornes</em></h3>
+
+  <div class="dialogue">
+    <div class="dial-header">
+      <div class="dial-situation">Collègue qui s'approprie ton travail devant le groupe</div>
+    </div>
+    <div class="dial-body">
+      <div class="dial-line">
+        <div class="dial-who">Collègue</div>
+        <div class="dial-text bad">"L'idée qu'on a eu ensemble c'est de faire ça..." [présente ton idée comme partagée]</div>
+      </div>
+      <div class="dial-label good">✓ Reprise immédiate (douce mais nette)</div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text good">"Pour être précis — c'est une idée que j'ai apportée lundi. [prénom] a contribué à l'affiner, ce qui était utile. Mais le point de départ vient de moi. Juste pour que tout le monde ait le bon contexte."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grule"></div>
+
+  <!-- === FAMILLE === -->
+  <div class="eye">En famille</div>
+  <h2 class="sec">Relations familiales</h2>
+
+  <p class="bd">La famille est souvent le terrain où les limites sont les moins bien posées — parce que l'enjeu affectif est plus fort et parce qu'on "connaît les habitudes" de l'autre. Ces habitudes non questionnées deviennent des comportements banalisés. La nomination calme y est particulièrement efficace.</p>
+
+  <div class="dialogue">
+    <div class="dial-header">
+      <div class="dial-situation">Parent ou proche qui critique systématiquement tes choix de vie</div>
+    </div>
+    <div class="dial-body">
+      <div class="dial-line">
+        <div class="dial-who">Proche</div>
+        <div class="dial-text bad">"Tu feras jamais grand chose avec cette carrière. C'est dommage."</div>
+      </div>
+      <div class="dial-label wrong">❌ Se justifier (renforce la dynamique)</div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text wrong">"Mais si, j'ai un projet, tu comprendrais pas..."</div>
+      </div>
+      <div class="dial-label good">✓ Nomination + Limite douce</div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text good">"Je t'entends. Et en même temps, ce genre de remarque me fait du mal — même si c'est pas l'intention. J'aurais besoin qu'on n'aborde plus ce sujet de cette façon-là."</div>
+      </div>
+      <div class="dial-line">
+        <div class="dial-who">Proche</div>
+        <div class="dial-text">"Je voulais juste..."</div>
+      </div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text good">"Je sais. Ça reste difficile à entendre. On peut parler d'autre chose ?"</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight">
+    <div class="insight-bar"></div>
+    <div class="ins-lbl">◈ Règle d'or en famille</div>
+    <p class="ins-text">En famille, l'objectif n'est pas de "gagner" — c'est de maintenir la relation tout en posant une limite qui sera respectée. La clôture bienveillante ("on peut parler d'autre chose ?") est une sortie qui préserve les deux parties.</p>
+  </div>
+
+  <div class="grule"></div>
+
+  <!-- === QUOTIDIEN / RUE === -->
+  <div class="eye">Au quotidien</div>
+  <h2 class="sec">Dans la rue, les courses,<br>la vie courante</h2>
+
+  <div class="dialogue">
+    <div class="dial-header">
+      <div class="dial-situation">Quelqu'un qui coupe la file et s'énerve quand tu le signales</div>
+    </div>
+    <div class="dial-body">
+      <div class="dial-line">
+        <div class="dial-who">Autre</div>
+        <div class="dial-text bad">"Et alors ? T'es sérieux là ?!"</div>
+      </div>
+      <div class="dial-label good">✓ Posture ancrée — calme absolu</div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text good">[ton très bas, regard stable] "La file est par là." [et tu retournes à autre chose]</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dialogue">
+    <div class="dial-header">
+      <div class="dial-situation">Vendeur ou employé qui te parle avec condescendance</div>
+    </div>
+    <div class="dial-body">
+      <div class="dial-line">
+        <div class="dial-who">Employé</div>
+        <div class="dial-text bad">"C'est pourtant simple, je sais pas comment vous comprenez pas ça."</div>
+      </div>
+      <div class="dial-label good">✓ Question chirurgicale + ton posé</div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text good">[sans colère] "Est-ce que vous pouvez reformuler ça différemment ? Le ton que vous utilisez ne facilite pas la conversation."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grule"></div>
+
+  <!-- === SPORT / CLUB === -->
+  <div class="eye">Au sport / en club</div>
+  <h2 class="sec">Environnements sportifs<br>et collectifs</h2>
+
+  <p class="bd">Dans les environnements sportifs, une culture de la vanne et de la "taquinerie dure" s'installe souvent. Le problème : certaines personnes confondent humour de vestiaire et manque de respect réel. La limite est importante à poser sans dramatiser.</p>
+
+  <div class="dialogue">
+    <div class="dial-header">
+      <div class="dial-situation">Moquerie qui dépasse les bornes dans un groupe sportif</div>
+    </div>
+    <div class="dial-body">
+      <div class="dial-line">
+        <div class="dial-who">Autre</div>
+        <div class="dial-text bad">"Ouais lui t'inquiète il est toujours à la ramasse !" [rires]</div>
+      </div>
+      <div class="dial-label good">✓ Neutralisation sans drama</div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text good">[sourire froid, ton tranquille] "Ouais. Bon. C'est quoi l'échauffement ?" [sujet clos, pas de surréaction]</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dialogue">
+    <div class="dial-header">
+      <div class="dial-situation">Si le comportement se répète — mise au point en privé</div>
+    </div>
+    <div class="dial-body">
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text good">"[prénom], deux secondes. Les vannes de groupe, ça va. Mais là ces dernières fois ça dépasse ce qui est cool pour moi. Je te dis ça direct parce que je préfère qu'on le règle entre nous."</div>
+      </div>
+      <div class="dial-line">
+        <div class="dial-who">Autre</div>
+        <div class="dial-text">"Ah ouais ? Je savais pas que ça te touchait..."</div>
+      </div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text good">"C'est pour ça que je te le dis. Maintenant tu sais."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CHAPITRE 4 ══ -->
+<div class="ch-cover">
+  <div class="ch-glow"></div>
+  <div class="ch-num">4</div>
+  <div class="ch-eye">Chapitre 4</div>
+  <h2 class="ch-title">Obtenir les <em>excuses</em><br>sans les exiger.</h2>
+  <div class="ch-rule"></div>
+</div>
+
+<div class="body-wrap">
+  <p class="lead">Les excuses forcées ne valent rien. Ce qui compte, c'est de créer les conditions dans lesquelles l'autre réalise seul ce qu'il a fait — et veut réparer.</p>
+
+  <div class="eye green">Le mécanisme</div>
+  <h2 class="sec" style="em-color:var(--green)">Pourquoi exiger des excuses<br><em>produit le contraire.</em></h2>
+
+  <p class="bd">Quand on dit "excuse-toi", on place l'autre en position défensive. Son cerveau active sa résistance — même s'il sait qu'il a tort. Le résultat : une excuse du bout des lèvres, vide de sens, qui entretient la rancœur.</p>
+  <p class="bd">La voie efficace : nommer ce qui s'est passé, poser ta limite, et <strong>laisser de l'espace</strong>. L'espace crée l'inconfort. L'inconfort crée la réflexion. La réflexion crée les vraies excuses.</p>
+
+  <div class="rule-table">
+    <div class="rt-row">
+      <div class="rt-num">1</div>
+      <div class="rt-content">
+        <div class="rt-title">Nommer sans accuser</div>
+        <div class="rt-desc">"Ce que tu viens de dire m'a blessé." Pas "tu m'as blessé intentionnellement". On décrit l'effet, pas l'intention qu'on ne connaît pas.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-num">2</div>
+      <div class="rt-content">
+        <div class="rt-title">Donner une sortie honorable</div>
+        <div class="rt-desc">"Je pense pas que tu l'aies voulu." Cette phrase seule change tout — elle permet à l'autre de s'excuser sans admettre une malveillance.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-num">3</div>
+      <div class="rt-content">
+        <div class="rt-title">Laisser le silence</div>
+        <div class="rt-desc">Après avoir nommé, ne pas remplir le vide. L'autre doit vivre avec ce qui vient d'être dit. Ce silence est son espace pour réagir.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-num">4</div>
+      <div class="rt-content">
+        <div class="rt-title">Accepter l'excuse simplement</div>
+        <div class="rt-desc">Quand les excuses arrivent : "Merci. C'est bon." Pas de surenchère. Pas de "j'espère que tu comprends pourquoi". La clôture nette est un signe de force.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dialogue">
+    <div class="dial-header">
+      <div class="dial-situation">Amis — remarque blessante sur ta situation personnelle</div>
+    </div>
+    <div class="dial-body">
+      <div class="dial-line">
+        <div class="dial-who">Ami</div>
+        <div class="dial-text bad">"Ah ouais t'as toujours pas trouvé de boulot ? Ça fait un moment dis donc..."</div>
+      </div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text good">"Cette remarque fait mal. Je pense pas que t'aies voulu ça — mais c'est l'effet."</div>
+      </div>
+      <div class="dial-line">
+        <div class="dial-who">Ami</div>
+        <div class="dial-text">[silence] "Ah merde. Non c'était pas le but... Excuse-moi."</div>
+      </div>
+      <div class="dial-line">
+        <div class="dial-who">Toi</div>
+        <div class="dial-text good">"C'est bon. T'inquiète."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dquote">
+    <div class="dquote-bar"></div>
+    <p class="dquote-text">Les vraies excuses arrivent quand on crée l'espace pour qu'elles émergent — pas quand on les exige. Exiger, c'est forcer une porte. Nommer, c'est l'ouvrir.</p>
+  </div>
+</div>
+
+<!-- ══ CHAPITRE 5 ══ -->
+<div class="ch-cover">
+  <div class="ch-glow"></div>
+  <div class="ch-num">5</div>
+  <div class="ch-eye">Chapitre 5</div>
+  <h2 class="ch-title">La posture qui<br>précède les <em>mots.</em></h2>
+  <div class="ch-rule"></div>
+</div>
+
+<div class="body-wrap">
+  <p class="lead">Toutes les techniques verbales de ce dossier reposent sur un prérequis : une posture intérieure et physique qui signale que tu n'as pas besoin de t'énerver pour être pris au sérieux.</p>
+
+  <div class="eye gold">Le fondement</div>
+  <h2 class="sec g">Le respect commence<br><em>avant que tu parles.</em></h2>
+
+  <p class="bd">Avant même le premier mot, ton corps a déjà communiqué quelque chose. La façon dont tu occupes l'espace, la stabilité de ton regard, la lenteur de tes gestes — tout ça précède les mots et prépare leur réception.</p>
+
+  <div class="rule-table">
+    <div class="rt-row">
+      <div class="rt-num">1</div>
+      <div class="rt-content">
+        <div class="rt-title">Le regard stabilisé</div>
+        <div class="rt-desc">Quand quelqu'un dit quelque chose d'irrespectueux, le premier réflexe est de détourner les yeux. Faire l'inverse — maintenir le contact visuel, posément — change immédiatement le rapport de force.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-num">2</div>
+      <div class="rt-content">
+        <div class="rt-title">Le rythme ralenti</div>
+        <div class="rt-desc">Répondre vite signale la nervosité. Répondre lentement signale la confiance. Avant chaque réponse à une situation tendue : inspirer, laisser 2 secondes, puis parler.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-num">3</div>
+      <div class="rt-content">
+        <div class="rt-title">La voix basse</div>
+        <div class="rt-desc">Contre-intuitif : plus la situation monte, plus ta voix doit descendre. Parler plus bas oblige l'autre à se taire pour entendre. Et une voix grave, posée, est perçue comme plus autoritaire qu'une voix qui s'élève.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-num">4</div>
+      <div class="rt-content">
+        <div class="rt-title">L'immobilité</div>
+        <div class="rt-desc">Les gestes parasites — se gratter, croiser les bras, bouger les pieds — signalent l'inconfort. Rester stable physiquement, même quand c'est tendu intérieurement, projette une solidité que l'autre ressent.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-num">5</div>
+      <div class="rt-content">
+        <div class="rt-title">La neutralité émotionnelle apparente</div>
+        <div class="rt-desc">Ne pas montrer que ça touche — même si ça touche. L'absence de réaction émotionnelle visible retire à l'autre la confirmation qu'il cherchait. Ce n'est pas de la froideur — c'est de la maîtrise.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight">
+    <div class="insight-bar"></div>
+    <div class="ins-lbl">◈ L'équation du respect</div>
+    <p class="ins-text">Posture stable + voix basse + regard direct + silence habité = signal de quelqu'un qu'on ne déstabilise pas facilement. Ce signal précède les mots. Et il change ce que les gens osent te dire.</p>
+  </div>
+
+  <div class="tech">
+    <div class="tech-lbl">Exercice de préparation</div>
+    <div class="tech-title">Le Reset 30 secondes avant une situation tendue</div>
+    <div class="tech-body">
+      <p>Avant d'entrer dans une réunion difficile, une conversation compliquée ou une situation où tu sais que le respect risque d'être mis à l'épreuve :</p>
+      <p><strong>1.</strong> Respire lentement — 4 secondes inspiration, 4 secondes expiration. Une fois suffit.</p>
+      <p><strong>2.</strong> Redresse la colonne. Épaules basses, nuque longue.</p>
+      <p><strong>3.</strong> Formule intérieurement : <em>"Je n'ai pas besoin que cette conversation se passe d'une certaine façon pour que j'aille bien."</em></p>
+      <p>Cette phrase est la clé. Elle te déconnecte du besoin de l'approbation de l'autre — et c'est précisément ce détachement qui rend ton ancrage visible.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SYNTHÈSE ══ -->
+<div class="ch-cover">
+  <div class="ch-glow"></div>
+  <div class="ch-num">✦</div>
+  <div class="ch-eye">Synthèse</div>
+  <h2 class="ch-title">Ce que tu emportes<br><em>de ce dossier.</em></h2>
+  <div class="ch-rule"></div>
+</div>
+
+<div class="body-wrap">
+  <p class="lead">Six choses à avoir en tête à partir d'aujourd'hui — dans chaque situation où le respect est en jeu.</p>
+
+  <div class="rule-table">
+    <div class="rt-row">
+      <div class="rt-num">1</div>
+      <div class="rt-content">
+        <div class="rt-title">Ne pas réagir immédiatement</div>
+        <div class="rt-desc">Le silence de 2 secondes est ta première réponse dans toutes les situations. Il te donne le temps de choisir — et il signale que tu ne te laisses pas déstabiliser.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-num">2</div>
+      <div class="rt-content">
+        <div class="rt-title">Nommer, pas attaquer</div>
+        <div class="rt-desc">"Ce que tu as dit m'a blessé" est infiniment plus puissant que "tu es irrespectueux". L'un décrit un fait. L'autre ouvre un procès.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-num">3</div>
+      <div class="rt-content">
+        <div class="rt-title">Donner toujours une sortie honorable</div>
+        <div class="rt-desc">"Je pense pas que tu l'aies voulu" permet les vraies excuses. Sans cette phrase, l'autre se défend. Avec elle, il peut se corriger.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-num">4</div>
+      <div class="rt-content">
+        <div class="rt-title">Ne jamais se justifier face à un manque de respect</div>
+        <div class="rt-desc">Se justifier valide l'attaque. La question chirurgicale ou la nomination calme sont toujours plus efficaces que l'explication.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-num">5</div>
+      <div class="rt-content">
+        <div class="rt-title">Fermer proprement</div>
+        <div class="rt-desc">Quand la limite est posée et l'autre a réajusté : clore sans surenchérir. "C'est bon." "On passe à autre chose." La clôture nette est une marque de force.</div>
+      </div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-num">6</div>
+      <div class="rt-content">
+        <div class="rt-title">Répéter si nécessaire — sans s'énerver</div>
+        <div class="rt-desc">Certains testent une deuxième fois. Même réponse, même ton, même calme. La constance est ce qui ancre définitivement le respect.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dquote">
+    <div class="dquote-bar"></div>
+    <p class="dquote-text">Le respect que tu obtiens des autres est le reflet direct de celui que tu te manifestes à toi-même. Ce dossier t'a donné les mots. Le travail de fond — celui que le programme AURA fait — te donne l'ancrage depuis lequel ces mots ont du poids.</p>
+  </div>
+</div>
+
+<!-- ══ FINALE ══ -->
+<div class="finale">
+  <div class="finale-bg"></div>
+  <div class="fin-inner">
+    <div class="fin-kicker">Ce que ça change</div>
+    <h2 class="fin-title">On ne te parlera<br>plus jamais<br><em>comme ça.</em></h2>
+    <div class="fin-rule"></div>
+    <p class="fin-sub">Pas parce que tu t'es battu. Pas parce que tu as crié. Parce que tu as signalé, clairement et calmement, qui tu es et où sont tes limites. Et ça — les gens ne l'oublient pas.</p>
+  </div>
+</div>
+
+</body>
+</html>

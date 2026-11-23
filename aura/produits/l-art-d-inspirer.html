@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURA — L'Art d'Inspirer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Jost:wght@200;300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night:   #080710;
+  --dark:    #0F0D1C;
+  --dark2:   #161324;
+  --dark3:   #1E1A30;
+  --gold:    #C4993A;
+  --gold-l:  #E0BC68;
+  --gold-p:  #F5EDD4;
+  --amber:   #A0702A;
+  --white:   #F2EDE4;
+  --cream:   #E8E0D0;
+  --lavender:#B8AACF;
+  --ink:     #1A1624;
+  --ink2:    #2E2840;
+  --ink3:    #534E63;
+  --border:  #D8D0C0;
+  --bg:      #F8F5EF;
+  --bg2:     #F0EBE2;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:'Jost', sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  font-size:16px;
+  line-height:1.8;
+  overflow-x:hidden;
+}
+
+/* ══ COVER ══ */
+.cover {
+  min-height:100vh;
+  background:var(--night);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center; padding:80px 40px;
+  position:relative; overflow:hidden;
+}
+.cover-canvas {
+  position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 65% 55% at 50% 45%,
+      rgba(80,55,160,0.22) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 35% at 25% 75%,
+      rgba(160,112,42,0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 35% 30% at 80% 20%,
+      rgba(80,55,160,0.10) 0%, transparent 50%);
+}
+.cover-rings {
+  position:absolute; inset:0; pointer-events:none;
+}
+.cover-inner {
+  position:relative; z-index:2; max-width:680px;
+}
+.cover-kicker {
+  font-size:9px; font-weight:500; letter-spacing:.65em;
+  color:rgba(196,153,58,.55); text-transform:uppercase;
+  margin-bottom:28px;
+}
+.cover-overline {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(15px,2vw,20px);
+  font-style:italic; font-weight:400;
+  color:rgba(242,237,228,.35);
+  margin-bottom:10px; letter-spacing:.04em;
+}
+.cover-main {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(52px,9vw,102px);
+  font-weight:700; line-height:.92;
+  color:var(--white);
+  letter-spacing:-.01em;
+  margin-bottom:0;
+  text-shadow:0 0 80px rgba(80,55,160,0.25);
+}
+.cover-main em {
+  font-style:italic;
+  color:var(--gold-l);
+}
+.cover-rule {
+  width:52px; height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin:32px auto;
+}
+.cover-tagline {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(16px,2vw,21px);
+  font-style:italic; font-weight:300;
+  color:rgba(242,237,228,.42);
+  line-height:1.7; max-width:480px; margin:0 auto 40px;
+}
+.cover-bottom {
+  font-size:10px; font-weight:300; letter-spacing:.35em;
+  color:rgba(196,153,58,.3); text-transform:uppercase;
+}
+
+/* ══ CHAPTER TITLES — dark pages ══ */
+.chapter-cover {
+  min-height:60vh;
+  background:var(--dark);
+  display:flex; flex-direction:column;
+  align-items:flex-start; justify-content:flex-end;
+  padding:72px 10% 64px;
+  position:relative; overflow:hidden;
+  page-break-before:always;
+}
+.cc-glow {
+  position:absolute; pointer-events:none;
+  width:400px; height:400px; border-radius:50%;
+  background:radial-gradient(circle,rgba(80,55,160,.18) 0%,transparent 70%);
+  right:-80px; top:-80px;
+}
+.cc-num {
+  font-family:'Bebas Neue', sans-serif;
+  font-size:140px; line-height:1;
+  color:rgba(196,153,58,.07);
+  position:absolute; right:8%; bottom:40px;
+  letter-spacing:-.02em; pointer-events:none;
+}
+.cc-eye {
+  font-size:9px; font-weight:500; letter-spacing:.55em;
+  color:var(--gold); text-transform:uppercase;
+  margin-bottom:16px;
+  display:flex; align-items:center; gap:12px;
+}
+.cc-eye::before {
+  content:''; width:24px; height:1px;
+  background:var(--gold); opacity:.5;
+}
+.cc-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(34px,5.5vw,64px);
+  font-weight:600; line-height:1.08;
+  color:var(--white); max-width:560px;
+}
+.cc-title em {
+  font-style:italic; color:var(--gold-l);
+}
+.cc-rule {
+  width:60px; height:1px;
+  background:linear-gradient(90deg,var(--gold),transparent);
+  margin-top:28px; opacity:.5;
+}
+
+/* ══ CONTENT PAGES ══ */
+.chapter-body {
+  max-width:720px; margin:0 auto;
+  padding:72px 40px 80px;
+}
+@media(max-width:600px) {
+  .chapter-body { padding:52px 24px 64px; }
+}
+
+/* ══ TYPOGRAPHY ══ */
+.eyebrow {
+  font-size:9px; font-weight:500; letter-spacing:.5em;
+  text-transform:uppercase; color:var(--amber);
+  margin-bottom:14px;
+  display:flex; align-items:center; gap:10px;
+}
+.eyebrow::before {
+  content:''; width:20px; height:1px;
+  background:var(--amber); opacity:.5;
+}
+
+h2.sec {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(28px,4vw,44px);
+  font-weight:600; line-height:1.12;
+  color:var(--ink); margin-bottom:24px;
+}
+h2.sec em { font-style:italic; color:var(--amber); }
+
+h3.sub {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(20px,2.8vw,28px);
+  font-weight:600; color:var(--ink);
+  margin:36px 0 14px; line-height:1.2;
+}
+h3.sub em { font-style:italic; color:var(--amber); }
+
+p.lead {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(18px,2.2vw,22px);
+  font-style:italic; font-weight:400;
+  color:var(--ink2); line-height:1.75;
+  margin-bottom:28px;
+}
+
+p.body {
+  font-size:16px; font-weight:300;
+  color:var(--ink3); line-height:1.95;
+  margin-bottom:20px;
+}
+p.body strong { color:var(--ink2); font-weight:500; }
+p.body em { color:var(--amber); font-style:italic; }
+
+/* ══ PULL QUOTE — dark ══ */
+.pullquote {
+  background:var(--dark2);
+  padding:36px 40px 32px;
+  margin:36px 0;
+  position:relative; overflow:hidden;
+}
+.pullquote::before {
+  content:'\201C';
+  position:absolute; top:-24px; left:12px;
+  font-family:'Cormorant Garamond', serif;
+  font-size:160px; font-weight:700;
+  color:var(--gold); opacity:.05;
+  line-height:1; pointer-events:none;
+}
+.pq-bar {
+  width:3px; height:100%;
+  background:var(--gold);
+  position:absolute; left:0; top:0;
+}
+.pq-text {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(17px,2.2vw,22px);
+  font-style:italic; font-weight:400;
+  color:var(--white); /* WHITE on dark bg */
+  line-height:1.65; position:relative; z-index:1;
+}
+.pq-attr {
+  font-size:11px; font-weight:300; letter-spacing:.2em;
+  color:rgba(196,153,58,.55); /* GOLD muted */
+  text-transform:uppercase; margin-top:14px;
+  position:relative; z-index:1;
+}
+
+/* ══ INSIGHT — light ══ */
+.insight {
+  border-left:3px solid var(--amber);
+  background:var(--gold-p);
+  padding:24px 28px; margin:28px 0;
+}
+.ins-label {
+  font-size:9px; font-weight:500; letter-spacing:.4em;
+  color:var(--amber); text-transform:uppercase; margin-bottom:8px;
+}
+.ins-text {
+  font-family:'Cormorant Garamond', serif;
+  font-size:17px; font-style:italic; font-weight:500;
+  color:var(--ink2); line-height:1.65;
+}
+
+/* ══ PRACTICE BOX ══ */
+.practice {
+  background:#fff;
+  border:1px solid var(--border);
+  border-left:3px solid var(--gold);
+  padding:28px 32px; margin:28px 0;
+}
+.prac-label {
+  font-size:9px; font-weight:500; letter-spacing:.4em;
+  color:var(--gold); text-transform:uppercase; margin-bottom:8px;
+}
+.prac-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:20px; font-weight:600;
+  color:var(--ink); margin-bottom:14px;
+}
+.prac-body {
+  font-size:14px; font-weight:300;
+  color:var(--ink3); line-height:1.8;
+}
+.prac-body p { margin-bottom:10px; }
+.prac-body p:last-child { margin-bottom:0; }
+.prac-body strong { color:var(--ink2); font-weight:500; }
+.prac-body em { color:var(--amber); }
+
+/* ══ 4P CARDS ══ */
+.four-p {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:2px; background:var(--border);
+  margin:36px 0;
+}
+.fp {
+  background:#fff;
+  padding:28px 26px;
+}
+.fp-letter {
+  font-family:'Cormorant Garamond', serif;
+  font-size:72px; font-weight:700; line-height:1;
+  margin-bottom:4px;
+}
+.fp-name {
+  font-family:'Cormorant Garamond', serif;
+  font-size:20px; font-weight:600;
+  color:var(--ink); margin-bottom:12px;
+}
+.fp-name em { font-style:italic; }
+.fp-bar { height:2px; margin-bottom:16px; }
+.fp-body {
+  font-size:13.5px; font-weight:300;
+  color:var(--ink3); line-height:1.75;
+}
+.fp-body strong { color:var(--ink2); font-weight:500; }
+
+/* ══ MYTH TABLE ══ */
+.myth {
+  margin:28px 0;
+}
+.myth-row {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:2px; background:var(--border);
+  margin-bottom:2px;
+}
+.myth-no {
+  background:#fff;
+  padding:18px 22px;
+  border-left:3px solid #B83232;
+}
+.myth-yes {
+  background:#fff;
+  padding:18px 22px;
+  border-left:3px solid #1A7A55;
+}
+.myth-lbl {
+  font-size:8px; font-weight:600; letter-spacing:.4em;
+  text-transform:uppercase; margin-bottom:7px;
+}
+.myth-no .myth-lbl { color:#B83232; }
+.myth-yes .myth-lbl { color:#1A7A55; }
+.myth-txt {
+  font-size:13.5px; font-weight:300;
+  color:var(--ink3); line-height:1.65;
+}
+.myth-txt strong { color:var(--ink2); font-weight:500; }
+
+/* ══ DIVIDERS ══ */
+.gold-rule {
+  width:100%; height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin:44px 0; opacity:.3;
+}
+.sec-break {
+  display:flex; align-items:center; gap:18px;
+  margin:44px 0; opacity:.25;
+}
+.sec-break::before, .sec-break::after {
+  content:''; flex:1; height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold));
+}
+.sec-break::after {
+  background:linear-gradient(90deg,var(--gold),transparent);
+}
+.sec-break span {
+  font-family:'Cormorant Garamond', serif;
+  font-size:18px; color:var(--gold);
+}
+
+/* ══ SCIENCE BOX ══ */
+.science {
+  background:var(--dark);
+  padding:24px 28px; margin:28px 0;
+}
+.sci-label {
+  font-size:8px; font-weight:600; letter-spacing:.45em;
+  color:var(--lavender); /* LIGHT on dark */
+  text-transform:uppercase; margin-bottom:10px;
+}
+.sci-body {
+  font-size:13.5px; font-weight:300;
+  color:rgba(242,237,228,.72); /* LIGHT on dark */
+  line-height:1.75;
+}
+.sci-body strong {
+  color:var(--white); /* WHITE on dark */
+  font-weight:400;
+}
+
+/* ══ FINAL DARK PAGE ══ */
+.finale {
+  min-height:80vh;
+  background:var(--night);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center; padding:80px 40px;
+  position:relative; overflow:hidden;
+}
+.finale-glow {
+  position:absolute; inset:0;
+  background:radial-gradient(ellipse 55% 50% at 50% 50%,
+    rgba(80,55,160,.18) 0%, transparent 65%);
+  pointer-events:none;
+}
+.finale-inner { position:relative; z-index:2; max-width:580px; }
+.fin-kicker {
+  font-size:9px; font-weight:500; letter-spacing:.55em;
+  color:rgba(196,153,58,.45); text-transform:uppercase;
+  margin-bottom:28px;
+}
+.fin-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(38px,6vw,68px);
+  font-weight:700; line-height:1.05;
+  color:var(--white); /* WHITE mandatory */
+  margin-bottom:8px;
+}
+.fin-title em { font-style:italic; color:var(--gold-l); }
+.fin-rule {
+  width:52px; height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin:28px auto;
+}
+.fin-sub {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(15px,2vw,19px);
+  font-style:italic; font-weight:300;
+  color:rgba(242,237,228,.42); /* LIGHT on dark */
+  line-height:1.7; margin-bottom:36px;
+}
+.fin-sig {
+  font-size:10px; font-weight:300; letter-spacing:.35em;
+  color:rgba(196,153,58,.25); text-transform:uppercase;
+}
+
+@media(max-width:580px) {
+  .four-p { grid-template-columns:1fr; }
+  .myth-row { grid-template-columns:1fr; }
+  .cc-num { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     COUVERTURE
+     ══════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-canvas"></div>
+  <svg class="cover-rings" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <circle cx="300" cy="300" r="180" fill="none" stroke="rgba(196,153,58,0.05)" stroke-width="0.7"/>
+    <circle cx="300" cy="300" r="240" fill="none" stroke="rgba(196,153,58,0.04)" stroke-width="0.5"/>
+    <circle cx="300" cy="300" r="290" fill="none" stroke="rgba(196,153,58,0.03)" stroke-width="0.5"/>
+    <circle cx="300" cy="300" r="340" fill="none" stroke="rgba(196,153,58,0.025)" stroke-width="0.4"/>
+  </svg>
+  <div class="cover-inner">
+    <div class="cover-kicker">AURA — Bonus Exclusif Programme Complet</div>
+    <p class="cover-overline">Inspiré des recherches de Kristi Hedges sur le leadership</p>
+    <h1 class="cover-main">L'Art<br>d'<em>Inspirer</em></h1>
+    <div class="cover-rule"></div>
+    <p class="cover-tagline">Comment les meilleurs leaders inspirent vraiment — et ce que presque personne ne formule.</p>
+    <div class="cover-bottom">AURA · L'Art d'Inspirer · Bonus Exclusif Programme Complet</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     AVANT-PROPOS
+     ══════════════════════════════════════ -->
+<div class="chapter-cover">
+  <div class="cc-glow"></div>
+  <div class="cc-num">✦</div>
+  <div class="cc-eye">Avant-propos</div>
+  <h2 class="cc-title">Ce que ce<br>document <em>révèle.</em></h2>
+  <div class="cc-rule"></div>
+</div>
+
+<div class="chapter-body">
+  <p class="lead">Il existe une forme de leadership dont on ne parle presque jamais — parce qu'elle ne se voit pas. Elle se ressent.</p>
+  <p class="body">Ce document s'appuie sur les travaux de <strong>Kristi Hedges</strong>, coach exécutive formée à Georgetown University, qui a passé cinq années à étudier ce que les leaders les plus inspirants font différemment. Ses recherches, menées avec le cabinet Harris Poll auprès de milliers de répondants, convergent vers une conclusion surprenante : l'inspiration ne vient pas des grands discours, des stratégies brillantes, ni du charisme naturel.</p>
+  <p class="body">Elle vient de comportements précis, répétables, apprenables — présents dans chaque conversation, chaque échange, chaque moment ordinaire.</p>
+  <p class="body">Ce que tu vas lire ici n'est pas une théorie sur le leadership. C'est une cartographie de ce qui se passe réellement dans les interactions humaines quand quelqu'un inspire vraiment. Certains points vont confirmer ce que tu ressens déjà intuitivement. D'autres vont te surprendre.</p>
+
+  <div class="pullquote">
+    <div class="pq-bar"></div>
+    <p class="pq-text">L'inspiration n'est pas réservée aux visionnaires ou aux orateurs nés. Elle est disponible dans n'importe quelle conversation, pour n'importe qui — dès lors qu'on sait ce qu'on fait.</p>
+    <p class="pq-attr">— Kristi Hedges, The Inspiration Code, 2017</p>
+  </div>
+
+  <p class="body">Tout ce qui suit est directement applicable. Aucune technique abstraite. Que des comportements concrets, testables dès aujourd'hui.</p>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPITRE 1
+     ══════════════════════════════════════ -->
+<div class="chapter-cover">
+  <div class="cc-glow"></div>
+  <div class="cc-num">1</div>
+  <div class="cc-eye">Chapitre 1</div>
+  <h2 class="cc-title">Ce qui inspire<br>— et ce qui <em>ne marche pas.</em></h2>
+  <div class="cc-rule"></div>
+</div>
+
+<div class="chapter-body">
+  <p class="lead">Avant d'explorer ce qui fonctionne, il faut démolir ce qu'on croit savoir.</p>
+
+  <div class="eyebrow">Les mythes fondateurs</div>
+  <h2 class="sec">5 croyances sur l'inspiration<br>que les données <em>contredisent.</em></h2>
+
+  <p class="body">Quand on demande aux gens ce qui inspire, ils citent des choses comme "un leader visionnaire", "un grand discours", "quelqu'un de charismatique par nature". La recherche de Hedges révèle quelque chose de plus précis — et de plus accessible.</p>
+
+  <div class="myth">
+    <div class="myth-row">
+      <div class="myth-no">
+        <div class="myth-lbl">✗ Mythe</div>
+        <p class="myth-txt">Il faut être <strong>extraverti et naturellement charismatique</strong> pour inspirer.</p>
+      </div>
+      <div class="myth-yes">
+        <div class="myth-lbl">✓ Réalité</div>
+        <p class="myth-txt">Les introverts inspirent autant — parfois plus. Ce qui inspire, c'est la <strong>qualité de présence</strong>, pas le volume.</p>
+      </div>
+    </div>
+    <div class="myth-row">
+      <div class="myth-no">
+        <div class="myth-lbl">✗ Mythe</div>
+        <p class="myth-txt">Inspirer nécessite <strong>de grands discours et des moments spectaculaires.</strong></p>
+      </div>
+      <div class="myth-yes">
+        <div class="myth-lbl">✓ Réalité</div>
+        <p class="myth-txt">L'inspiration se passe dans les <strong>conversations ordinaires</strong>. Un échange de 5 minutes avec la bonne qualité de présence change plus qu'un discours de 45 minutes.</p>
+      </div>
+    </div>
+    <div class="myth-row">
+      <div class="myth-no">
+        <div class="myth-lbl">✗ Mythe</div>
+        <p class="myth-txt">Pour inspirer, il faut être <strong>perçu comme parfait et sans faille.</strong></p>
+      </div>
+      <div class="myth-yes">
+        <div class="myth-lbl">✓ Réalité</div>
+        <p class="myth-txt">La <strong>vulnérabilité stratégique</strong> — partager ses doutes, ses erreurs — crée plus de confiance que la perfection affichée.</p>
+      </div>
+    </div>
+    <div class="myth-row">
+      <div class="myth-no">
+        <div class="myth-lbl">✗ Mythe</div>
+        <p class="myth-txt">Les gens sont inspirés par des <strong>idées brillantes</strong> et des stratégies innovantes.</p>
+      </div>
+      <div class="myth-yes">
+        <div class="myth-lbl">✓ Réalité</div>
+        <p class="myth-txt">Les gens sont inspirés par les <strong>personnes</strong>. Le contenu n'inspire pas seul — c'est la connexion humaine à travers laquelle il est reçu qui fait la différence.</p>
+      </div>
+    </div>
+    <div class="myth-row">
+      <div class="myth-no">
+        <div class="myth-lbl">✗ Mythe</div>
+        <p class="myth-txt">L'inspiration est un talent inné qu'on <strong>a ou qu'on n'a pas.</strong></p>
+      </div>
+      <div class="myth-yes">
+        <div class="myth-lbl">✓ Réalité</div>
+        <p class="myth-txt">Chaque comportement inspirant est <strong>appris et délibéré.</strong> L'inspiration est une compétence. Elle se pratique et elle se mesure.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight">
+    <div class="ins-label">◈ Ce que ça change</div>
+    <p class="ins-text">Si l'inspiration n'est pas un trait de personnalité mais un ensemble de comportements, alors chaque conversation est une occasion de l'exercer — ou de la rater.</p>
+  </div>
+
+  <p class="body">Ce renversement de perspective est fondamental. Il retire l'inspiration du domaine du talent pour la placer dans celui de la pratique. Et ça change radicalement ce sur quoi on peut agir.</p>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPITRE 2
+     ══════════════════════════════════════ -->
+<div class="chapter-cover">
+  <div class="cc-glow"></div>
+  <div class="cc-num">2</div>
+  <div class="cc-eye">Chapitre 2</div>
+  <h2 class="cc-title">Les 4 dimensions<br>de <em>l'Inspire Path.</em></h2>
+  <div class="cc-rule"></div>
+</div>
+
+<div class="chapter-body">
+  <p class="lead">Après cinq années de recherche sur ce qui inspire vraiment les gens, un modèle en 4 dimensions a émergé avec une régularité remarquable.</p>
+
+  <p class="body">Les chercheurs l'appellent l'<strong>Inspire Path</strong> : les quatre comportements que les leaders inspirants partagent systématiquement. Chacun peut sembler intuitif en surface. La profondeur de chacun est pourtant bien au-delà de ce qu'on imagine.</p>
+
+  <div class="four-p">
+    <div class="fp">
+      <div class="fp-letter" style="color:rgba(80,55,160,.15);">P</div>
+      <div class="fp-name">Être <em>Présent</em></div>
+      <div class="fp-bar" style="background:rgba(80,55,160,.3);"></div>
+      <p class="fp-body">Pas juste être dans la pièce — être <strong>entièrement là.</strong> La présence totale est la première chose perçue par l'autre, souvent avant les mots. Elle détermine si ce qui suit sera reçu ou seulement entendu.</p>
+    </div>
+    <div class="fp">
+      <div class="fp-letter" style="color:rgba(26,106,84,.15);">P</div>
+      <div class="fp-name">Être <em>Personnel</em></div>
+      <div class="fp-bar" style="background:rgba(26,106,84,.3);"></div>
+      <p class="fp-body">Parler genuinement. Écouter généreusement. Faire ressortir le potentiel de l'autre en le nommant avec précision. C'est la dimension la plus profonde — celle qui touche à l'authenticité réelle.</p>
+    </div>
+    <div class="fp">
+      <div class="fp-letter" style="color:rgba(160,112,42,.15);">P</div>
+      <div class="fp-name">Être <em>Passionné</em></div>
+      <div class="fp-bar" style="background:rgba(160,112,42,.3);"></div>
+      <p class="fp-body">Exprimer une émotion sincère, calibrée à la situation. Pas de la fièvre artificielle — de l'énergie authentique. Les émotions se transmettent biologiquement. <strong>La conviction réelle est contagieuse.</strong></p>
+    </div>
+    <div class="fp">
+      <div class="fp-letter" style="color:rgba(105,42,130,.15);">P</div>
+      <div class="fp-name">Être <em>Purposeful</em></div>
+      <div class="fp-bar" style="background:rgba(105,42,130,.3);"></div>
+      <p class="fp-body">Aider l'autre à trouver du sens — à voir sa place dans quelque chose de plus grand. Connecter chaque action à une raison d'être. Donner le "pourquoi" avant le "comment".</p>
+    </div>
+  </div>
+
+  <p class="body">Ces quatre dimensions ne sont pas indépendantes — elles se renforcent mutuellement. La présence crée les conditions dans lesquelles le personnel peut se déployer. Le personnel amplifie l'impact de la passion. Et la passion rend le purposeful crédible.</p>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPITRE 3
+     ══════════════════════════════════════ -->
+<div class="chapter-cover">
+  <div class="cc-glow"></div>
+  <div class="cc-num">3</div>
+  <div class="cc-eye">Chapitre 3</div>
+  <h2 class="cc-title">La première<br>dimension : <em>Être Présent.</em></h2>
+  <div class="cc-rule"></div>
+</div>
+
+<div class="chapter-body">
+  <p class="lead">Quand on demande aux gens de décrire quelqu'un qui les a inspirés, la première chose qu'ils mentionnent presque systématiquement : cette personne était <em>notablement présente.</em></p>
+
+  <p class="body">Pas charismatique. Pas éloquente. Présente. Ce mot revient comme un marqueur sémantique constant dans les études sur l'inspiration. Et pourtant, il est rarement défini avec précision.</p>
+
+  <h3 class="sub">Ce que la présence <em>signifie vraiment</em></h3>
+
+  <p class="body">La présence totale n'est pas une posture ou une technique de body language. C'est un état dans lequel ton attention est entièrement investie dans ce qui se passe maintenant — sans division, sans agenda parallèle, sans préparation de ta prochaine réponse.</p>
+
+  <p class="body">Ce que cela requiert, concrètement : <strong>renoncer au contrôle de la conversation.</strong> La plupart des gens entrent dans un échange avec une issue souhaitée. Cette intention invisible, même inconsciente, produit une qualité d'écoute partielle — on entend ce qui confirme notre direction, on filtre le reste.</p>
+
+  <div class="science">
+    <div class="sci-label">Recherche — Neurosciences de l'attention</div>
+    <p class="sci-body">Les études en eye-tracking et variabilité cardiaque montrent que la qualité d'attention d'un interlocuteur est détectable par le système nerveux avant d'être conscientisée. <strong>Le corps de l'autre sait si tu es vraiment là — avant que son cerveau le formule.</strong> Cette détection inconsciente détermine si la conversation sera vécue comme authentique ou performative.</p>
+  </div>
+
+  <h3 class="sub">Le piège le plus commun : <em>préparer pendant qu'on écoute</em></h3>
+
+  <p class="body">Il existe un comportement qui détruit silencieusement la qualité de présence — et que presque tout le monde pratique sans le savoir. Pendant que l'autre parle, on prépare mentalement ce qu'on va dire.</p>
+
+  <p class="body">Ce mécanisme est si automatique qu'il passe souvent inaperçu. Et pourtant, il produit un signal physique détectable : regard légèrement décroché, posture en légère rotation, micro-expressions d'anticipation. <strong>L'autre sent qu'il n'est pas vraiment entendu.</strong> Il peut ne pas l'identifier consciemment. Mais ça modifie la profondeur de ce qu'il va partager.</p>
+
+  <div class="insight">
+    <div class="ins-label">◈ Le paradoxe de la présence</div>
+    <p class="ins-text">Pour être plus présent, tu dois faire moins — moins préparer, moins contrôler, moins anticiper. La présence totale est une forme active de lâcher-prise.</p>
+  </div>
+
+  <h3 class="sub">Orienter le flux — <em>guide the flow</em></h3>
+
+  <p class="body">La présence ne signifie pas être passif. Les leaders inspirants orientent activement la conversation — mais depuis un endroit d'écoute réelle, pas de contrôle. La nuance est subtile et fondamentale.</p>
+
+  <p class="body">Orienter depuis l'écoute : poser la question suivante à partir de ce qu'on a vraiment entendu, pas à partir de ce qu'on voulait aborder. Reformuler avec les mots de l'autre, pas les siens. Laisser les silences exister — ils sont des espaces dans lesquels l'autre peut aller plus loin que ce qu'il avait prévu de dire.</p>
+
+  <div class="practice">
+    <div class="prac-label">Pratique immédiate</div>
+    <div class="prac-title">L'écoute sans préparation — 7 jours</div>
+    <div class="prac-body">
+      <p>Dans chaque conversation cette semaine, impose-toi une règle : <strong>ne pas commencer à formuler ta réponse avant que l'autre ait fini de parler.</strong> Complètement fini — pas au moment où tu anticipes la fin.</p>
+      <p>Attends trois secondes après qu'il a terminé. Dans ces trois secondes, pose une seule question : <em>"Qu'est-ce que j'ai vraiment entendu ?"</em> Puis réponds depuis là.</p>
+      <p>Ce délai artificiel devient, en 7 jours, un réflexe naturel. Et il change radicalement la qualité perçue de ta présence.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPITRE 4
+     ══════════════════════════════════════ -->
+<div class="chapter-cover">
+  <div class="cc-glow"></div>
+  <div class="cc-num">4</div>
+  <div class="cc-eye">Chapitre 4</div>
+  <h2 class="cc-title">La deuxième<br>dimension : <em>Être Personnel.</em></h2>
+  <div class="cc-rule"></div>
+</div>
+
+<div class="chapter-body">
+  <p class="lead">La dimension personnelle est la plus difficile à décrire — et souvent la plus transformatrice à vivre. Elle touche à quelque chose que la plupart des gens protègent avec soin : leur vérité intérieure.</p>
+
+  <p class="body">Être personnel dans un contexte de leadership ne signifie pas tout révéler. Ça signifie être <strong>authentiquement là</strong> — parler depuis ce qu'on pense vraiment, écouter depuis un lieu d'intérêt réel, et être capable de nommer ce qu'on voit d'exceptionnel chez quelqu'un.</p>
+
+  <h3 class="sub">NATO — <em>Not Attached To Outcome</em></h3>
+
+  <p class="body">Parmi tous les comportements identifiés dans la recherche, l'écoute NATO est l'un des plus rares et des plus puissants. Son nom vient d'un concept bouddhiste : le non-attachement au résultat.</p>
+
+  <p class="body">Appliqué à la conversation, il signifie ceci : tu entres dans un échange sans avoir décidé à l'avance comment il doit se terminer. Tu n'as pas d'agenda caché. Tu n'essaies pas d'atteindre un résultat spécifique. Tu es là pour écouter — et pour laisser la conversation aller là où elle doit aller.</p>
+
+  <div class="pullquote">
+    <div class="pq-bar"></div>
+    <p class="pq-text">NATO ne signifie pas ne pas avoir d'objectifs. Ça signifie entrer dans la conversation avec une intention ouverte plutôt qu'un script fermé. Cette différence est perçue immédiatement — et crée immédiatement plus de confiance.</p>
+    <p class="pq-attr">— Kristi Hedges</p>
+  </div>
+
+  <p class="body">Ce que cela produit est contre-intuitif : en relâchant le contrôle du résultat, tu obtiens généralement <strong>de meilleurs résultats</strong> qu'en cherchant à les forcer. Parce que l'autre se sent suffisamment en sécurité pour partager ce qu'il pense vraiment — et c'est souvent là que se trouvent les vraies opportunités.</p>
+
+  <div class="gold-rule"></div>
+
+  <h3 class="sub">La vulnérabilité stratégique — <em>l'outil le plus sous-estimé</em></h3>
+
+  <p class="body">L'une des découvertes les plus contre-intuitives de la recherche : les leaders les plus inspirants partagent régulièrement leurs doutes, leurs erreurs et leurs zones d'incertitude. Non pas par faiblesse — par calcul conscient de confiance.</p>
+
+  <p class="body">Le mécanisme est simple. Quand quelqu'un affiche une perfection sans faille, le système nerveux des autres détecte une incohérence — personne n'est parfait, donc quelque chose est caché. Cette détection inconsciente crée une distance. À l'inverse, quand quelqu'un admet honnêtement une limite ou une erreur, la réponse biologique est la confiance.</p>
+
+  <div class="science">
+    <div class="sci-label">Neurosciences de la confiance</div>
+    <p class="sci-body">Les travaux de Paul Zak sur l'ocytocine montrent que la <strong>vulnérabilité authentique</strong> — partager quelque chose de personnel ou difficile — déclenche une libération d'ocytocine chez l'auditeur. Cette hormone est directement associée à la confiance, à l'empathie et à la coopération. <strong>La vulnérabilité crée biologiquement la confiance.</strong></p>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <h3 class="sub">Calling Out Potential — <em>voir l'autre avant qu'il se voit lui-même</em></h3>
+
+  <p class="body">C'est le comportement le plus rare de toute la recherche — et celui qui crée l'impact le plus durable. Nommer précisément quelque chose de grand que tu vois dans une autre personne, dans un contexte spécifique, avant qu'elle le formule elle-même.</p>
+
+  <p class="body">La distinction avec le compliment générique est fondamentale. <em>"Tu t'en es bien sorti"</em> est un compliment. <em>"Ce que tu as fait dans cette réunion — cette façon de tenir ta position sans agressivité quand la pression montait — c'est précisément le type de leadership dont ce groupe a besoin en ce moment"</em> est du calling out potential.</p>
+
+  <p class="body">La spécificité est ce qui fait la différence. Elle prouve que tu as vraiment regardé. Que ce n'est pas poli — c'est vrai. Et cette vérité précise s'ancre dans la personne d'une façon qu'elle ne peut pas rejeter.</p>
+
+  <div class="insight">
+    <div class="ins-label">◈ L'impact de nommer le potentiel</div>
+    <p class="ins-text">Quand quelqu'un nomme avec précision quelque chose de grand en toi — tu ne l'oublies pas. Tu reviens à cette phrase des années plus tard. Tu deviens la personne qu'il a décrite avant même de t'en rendre compte.</p>
+  </div>
+
+  <div class="practice">
+    <div class="prac-label">Pratique immédiate</div>
+    <div class="prac-title">L'art de nommer ce qu'on voit — cette semaine</div>
+    <div class="prac-body">
+      <p>Identifie une personne dans ton entourage — professionnel ou personnel. Observe avec attention cette semaine une qualité spécifique qu'elle manifeste dans un contexte précis.</p>
+      <p>Formule-la à voix haute en face d'elle. Avec précision. <em>"Dans cette situation, ce que tu as fait — [description précise] — c'est une forme de [qualité] que peu de gens ont."</em></p>
+      <p>La règle : <strong>pas de généralité</strong> ("tu es courageux"), seulement du spécifique ancré dans un comportement observé. La spécificité est la preuve que tu as vraiment vu.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPITRE 5
+     ══════════════════════════════════════ -->
+<div class="chapter-cover">
+  <div class="cc-glow"></div>
+  <div class="cc-num">5</div>
+  <div class="cc-eye">Chapitre 5</div>
+  <h2 class="cc-title">La troisième<br>dimension : <em>Être Passionné.</em></h2>
+  <div class="cc-rule"></div>
+</div>
+
+<div class="chapter-body">
+  <p class="lead">La passion fait peur à beaucoup de leaders. Elle semble trop exposée, trop risquée, trop éloignée du registre professionnel qu'on leur a appris à tenir.</p>
+
+  <p class="body">C'est une erreur stratégique. Parce que la passion — au sens où la recherche l'entend — n'est pas de l'enthousiasme débordant ou de la fièvre artificielle. C'est quelque chose de bien plus précis : <strong>l'énergie authentique, calibrée à la situation.</strong></p>
+
+  <h3 class="sub">La contagion émotionnelle — <em>comment les états se transmettent</em></h3>
+
+  <p class="body">Il existe un phénomène neurologique qui explique pourquoi la passion inspire : la contagion émotionnelle. Les émotions ne restent pas confinées à celui qui les ressent — elles se transmettent biologiquement aux personnes présentes.</p>
+
+  <div class="science">
+    <div class="sci-label">Neurosciences — La contagion émotionnelle</div>
+    <p class="sci-body">Les recherches en neuroimagerie montrent que les <strong>neurones miroirs</strong> du cerveau reproduisent partiellement les états émotionnels observés chez autrui. Une personne dont la conviction est réelle <strong>active dans le cerveau de ses interlocuteurs une résonance partielle de cette conviction.</strong> Ce n'est pas métaphorique — c'est un mécanisme neurologique mesuré. Une émotion sincère crée une réponse biologique chez l'auditeur. Une émotion performée ne le fait pas.</p>
+  </div>
+
+  <p class="body">C'est pourquoi l'énergie artificielle — l'enthousiasme forcé, la motivation de façade — ne fonctionne pas à long terme. Le système nerveux de l'autre détecte l'incongruence entre les signaux verbaux et non-verbaux. Et cette incongruence détruit précisément ce qu'elle cherche à construire.</p>
+
+  <div class="gold-rule"></div>
+
+  <h3 class="sub">OUT — <em>Open Up Toward</em></h3>
+
+  <p class="body">La passion sincère s'exprime dans les signaux non-verbaux avant d'atteindre les mots. La recherche identifie un pattern physique spécifique chez les leaders inspirants : l'ouverture vers l'autre.</p>
+
+  <p class="body">Corps orienté face à l'interlocuteur. Contact visuel maintenu sans fixer. Posture détendue et ouverte, pas défensive. Gestes qui incluent plutôt qu'ils ne repoussent. Ce pattern physique — qu'on peut résumer en trois lettres, OUT — signale au système nerveux de l'autre : <em>"tu comptes, et je suis là pour toi."</em></p>
+
+  <p class="body">Son opposé est le signal DIN — Directed Inside ou None — qui produit l'effet inverse. Corps légèrement tourné, bras croisés, regard qui décroche régulièrement. Ces signaux, même inconscients, ferment la conversation avant que les mots ne l'ouvrent.</p>
+
+  <div class="insight">
+    <div class="ins-label">◈ La règle de la passion authentique</div>
+    <p class="ins-text">On ne peut pas inspirer depuis un endroit où on ne ressent rien. La première étape n'est pas de montrer plus — c'est d'identifier ce qui te donne vraiment de l'énergie, et de créer les conditions pour être là quand c'est nécessaire.</p>
+  </div>
+
+  <div class="practice">
+    <div class="prac-label">Pratique immédiate</div>
+    <div class="prac-title">Le check OUT avant chaque conversation importante</div>
+    <div class="prac-body">
+      <p>Avant d'entrer dans une conversation ou une réunion importante, prends 30 secondes. Vérifie physiquement :</p>
+      <p><strong>O — Open :</strong> mon corps est-il ouvert ? Épaules basses, pas de bras croisés, posture détendue.</p>
+      <p><strong>U — Up :</strong> mon énergie est-elle présente ? Je suis là, pas en train de penser à ce qui précède ou ce qui suit.</p>
+      <p><strong>T — Toward :</strong> suis-je orienté vers l'autre ? Physiquement et mentalement dans la direction de la personne devant moi.</p>
+      <p>Ce check de 30 secondes change la qualité perçue de ta présence avant même que tu aies prononcé un mot.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPITRE 6
+     ══════════════════════════════════════ -->
+<div class="chapter-cover">
+  <div class="cc-glow"></div>
+  <div class="cc-num">6</div>
+  <div class="cc-eye">Chapitre 6</div>
+  <h2 class="cc-title">La quatrième<br>dimension : <em>Être Purposeful.</em></h2>
+  <div class="cc-rule"></div>
+</div>
+
+<div class="chapter-body">
+  <p class="lead">La dimension la plus profonde des quatre — et paradoxalement, la moins enseignée dans les formations au leadership.</p>
+
+  <p class="body">Être purposeful ne signifie pas avoir une mission d'entreprise bien formulée. Ça signifie quelque chose de beaucoup plus intime : aider l'autre à voir sa place dans quelque chose qui le dépasse — et à trouver du sens dans ce qu'il fait.</p>
+
+  <h3 class="sub">Pourquoi le sens <em>est un besoin biologique</em></h3>
+
+  <p class="body">Les travaux en psychologie positive et en neurosciences convergent : l'être humain ne cherche pas seulement à réussir ou à survivre. Il cherche à s'inscrire dans quelque chose de plus grand que lui. Ce besoin de sens est aussi fondamental que les besoins de sécurité ou d'appartenance.</p>
+
+  <p class="body">Quand ce besoin est satisfait — quand quelqu'un comprend pourquoi ce qu'il fait compte, pas seulement comment le faire — quelque chose se débloque. La motivation n'a plus besoin d'être entretenue de l'extérieur. Elle devient intrinsèque.</p>
+
+  <div class="science">
+    <div class="sci-label">Recherche — La direction comme motivateur</div>
+    <p class="sci-body">Les recherches de <strong>Richard Boyatzis</strong> (Case Western Reserve) montrent que les leaders qui orientent vers un idéal positif activent le réseau neuronal parasympathique chez leurs interlocuteurs — le réseau de l'ouverture, de la créativité et de la motivation intrinsèque. À l'inverse, les leaders centrés sur la résolution de problèmes activent le système sympathique : l'état de stress et de conformité. <strong>La direction vers un idéal produit une chimie cérébrale radicalement différente.</strong></p>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <h3 class="sub">Donner le "pourquoi" <em>avant le "comment"</em></h3>
+
+  <p class="body">Dans la pratique, la dimension purposeful se traduit par une habitude simple mais rare : <strong>commencer par le sens avant de passer aux instructions.</strong></p>
+
+  <p class="body">La plupart des managers font l'inverse. Ils expliquent comment faire, ce qui est attendu, les délais. Parfois ils ajoutent le pourquoi à la fin — comme une justification. Les leaders inspirants font le mouvement inverse : ils commencent par le sens, et les instructions deviennent des détails naturels dans un cadre compris.</p>
+
+  <div class="pullquote">
+    <div class="pq-bar"></div>
+    <p class="pq-text">Les gens n'ont pas besoin de savoir comment faire leur travail — ils l'apprennent vite. Ce dont ils ont besoin, c'est de comprendre pourquoi leur travail compte. Quand ils le savent vraiment, ils font le comment mieux que tu ne l'aurais défini.</p>
+    <p class="pq-attr">— Kristi Hedges</p>
+  </div>
+
+  <h3 class="sub">Trouver <em>le sens individuel de chaque personne</em></h3>
+
+  <p class="body">La nuance la plus importante de la dimension purposeful : le sens n'est pas universel. Ce qui donne du sens à une personne ne le donne pas nécessairement à une autre.</p>
+
+  <p class="body">Certains trouvent du sens dans l'impact sur les clients. D'autres dans la maîtrise technique. D'autres dans la contribution à une équipe, dans la résolution de problèmes complexes, dans la transmission. Le leader inspirant ne projette pas son propre sens sur les autres — il prend le temps de comprendre ce qui compte pour chaque personne spécifiquement.</p>
+
+  <div class="insight">
+    <div class="ins-label">◈ La question qui révèle le sens</div>
+    <p class="ins-text">Dans une conversation, une seule question peut révéler le sens d'une personne : "Qu'est-ce qui compte vraiment pour toi dans ce que tu fais ?" La réponse à cette question change tout ce qui suit.</p>
+  </div>
+
+  <div class="practice">
+    <div class="prac-label">Pratique immédiate</div>
+    <div class="prac-title">La conversation sur le sens — une fois par semaine</div>
+    <div class="prac-body">
+      <p>Choisis une personne avec qui tu travailles régulièrement. Prends 15 minutes en tête-à-tête — pas pour parler de tâches ou de projets.</p>
+      <p>Pose cette question, et écoute vraiment : <em>"Qu'est-ce qui te donne vraiment de l'énergie dans ce que tu fais ? Et qu'est-ce qui t'en prend ?"</em></p>
+      <p>Ne réponds pas. N'évalue pas. N'essaie pas de résoudre. Juste écouter. Et noter ce que tu entends pour que ça guide comment tu travailles avec cette personne dans les semaines qui suivent.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPITRE 7 — SYNTHÈSE
+     ══════════════════════════════════════ -->
+<div class="chapter-cover">
+  <div class="cc-glow"></div>
+  <div class="cc-num">7</div>
+  <div class="cc-eye">Chapitre 7 — Synthèse</div>
+  <h2 class="cc-title">Mettre les 4P<br>en <em>conversation.</em></h2>
+  <div class="cc-rule"></div>
+</div>
+
+<div class="chapter-body">
+  <p class="lead">Les 4P ne sont pas une liste à cocher séquentiellement. Ils existent simultanément dans chaque échange — ou ils n'existent pas du tout.</p>
+
+  <p class="body">La conversation inspirante n'est pas celle où tu te dis "maintenant je suis présent, maintenant je suis personnel". C'est celle où tu as suffisamment travaillé chaque dimension séparément pour qu'elles s'intègrent naturellement.</p>
+
+  <h3 class="sub">L'anatomie d'une conversation <em>qui change quelque chose</em></h3>
+
+  <p class="body">Hedges décrit un phénomène qu'elle appelle le "pivot conversation" — l'échange qui marque un avant et un après dans la vie de quelqu'un. Ces conversations ont en commun d'avoir activé les 4P de façon cohérente :</p>
+
+  <p class="body"><strong>La présence</strong> a créé la sécurité pour que l'autre parle vraiment. <strong>Le personnel</strong> a ouvert l'espace de l'authenticité — des deux côtés. <strong>La passion</strong> a signalé que ce qui se disait comptait réellement. Et <strong>le purposeful</strong> a relié ce moment à quelque chose de plus grand que l'échange lui-même.</p>
+
+  <div class="sec-break"><span>◈</span></div>
+
+  <h3 class="sub">Ce que révèle la cohérence des 4P</h3>
+
+  <p class="body">Le niveau d'activation des 4P dans tes conversations quotidiennes révèle quelque chose d'important : <strong>la part de toi que tu apportes réellement dans tes interactions.</strong></p>
+
+  <p class="body">On peut être très présent mais peu purposeful — engagé dans l'échange mais sans direction. On peut être très passionné mais pas personnel — émettant de l'énergie sans vraiment voir l'autre. Chaque combinaison partielle crée un profil d'influence différent, avec ses forces et ses angles morts.</p>
+
+  <div class="pullquote">
+    <div class="pq-bar"></div>
+    <p class="pq-text">L'inspiration la plus puissante ne vient pas de quelqu'un qui excelle dans une dimension. Elle vient de quelqu'un dont la présence, l'authenticité, l'énergie et la direction forment un ensemble cohérent et perçu comme réel.</p>
+    <p class="pq-attr">— Kristi Hedges</p>
+  </div>
+
+  <p class="body">C'est ce que les recherches appellent la "cohérence inspirante" — l'alignement perçu entre ce qu'une personne dit, comment elle se tient, ce qu'elle ressent visiblement et vers quoi elle oriente l'échange. Cette cohérence n'a pas besoin d'être parfaite pour être puissante. Elle a besoin d'être <em>réelle.</em></p>
+
+  <div class="insight">
+    <div class="ins-label">◈ La vérité finale</div>
+    <p class="ins-text">L'inspiration n'est pas ce qu'on fait dans les grands moments. C'est la qualité de ce qu'on est dans les moments ordinaires. Les grandes conversations naissent des petites habitudes.</p>
+  </div>
+
+  <div class="practice">
+    <div class="prac-label">Pratique de synthèse</div>
+    <div class="prac-title">Le Bilan des 4P — chaque vendredi</div>
+    <div class="prac-body">
+      <p>Prends 10 minutes en fin de semaine. Pour chaque dimension, une question honnête :</p>
+      <p><strong>Présent :</strong> dans quelle conversation cette semaine ai-je été vraiment là — sans agenda, sans préparation parallèle ? Dans laquelle ne l'ai-je pas été ?</p>
+      <p><strong>Personnel :</strong> à quel moment ai-je dit quelque chose de vrai plutôt que de convenable ? À quel moment ai-je retenu quelque chose qui aurait dû être dit ?</p>
+      <p><strong>Passionné :</strong> quand est-ce que mon énergie était authentiquement là — pas forcée ? Qu'est-ce qui l'a produite ou détruite cette semaine ?</p>
+      <p><strong>Purposeful :</strong> ai-je aidé quelqu'un à voir le sens de ce qu'il fait ? Ai-je moi-même opéré depuis un lieu de sens cette semaine ?</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE FINALE
+     ══════════════════════════════════════ -->
+<div class="finale">
+  <div class="finale-glow"></div>
+  <div class="finale-inner">
+    <div class="fin-kicker">Ce que tu emportes</div>
+    <h2 class="fin-title">L'inspiration<br>n'attend pas<br><em>les grands moments.</em></h2>
+    <div class="fin-rule"></div>
+    <p class="fin-sub">Elle vit dans la qualité de ton attention, dans la précision de ce que tu nommes chez les autres, dans l'énergie que tu apportes quand ça compte vraiment — et dans la direction que tu maintiens même quand la conversation devient difficile.</p>
+    <p class="fin-sub">Tout ce qui précède n'est utile que dans une mesure : la pratique quotidienne. Non pas dans les grandes occasions. Dans la prochaine conversation.</p>
+    <div class="fin-sig">AURA · L'Art d'Inspirer · Comment les meilleurs leaders inspirent vraiment</div>
+  </div>
+</div>
+
+</body>
+</html>
