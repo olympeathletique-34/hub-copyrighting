@@ -1047,7 +1047,7 @@ function handleFiles(files, pid) {
         save(); notify(done + ' page' + (done > 1 ? 's' : '') + ' ajoutée' + (done > 1 ? 's' : '') + ' !'); renderProject(pid);
         var _ids = window._ghNewPages; window._ghNewPages = [];
         if (p.settings && p.settings.ghFolder && ghCfg().token)
-          setTimeout(function () { if (confirm('Ajouter aussi ' + (done > 1 ? 'ces ' + done + ' pages' : 'cette page') + ' au dossier GitHub ' + p.settings.ghFolder + '/tunnel ?')) ghAddPagesToGitHub(pid, _ids); }, 50);
+          setTimeout(function () { if (confirm('Ajouter aussi ' + (done > 1 ? 'ces ' + done + ' pages' : 'cette page') + ' au dossier GitHub ' + ghTunnelDir(p) + ' ?')) ghAddPagesToGitHub(pid, _ids); }, 50);
       }
     };
     reader.readAsText(file);
@@ -3978,7 +3978,7 @@ function ghPushProduct(pid, idx, message) {
 
 
 // ===================== GITHUB : TUNNEL (pages) + PUBLICATION SUR VERCEL =====================
-// Pages du tunnel  ⇄  hub-projets/<dossier>/tunnel/  (+ tunnel.json : ordre, nom, type de page)
+// Pages du tunnel  ⇄  hub-projets/<dossier>/marketing/tunnels/  (+ tunnel.json : ordre, nom, type de page)
 // Publication      →  hub-copyrighting/<projet>/…  (un seul commit ; Vercel déploie hub-copyrighting.vercel.app)
 
 var GH_SITE = 'https://hub-copyrighting.vercel.app';
@@ -3989,6 +3989,7 @@ function ghSlug(p) {
   var f = (p.settings && p.settings.folder) || p.name;
   return f.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
+function ghTunnelDir(p) { return p.settings.ghFolder + '/marketing/tunnels'; }
 function ghPageContent(pg) { return pg.content || localStorage.getItem('cf_pg_' + pg.id); }
 function ghDecodeB64(b64) {
   return new TextDecoder().decode(Uint8Array.from(atob((b64 || '').replace(/\n/g, '')), function (ch) { return ch.charCodeAt(0); }));
@@ -4034,7 +4035,7 @@ function ghCommitFiles(repo, branch, files, message, opts) {
 // ---------- Synchronisation des pages du tunnel ----------
 function ghSyncPages(pid, stats) {
   var p = getP(pid);
-  var dir = p.settings.ghFolder + '/tunnel';
+  var dir = ghTunnelDir(p);
   stats.pAjoutees = 0; stats.pMaj = 0;
   return Promise.all([ghList(dir), ghMeta(dir + '/tunnel.json')]).then(function (res) {
     var items = Array.isArray(res[0]) ? res[0] : [];
@@ -4092,7 +4093,7 @@ function ghScheduleTunnelManifest(pid, delay) {
   _ghTunnelTimers[pid] = setTimeout(function () { ghSaveTunnelManifest(pid); }, delay === undefined ? 1500 : delay);
 }
 function ghTunnelManifestText(p) {
-  var dir = p.settings.ghFolder + '/tunnel';
+  var dir = ghTunnelDir(p);
   return JSON.stringify({
     _info: "Géré par hub-copyrighting.vercel.app : ordre des pages du tunnel, nom et type (optin, sales, upsell, downsell, thankyou, member, custom). Les IA peuvent le lire ; seul le porteur de projet le modifie, via hub-copyrighting.",
     pages: p.pages.filter(function (pg) { return pg.ghPath && !pg.ghMissing && pg.ghPath.indexOf(dir + '/') === 0; })
@@ -4101,7 +4102,7 @@ function ghTunnelManifestText(p) {
 }
 function ghSaveTunnelManifest(pid) {
   var p = getP(pid);
-  var path = p.settings.ghFolder + '/tunnel/tunnel.json';
+  var path = ghTunnelDir(p) + '/tunnel.json';
   return ghMeta(path).then(function (meta) {
     return ghPut(path, ghTunnelManifestText(p), meta ? meta.sha : null, 'hub-copyrighting · ' + p.settings.ghFolder + ' : ordre et types des pages du tunnel');
   }).then(function () { notify('Ordre du tunnel enregistré sur GitHub'); })
@@ -4123,14 +4124,14 @@ function ghPagesPanelExtra(p) {
   var local = p.pages.filter(function (pg) { return !pg.ghPath && ghPageContent(pg); });
   if (!local.length) return '';
   return '<div class="info-box" style="margin:-6px 0 14px;display:flex;align-items:center;gap:10px">' +
-    '<span style="flex:1">' + local.length + ' page(s) du tunnel ne sont pas encore dans GitHub (' + escHtml(p.settings.ghFolder) + '/tunnel).</span>' +
+    '<span style="flex:1">' + local.length + ' page(s) du tunnel ne sont pas encore dans GitHub (' + escHtml(ghTunnelDir(p)) + ').</span>' +
     '<button class="btn btn-primary btn-sm" onclick="ghAddPagesToGitHub(\'' + p.id + '\')">⬆️ Tout envoyer vers GitHub</button></div>';
 }
 
-// Envoie des pages locales dans hub-projets/<dossier>/tunnel/ (un seul commit, tunnel.json compris).
+// Envoie des pages locales dans hub-projets/<dossier>/marketing/tunnels/ (un seul commit, tunnel.json compris).
 function ghAddPagesToGitHub(pid, ids) {
   var p = getP(pid);
-  var dir = p.settings.ghFolder + '/tunnel';
+  var dir = ghTunnelDir(p);
   var list = p.pages.filter(function (pg) { return !pg.ghPath && ghPageContent(pg) && (!ids || ids.indexOf(pg.id) !== -1); });
   if (!list.length) return;
   var c = ghCfg();
