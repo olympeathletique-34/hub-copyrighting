@@ -750,7 +750,10 @@ function renderProject(id) {
   m.innerHTML =
     '<div class="breadcrumb"><a onclick="showHome()">🏠 Projets</a><span>›</span><span>' + p.name + '</span></div>' +
     '<div class="page-header"><div><div class="page-title">' + p.name + '</div><div class="page-sub">' + (p.description || '') + (p.settings.price ? ' · <strong>' + p.settings.price + ' ' + p.settings.currency + '</strong>' : '') + '</div></div>' +
-    '<div style="display:flex;gap:8px"><button class="btn btn-secondary" onclick="generateTunnel(\'' + id + '\')">⚡ Générer le tunnel</button></div></div>' +
+    '<div style="display:flex;gap:8px;align-items:center">' +
+      (p.settings && p.settings.ghPublishedUrls ? '<a href="#" style="font-size:12px;color:var(--accent)" onclick="ghShowPublished(\'' + id + '\');return false">🔗 en ligne</a>' : '') +
+      '<button class="btn btn-primary" onclick="ghPublishSite(\'' + id + '\')">🚀 Publier en ligne</button>' +
+      '<button class="btn btn-secondary" onclick="generateTunnel(\'' + id + '\')">⚡ Générer le tunnel</button></div></div>' +
     langTabsHtml +
     '<div class="tabs">' +
       '<button class="tab ' + (S.tab === 'pages' ? 'active' : '') + '" onclick="switchTab(\'pages\',\'' + id + '\')">📄 Pages</button>' +
@@ -854,7 +857,7 @@ function renderPagesTab(p, c) {
           '<div class="page-num">' + (i+1) + '</div>' +
           '<span style="font-size:18px">' + pgIcon(pg.type) + '</span>' +
           '<div class="page-info"><div class="page-name">' + pg.name + abBadge + '</div>' +
-          '<div class="page-filename">' + pg.filename + ' · <span class="badge badge-' + pg.type + '">' + pgLabel(pg.type) + '</span></div></div>' +
+          '<div class="page-filename">' + pg.filename + ' · <span class="badge badge-' + pg.type + '">' + pgLabel(pg.type) + '</span>' + ghPageBadge(p, pg) + '</div></div>' +
           '<div class="page-actions">' +
           (isDefault && !hasAB && pg.content ? '<button class="btn btn-icon btn-sm" onclick="editPage(\'' + pg.id + '\')" title="Éditer">🎨</button>' : '') +
           (isDefault && !hasAB && pg.content ? '<button class="btn btn-icon btn-sm" onclick="previewPage(\'' + pg.id + '\')" title="Aperçu">👁️</button>' : '') +
@@ -866,7 +869,7 @@ function renderPagesTab(p, c) {
           (i < p.pages.length-1 ? '<div class="tunnel-arrow">↓</div>' : '');
       }).join('') + '</div>';
   }
-  c.innerHTML =
+  c.innerHTML = ghPanelHtml(p) + ghPagesPanelExtra(p) +
     '<div class="upload-zone" id="upload-zone" onclick="triggerUpload(\'' + p.id + '\')">' +
     '<div class="upload-zone-icon">📂</div>' +
     '<div class="upload-zone-text">Glissez vos fichiers HTML ici</div>' +
@@ -1037,9 +1040,15 @@ function handleFiles(files, pid) {
   arr.forEach(function(file) {
     var reader = new FileReader();
     reader.onload = function(e) {
-      p.pages.push({ id: uid(), name: file.name.replace(/\.html?$/i,'').replace(/[-_]/g,' '), filename: file.name, type: guessType(file.name), content: e.target.result, uploadedAt: Date.now() });
+      var _np = { id: uid(), name: file.name.replace(/\.html?$/i,'').replace(/[-_]/g,' '), filename: file.name, type: guessType(file.name), content: e.target.result, uploadedAt: Date.now() };
+      p.pages.push(_np); (window._ghNewPages = window._ghNewPages || []).push(_np.id);
       done++;
-      if (done === arr.length) { save(); notify(done + ' page' + (done > 1 ? 's' : '') + ' ajoutée' + (done > 1 ? 's' : '') + ' !'); renderProject(pid); }
+      if (done === arr.length) {
+        save(); notify(done + ' page' + (done > 1 ? 's' : '') + ' ajoutée' + (done > 1 ? 's' : '') + ' !'); renderProject(pid);
+        var _ids = window._ghNewPages; window._ghNewPages = [];
+        if (p.settings && p.settings.ghFolder && ghCfg().token)
+          setTimeout(function () { if (confirm('Ajouter aussi ' + (done > 1 ? 'ces ' + done + ' pages' : 'cette page') + ' au dossier GitHub ' + p.settings.ghFolder + '/tunnel ?')) ghAddPagesToGitHub(pid, _ids); }, 50);
+      }
     };
     reader.readAsText(file);
   });
@@ -1061,7 +1070,7 @@ function setupDragDrop(pid) {
         var p = getP(pid);
         var moved = p.pages.splice(dragIdx, 1)[0];
         p.pages.splice(targetIdx, 0, moved);
-        save(); notify('Ordre mis à jour !'); renderProject(pid);
+        save(); notify('Ordre mis à jour !'); renderProject(pid); ghScheduleTunnelManifest(pid);
       }
     });
   });
@@ -1085,6 +1094,7 @@ function saveRenamePage() {
   pg.name = document.getElementById('rp-name').value || pg.name;
   pg.type = document.getElementById('rp-type').value;
   save(); closeModal('modal-rename-page'); notify('Page mise à jour !'); renderProject(p.id);
+  if (pg.ghPath) ghScheduleTunnelManifest(p.id);
 }
 function previewPage(pgId) {
   var p = S.projects.find(function(proj) { return proj.pages.some(function(pg) { return pg.id === pgId; }); });
@@ -1099,7 +1109,7 @@ function confirmDeletePage(pgId) {
   var p = S.projects.find(function(proj) { return proj.pages.some(function(pg) { return pg.id === pgId; }); });
   var pg = p && p.pages.find(function(pg) { return pg.id === pgId; });
   document.getElementById('delete-text').textContent = 'Supprimer la page "' + (pg ? pg.name : '') + '" ?';
-  _delCb = function() { p.pages = p.pages.filter(function(x) { return x.id !== pgId; }); localStorage.removeItem('cf_pg_' + pgId); save(); closeModal('modal-delete'); notify('Page supprimée'); renderProject(p.id); };
+  _delCb = function() { var _gp = pg && pg.ghPath; p.pages = p.pages.filter(function(x) { return x.id !== pgId; }); localStorage.removeItem('cf_pg_' + pgId); save(); closeModal('modal-delete'); notify('Page supprimée'); renderProject(p.id); if (_gp) ghOfferDelete(p.id, _gp, 'tunnel'); };
   document.getElementById('delete-confirm-btn').onclick = _delCb;
   openModal('modal-delete');
 }
@@ -1616,7 +1626,7 @@ function deleteLangProduct(pid, idx, lang) {
 function confirmDeleteProduct(pid, idx) {
   var p = getP(pid);
   document.getElementById('delete-text').textContent = 'Supprimer le produit "' + (p.products[idx] ? p.products[idx].name : '') + '" ?';
-  _delCb = function() { p.products.splice(idx, 1); save(); closeModal('modal-delete'); notify('Produit supprimé'); renderProject(pid); };
+  _delCb = function() { var _gp = p.products[idx] && p.products[idx].ghPath; p.products.splice(idx, 1); save(); closeModal('modal-delete'); notify('Produit supprimé'); renderProject(pid); if (_gp) ghOfferDelete(pid, _gp, 'produits'); };
   document.getElementById('delete-confirm-btn').onclick = _delCb;
   openModal('modal-delete');
 }
@@ -2561,6 +2571,7 @@ function saveEditorPage() {
   pg.content = html;
   try { localStorage.setItem('cf_pg_' + pg.id, html); } catch(e) {}
   save(); notify('Page sauvegardée !'); closeEditor(); renderProject(_editProjId);
+  if (pg.ghPath) ghOfferPushPage(_editProjId, pg.id);
 }
 
 function closeEditor() {
@@ -3611,12 +3622,12 @@ function ghPanelHtml(p) {
   }
   var folder = (p.settings && p.settings.ghFolder) || '';
   var last = p.settings && p.settings.ghLastSync ? new Date(p.settings.ghLastSync).toLocaleString('fr-FR') : 'jamais';
-  var link = folder ? 'https://github.com/' + c.repo + '/tree/' + c.branch + '/' + ghEnc(folder) + '/produits' : '';
+  var link = folder ? 'https://github.com/' + c.repo + '/tree/' + c.branch + '/' + ghEnc(folder) : '';
   setTimeout(function () { ghFillFolderSelect(folder); }, 0);
   return '<div style="' + box + ';display:flex;flex-wrap:wrap;align-items:center;gap:8px">' +
     '<span style="font-weight:600">🐙 GitHub</span>' +
     '<select class="form-input" id="gh-folder-select" style="padding:5px 8px;font-size:12px;width:auto" onchange="ghSetFolder(\'' + p.id + '\',this.value)">' +
-    '<option value="">— dossier non relié —</option>' + (folder ? '<option value="' + escAttr(folder) + '" selected>' + escHtml(folder) + '/produits</option>' : '') + '</select>' +
+    '<option value="">— dossier non relié —</option>' + (folder ? '<option value="' + escAttr(folder) + '" selected>' + escHtml(folder) + ' (produits + tunnel)</option>' : '') + '</select>' +
     (folder ? '<button class="btn btn-primary btn-sm" id="gh-sync-btn" onclick="ghSync(\'' + p.id + '\')">🔄 Synchroniser</button>' : '') +
     (folder ? '<a href="' + link + '" target="_blank" style="color:var(--accent)">ouvrir sur GitHub</a>' : '') +
     '<span style="color:var(--text2);margin-left:auto">Dernière synchro : ' + last + '</span>' +
@@ -3631,7 +3642,7 @@ function ghFillFolderSelect(current) {
     sel = document.getElementById('gh-folder-select');
     if (!sel) return;
     sel.innerHTML = '<option value="">— dossier non relié —</option>' + folders.map(function (f) {
-      return '<option value="' + escAttr(f) + '"' + (f === current ? ' selected' : '') + '>' + escHtml(f) + '/produits</option>';
+      return '<option value="' + escAttr(f) + '"' + (f === current ? ' selected' : '') + '>' + escHtml(f) + ' (produits + tunnel)</option>';
     }).join('');
   }).catch(function (e) { notify(e.message, 'error'); });
 }
@@ -3761,16 +3772,18 @@ function ghSync(pid) {
       p.products = p.products.map(function (pr, i) { return { pr: pr, i: i }; })
         .sort(function (a, b) { return (rank(a.pr) - rank(b.pr)) || (a.i - b.i); })
         .map(function (x) { return x.pr; });
-      p.settings.ghLastSync = Date.now();
-      save();
-      renderProject(pid);
-      notify('GitHub : ' + stats.ajoutes + ' ajouté(s), ' + stats.maj + ' mis à jour' +
-        (stats.aPublier ? ', ' + stats.aPublier + ' fichier(s) à publier (uploader non configuré)' : '') +
-        (stats.conflits ? ', ' + stats.conflits + ' conflit(s) gardé(s) en local' : '') +
-        (stats.absents ? ', ' + stats.absents + ' absent(s) de GitHub' : ''));
       // Crée ou complète le manifeste si des fichiers n'y figurent pas encore.
       var missing = files.some(function (f) { return !manByFile[f.name]; });
       if (missing) ghScheduleManifest(pid, 0);
+      return ghSyncPages(pid, stats).catch(function (e) { notify('Tunnel : ' + e.message, 'error'); }).then(function () {
+        p.settings.ghLastSync = Date.now();
+        save();
+        renderProject(pid);
+        notify('GitHub · produits : ' + stats.ajoutes + ' ajouté(s), ' + stats.maj + ' mis à jour' +
+          ' · tunnel : ' + (stats.pAjoutees || 0) + ' page(s) ajoutée(s), ' + (stats.pMaj || 0) + ' mise(s) à jour' +
+          (stats.conflits ? ' · ' + stats.conflits + ' conflit(s) gardé(s) en local' : '') +
+          (stats.absents ? ' · ' + stats.absents + ' absent(s) de GitHub' : ''));
+      });
     });
   }).catch(function (e) {
     notify(e.status === 401 ? 'Token GitHub refusé (expiré ou invalide) : clique sur 🔑 pour le changer' : e.message, 'error');
@@ -3859,7 +3872,6 @@ function ghSyncFile(p, f, m, stats) {
     if (m.role !== undefined) pr.role = m.role;
     if (m.nom) pr.name = m.nom;
     if (pr.ghSha === f.sha && pr.url) return Promise.resolve();
-    if (pr.ghSha === f.sha && !S.global.uploaderUrl) return Promise.resolve();
   } else {
     pr = { id: uid(), name: m.nom || f.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' '), description: '', type: ghTypeOf(f.name), url: '',
       ghPath: f.path, role: m.role || '' };
@@ -3867,17 +3879,10 @@ function ghSyncFile(p, f, m, stats) {
   }
   var changed = pr.ghSha !== f.sha;
   pr.ghSha = f.sha; pr.ghDirty = false;
-  if (!S.global.uploaderUrl) { pr.url = changed ? '' : pr.url; if (!pr.url) stats.aPublier = (stats.aPublier || 0) + 1; if (isNew) stats.ajoutes++; else if (changed) stats.maj++; return Promise.resolve(); }
-  return ghRawBlob(f.path).then(ghBlobToB64).then(function (b64) {
-    return ghUploadToServer(p, f.name, b64);
-  }).then(function (url) {
-    pr.url = url || '';
-    if (isNew) stats.ajoutes++; else stats.maj++;
-  }).catch(function (e) {
-    pr.url = changed ? '' : pr.url;
-    stats.aPublier = (stats.aPublier || 0) + 1;
-    console.warn('[GH] publication', f.name, e);
-  });
+  // Le fichier sera copié sur hub-copyrighting.vercel.app à la prochaine publication.
+  pr.url = GH_SITE + '/' + ghSlug(p) + '/produits/' + f.name.replace(/[^a-zA-Z0-9._-]/g, '-');
+  if (isNew) stats.ajoutes++; else if (changed) stats.maj++;
+  return Promise.resolve();
 }
 
 function ghPublishFile(pid, i) {
@@ -3969,6 +3974,380 @@ function ghPushProduct(pid, idx, message) {
     save(); renderProject(pid);
     notify('✅ « ' + pr.name + ' » mis à jour sur GitHub');
   }).catch(function (e) { notify(e.message, 'error'); renderProject(pid); });
+}
+
+
+// ===================== GITHUB : TUNNEL (pages) + PUBLICATION SUR VERCEL =====================
+// Pages du tunnel  ⇄  hub-projets/<dossier>/tunnel/  (+ tunnel.json : ordre, nom, type de page)
+// Publication      →  hub-copyrighting/<projet>/…  (un seul commit ; Vercel déploie hub-copyrighting.vercel.app)
+
+var GH_SITE = 'https://hub-copyrighting.vercel.app';
+var GH_SITE_REPO = 'olympeathletique-34/hub-copyrighting';
+var GH_SITE_BRANCH = 'main';
+
+function ghSlug(p) {
+  var f = (p.settings && p.settings.folder) || p.name;
+  return f.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+function ghPageContent(pg) { return pg.content || localStorage.getItem('cf_pg_' + pg.id); }
+function ghDecodeB64(b64) {
+  return new TextDecoder().decode(Uint8Array.from(atob((b64 || '').replace(/\n/g, '')), function (ch) { return ch.charCodeAt(0); }));
+}
+
+// ---------- API Git bas niveau : plusieurs fichiers en un seul commit ----------
+function ghApi(path, method, body) {
+  return ghFetch(path, { method: method || 'GET', body: body ? JSON.stringify(body) : undefined, headers: { 'Content-Type': 'application/json' } });
+}
+// files : [{ path, b64 }]. opts.prune : dossier dont on supprime les fichiers absents de la nouvelle liste.
+function ghCommitFiles(repo, branch, files, message, opts) {
+  opts = opts || {};
+  var base = '/repos/' + repo + '/git/';
+  var parentSha, treeSha, shas = {};
+  return ghApi(base + 'ref/heads/' + branch).then(function (ref) {
+    if (!ref) { var e = new Error('Dépôt ' + repo + ' inaccessible avec ce token'); e.status = 404; throw e; }
+    parentSha = ref.object.sha;
+    return ghApi(base + 'commits/' + parentSha);
+  }).then(function (commit) {
+    treeSha = commit.tree.sha;
+    return files.reduce(function (chain, f) {
+      return chain.then(function () {
+        return ghApi(base + 'blobs', 'POST', { content: f.b64, encoding: 'base64' }).then(function (b) { shas[f.path] = b.sha; });
+      });
+    }, Promise.resolve());
+  }).then(function () {
+    if (!opts.prune) return [];
+    return ghApi(base + 'trees/' + treeSha + '?recursive=1').then(function (t) {
+      return (t.tree || []).filter(function (e) {
+        return e.type === 'blob' && e.path.indexOf(opts.prune + '/') === 0 && !shas[e.path];
+      }).map(function (e) { return { path: e.path, mode: '100644', type: 'blob', sha: null }; });
+    });
+  }).then(function (deletions) {
+    var entries = files.map(function (f) { return { path: f.path, mode: '100644', type: 'blob', sha: shas[f.path] }; }).concat(deletions);
+    return ghApi(base + 'trees', 'POST', { base_tree: treeSha, tree: entries });
+  }).then(function (tree) {
+    return ghApi(base + 'commits', 'POST', { message: message, tree: tree.sha, parents: [parentSha] });
+  }).then(function (c) {
+    return ghApi(base + 'refs/heads/' + branch, 'PATCH', { sha: c.sha });
+  }).then(function () { return shas; });
+}
+
+// ---------- Synchronisation des pages du tunnel ----------
+function ghSyncPages(pid, stats) {
+  var p = getP(pid);
+  var dir = p.settings.ghFolder + '/tunnel';
+  stats.pAjoutees = 0; stats.pMaj = 0;
+  return Promise.all([ghList(dir), ghMeta(dir + '/tunnel.json')]).then(function (res) {
+    var items = Array.isArray(res[0]) ? res[0] : [];
+    var manifest = { pages: [] };
+    if (res[1] && res[1].content) { try { manifest = JSON.parse(ghDecodeB64(res[1].content)); } catch (e) { notify('tunnel.json illisible, ignoré', 'error'); } }
+    var byFile = {};
+    (manifest.pages || []).forEach(function (m, i) { byFile[m.fichier] = Object.assign({ _idx: i }, m); });
+    var files = items.filter(function (it) { return it.type === 'file' && /\.html?$/i.test(it.name); });
+    var seen = {};
+    return files.reduce(function (chain, f) {
+      return chain.then(function () {
+        seen[f.path] = true;
+        var m = byFile[f.name] || {};
+        var pg = p.pages.find(function (x) { return x.ghPath === f.path; }) ||
+                 p.pages.find(function (x) { return !x.ghPath && x.filename === f.name; });
+        if (pg) {
+          pg.ghPath = f.path; pg.ghMissing = false;
+          if (m.type) pg.type = m.type;
+          if (m.nom) pg.name = m.nom;
+          if (pg.ghSha === f.sha) return;
+          return ghRaw(f.path).then(function (html) {
+            var local = ghPageContent(pg);
+            if (local && local !== html && (pg.ghDirty || !pg.ghSha) &&
+                !confirm('La page « ' + pg.name + ' » diffère entre ici et GitHub.\n\nOK = prendre la version GitHub\nAnnuler = garder ta version (tu pourras la pousser)')) {
+              pg.ghSha = f.sha; pg.ghDirty = true; stats.conflits++; return;
+            }
+            pg.content = html; pg.ghSha = f.sha; pg.ghDirty = false;
+            try { localStorage.setItem('cf_pg_' + pg.id, html); } catch (e) {}
+            stats.pMaj++;
+          });
+        }
+        return ghRaw(f.path).then(function (html) {
+          var np = { id: uid(), name: m.nom || ghTitleOf(html, f.name.replace(/\.html?$/i, '').replace(/[-_]/g, ' ')), filename: f.name,
+            type: m.type || guessType(f.name), content: html, uploadedAt: Date.now(), ghPath: f.path, ghSha: f.sha };
+          p.pages.push(np);
+          try { localStorage.setItem('cf_pg_' + np.id, html); } catch (e) {}
+          stats.pAjoutees++;
+        });
+      });
+    }, Promise.resolve()).then(function () {
+      p.pages.forEach(function (pg) { if (pg.ghPath && pg.ghPath.indexOf(dir + '/') === 0 && !seen[pg.ghPath]) pg.ghMissing = true; });
+      var rank = function (pg) { if (!pg.ghPath) return 1e6; var m = byFile[pg.ghPath.split('/').pop()]; return m ? m._idx : 1e5; };
+      p.pages = p.pages.map(function (pg, i) { return { pg: pg, i: i }; })
+        .sort(function (a, b) { return (rank(a.pg) - rank(b.pg)) || (a.i - b.i); }).map(function (x) { return x.pg; });
+      if (files.some(function (f) { return !byFile[f.name]; })) ghScheduleTunnelManifest(pid, 0);
+    });
+  });
+}
+
+var _ghTunnelTimers = {};
+function ghScheduleTunnelManifest(pid, delay) {
+  var p = getP(pid);
+  if (!p || !p.settings || !p.settings.ghFolder || !ghCfg().token) return;
+  clearTimeout(_ghTunnelTimers[pid]);
+  _ghTunnelTimers[pid] = setTimeout(function () { ghSaveTunnelManifest(pid); }, delay === undefined ? 1500 : delay);
+}
+function ghTunnelManifestText(p) {
+  var dir = p.settings.ghFolder + '/tunnel';
+  return JSON.stringify({
+    _info: "Géré par hub-copyrighting.vercel.app : ordre des pages du tunnel, nom et type (optin, sales, upsell, downsell, thankyou, member, custom). Les IA peuvent le lire ; seul le porteur de projet le modifie, via hub-copyrighting.",
+    pages: p.pages.filter(function (pg) { return pg.ghPath && !pg.ghMissing && pg.ghPath.indexOf(dir + '/') === 0; })
+      .map(function (pg) { return { fichier: pg.ghPath.split('/').pop(), nom: pg.name, type: pg.type }; })
+  }, null, 2) + '\n';
+}
+function ghSaveTunnelManifest(pid) {
+  var p = getP(pid);
+  var path = p.settings.ghFolder + '/tunnel/tunnel.json';
+  return ghMeta(path).then(function (meta) {
+    return ghPut(path, ghTunnelManifestText(p), meta ? meta.sha : null, 'hub-copyrighting · ' + p.settings.ghFolder + ' : ordre et types des pages du tunnel');
+  }).then(function () { notify('Ordre du tunnel enregistré sur GitHub'); })
+    .catch(function (e) { notify('tunnel.json non enregistré : ' + e.message, 'error'); });
+}
+
+// ---------- Badges et actions sur les pages ----------
+function ghPageBadge(p, pg) {
+  if (!p.settings || !p.settings.ghFolder || !ghCfg().token) return '';
+  var s = 'font-size:10px;border-radius:4px;padding:1px 5px;';
+  if (!pg.ghPath) return ' · <a href="#" style="font-size:10px;color:var(--accent)" onclick="ghAddPagesToGitHub(\'' + p.id + '\',[\'' + pg.id + '\']);return false">🐙 ajouter à GitHub</a>';
+  if (pg.ghMissing) return ' · <span style="' + s + 'background:rgba(244,67,54,.2);color:#f44336">🐙 absente de GitHub</span>';
+  if (pg.ghDirty) return ' · <span style="' + s + 'background:rgba(255,152,0,.2);color:#ff9800">🐙 modifiée ici</span> <a href="#" style="font-size:10px;color:var(--accent)" onclick="ghPushPage(\'' + p.id + '\',\'' + pg.id + '\');return false">⬆️ pousser</a>';
+  return ' · <span style="' + s + 'background:rgba(76,175,80,.15);color:#4caf50">🐙 synchro</span>';
+}
+
+function ghPagesPanelExtra(p) {
+  if (!p.settings || !p.settings.ghFolder || !ghCfg().token) return '';
+  var local = p.pages.filter(function (pg) { return !pg.ghPath && ghPageContent(pg); });
+  if (!local.length) return '';
+  return '<div class="info-box" style="margin:-6px 0 14px;display:flex;align-items:center;gap:10px">' +
+    '<span style="flex:1">' + local.length + ' page(s) du tunnel ne sont pas encore dans GitHub (' + escHtml(p.settings.ghFolder) + '/tunnel).</span>' +
+    '<button class="btn btn-primary btn-sm" onclick="ghAddPagesToGitHub(\'' + p.id + '\')">⬆️ Tout envoyer vers GitHub</button></div>';
+}
+
+// Envoie des pages locales dans hub-projets/<dossier>/tunnel/ (un seul commit, tunnel.json compris).
+function ghAddPagesToGitHub(pid, ids) {
+  var p = getP(pid);
+  var dir = p.settings.ghFolder + '/tunnel';
+  var list = p.pages.filter(function (pg) { return !pg.ghPath && ghPageContent(pg) && (!ids || ids.indexOf(pg.id) !== -1); });
+  if (!list.length) return;
+  var c = ghCfg();
+  notify('⏳ Envoi de ' + list.length + ' page(s) vers GitHub…');
+  list.forEach(function (pg) { pg._ghTarget = dir + '/' + pg.filename.replace(/[^a-zA-Z0-9._-]/g, '-'); });
+  var files = list.map(function (pg) { return { path: pg._ghTarget, b64: ghUtf8ToB64(ghPageContent(pg)) }; });
+  // Le manifeste est calculé comme si les pages étaient déjà reliées.
+  list.forEach(function (pg) { pg.ghPath = pg._ghTarget; });
+  files.push({ path: dir + '/tunnel.json', b64: ghUtf8ToB64(ghTunnelManifestText(p)) });
+  ghCommitFiles(c.repo, c.branch, files, 'hub-copyrighting · ' + p.settings.ghFolder + ' : ajout de ' + list.length + ' page(s) du tunnel').then(function (shas) {
+    list.forEach(function (pg) { pg.ghSha = shas[pg.ghPath]; pg.ghDirty = false; pg.ghMissing = false; delete pg._ghTarget; });
+    save(); renderProject(pid);
+    notify('✅ ' + list.length + ' page(s) envoyée(s) dans GitHub');
+  }).catch(function (e) {
+    list.forEach(function (pg) { delete pg.ghPath; delete pg._ghTarget; });
+    save(); renderProject(pid);
+    notify(e.message, 'error');
+  });
+}
+
+function ghOfferPushPage(pid, pgId) {
+  var p = getP(pid), pg = p && p.pages.find(function (x) { return x.id === pgId; });
+  if (!pg || !pg.ghPath || !ghCfg().token) return;
+  pg.ghDirty = true; save();
+  setTimeout(function () {
+    var msg = prompt('Mettre aussi à jour la page « ' + pg.name + ' » sur GitHub ?\n\nMessage du commit (Annuler = plus tard, avec ⬆️ pousser) :', 'hub-copyrighting · modification de ' + pg.filename);
+    if (msg) ghPushPage(pid, pgId, msg); else renderProject(pid);
+  }, 50);
+}
+function ghPushPage(pid, pgId, message) {
+  var p = getP(pid), pg = p && p.pages.find(function (x) { return x.id === pgId; });
+  if (!pg || !pg.ghPath) return;
+  var html = ghPageContent(pg);
+  ghMeta(pg.ghPath).then(function (meta) {
+    if (meta && pg.ghSha && meta.sha !== pg.ghSha &&
+        !confirm('La page « ' + pg.name + ' » a changé sur GitHub depuis ta dernière synchro.\n\nOK = écraser avec ta version\nAnnuler = ne rien envoyer')) {
+      throw new Error('Envoi annulé : conflit avec la version GitHub');
+    }
+    return ghPut(pg.ghPath, html, meta ? meta.sha : null, message || 'hub-copyrighting · modification de ' + pg.filename);
+  }).then(function (sha) {
+    pg.ghSha = sha; pg.ghDirty = false; pg.ghMissing = false;
+    save(); renderProject(pid); notify('✅ Page « ' + pg.name + ' » mise à jour sur GitHub');
+  }).catch(function (e) { notify(e.message, 'error'); renderProject(pid); });
+}
+
+// ---------- Publication du site (tunnel + produits + espace client) ----------
+function ghDemoBar(prevHref, nextHref, step, total, nextLabel) {
+  return '\n<!-- Barre de démo hub-copyrighting -->\n<div style="position:fixed;left:0;right:0;bottom:0;z-index:2147483000;display:flex;align-items:center;gap:10px;justify-content:center;padding:10px 14px;background:rgba(20,20,30,.92);color:#fff;font:600 13px/1.2 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;backdrop-filter:blur(6px)">' +
+    '<span style="opacity:.7">Démo · étape ' + step + '/' + total + '</span>' +
+    (prevHref ? '<a href="' + prevHref + '" style="color:#fff;opacity:.8;text-decoration:none;padding:6px 10px">← Précédent</a>' : '') +
+    '<a href="' + nextHref + '" style="background:#6c63ff;color:#fff;text-decoration:none;padding:8px 16px;border-radius:8px">' + nextLabel + ' →</a></div>\n';
+}
+function ghInject(html, snippet) { return /<\/body>/i.test(html) ? html.replace(/<\/body>/i, snippet + '</body>') : html + snippet; }
+
+function ghAbRouterHtml(variantFiles, key) {
+  return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>…</title><script>(function(){var k="cf_ab_' + key + '",v=null;try{v=localStorage.getItem(k)}catch(e){}var f=' + JSON.stringify(variantFiles) + ';if(!v||f.indexOf(v)===-1){v=f[Math.floor(Math.random()*f.length)];try{localStorage.setItem(k,v)}catch(e){}}location.replace(v+location.search+location.hash);})();<\/script></head><body></body></html>\n';
+}
+
+function ghEspaceClientHtml(projName, items, backHref) {
+  var roleLabels = {}; GH_ROLES.forEach(function (r) { roleLabels[r[0]] = r[1]; });
+  var cards = items.map(function (it) {
+    var label = { pdf: '📄 Lire', video: '▶️ Regarder', audio: '🎵 Écouter', html: '🌐 Ouvrir', link: '🔗 Ouvrir' }[it.type] || '⬇️ Télécharger';
+    var viewer = ['pdf', 'video', 'audio', 'html'].indexOf(it.type) !== -1;
+    var btn = !it.url ? '' : viewer
+      ? '<button class="btn" onclick="cfOpen(' + escAttr(JSON.stringify(it.url)) + ',' + escAttr(JSON.stringify(it.name)) + ')">' + label + '</button>'
+      : '<a class="btn" href="' + escAttr(it.url) + '"' + (it.type === 'link' ? ' target="_blank"' : ' download') + '>' + label + '</a>';
+    return '<div class="card"><div class="ico">' + it.icon + '</div><div class="info"><h3>' + escHtml(it.name) + '</h3>' +
+      (it.role ? '<span class="role">' + escHtml(roleLabels[it.role] || it.role) + '</span>' : '') +
+      (it.description ? '<p>' + escHtml(it.description) + '</p>' : '') + '</div>' + btn + '</div>';
+  }).join('\n');
+  return '<!DOCTYPE html>\n<html lang="fr">\n<head>\n<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">\n<title>Espace client — ' + escHtml(projName) + '</title>\n<style>\n' +
+    '*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f5f7;min-height:100vh;color:#1c1c28}\n' +
+    '.header{background:linear-gradient(135deg,#6c63ff,#ff6584);color:#fff;padding:28px 32px}.header h1{font-size:22px}.header p{opacity:.85;margin-top:4px;font-size:14px}\n' +
+    '.wrap{max-width:720px;margin:28px auto;padding:0 18px}.demo{background:#fff8e1;border:1px solid #ffe08a;color:#7a5b00;border-radius:12px;padding:10px 14px;font-size:13px;margin-bottom:16px}\n' +
+    '.card{background:#fff;border-radius:16px;padding:16px 18px;margin-bottom:12px;box-shadow:0 2px 14px rgba(0,0,0,.07);display:flex;align-items:center;gap:14px}\n' +
+    '.ico{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,#6c63ff,#8f88ff);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}\n' +
+    '.info{flex:1;min-width:0}.info h3{font-size:15px;margin-bottom:3px}.info p{color:#888;font-size:13px}.role{display:inline-block;font-size:11px;font-weight:600;color:#6c63ff;background:rgba(108,99,255,.1);border-radius:6px;padding:1px 7px;margin-bottom:3px}\n' +
+    '.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;background:#6c63ff;color:#fff;border:none;border-radius:10px;font-weight:600;font-size:13px;white-space:nowrap;cursor:pointer;text-decoration:none}.btn:hover{background:#5a52d5}\n' +
+    '#v{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:99;flex-direction:column}#vb{background:#1a1d27;color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}\n' +
+    '#vb button{background:rgba(255,255,255,.15);border:none;color:#fff;padding:7px 16px;border-radius:8px;cursor:pointer}#vf{flex:1;border:none;background:#fff}\n' +
+    '.foot{text-align:center;color:#aaa;font-size:12px;padding:28px 0}.foot a{color:#6c63ff}\n</style>\n</head>\n<body>\n' +
+    '<div id="v"><div id="vb"><span id="vt"></span><button onclick="cfClose()">Fermer ✕</button></div><iframe id="vf"></iframe></div>\n' +
+    '<div class="header"><h1>' + escHtml(projName) + '</h1><p>Espace client</p></div>\n<div class="wrap">\n' +
+    '<div class="demo">Mode démonstration : accès libre, sans achat.</div>\n' + (cards || '<p>Aucun produit pour le moment.</p>') + '\n' +
+    '<div class="foot">' + (backHref ? '<a href="' + backHref + '">← Revoir le tunnel</a>' : '') + '</div>\n</div>\n' +
+    '<script>function cfOpen(u,t){document.getElementById("vt").textContent=t;document.getElementById("vf").src=u;document.getElementById("v").style.display="flex";document.body.style.overflow="hidden"}' +
+    'function cfClose(){document.getElementById("v").style.display="none";document.getElementById("vf").src="";document.body.style.overflow=""}' +
+    'document.addEventListener("keydown",function(e){if(e.key==="Escape")cfClose()});<\/script>\n</body>\n</html>\n';
+}
+
+function ghPublishSite(pid) {
+  var p = getP(pid);
+  if (!p) return;
+  if (!ghCfg().token) { notify('Ajoute d\'abord ton token GitHub (onglet Produits → 🐙)', 'error'); return; }
+  if (!p.pages.length && !(p.products || []).length) { notify('Rien à publier : ajoute des pages ou des produits', 'error'); return; }
+  var slug = ghSlug(p);
+  if (!slug) { notify('Nom de dossier invalide (Configuration → dossier)', 'error'); return; }
+  var siteBase = GH_SITE + '/' + slug;
+  if (!confirm('Publier « ' + p.name + ' » sur ' + siteBase + '/ ?\n\nTunnel, produits et espace client remplacent la version en ligne de ce projet.')) return;
+
+  var s = p.settings || {};
+  var langs = p.languages && p.languages.length ? p.languages : ['fr'];
+  var defLang = p.defaultLanguage || langs[0];
+  var files = [];
+  var add = function (path, text) { files.push({ path: path, b64: ghUtf8ToB64(text) }); };
+  notify('⏳ Préparation de la publication…');
+
+  // 1. Produits (fichiers communs à toutes les langues, dans /<projet>/produits/)
+  var prodItems = [];
+  var prodChain = (p.products || []).reduce(function (chain, pr) {
+    return chain.then(function () {
+      var item = { name: pr.name, description: pr.description || '', type: pr.type, icon: (typeof ghIcon === 'function' ? ghIcon(pr) : pIcon(pr.type)), role: pr.role || '', url: '' };
+      prodItems.push(item);
+      if (pr.type === 'html') {
+        var html = pr.htmlContent || localStorage.getItem('cf_prod_' + pr.id);
+        var fname = (pr.htmlFilename || (pr.name + '.html')).replace(/[^a-zA-Z0-9._-]/g, '-');
+        if (!html) return;
+        add(slug + '/produits/' + fname, html);
+        item.url = '../produits/' + fname; pr._generatedUrl = siteBase + '/produits/' + fname;
+        return;
+      }
+      if (pr.ghPath) {
+        var name = pr.ghPath.split('/').pop().replace(/[^a-zA-Z0-9._-]/g, '-');
+        return ghRawBlob(pr.ghPath).then(ghBlobToB64).then(function (b64) {
+          files.push({ path: slug + '/produits/' + name, b64: b64 });
+          item.url = '../produits/' + name; pr.url = siteBase + '/produits/' + name; pr._generatedUrl = pr.url;
+        });
+      }
+      item.url = pr.url || ''; pr._generatedUrl = pr.url || '';
+    });
+  }, Promise.resolve());
+
+  prodChain.then(function () {
+    var firstUrls = [];
+    langs.forEach(function (lang) {
+      var isDef = lang === defLang;
+      var base = isDef ? slug : slug + '/' + lang;
+      var projName = (!isDef && p.nameTranslations && p.nameTranslations[lang]) || p.name;
+      var pages = p.pages.map(function (pg) {
+        var tl = !isDef && pg.translations && pg.translations[lang];
+        return { pg: pg, file: (tl && tl.filename) || pg.filename, content: (tl && (tl.content || localStorage.getItem('cf_pg_' + lang + '_' + pg.id))) || ghPageContent(pg) };
+      }).filter(function (x) { return x.content; });
+      var espace = 'espace-client/';
+      pages.forEach(function (x, i) {
+        var pg = x.pg, next = pages[i + 1], prev = pages[i - 1];
+        var nextHref = next ? next.file : espace;
+        var html = x.content;
+        if ((pg.type === 'sales' || pg.type === 'upsell') && s.stripe && s.stripe.paymentLinkUrl) html = injectStripe(html, p);
+        else if ((pg.type === 'sales' || pg.type === 'upsell') && s.paypal && s.paypal.clientId) html = injectPaypal(html, p, nextHref);
+        if (pg.type === 'optin' && s.brevo && s.brevo.apiKey) html = injectBrevo(html, p, nextHref);
+        if (pg.type === 'member' && p.products && p.products.length) html = injectProducts(html, p);
+        var bar = ghDemoBar(prev ? prev.file : '', nextHref, i + 1, pages.length, next ? 'Page suivante' : 'Espace client');
+        var hasAB = isDef && pg.variants && pg.variants.length > 1;
+        if (hasAB) {
+          var vfiles = [];
+          pg.variants.forEach(function (v) {
+            var vc = v.content || localStorage.getItem('cf_variant_' + v.id);
+            if (!vc) return;
+            add(base + '/' + v.filename, ghInject(vc, bar)); vfiles.push(v.filename);
+          });
+          if (vfiles.length) add(base + '/' + x.file, ghAbRouterHtml(vfiles, slug + '_' + pg.id));
+        } else {
+          add(base + '/' + x.file, ghInject(html, bar));
+        }
+      });
+      var items = prodItems.map(function (it) { return Object.assign({}, it, { url: it.url && it.url.indexOf('../produits/') === 0 ? (isDef ? '../produits/' : '../../produits/') + it.url.slice(12) : it.url }); });
+      add(base + '/espace-client/index.html', ghEspaceClientHtml(projName, items, pages.length ? '../' + pages[0].file : ''));
+      var first = pages.length ? pages[0].file : 'espace-client/';
+      add(base + '/index.html', '<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=' + first + '"><title>' + escHtml(projName) + '</title></head><body><a href="' + first + '">' + escHtml(projName) + '</a></body></html>\n');
+      firstUrls.push({ lang: lang, url: GH_SITE + '/' + base + '/' + first, espace: GH_SITE + '/' + base + '/espace-client/' });
+    });
+    notify('⏳ Envoi de ' + files.length + ' fichier(s) vers hub-copyrighting…');
+    return ghCommitFiles(GH_SITE_REPO, GH_SITE_BRANCH, files, 'Publication de ' + p.name + ' (' + files.length + ' fichiers) depuis hub-copyrighting', { prune: slug })
+      .then(function () { return firstUrls; });
+  }).then(function (urls) {
+    p.settings.ghPublishedAt = Date.now(); p.settings.ghPublishedUrls = urls;
+    save();
+    ghShowPublished(pid);
+  }).catch(function (e) {
+    if (e.status === 404 || e.status === 403) notify('Le token n\'a pas accès au dépôt hub-copyrighting : sur GitHub, modifie le token et ajoute « hub-copyrighting » (Contents : Read and write)', 'error');
+    else notify(e.message, 'error');
+  });
+}
+
+function ghShowPublished(pid) {
+  var p = getP(pid);
+  var urls = (p.settings && p.settings.ghPublishedUrls) || [];
+  var row = function (label, url) {
+    return '<div style="display:flex;align-items:center;gap:8px;background:var(--surface2);border-radius:8px;padding:10px;margin-bottom:6px">' +
+      '<div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600">' + label + '</div>' +
+      '<a href="' + url + '" target="_blank" style="font-size:12px;color:var(--accent);font-family:monospace;word-break:break-all">' + url + '</a></div>' +
+      '<button class="btn btn-icon btn-sm" onclick="navigator.clipboard.writeText(\'' + url + '\');notify(\'Copié !\')">📋</button></div>';
+  };
+  document.getElementById('main').innerHTML =
+    '<div class="breadcrumb"><a onclick="showHome()">🏠 Projets</a><span>›</span><a onclick="renderProject(\'' + pid + '\')">' + escHtml(p.name) + '</a><span>›</span><span>Publié</span></div>' +
+    '<div class="page-header"><div><div class="page-title">🚀 Publié !</div><div class="page-sub">Vercel met le site en ligne en général en moins d\'une minute.</div></div>' +
+    '<button class="btn btn-secondary" onclick="renderProject(\'' + pid + '\')">← Retour</button></div>' +
+    '<div class="card">' + urls.map(function (u) {
+      return row(langFlag(u.lang) + ' Tunnel (page 1)', u.url) + row(langFlag(u.lang) + ' Espace client', u.espace);
+    }).join('') + '</div>';
+}
+
+// ---------- Suppression aussi sur GitHub ----------
+function ghOfferDelete(pid, path, kind) {
+  if (!ghCfg().token) return;
+  setTimeout(function () {
+    if (!confirm('Supprimer aussi « ' + path.split('/').pop() + ' » de GitHub (' + path + ') ?\n\nAnnuler = il reste sur GitHub et reviendra à la prochaine synchro.')) return;
+    var c = ghCfg();
+    ghMeta(path).then(function (meta) {
+      if (!meta) return;
+      return ghFetch('/repos/' + c.repo + '/contents/' + ghEnc(path), { method: 'DELETE', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'hub-copyrighting · suppression de ' + path.split('/').pop(), sha: meta.sha, branch: c.branch }) });
+    }).then(function () {
+      if (kind === 'tunnel') ghScheduleTunnelManifest(pid, 300); else ghScheduleManifest(pid, 300);
+      notify('Supprimé de GitHub');
+    }).catch(function (e) { notify(e.message, 'error'); });
+  }, 50);
 }
 
 </script>
