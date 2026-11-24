@@ -3,6 +3,8 @@
 Outil de gestion des contenus de copywriting : https://hub-copyrighting.vercel.app
 
 ## Principe
+- **Accueil** : tous les projets en vignettes, avec l'étape en cours, la barre d'avancement, le nombre de pages de tunnel, de produits, de fichiers à affecter, de contenus validés, de notes ✏️ et 🧪, la prochaine action et l'échéance.
+- **Pilotage** (par projet) : 7 étapes (cadrage, recherche, produits, tunnel, relecture & tests, lancement, optimisation). Chaque étape a sa liste de tâches (modifiable) et des vérifications automatiques calculées à partir des fichiers. « À faire maintenant » rassemble les tâches de l'étape, les notes ✏️, les fichiers à affecter et les fiches incomplètes. On passe à l'étape suivante d'un clic.
 - **Source de vérité : le dépôt GitHub `olympeathletique-34/hub-projets`.** Chaque dossier racine est un projet (aura, zone-4e…). Rien n'est stocké ailleurs : le hub lit et écrit directement dans le dépôt.
 - **Trois colonnes par projet** :
   - **Tunnel** : fichiers de `<projet>/marketing/tunnels/`, dans l'ordre du tunnel, avec leur étape (capture, vente, upsell…).
@@ -17,7 +19,7 @@ Outil de gestion des contenus de copywriting : https://hub-copyrighting.vercel.a
 - Thème clair par défaut, sombre en option.
 
 ## Où sont les infos
-`<projet>/hub.json`, une entrée par fichier (clé = chemin depuis le dossier projet). Les IA fournissent les infos de base d'une page HTML avec des balises `<meta name="hub:…">` : voir `00-hub/FICHES-HUB.md` dans hub-projets (installable depuis ⚙︎ Réglages). Les anciens `produits.json` et `tunnel.json` sont repris comme valeurs par défaut.
+`<projet>/hub.json` : la clé `projet` (étape en cours, objectif, échéance, tâches) et une entrée par fichier (clé = chemin depuis le dossier projet). Les IA fournissent les infos de base d'une page HTML avec des balises `<meta name="hub:…">` : voir `00-hub/FICHES-HUB.md` dans hub-projets (installable depuis ⚙︎ Réglages). Les anciens `produits.json` et `tunnel.json` sont repris comme valeurs par défaut.
 
 ## Token
 Token GitHub fine-grained limité à `hub-projets`, permission Contents : Read and write. Il reste dans le navigateur (clé `cf_gh_cfg`, la même que l'ancien tableau de bord).

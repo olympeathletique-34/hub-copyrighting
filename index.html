@@ -139,6 +139,64 @@ main{flex:1;min-height:0;overflow:auto}
 .tour{position:fixed;inset:0;z-index:60;background:var(--bg);display:flex;flex-direction:column}
 .tour .tb{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--border)}
 .tour iframe{flex:1;border:0;background:#fff;width:100%}
+
+/* Accueil */
+.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px}
+.pcard{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px 18px;cursor:pointer;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;transition:border-color .12s,transform .12s}
+.pcard:hover{border-color:var(--accent);transform:translateY(-1px)}
+.pcard h3{margin:0;font-size:17px;flex:1;text-transform:capitalize}
+.pc-h{display:flex;align-items:center;gap:8px}
+.phase-now{font-size:13px;color:var(--text2)}
+.phase-now b{color:var(--text)}
+.segs{display:flex;gap:3px}
+.segs i{flex:1;height:7px;border-radius:4px;background:var(--surface2);position:relative;overflow:hidden}
+.segs i.done{background:var(--green)}
+.segs i.cur{background:var(--accent-soft)}
+.segs i.cur b{position:absolute;left:0;top:0;bottom:0;background:var(--accent);border-radius:4px}
+.counts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.counts div{background:var(--surface2);border-radius:9px;padding:6px 8px}
+.counts b{display:block;font-size:16px}
+.counts span{font-size:11.5px;color:var(--text2)}
+.counts .warn b{color:var(--orange)}
+.next{font-size:13px;background:var(--accent-soft);color:var(--accent-text);border-radius:9px;padding:7px 10px}
+.next.ok{background:var(--green-soft);color:var(--green)}
+.due{font-size:12px;color:var(--text3)}
+.pcard.new{align-items:center;justify-content:center;border-style:dashed;color:var(--text2);min-height:200px;box-shadow:none;background:transparent}
+/* Pilotage */
+.ph-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.ph-head h1{margin:0;font-size:22px;text-transform:capitalize}
+.stepper{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:18px}
+@media(max-width:900px){.stepper{grid-template-columns:repeat(4,1fr)}}
+.stp{border:1px solid var(--border);background:var(--surface);border-radius:12px;padding:9px 10px;cursor:pointer;text-align:left;color:var(--text2)}
+.stp .k{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.stp .t{font-weight:650;color:var(--text);font-size:13.5px;margin:2px 0 6px}
+.stp .p{height:4px;border-radius:3px;background:var(--surface2);overflow:hidden}
+.stp .p b{display:block;height:100%;background:var(--accent)}
+.stp.done{background:var(--green-soft);border-color:transparent}
+.stp.done .k{color:var(--green)}
+.stp.done .p b{background:var(--green)}
+.stp.cur{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.stp.cur .k{color:var(--accent-text)}
+.stp.view{outline:2px dashed var(--text3);outline-offset:2px}
+.pgrid{display:grid;grid-template-columns:1.25fr 1fr;gap:16px;align-items:start}
+@media(max-width:1000px){.pgrid{grid-template-columns:1fr}}
+.box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+.box h2{margin:0 0 4px;font-size:17px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.box .but{color:var(--text2);margin-bottom:14px}
+.chk{display:flex;align-items:flex-start;gap:10px;padding:8px 6px;border-radius:9px}
+.chk:hover{background:var(--surface2)}
+.chk input{width:17px;height:17px;margin-top:1px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+.chk .lb{flex:1}
+.chk.fait .lb{color:var(--text3);text-decoration:line-through}
+.chk .auto{font-size:16px;width:17px;text-align:center;flex-shrink:0;line-height:1.2}
+.chk .tag{font-size:10.5px;font-weight:600;color:var(--text3);background:var(--surface2);border-radius:5px;padding:0 5px;margin-left:6px}
+.chk .x{opacity:0;border:0;background:none;cursor:pointer;color:var(--text3)}
+.chk:hover .x{opacity:1}
+.todo{display:flex;align-items:flex-start;gap:9px;padding:8px 6px;border-radius:9px;cursor:pointer;font-size:13.5px}
+.todo:hover{background:var(--surface2)}
+.todo .ic{width:20px;text-align:center;flex-shrink:0}
+.todo small{display:block;color:var(--text3);font-size:12px}
+.grp{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text3);margin:14px 6px 4px}
 code{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:var(--surface2);padding:1px 5px;border-radius:5px}
 .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px}
 @keyframes sp{to{transform:rotate(360deg)}}
@@ -146,11 +204,13 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:var(--su
 </head>
 <body>
 <header class="top">
-  <div class="logo">Hub <span>copywriting</span></div>
+  <div class="logo" style="cursor:pointer" onclick="A.home()" title="Accueil : tous les projets">Hub <span>copywriting</span></div>
   <select class="inp" id="proj-sel" title="Projet (dossier du dépôt)" style="max-width:220px"></select>
-  <div class="tabs" id="view-tabs" style="display:none">
-    <button data-v="board">Contenus</button>
-    <button data-v="notes">Toutes les notes</button>
+  <div class="tabs" id="view-tabs">
+    <button data-v="home">Accueil</button>
+    <button data-v="pilot" class="pj">Pilotage</button>
+    <button data-v="board" class="pj">Contenus</button>
+    <button data-v="notes" class="pj">Notes</button>
   </div>
   <div class="sp"></div>
   <span id="savestate"></span>
@@ -187,9 +247,9 @@ const CATS = [['tunnel','Tunnel'],['produit','Produit'],['','À affecter'],['arc
 const NT = { garder:['✅','C’est bien, on garde'], changer:['✏️','À changer'], ab:['🧪','À tester en A/B'], idee:['💡','Idée / question'] };
 const IGNORE = ['hub.json','produits.json','tunnel.json','README.md','.gitkeep'];
 const LOOSE_EXT = ['html','htm','pdf','docx','doc','odt','xlsx','xls','ods','pptx','ppt','epub','mp4','mov','webm','m4v','mp3','wav','m4a','ogg','zip'];
-const HUB_INFO = 'Fiches du hub copywriting (hub-copyrighting.vercel.app). Clé = chemin du fichier dans ce dossier projet. Champs : categorie (tunnel | produit | archive | vide = à affecter), nom, type (produits), role (produits), etape (tunnel), ordre, statut (brouillon | a-revoir | valide), resume, pour_qui, promesse, notes. Les IA peuvent ajouter ou compléter resume / pour_qui / promesse / type ; elles ne suppriment jamais les notes du porteur de projet. Voir 00-hub/FICHES-HUB.md.';
+const HUB_INFO = 'Fiches du hub copywriting (hub-copyrighting.vercel.app). Clé = chemin du fichier dans ce dossier projet. Champs : categorie (tunnel | produit | archive | vide = à affecter), nom, type (produits), role (produits), etape (tunnel), ordre, statut (brouillon | a-revoir | valide), resume, pour_qui, promesse, notes ; clé « projet » : étape en cours, objectif, échéance et tâches du projet (géré par le porteur de projet). Les IA peuvent ajouter ou compléter resume / pour_qui / promesse / type ; elles ne suppriment jamais les notes du porteur de projet. Voir 00-hub/FICHES-HUB.md.';
 
-const S = { tree: [], projects: [], proj: null, hub: { fichiers: {} }, legacy: {}, files: [], metas: {}, view: 'board',
+const S = { tree: [], projects: [], proj: null, hub: { fichiers: {} }, legacy: {}, files: [], metas: {}, view: 'home', hubs: {}, pilotPhase: null,
   cur: null, curText: null, curBlobUrl: null, mode: 'apercu', mobile: false, dirty: false, ntype: 'changer', nfilter: 'open',
   pending: [], flushTimer: null, flushing: null, showArch: false };
 
@@ -347,6 +407,13 @@ function isContent(rel) {
   return LOOSE_EXT.includes(ext);
 }
 
+function filesOf(proj) {
+  const pre = proj + '/';
+  return S.tree.filter(e => e.type === 'blob' && e.path.startsWith(pre))
+    .map(e => ({ rel: e.path.slice(pre.length), full: e.path, sha: e.sha, size: e.size }))
+    .filter(f => isContent(f.rel))
+    .map(f => Object.assign(f, { name: baseName(f.rel), ext: extOf(f.rel), kind: kindOf(extOf(f.rel)) }));
+}
 async function openProject(name) {
   if (S.dirty && !confirm('Tu as des modifications non enregistrées dans l’éditeur. Les abandonner ?')) { $('#proj-sel').value = S.proj; return; }
   await flush();
@@ -366,9 +433,9 @@ async function openProject(name) {
   S.legacy = {};
   ((lp && lp.data.produits) || []).forEach((m, i) => { S.legacy[DIRS.produit + m.fichier] = { nom: m.nom, role: m.role, ordre: i + 1 }; });
   ((lt && lt.data.pages) || []).forEach((m, i) => { S.legacy[DIRS.tunnel + m.fichier] = { nom: m.nom, etape: LEGACY_ETAPE[m.type] || '', ordre: i + 1 }; });
-  S.files = blobs.map(e => ({ rel: e.path.slice(pre.length), full: e.path, sha: e.sha, size: e.size }))
-    .filter(f => isContent(f.rel))
-    .map(f => Object.assign(f, { name: baseName(f.rel), ext: extOf(f.rel), kind: kindOf(extOf(f.rel)) }));
+  S.files = filesOf(name);
+  S.hubs[name] = S.hub;
+  if (S.view === 'home') S.view = 'pilot';
   await loadMetas(S.files.filter(f => f.kind === 'html'));
   render();
 }
@@ -406,8 +473,8 @@ function guessEtape(n) {
   return '';
 }
 // Fiche fusionnée : hub.json > balises hub: du fichier (posées par une IA) > anciens manifestes > dossier.
-function info(f) {
-  const h = S.hub.fichiers[f.rel] || {}, mt = S.metas[f.sha] || { hub: {} }, m = mt.hub || {}, l = S.legacy[f.rel] || {};
+function info(f, hub = S.hub, legacy = S.legacy) {
+  const h = hub.fichiers[f.rel] || {}, mt = S.metas[f.sha] || { hub: {} }, m = mt.hub || {}, l = legacy[f.rel] || {};
   const has = v => v !== undefined && v !== null && v !== '';
   const pick = k => has(h[k]) ? h[k] : has(m[k]) ? m[k] : l[k];
   let cat = h.categorie !== undefined ? h.categorie : has(m.categorie) ? m.categorie : undefined;
@@ -435,12 +502,13 @@ function noteCounts(notes) {
 
 /* ----------------------------- rendu ----------------------------- */
 function render() {
-  $('#view-tabs').style.display = S.proj ? '' : 'none';
-  document.querySelectorAll('#view-tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === S.view));
+  $('#view-tabs').style.display = cfg().token ? '' : 'none';
+  document.querySelectorAll('#view-tabs button').forEach(b => { b.classList.toggle('on', b.dataset.v === S.view && !S.cur); if (b.classList.contains('pj')) b.style.display = S.proj ? '' : 'none'; });
   if (!cfg().token) return renderWelcome();
-  if (!S.proj) return renderNoProject();
+  if (!S.proj || S.view === 'home') { S.cur = null; return renderHome(); }
   if (S.cur) return renderDetail();
   if (S.view === 'notes') return renderAllNotes();
+  if (S.view === 'pilot') return renderPilot();
   renderBoard();
 }
 
@@ -658,12 +726,199 @@ function showHtml() {
 }
 const editDoc = () => { const fr = $('#pvbody iframe'); return S.mode === 'edit' && fr ? fr.contentDocument : null; };
 
+
+/* --------------------- gestion de projet (pilotage) --------------------- */
+const PHASES = [
+  { id: 'cadrage', nom: 'Cadrage', but: 'Décider quoi vendre, à qui, et à quel prix.', taches: [
+    'Définir la cible : qui, dans quelle situation, avec quelle douleur principale',
+    'Formuler la promesse principale (résultat concret, sans promesse non prouvée)',
+    'Fixer le prix et la structure de l’offre (produit principal, order bump, upsell)'] },
+  { id: 'recherche', nom: 'Recherche', but: 'Comprendre la cible avec ses propres mots.', taches: [
+    'Collecter 20 verbatims réels (forums, avis, commentaires)',
+    'Analyser 3 offres concurrentes (promesse, prix, angle)',
+    'Lister les objections principales et leurs réponses',
+    'Choisir 3 à 5 angles d’accroche à tester'] },
+  { id: 'produits', nom: 'Produits', but: 'Créer ce que le client reçoit après l’achat.', taches: [
+    'Relire chaque produit en entier',
+    'Préparer la livraison (espace client, accès)'] },
+  { id: 'tunnel', nom: 'Tunnel', but: 'Écrire les pages qui vendent, dans l’ordre du parcours.', taches: [
+    'Écrire la séquence d’emails (bienvenue puis vente)',
+    'Écrire l’order bump et l’upsell, si prévus'] },
+  { id: 'relecture', nom: 'Relecture & tests', but: 'Tout relire, trancher, et préparer les tests A/B.', taches: [
+    'Faire relire par une IA : français et promesses risquées',
+    'Choisir les variantes A/B à lancer (notes 🧪)'] },
+  { id: 'lancement', nom: 'Lancement', but: 'Mettre en ligne et amener du trafic.', taches: [
+    'Mettre en ligne le tunnel et le paiement',
+    'Tester un achat de bout en bout',
+    'Créer les publicités',
+    'Lancer la séquence d’emails'] },
+  { id: 'optimisation', nom: 'Optimisation', but: 'Mesurer, puis améliorer ce qui freine.', taches: [
+    'Relever les chiffres : opt-in, conversion, panier moyen',
+    'Lancer un test A/B sur la page la plus faible',
+    'Noter dans les fiches ce qui a marché'] }
+];
+const phaseIdx = id => Math.max(0, PHASES.findIndex(p => p.id === id));
+function defaultTasks() { const out = []; PHASES.forEach(ph => ph.taches.forEach((t, i) => out.push({ id: ph.id + '-' + (i + 1), etape: ph.id, texte: t }))); return out; }
+function projetOf(hub) {
+  const p = (hub && hub.projet) || {};
+  return { etape: PHASES.some(x => x.id === p.etape) ? p.etape : 'cadrage', objectif: p.objectif || '', echeance: p.echeance || '',
+    etapes: p.etapes || {}, taches: Array.isArray(p.taches) ? p.taches : defaultTasks() };
+}
+function ensureProjet(d) {
+  const p = d.projet = d.projet && typeof d.projet === 'object' ? d.projet : {};
+  if (!Array.isArray(p.taches)) p.taches = defaultTasks();
+  if (!p.etape) p.etape = 'cadrage';
+  if (!p.etapes || typeof p.etapes !== 'object') p.etapes = {};
+  return p;
+}
+function statsOf(files, hub, legacy = {}) {
+  const st = { tunnel: 0, produit: 0, inbox: 0, valides: 0, total: 0, changer: 0, ab: 0, idee: 0, garder: 0, etapes: new Set(),
+    changerList: [], inboxList: [], incomplets: [] };
+  files.forEach(f => {
+    const i = info(f, hub, legacy);
+    if (i.categorie === 'archive') return;
+    i.notes.filter(n => !n.fait).forEach(n => { if (st[n.type] !== undefined) st[n.type]++; if (n.type === 'changer') st.changerList.push({ f, i, n }); });
+    if (i.categorie === 'tunnel') { st.tunnel++; if (i.etape) st.etapes.add(i.etape); }
+    else if (i.categorie === 'produit') st.produit++;
+    else { st.inbox++; st.inboxList.push({ f, i }); return; }
+    st.total++; if (i.statut === 'valide') st.valides++;
+    if (!i.resume || (i.categorie === 'produit' && !i.type)) st.incomplets.push({ f, i });
+  });
+  return st;
+}
+// Vérifications calculées à partir des fichiers : [libellé, ok, vue où agir]
+const AUTO = {
+  cadrage: (st, pj) => [['Objectif du projet écrit (en haut de cette page)', !!pj.objectif]],
+  produits: st => [[`Au moins un produit (${st.produit})`, st.produit > 0, 'board'],
+    [`Chaque contenu a sa fiche : type et résumé${st.incomplets.length ? ' (' + st.incomplets.length + ' à compléter)' : ''}`, st.total > 0 && !st.incomplets.length, 'board']],
+  tunnel: st => [['Une page de capture', st.etapes.has('capture'), 'board'], ['Une page de vente', st.etapes.has('vente'), 'board'], ['Une page de remerciement', st.etapes.has('merci'), 'board']],
+  relecture: st => [[`Aucun fichier à affecter (${st.inbox})`, !st.inbox, 'board'], [`Aucune note ✏️ à traiter (${st.changer})`, !st.changer, 'notes'],
+    [`Tous les contenus validés (${st.valides}/${st.total})`, st.total > 0 && st.valides === st.total, 'board']]
+};
+function phaseState(ph, pj, st) {
+  const man = pj.taches.filter(t => t.etape === ph.id), auto = AUTO[ph.id] ? AUTO[ph.id](st, pj) : [];
+  const total = man.length + auto.length, done = man.filter(t => t.fait).length + auto.filter(a => a[1]).length;
+  return { man, auto, total, done, fait: !!(pj.etapes[ph.id] && pj.etapes[ph.id].fait) };
+}
+function nextAction(pj, st) {
+  const ph = PHASES[phaseIdx(pj.etape)], s = phaseState(ph, pj, st);
+  const t = s.man.find(x => !x.fait); if (t) return t.texte;
+  const a = s.auto.find(x => !x[1]); if (a) return a[0];
+  return null;
+}
+const fmtDate = d => { try { return new Date(d + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }); } catch (e) { return d; } };
+function daysLeft(d) { const n = Math.round((new Date(d + 'T12:00:00') - new Date()) / 864e5); return n < 0 ? 'dépassée de ' + (-n) + ' j' : n === 0 ? 'aujourd’hui' : 'dans ' + n + ' j'; }
+
+async function loadHubs() {
+  const res = await Promise.all(S.projects.map(p => p === S.proj ? Promise.resolve({ data: S.hub }) : readJson(p + '/hub.json').catch(() => null)));
+  S.projects.forEach((p, k) => { S.hubs[p] = normHub(res[k] && res[k].data); });
+  S.homeLoaded = true;
+}
+function segsHtml(pj, st) {
+  const k = phaseIdx(pj.etape);
+  return '<div class="segs">' + PHASES.map((ph, i) => {
+    if (pj.etapes[ph.id] && pj.etapes[ph.id].fait && i !== k) return '<i class="done" title="' + esc(ph.nom) + ' : terminée"></i>';
+    if (i === k) { const s = phaseState(ph, pj, st); return '<i class="cur" title="' + esc(ph.nom) + ' : en cours"><b style="width:' + (s.total ? Math.round(100 * s.done / s.total) : 0) + '%"></b></i>'; }
+    return '<i title="' + esc(ph.nom) + '"></i>';
+  }).join('') + '</div>';
+}
+async function renderHome() {
+  if (S.proj) S.hubs[S.proj] = S.hub;
+  if (!S.homeLoaded) {
+    $('#main').innerHTML = '<div class="wrap"><span class="spin"></span> Lecture des projets…</div>';
+    try { await loadHubs(); } catch (e) { toast(e.message, true); }
+    if (S.view !== 'home' && S.proj) return;
+  }
+  const cards = S.projects.map(p => {
+    const hub = S.hubs[p] || normHub({}), pj = projetOf(hub), st = statsOf(filesOf(p), hub), k = phaseIdx(pj.etape);
+    const nx = nextAction(pj, st);
+    return `<div class="pcard" data-p="${esc(p)}" onclick="A.openPilot(this.dataset.p)">
+      <div class="pc-h"><h3>${esc(p)}</h3><span class="chip">Étape ${k + 1}/${PHASES.length}</span></div>
+      <div class="phase-now">En cours : <b>${esc(PHASES[k].nom)}</b>${pj.objectif ? ' · ' + esc(pj.objectif.length > 70 ? pj.objectif.slice(0, 70) + '…' : pj.objectif) : ''}</div>
+      ${segsHtml(pj, st)}
+      <div class="counts">
+        <div><b>${st.tunnel}</b><span>pages tunnel</span></div>
+        <div><b>${st.produit}</b><span>produits</span></div>
+        <div class="${st.inbox ? 'warn' : ''}"><b>${st.inbox}</b><span>à affecter</span></div>
+        <div><b>${st.valides}/${st.total}</b><span>validés</span></div>
+        <div class="${st.changer ? 'warn' : ''}"><b>${st.changer}</b><span>✏️ à changer</span></div>
+        <div><b>${st.ab}</b><span>🧪 à tester</span></div>
+      </div>
+      <div class="next${nx ? '' : ' ok'}">${nx ? '→ ' + esc(nx) : '✓ Étape prête à être terminée'}</div>
+      ${pj.echeance ? `<div class="due">Échéance : ${esc(fmtDate(pj.echeance))} (${daysLeft(pj.echeance)})</div>` : ''}
+    </div>`;
+  }).join('');
+  $('#main').innerHTML = `<div class="wrap">
+    <div class="ph-head"><h1 style="text-transform:none">Mes projets</h1><span class="sp"></span><span style="color:var(--text3);font-size:12.5px">Dépôt ${esc(cfg().repo)}</span></div>
+    <div class="hgrid">${cards}<div class="pcard new" onclick="A.newProject()">＋ Nouveau projet</div></div></div>`;
+}
+
+function renderPilot() {
+  const pj = projetOf(S.hub), st = statsOf(S.files, S.hub, S.legacy), cur = phaseIdx(pj.etape);
+  const viewId = S.pilotPhase || pj.etape, vk = phaseIdx(viewId), ph = PHASES[vk], s = phaseState(ph, pj, st);
+  const stepper = PHASES.map((p, i) => {
+    const x = phaseState(p, pj, st), cls = i === cur ? 'cur' : x.fait ? 'done' : '';
+    return `<button class="stp ${cls}${i === vk && i !== cur ? ' view' : ''}" onclick="A.phaseView('${p.id}')">
+      <div class="k">${i === cur ? 'En cours' : x.fait ? '✓ Terminée' : 'Étape ' + (i + 1)}</div><div class="t">${esc(p.nom)}</div>
+      <div class="p"><b style="width:${x.total ? Math.round(100 * x.done / x.total) : 0}%"></b></div></button>`;
+  }).join('');
+  const status = vk === cur ? 'En cours' : s.fait ? 'Terminée' : vk < cur ? 'Non terminée' : 'À venir';
+  const autoHtml = s.auto.map(a => `<div class="chk${a[1] ? ' fait' : ''}"${a[2] && !a[1] ? ` style="cursor:pointer" onclick="A.go('${a[2]}')"` : ''}><span class="auto">${a[1] ? '✅' : '○'}</span><span class="lb">${esc(a[0])}<span class="tag">auto</span></span></div>`).join('');
+  const manHtml = s.man.map(t => `<label class="chk${t.fait ? ' fait' : ''}"><input type="checkbox" ${t.fait ? 'checked' : ''} data-t="${esc(t.id)}" onchange="A.task(this)"><span class="lb">${esc(t.texte)}${t.fait && t.date ? ` <span class="tag">${esc(t.date)}</span>` : ''}</span><button class="x" title="Supprimer" data-t="${esc(t.id)}" onclick="event.preventDefault();A.taskDel(this)">✕</button></label>`).join('');
+  const nextPh = PHASES[cur + 1];
+  const actions = vk === cur
+    ? `<button class="btn pri" onclick="A.phaseDone()">${nextPh ? '✓ Étape terminée → passer à « ' + esc(nextPh.nom) + ' »' : '✓ Projet terminé'}</button>`
+    : `<button class="btn" onclick="A.phaseSet('${ph.id}')">${vk < cur ? '↩ Revenir à cette étape' : 'Passer directement à cette étape'}</button>`;
+
+  // À faire maintenant
+  const curS = phaseState(PHASES[cur], pj, st);
+  let todo = '';
+  const openMan = curS.man.filter(t => !t.fait), badAuto = curS.auto.filter(a => !a[1]);
+  if (openMan.length || badAuto.length) {
+    todo += `<div class="grp">Étape « ${esc(PHASES[cur].nom)} »</div>` +
+      openMan.map(t => `<label class="chk"><input type="checkbox" data-t="${esc(t.id)}" onchange="A.task(this)"><span class="lb">${esc(t.texte)}</span></label>`).join('') +
+      badAuto.map(a => `<div class="todo" onclick="A.go('${a[2] || 'board'}')"><span class="ic">○</span><span>${esc(a[0])}</span></div>`).join('');
+  }
+  if (st.changerList.length) todo += `<div class="grp">Notes ✏️ à traiter</div>` + st.changerList.slice(0, 6).map(x =>
+    `<div class="todo" data-rel="${esc(x.f.rel)}" onclick="A.open(this)"><span class="ic">✏️</span><span>${esc(x.n.texte || x.n.extrait || 'Note')}<small>${esc(x.i.nom)}</small></span></div>`).join('') +
+    (st.changerList.length > 6 ? `<div class="todo" onclick="A.go('notes')"><span class="ic">…</span><span>${st.changerList.length - 6} autre(s)</span></div>` : '');
+  if (st.inbox) todo += `<div class="grp">À affecter</div><div class="todo" onclick="A.go('board')"><span class="ic">📥</span><span>${st.inbox} fichier(s) à classer en tunnel ou produit</span></div>`;
+  if (st.incomplets.length) todo += `<div class="grp">Fiches à compléter</div>` + st.incomplets.slice(0, 5).map(x =>
+    `<div class="todo" data-rel="${esc(x.f.rel)}" onclick="A.open(this)"><span class="ic">${ICONS[x.f.kind]}</span><span>${esc(x.i.nom)}<small>${x.i.categorie === 'produit' && !x.i.type ? 'type et ' : ''}${x.i.resume ? '' : 'résumé manquant'}</small></span></div>`).join('');
+
+  $('#main').innerHTML = `<div class="wrap">
+    <div class="ph-head"><h1>${esc(S.proj)}</h1>
+      <input class="inp" style="flex:1;min-width:240px" placeholder="Objectif du projet (ex. : 30 ventes de l’ebook avant le 15 janvier)" value="${esc(pj.objectif)}" onchange="A.setProjet('objectif',this.value.trim())">
+      <label style="font-size:12.5px;color:var(--text2);display:flex;align-items:center;gap:6px">Échéance <input class="inp" type="date" style="width:auto" value="${esc(pj.echeance)}" onchange="A.setProjet('echeance',this.value)"></label>
+    </div>
+    <div class="stepper">${stepper}</div>
+    <div class="pgrid">
+      <div class="box">
+        <h2>Étape ${vk + 1} · ${esc(ph.nom)} <span class="st ${vk === cur ? 'a-revoir' : s.fait ? 'valide' : 'brouillon'}">${status}</span><span class="sp"></span><span style="font-size:13px;color:var(--text2);font-weight:500">${s.done}/${s.total}</span></h2>
+        <div class="but">${esc(ph.but)}</div>
+        ${autoHtml}${manHtml}
+        <div style="display:flex;gap:8px;margin:10px 0 16px"><input class="inp" id="t-new" placeholder="Ajouter une tâche à cette étape…" onkeydown="if(event.key==='Enter')A.taskAdd()"><button class="btn" onclick="A.taskAdd()">Ajouter</button></div>
+        ${actions}
+      </div>
+      <div class="box">
+        <h2>À faire maintenant</h2>
+        ${todo || '<div class="next ok" style="margin-top:8px">✓ Rien en attente : tu peux terminer l’étape.</div>'}
+        <div class="grp">Contenus</div>
+        <div class="counts" style="margin:0 6px">
+          <div><b>${st.tunnel}</b><span>pages tunnel</span></div><div><b>${st.produit}</b><span>produits</span></div><div><b>${st.valides}/${st.total}</b><span>validés</span></div>
+        </div>
+      </div>
+    </div></div>`;
+}
+
 /* ------------------------------ actions ------------------------------ */
 const relOf = el => el.closest('[data-rel]').dataset.rel;
 async function reloadAll(keepRel) {
   await loadTree();
   fillProjects();
+  S.homeLoaded = false;
   if (!S.proj || !S.projects.includes(S.proj)) { S.proj = null; S.cur = null; return render(); }
+  if (S.view === 'home') { S.files = filesOf(S.proj); return render(); }
   const prevMode = S.mode;
   await openProject(S.proj);
   if (keepRel) { const f = fileByRel(keepRel); if (f) { S.cur = f; S.curText = null; S.mode = prevMode; render(); } }
@@ -792,16 +1047,53 @@ Chaque entrée de hub.json peut contenir \`notes\` : ses retours sur le fichier.
 - \`extrait\` : le passage concerné ; \`fait: true\` : déjà traité.
 
 Avant de réécrire un fichier, une IA lit ses notes non traitées. Elle ne modifie ni ne supprime jamais les notes, le statut ou l'ordre : seul le porteur de projet les gère, depuis le hub.
+
+## Avancement du projet
+La clé \`projet\` de hub.json indique l'étape en cours (\`etape\` : cadrage, recherche, produits, tunnel, relecture, lancement, optimisation), l'objectif, l'échéance et les tâches de chaque étape (\`taches\`, avec \`fait: true\` quand elles sont cochées). Une IA s'en sert pour savoir où en est le projet et proposer la suite ; elle ne la modifie pas.
 `;
 
 const A = {
+  home() { if (!confirmLeave()) return; flush(); S.view = 'home'; S.cur = null; S.dirty = false; render(); },
+  openPilot(p) { S.view = 'pilot'; S.pilotPhase = null; if (p === S.proj) { S.cur = null; render(); } else A.pick(p); },
+  go(v) { S.view = v; S.cur = null; render(); },
+  setProjet(k, v) { change(d => { ensureProjet(d)[k] = v; }); render(); },
+  task(el) {
+    const id = el.dataset.t;
+    change(d => { const t = ensureProjet(d).taches.find(x => x.id === id); if (t) { if (t.fait) { delete t.fait; delete t.date; } else { t.fait = true; t.date = today(); } } });
+    render();
+  },
+  taskAdd() {
+    const v = $('#t-new').value.trim(); if (!v) return;
+    const ph = S.pilotPhase || projetOf(S.hub).etape, id = uid();
+    change(d => { ensureProjet(d).taches.push({ id, etape: ph, texte: v }); });
+    render(); $('#t-new').focus();
+  },
+  taskDel(el) {
+    if (!confirm('Supprimer cette tâche ?')) return;
+    const id = el.dataset.t;
+    change(d => { const p = ensureProjet(d); p.taches = p.taches.filter(x => x.id !== id); });
+    render();
+  },
+  phaseView(id) { S.pilotPhase = id === projetOf(S.hub).etape ? null : id; render(); },
+  phaseDone() {
+    const pj = projetOf(S.hub), k = phaseIdx(pj.etape), s = phaseState(PHASES[k], pj, statsOf(S.files, S.hub, S.legacy));
+    if (s.done < s.total && !confirm('Il reste ' + (s.total - s.done) + ' point(s) non cochés dans cette étape. La terminer quand même ?')) return;
+    change(d => { const p = ensureProjet(d); p.etapes[pj.etape] = { fait: true, date: today() }; if (k < PHASES.length - 1) p.etape = PHASES[k + 1].id; });
+    S.pilotPhase = null; render();
+    toast(k < PHASES.length - 1 ? 'Étape suivante : ' + PHASES[k + 1].nom : 'Projet terminé 🎉');
+  },
+  phaseSet(id) {
+    const k = phaseIdx(id);
+    change(d => { const p = ensureProjet(d); p.etape = id; PHASES.forEach((x, i) => { if (i >= k) delete p.etapes[x.id]; else if (!p.etapes[x.id]) p.etapes[x.id] = { fait: true, date: today() }; }); });
+    S.pilotPhase = null; render();
+  },
   saveToken() { const t = ($('#tok') || {}).value; if (!t || !t.trim()) return toast('Colle ton token', true); const c = cfg(); c.token = t.trim(); saveCfg(c); boot(); },
   pick(p) { openProject(p).catch(e => toast(e.message, true)); },
   async newProject() {
     const n = prompt('Nom du nouveau projet (dossier du dépôt) :'); if (!n) return;
     const slug = slugify(n); if (!slug) return;
     if (S.projects.includes(slug)) return A.pick(slug);
-    try { await putFile(slug + '/hub.json', b64(hubText(normHub({}))), null, 'Hub copywriting : nouveau projet ' + slug); await loadTree(); fillProjects(); A.pick(slug); }
+    try { await putFile(slug + '/hub.json', b64(hubText(normHub({}))), null, 'Hub copywriting : nouveau projet ' + slug); await loadTree(); fillProjects(); S.homeLoaded = false; S.view = 'pilot'; A.pick(slug); }
     catch (e) { toast(e.message, true); }
   },
   open(el) {
@@ -965,7 +1257,7 @@ $('#btn-theme').onclick = () => setTheme(document.documentElement.dataset.theme 
 $('#btn-settings').onclick = () => A.settings();
 $('#btn-sync').onclick = async () => { if (!confirmLeave()) return; await flush(); S.dirty = false; const rel = S.cur && S.cur.rel; reloadAll(rel).then(() => toast('Synchronisé avec GitHub')).catch(e => toast(e.message, true)); };
 $('#proj-sel').onchange = e => { if (e.target.value === '__new') { e.target.value = S.proj || ''; return A.newProject(); } A.pick(e.target.value); };
-document.querySelectorAll('#view-tabs button').forEach(b => b.onclick = () => { if (!confirmLeave()) return; S.view = b.dataset.v; S.cur = null; S.dirty = false; render(); });
+document.querySelectorAll('#view-tabs button').forEach(b => b.onclick = () => { if (!confirmLeave()) return; if (b.dataset.v === 'home') return A.home(); S.view = b.dataset.v; S.cur = null; S.dirty = false; render(); });
 window.addEventListener('beforeunload', e => { if (S.dirty || S.pending.length) { flush(); e.preventDefault(); e.returnValue = ''; } });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') A.close(); });
 
@@ -979,10 +1271,9 @@ async function boot() {
   $('#main').innerHTML = '<div class="wrap"><span class="spin"></span> Connexion à GitHub…</div>';
   try {
     await loadTree();
-    const last = localStorage.getItem(LS_PROJ);
-    S.proj = S.projects.includes(last) ? last : null;
+    S.proj = null; S.view = 'home';
     fillProjects();
-    if (S.proj) await openProject(S.proj); else render();
+    render();
   } catch (e) {
     $('#main').innerHTML = `<div class="welcome"><h1>Connexion impossible</h1><p>${esc(e.message)}</p><button class="btn pri" onclick="A.settings()">Ouvrir les réglages</button></div>`;
   }
