@@ -1,15 +1,993 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CopyFunnel Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hub copywriting</title>
 <style>
-  html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
-  iframe { width: 100%; height: 100vh; border: none; display: block; }
+:root{
+  --bg:#f5f6f8;--surface:#fff;--surface2:#f0f2f5;--border:#e2e5ea;--text:#1c2027;--text2:#5d6878;--text3:#8a94a3;
+  --accent:#4f46e5;--accent-soft:#eef0ff;--accent-text:#3f37c9;
+  --green:#15803d;--green-soft:#e8f6ed;--orange:#b45309;--orange-soft:#fff4e0;--red:#c62828;--red-soft:#fdecec;--blue:#1d4ed8;--blue-soft:#e8efff;--violet:#7e22ce;--violet-soft:#f5ebff;
+  --shadow:0 1px 2px rgba(16,24,40,.05),0 1px 6px rgba(16,24,40,.04);
+  --radius:12px;
+}
+[data-theme=dark]{
+  --bg:#14161b;--surface:#1c1f26;--surface2:#252932;--border:#323743;--text:#e8eaef;--text2:#a3acba;--text3:#788293;
+  --accent:#8b85ff;--accent-soft:#2a2850;--accent-text:#b7b3ff;
+  --green:#4ade80;--green-soft:#173326;--orange:#fbbf24;--orange-soft:#3a2c12;--red:#f87171;--red-soft:#3b1d1d;--blue:#7aa7ff;--blue-soft:#1b2a4a;--violet:#c084fc;--violet-soft:#2e1f45;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
+a{color:var(--accent)}
+button,input,select,textarea{font:inherit;color:inherit}
+.top{display:flex;align-items:center;gap:10px;padding:10px 18px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
+.logo{font-weight:700;font-size:15px;letter-spacing:-.01em;margin-right:6px;white-space:nowrap}
+.logo span{color:var(--accent)}
+.sp{flex:1}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:9px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-weight:500;white-space:nowrap;text-decoration:none;color:var(--text)}
+.btn:hover{background:var(--surface2)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover{filter:brightness(1.08)}
+.btn.sm{padding:4px 9px;font-size:12.5px;border-radius:7px}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.ghost:hover{background:var(--surface2)}
+.btn.danger{color:var(--red)}
+.inp{width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface);outline:none}
+.inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+textarea.inp{resize:vertical;min-height:60px}
+select.inp{width:auto}
+.tabs{display:flex;gap:2px;background:var(--surface2);padding:3px;border-radius:9px}
+.tabs button{border:0;background:transparent;padding:5px 11px;border-radius:7px;cursor:pointer;color:var(--text2);font-weight:500}
+.tabs button.on{background:var(--surface);color:var(--text);box-shadow:var(--shadow)}
+#savestate{font-size:12px;color:var(--text3);white-space:nowrap}
+main{flex:1;min-height:0;overflow:auto}
+.wrap{max-width:1400px;margin:0 auto;padding:20px 18px 40px}
+.board{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;align-items:start}
+@media(max-width:1000px){.board{grid-template-columns:1fr}}
+.col{background:var(--surface2);border-radius:14px;padding:12px;min-height:160px;border:2px dashed transparent;transition:border-color .15s}
+.col.drag{border-color:var(--accent);background:var(--accent-soft)}
+.col-h{display:flex;align-items:center;gap:8px;margin:2px 4px 10px;min-height:30px}
+.col-h h2{font-size:14px;margin:0;font-weight:650}
+.col-h .n{font-size:12px;color:var(--text3);background:var(--surface);border-radius:20px;padding:0 8px}
+.col-h .hint{font-size:12px;color:var(--text3)}
+.empty{font-size:13px;color:var(--text3);text-align:center;padding:22px 10px;border:1px dashed var(--border);border-radius:10px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px 12px;margin-bottom:8px;cursor:pointer;box-shadow:var(--shadow);transition:border-color .12s}
+.card:hover{border-color:var(--accent)}
+.card-h{display:flex;align-items:flex-start;gap:8px}
+.card .ico{font-size:18px;line-height:1.2}
+.card .nm{font-weight:600;flex:1;min-width:0;overflow-wrap:anywhere}
+.card .step{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.card .res{font-size:12.5px;color:var(--text2);margin-top:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card .res.none{color:var(--text3);font-style:italic}
+.card-f{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
+.chip{font-size:11.5px;font-weight:600;padding:1px 8px;border-radius:20px;background:var(--surface2);color:var(--text2);white-space:nowrap}
+.chip.tunnel{background:var(--blue-soft);color:var(--blue)}
+.chip.produit{background:var(--violet-soft);color:var(--violet)}
+.st{font-size:11.5px;font-weight:600;padding:1px 8px;border-radius:20px;white-space:nowrap}
+.st.brouillon{background:var(--surface2);color:var(--text3)}
+.st.a-revoir{background:var(--orange-soft);color:var(--orange)}
+.st.valide{background:var(--green-soft);color:var(--green)}
+.nc{font-size:12px;color:var(--text2);white-space:nowrap}
+.card .acts{display:flex;gap:4px;margin-left:auto}
+.mini{border:1px solid var(--border);background:var(--surface);border-radius:6px;padding:1px 7px;font-size:12px;cursor:pointer;color:var(--text2)}
+.mini:hover{color:var(--text);border-color:var(--text3)}
+.sub{font-size:12px;color:var(--text3);margin:14px 4px 6px;cursor:pointer;user-select:none}
+.welcome{max-width:560px;margin:60px auto;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:26px;box-shadow:var(--shadow)}
+.welcome h1{font-size:20px;margin:0 0 8px}
+.welcome p{color:var(--text2)}
+/* Détail */
+.detail{display:flex;flex-direction:column;height:100%}
+.dh{display:flex;align-items:center;gap:10px;padding:10px 18px;border-bottom:1px solid var(--border);background:var(--surface);flex-wrap:wrap}
+.dh .tt{font-weight:650;font-size:15px}
+.dh .path{font-size:12px;color:var(--text3);font-family:ui-monospace,Menlo,monospace}
+.db{flex:1;min-height:0;display:grid;grid-template-columns:1fr 400px}
+@media(max-width:1000px){.db{grid-template-columns:1fr;grid-template-rows:60vh auto}}
+.pv{display:flex;flex-direction:column;min-height:0;background:var(--surface2)}
+.pv-bar{display:flex;align-items:center;gap:6px;padding:7px 12px;border-bottom:1px solid var(--border);background:var(--surface);flex-wrap:wrap}
+.pv-bar .sep{width:1px;height:20px;background:var(--border);margin:0 4px}
+.pv-body{flex:1;min-height:0;display:flex;justify-content:center;overflow:auto;padding:0}
+.pv-body iframe{border:0;width:100%;height:100%;background:#fff}
+.pv-body.mobile iframe{width:390px;border-left:1px solid var(--border);border-right:1px solid var(--border)}
+.pv-body img,.pv-body video{max-width:100%;max-height:100%;margin:auto}
+.pv-msg{margin:auto;text-align:center;color:var(--text2);padding:30px}
+.editing{outline:2px solid var(--orange);outline-offset:-2px}
+.side{border-left:1px solid var(--border);background:var(--surface);overflow:auto;min-height:0}
+.sec{padding:14px 16px;border-bottom:1px solid var(--border)}
+.sec h3{font-size:13px;margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em;color:var(--text2);display:flex;align-items:center;gap:8px}
+.fld{margin-bottom:10px}
+.fld label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:4px}
+.fld .help{font-size:11.5px;color:var(--text3);margin-top:3px}
+.seg{display:flex;flex-wrap:wrap;gap:4px}
+.seg button{border:1px solid var(--border);background:var(--surface);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:12.5px;color:var(--text2)}
+.seg button.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-text);font-weight:600}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.src{font-size:11.5px;color:var(--text3);background:var(--surface2);border-radius:8px;padding:6px 9px;margin-bottom:10px}
+.ntypes{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:8px}
+.ntypes button{border:1px solid var(--border);background:var(--surface);border-radius:9px;padding:6px 8px;cursor:pointer;text-align:left;font-size:12.5px}
+.ntypes button.on.garder{border-color:var(--green);background:var(--green-soft)}
+.ntypes button.on.changer{border-color:var(--orange);background:var(--orange-soft)}
+.ntypes button.on.ab{border-color:var(--blue);background:var(--blue-soft)}
+.ntypes button.on.idee{border-color:var(--violet);background:var(--violet-soft)}
+.note{border:1px solid var(--border);border-left-width:4px;border-radius:10px;padding:9px 11px;margin-bottom:8px;font-size:13px}
+.note.garder{border-left-color:var(--green)}.note.changer{border-left-color:var(--orange)}.note.ab{border-left-color:var(--blue)}.note.idee{border-left-color:var(--violet)}
+.note.fait{opacity:.55}
+.note .nh{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);margin-bottom:4px}
+.note .nh b{color:var(--text)}
+.note .ex{font-style:italic;color:var(--text2);border-left:2px solid var(--border);padding-left:8px;margin:4px 0;white-space:pre-wrap}
+.note .tx{white-space:pre-wrap}
+.note .pr{margin-top:5px;background:var(--surface2);border-radius:7px;padding:5px 8px;white-space:pre-wrap}
+.note .pr::before{content:"Proposition : ";font-weight:600;color:var(--text2)}
+.note .na{display:flex;gap:4px;margin-left:auto}
+/* Notes globales */
+.ngrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-items:start}
+@media(max-width:1100px){.ngrid{grid-template-columns:1fr 1fr}}
+.note .fl{font-size:12px;color:var(--accent);cursor:pointer;font-weight:600}
+/* Modales, toasts */
+.ov{position:fixed;inset:0;background:rgba(10,12,20,.45);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal{background:var(--surface);border-radius:16px;padding:20px 22px;width:100%;max-width:620px;max-height:90vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.modal h2{margin:0 0 12px;font-size:17px}
+.modal .foot{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:80;display:flex;flex-direction:column;gap:6px;align-items:center}
+.toast{background:#1c2027;color:#fff;padding:9px 16px;border-radius:10px;font-size:13px;box-shadow:0 6px 20px rgba(0,0,0,.2);max-width:90vw}
+.toast.err{background:#b91c1c}
+#drop-ov{position:fixed;inset:0;background:rgba(79,70,229,.12);border:3px dashed var(--accent);z-index:40;display:none;align-items:center;justify-content:center;font-size:18px;font-weight:600;color:var(--accent-text);pointer-events:none}
+#drop-ov.on{display:flex}
+.tour{position:fixed;inset:0;z-index:60;background:var(--bg);display:flex;flex-direction:column}
+.tour .tb{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--border)}
+.tour iframe{flex:1;border:0;background:#fff;width:100%}
+code{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:var(--surface2);padding:1px 5px;border-radius:5px}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px}
+@keyframes sp{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
-<iframe src="copyfunnel-dashboard.html"></iframe>
+<header class="top">
+  <div class="logo">Hub <span>copywriting</span></div>
+  <select class="inp" id="proj-sel" title="Projet (dossier du dépôt)" style="max-width:220px"></select>
+  <div class="tabs" id="view-tabs" style="display:none">
+    <button data-v="board">Contenus</button>
+    <button data-v="notes">Toutes les notes</button>
+  </div>
+  <div class="sp"></div>
+  <span id="savestate"></span>
+  <button class="btn ghost" id="btn-sync" title="Relire GitHub">↻ Synchroniser</button>
+  <button class="btn ghost" id="btn-theme" title="Clair / sombre">☾</button>
+  <button class="btn ghost" id="btn-settings" title="Réglages">⚙︎</button>
+</header>
+<main id="main"></main>
+<div id="modal-root"></div>
+<div id="toast"></div>
+<div id="drop-ov">Dépose tes fichiers ici</div>
+<input type="file" id="file-input" multiple hidden>
+
+<script>
+'use strict';
+/* =========================================================================
+   Hub copywriting — outil de gestion de contenus (tunnel / produits)
+   Source de vérité : dépôt GitHub (par défaut olympeathletique-34/hub-projets).
+   Chaque projet = un dossier racine du dépôt. Les infos (catégorie, type,
+   résumé, notes…) vivent dans <projet>/hub.json, lisible par les IA.
+   Le token GitHub reste dans ce navigateur (clé « cf_gh_cfg », partagée
+   avec l'ancien tableau de bord).
+   ========================================================================= */
+
+const API = 'https://api.github.com';
+const LS_CFG = 'cf_gh_cfg', LS_THEME = 'hc_theme', LS_PROJ = 'hc_proj', LS_META = 'hc_meta_v1';
+const DIRS = { tunnel: 'marketing/tunnels/', produit: 'produits/', inbox: 'a-classer/' };
+const ETAPES = [['capture','Capture (opt-in)'],['vente','Page de vente'],['order-bump','Order bump'],['upsell','Upsell'],['downsell','Downsell'],['merci','Remerciement'],['espace-membre','Espace membre'],['email','Email'],['autre','Autre']];
+const LEGACY_ETAPE = { optin:'capture', sales:'vente', upsell:'upsell', downsell:'downsell', thankyou:'merci', member:'espace-membre', custom:'autre' };
+const TYPES = ['ebook','formation','guide','quiz','outil','tracker','audio','vidéo','bibliothèque','espace membre','manifeste','bonus','autre'];
+const ROLES = [['','— non décidé'],['capture','Gratuit (capture)'],['appel','Produit d’appel'],['principal','Produit principal'],['approfondissement','Approfondissement'],['order-bump','Order bump'],['upsell','Upsell'],['bonus','Bonus']];
+const STATUTS = [['brouillon','Brouillon'],['a-revoir','À revoir'],['valide','Validé']];
+const CATS = [['tunnel','Tunnel'],['produit','Produit'],['','À affecter'],['archive','Archivé']];
+const NT = { garder:['✅','C’est bien, on garde'], changer:['✏️','À changer'], ab:['🧪','À tester en A/B'], idee:['💡','Idée / question'] };
+const IGNORE = ['hub.json','produits.json','tunnel.json','README.md','.gitkeep'];
+const LOOSE_EXT = ['html','htm','pdf','docx','doc','odt','xlsx','xls','ods','pptx','ppt','epub','mp4','mov','webm','m4v','mp3','wav','m4a','ogg','zip'];
+const HUB_INFO = 'Fiches du hub copywriting (hub-copyrighting.vercel.app). Clé = chemin du fichier dans ce dossier projet. Champs : categorie (tunnel | produit | archive | vide = à affecter), nom, type (produits), role (produits), etape (tunnel), ordre, statut (brouillon | a-revoir | valide), resume, pour_qui, promesse, notes. Les IA peuvent ajouter ou compléter resume / pour_qui / promesse / type ; elles ne suppriment jamais les notes du porteur de projet. Voir 00-hub/FICHES-HUB.md.';
+
+const S = { tree: [], projects: [], proj: null, hub: { fichiers: {} }, legacy: {}, files: [], metas: {}, view: 'board',
+  cur: null, curText: null, curBlobUrl: null, mode: 'apercu', mobile: false, dirty: false, ntype: 'changer', nfilter: 'open',
+  pending: [], flushTimer: null, flushing: null, showArch: false };
+
+/* ---------------------------- utilitaires ---------------------------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const today = () => new Date().toISOString().slice(0, 10);
+function toast(msg, err) {
+  const d = document.createElement('div'); d.className = 'toast' + (err ? ' err' : ''); d.textContent = msg;
+  $('#toast').appendChild(d); setTimeout(() => d.remove(), err ? 6000 : 3000);
+}
+function b64(str) {
+  const bytes = new TextEncoder().encode(str); let bin = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+const unb64 = s => new TextDecoder().decode(Uint8Array.from(atob((s || '').replace(/\n/g, '')), c => c.charCodeAt(0)));
+const fileToB64 = f => new Promise((ok, ko) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(',')[1] || ''); r.onerror = ko; r.readAsDataURL(f); });
+const extOf = n => (n.split('.').pop() || '').toLowerCase();
+const baseName = p => p.split('/').pop();
+function kindOf(ext) {
+  if (ext === 'html' || ext === 'htm') return 'html';
+  if (ext === 'pdf') return 'pdf';
+  if (['png','jpg','jpeg','webp','gif','svg'].includes(ext)) return 'image';
+  if (['mp4','mov','webm','m4v'].includes(ext)) return 'video';
+  if (['mp3','wav','m4a','ogg','aac'].includes(ext)) return 'audio';
+  if (['md','txt'].includes(ext)) return 'text';
+  return 'other';
+}
+const ICONS = { html:'🌐', pdf:'📄', image:'🖼️', video:'🎬', audio:'🎧', text:'📝', other:'📦' };
+const slugify = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9._-]+/g, '-').replace(/^-+|-+$/g, '');
+const safeFileName = n => { const e = extOf(n), b = n.slice(0, n.length - e.length - 1); return (slugify(b) || 'fichier') + (e ? '.' + e : ''); };
+
+/* ------------------------------ GitHub ------------------------------ */
+function cfg() {
+  let c = {}; try { c = JSON.parse(localStorage.getItem(LS_CFG) || '{}'); } catch (e) {}
+  c.repo = c.repo || 'olympeathletique-34/hub-projets'; c.branch = c.branch || 'main'; return c;
+}
+function saveCfg(c) { localStorage.setItem(LS_CFG, JSON.stringify(c)); }
+const enc = p => p.split('/').map(encodeURIComponent).join('/');
+
+async function gh(path, o = {}) {
+  const c = cfg();
+  const headers = { Authorization: 'Bearer ' + c.token, 'X-GitHub-Api-Version': '2022-11-28',
+    Accept: o.raw || o.blob ? 'application/vnd.github.raw+json' : 'application/vnd.github+json' };
+  if (o.body) headers['Content-Type'] = 'application/json';
+  const r = await fetch(API + path, { method: o.method || 'GET', headers, body: o.body ? JSON.stringify(o.body) : undefined, cache: 'no-store' });
+  if (r.status === 404 && !o.must) return null;
+  if (!r.ok) {
+    let m = await r.text(); try { m = JSON.parse(m).message; } catch (e) {}
+    const e = new Error(r.status === 401 ? 'Token GitHub refusé (expiré ou invalide) : change-le dans ⚙︎ Réglages' : 'GitHub ' + r.status + ' : ' + m);
+    e.status = r.status; throw e;
+  }
+  if (r.status === 204) return {};
+  return o.blob ? r.blob() : o.raw ? r.text() : r.json();
+}
+const repoPath = p => '/repos/' + cfg().repo + p;
+const readBlobText = sha => gh(repoPath('/git/blobs/' + sha), { raw: true, must: true });
+const readBlob = sha => gh(repoPath('/git/blobs/' + sha), { blob: true, must: true });
+
+async function readJson(path) {
+  const m = await gh(repoPath('/contents/' + enc(path) + '?ref=' + encodeURIComponent(cfg().branch)));
+  if (!m || Array.isArray(m)) return null;
+  const txt = m.content ? unb64(m.content) : await readBlobText(m.sha);
+  try { return { data: JSON.parse(txt), sha: m.sha }; } catch (e) { toast(baseName(path) + ' illisible (JSON invalide) : ignoré', true); return { data: {}, sha: m.sha }; }
+}
+async function putFile(path, contentB64, sha, message) {
+  const body = { message, content: contentB64, branch: cfg().branch }; if (sha) body.sha = sha;
+  const r = await gh(repoPath('/contents/' + enc(path)), { method: 'PUT', body, must: true });
+  return r.content.sha;
+}
+// Plusieurs changements en un seul commit. changes : [{path, sha}] (copie d'un blob), [{path, content}] (texte), [{path, del:true}]
+async function commit(changes, message) {
+  const c = cfg(), g = '/git/';
+  const ref = await gh(repoPath(g + 'ref/heads/' + encodeURIComponent(c.branch)), { must: true });
+  const parent = ref.object.sha;
+  const pc = await gh(repoPath(g + 'commits/' + parent), { must: true });
+  const tree = await gh(repoPath(g + 'trees'), { method: 'POST', must: true, body: { base_tree: pc.tree.sha, tree: changes.map(x =>
+    x.del ? { path: x.path, mode: '100644', type: 'blob', sha: null }
+    : x.content !== undefined ? { path: x.path, mode: '100644', type: 'blob', content: x.content }
+    : { path: x.path, mode: '100644', type: 'blob', sha: x.sha }) } });
+  const cm = await gh(repoPath(g + 'commits'), { method: 'POST', must: true, body: { message, tree: tree.sha, parents: [parent] } });
+  await gh(repoPath(g + 'refs/heads/' + encodeURIComponent(c.branch)), { method: 'PATCH', must: true, body: { sha: cm.sha } });
+}
+
+async function loadTree() {
+  const c = cfg();
+  const t = await gh(repoPath('/git/trees/' + encodeURIComponent(c.branch) + '?recursive=1'));
+  if (!t) throw new Error('Dépôt « ' + c.repo + ' » ou branche « ' + c.branch + ' » introuvable avec ce token');
+  S.tree = t.tree || [];
+  S.projects = S.tree.filter(e => e.type === 'tree' && !e.path.includes('/') && !/^[0-9._]/.test(e.path)).map(e => e.path).sort();
+}
+
+/* ------------------------- hub.json (fiches) ------------------------- */
+function normHub(d) {
+  d = d && typeof d === 'object' ? d : {};
+  const out = { _info: HUB_INFO, version: 1, fichiers: d.fichiers && typeof d.fichiers === 'object' ? d.fichiers : {} };
+  Object.keys(d).forEach(k => { if (!(k in out)) out[k] = d[k]; });
+  return out;
+}
+const entry = (d, rel) => (d.fichiers[rel] = d.fichiers[rel] || {});
+const hubText = d => JSON.stringify(d, null, 2) + '\n';
+const hubPath = () => S.proj + '/hub.json';
+
+// Les modifications sont appliquées tout de suite à l'écran, puis regroupées en un commit.
+function change(mut) {
+  mut(S.hub); S.pending.push(mut);
+  setSave('Modifications en attente…');
+  clearTimeout(S.flushTimer); S.flushTimer = setTimeout(flush, 1200);
+}
+async function flush() {
+  clearTimeout(S.flushTimer);
+  if (S.flushing) await S.flushing;
+  if (!S.pending.length) return;
+  const muts = S.pending.splice(0);
+  S.flushing = (async () => {
+    setSave('<span class="spin"></span> Enregistrement…');
+    for (let i = 0; i < 4; i++) {
+      const cur = await readJson(hubPath());
+      const d = normHub(cur && cur.data); muts.forEach(m => m(d));
+      try {
+        await putFile(hubPath(), b64(hubText(d)), cur && cur.sha, 'Hub copywriting · ' + S.proj + ' : fiches et notes');
+        // On garde à l'écran les modifications faites pendant l'enregistrement.
+        S.hub = d; S.pending.forEach(m => m(S.hub));
+        setSave('✓ Enregistré sur GitHub'); return;
+      } catch (e) { if (e.status !== 409 && e.status !== 422) { S.pending.unshift(...muts); setSave(''); toast(e.message, true); return; } }
+    }
+    S.pending.unshift(...muts); setSave(''); toast('hub.json modifié ailleurs en même temps : clique sur ↻ Synchroniser', true);
+  })();
+  await S.flushing; S.flushing = null;
+}
+// Déplacement / suppression de fichier + mise à jour du hub.json dans le même commit.
+async function commitWithHub(fileChanges, mut, message) {
+  await flush();
+  const pre = S.proj + '/';
+  for (let i = 0; i < 4; i++) {
+    const cur = await readJson(hubPath());
+    const d = normHub(cur && cur.data); mut(d);
+    try {
+      await commit(fileChanges.concat([{ path: pre + 'hub.json', content: hubText(d) }]), message);
+      S.hub = d; return;
+    } catch (e) { if (e.status !== 409 && e.status !== 422) throw e; }
+  }
+  throw new Error('Le dépôt a changé pendant l’opération : réessaie');
+}
+function setSave(h) { $('#savestate').innerHTML = h; }
+
+/* ---------------------------- projet ---------------------------- */
+function isContent(rel) {
+  const name = baseName(rel), ext = extOf(name);
+  if (IGNORE.includes(name) || name.startsWith('.') || rel.split('/').some(s => s.startsWith('.'))) return false;
+  if (rel.startsWith(DIRS.tunnel) || rel.startsWith(DIRS.produit) || rel.startsWith(DIRS.inbox)) return true;
+  if (/(^|\/)consultations\//.test(rel)) return false;
+  return LOOSE_EXT.includes(ext);
+}
+
+async function openProject(name) {
+  if (S.dirty && !confirm('Tu as des modifications non enregistrées dans l’éditeur. Les abandonner ?')) { $('#proj-sel').value = S.proj; return; }
+  await flush();
+  S.proj = name; S.cur = null; S.dirty = false; localStorage.setItem(LS_PROJ, name);
+  $('#proj-sel').value = name;
+  $('#main').innerHTML = '<div class="wrap"><span class="spin"></span> Lecture de « ' + esc(name) + ' » sur GitHub…</div>';
+  const pre = name + '/';
+  const blobs = S.tree.filter(e => e.type === 'blob' && e.path.startsWith(pre));
+  const has = p => blobs.some(e => e.path === pre + p);
+  const [hub, lp, lt] = await Promise.all([
+    readJson(pre + 'hub.json'),
+    has('produits/produits.json') ? readJson(pre + 'produits/produits.json') : null,
+    has('marketing/tunnels/tunnel.json') ? readJson(pre + 'marketing/tunnels/tunnel.json') : null
+  ]);
+  S.hub = normHub(hub && hub.data);
+  // Anciens manifestes (produits.json / tunnel.json) : repris comme valeurs par défaut.
+  S.legacy = {};
+  ((lp && lp.data.produits) || []).forEach((m, i) => { S.legacy[DIRS.produit + m.fichier] = { nom: m.nom, role: m.role, ordre: i + 1 }; });
+  ((lt && lt.data.pages) || []).forEach((m, i) => { S.legacy[DIRS.tunnel + m.fichier] = { nom: m.nom, etape: LEGACY_ETAPE[m.type] || '', ordre: i + 1 }; });
+  S.files = blobs.map(e => ({ rel: e.path.slice(pre.length), full: e.path, sha: e.sha, size: e.size }))
+    .filter(f => isContent(f.rel))
+    .map(f => Object.assign(f, { name: baseName(f.rel), ext: extOf(f.rel), kind: kindOf(extOf(f.rel)) }));
+  await loadMetas(S.files.filter(f => f.kind === 'html'));
+  render();
+}
+
+// Titre + balises <meta name="hub:..."> de chaque page HTML (mis en cache par version du fichier).
+function metaCache() { try { return JSON.parse(localStorage.getItem(LS_META) || '{}'); } catch (e) { return {}; } }
+function parseMeta(html) {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const hub = {};
+  doc.querySelectorAll('meta[name^="hub:"]').forEach(m => { const k = m.getAttribute('name').slice(4).replace(/-/g, '_'); if (m.content) hub[k] = m.content.trim(); });
+  const h1 = doc.querySelector('h1');
+  return { title: (doc.title || (h1 && h1.textContent) || '').trim().slice(0, 120), hub };
+}
+async function loadMetas(files) {
+  const cache = metaCache();
+  const todo = files.filter(f => !cache[f.sha]);
+  let i = 0;
+  const worker = async () => { while (i < todo.length) { const f = todo[i++]; try { cache[f.sha] = parseMeta(await readBlobText(f.sha)); } catch (e) { cache[f.sha] = { title: '', hub: {} }; } } };
+  await Promise.all([worker(), worker(), worker(), worker(), worker(), worker()]);
+  const keys = Object.keys(cache); if (keys.length > 600) keys.slice(0, keys.length - 600).forEach(k => delete cache[k]);
+  try { localStorage.setItem(LS_META, JSON.stringify(cache)); } catch (e) {}
+  S.metas = cache;
+}
+
+function guessEtape(n) {
+  n = n.toLowerCase();
+  if (/optin|opt-in|capture|squeeze|lead/.test(n)) return 'capture';
+  if (/bump/.test(n)) return 'order-bump';
+  if (/upsell|oto/.test(n)) return 'upsell';
+  if (/downsell/.test(n)) return 'downsell';
+  if (/merci|thank/.test(n)) return 'merci';
+  if (/membre|member/.test(n)) return 'espace-membre';
+  if (/mail/.test(n)) return 'email';
+  if (/vente|sales|offre/.test(n)) return 'vente';
+  return '';
+}
+// Fiche fusionnée : hub.json > balises hub: du fichier (posées par une IA) > anciens manifestes > dossier.
+function info(f) {
+  const h = S.hub.fichiers[f.rel] || {}, mt = S.metas[f.sha] || { hub: {} }, m = mt.hub || {}, l = S.legacy[f.rel] || {};
+  const has = v => v !== undefined && v !== null && v !== '';
+  const pick = k => has(h[k]) ? h[k] : has(m[k]) ? m[k] : l[k];
+  let cat = h.categorie !== undefined ? h.categorie : has(m.categorie) ? m.categorie : undefined;
+  if (cat === undefined) cat = f.rel.startsWith(DIRS.tunnel) ? 'tunnel' : f.rel.startsWith(DIRS.produit) ? 'produit' : '';
+  const fromAI = ['resume','pour_qui','promesse','type','categorie'].filter(k => !has(h[k]) && has(m[k]));
+  return {
+    categorie: cat,
+    nom: pick('nom') || mt.title || f.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' '),
+    type: pick('type') || '', role: pick('role') || '',
+    etape: pick('etape') || (cat === 'tunnel' ? guessEtape(f.name) : ''),
+    ordre: has(h.ordre) ? +h.ordre : has(l.ordre) ? +l.ordre : 1e6,
+    statut: pick('statut') || 'brouillon',
+    resume: pick('resume') || '', pour_qui: pick('pour_qui') || '', promesse: pick('promesse') || '',
+    notes: Array.isArray(h.notes) ? h.notes : [], fromAI
+  };
+}
+const fileByRel = rel => S.files.find(f => f.rel === rel);
+const etapeLabel = v => (ETAPES.find(e => e[0] === v) || [, v])[1];
+const roleLabel = v => (ROLES.find(e => e[0] === v) || [, v])[1];
+const statutLabel = v => (STATUTS.find(e => e[0] === v) || [, v])[1];
+function noteCounts(notes) {
+  const open = notes.filter(n => !n.fait);
+  return Object.keys(NT).map(k => { const c = open.filter(n => n.type === k).length; return c ? NT[k][0] + ' ' + c : ''; }).filter(Boolean).join('  ');
+}
+
+/* ----------------------------- rendu ----------------------------- */
+function render() {
+  $('#view-tabs').style.display = S.proj ? '' : 'none';
+  document.querySelectorAll('#view-tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === S.view));
+  if (!cfg().token) return renderWelcome();
+  if (!S.proj) return renderNoProject();
+  if (S.cur) return renderDetail();
+  if (S.view === 'notes') return renderAllNotes();
+  renderBoard();
+}
+
+function renderWelcome() {
+  $('#main').innerHTML = `<div class="welcome">
+    <h1>Relier le hub à GitHub</h1>
+    <p>Le hub lit et écrit directement dans ton dépôt <code>${esc(cfg().repo)}</code>. Colle un token GitHub <b>fine-grained</b> limité à ce dépôt, permission <b>Contents : Read and write</b>. Il reste uniquement dans ce navigateur.</p>
+    <div style="display:flex;gap:8px;margin-top:14px"><input class="inp" type="password" id="tok" placeholder="github_pat_…"><button class="btn pri" onclick="A.saveToken()">Connecter</button></div>
+    <p style="font-size:12.5px;margin-top:14px"><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Créer un token sur GitHub</a></p>
+  </div>`;
+}
+function renderNoProject() {
+  $('#main').innerHTML = `<div class="welcome"><h1>Choisis un projet</h1><p>Un projet = un dossier à la racine de <code>${esc(cfg().repo)}</code>.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">${S.projects.map(p => `<button class="btn" data-p="${esc(p)}" onclick="A.pick(this.dataset.p)">${esc(p)}</button>`).join('')}
+    <button class="btn" onclick="A.newProject()">＋ Nouveau projet</button></div></div>`;
+}
+
+function cardHtml(f, i, opts = {}) {
+  const chips = [];
+  if (i.categorie === 'tunnel' && i.etape) chips.push(`<span class="chip tunnel">${esc(etapeLabel(i.etape))}</span>`);
+  if (i.categorie === 'produit' && i.type) chips.push(`<span class="chip produit">${esc(i.type)}</span>`);
+  if (i.categorie === 'produit' && i.role) chips.push(`<span class="chip">${esc(roleLabel(i.role))}</span>`);
+  const acts = opts.inbox
+    ? `<span class="acts"><button class="mini" onclick="event.stopPropagation();A.quickCat(this,'tunnel')">→ Tunnel</button><button class="mini" onclick="event.stopPropagation();A.quickCat(this,'produit')">→ Produit</button><button class="mini" title="Mettre de côté" onclick="event.stopPropagation();A.quickCat(this,'archive')">Archiver</button></span>`
+    : opts.order ? `<span class="acts"><button class="mini" title="Monter" onclick="event.stopPropagation();A.move(this,-1)">↑</button><button class="mini" title="Descendre" onclick="event.stopPropagation();A.move(this,1)">↓</button></span>` : '';
+  return `<div class="card" data-rel="${esc(f.rel)}" onclick="A.open(this)">
+    <div class="card-h">${opts.step ? `<span class="step">${opts.step}</span>` : `<span class="ico">${ICONS[f.kind]}</span>`}<span class="nm">${esc(i.nom)}</span><span class="st ${esc(i.statut)}">${esc(statutLabel(i.statut))}</span></div>
+    <div class="res${i.resume ? '' : ' none'}">${i.resume ? esc(i.resume) : (opts.inbox ? esc(f.rel) : 'Pas encore de résumé')}</div>
+    <div class="card-f">${chips.join('')}<span class="nc">${noteCounts(i.notes)}</span>${acts}</div>
+  </div>`;
+}
+const byOrder = (a, b) => (a.i.ordre - b.i.ordre) || a.i.nom.localeCompare(b.i.nom, 'fr');
+
+function renderBoard() {
+  const items = S.files.map(f => ({ f, i: info(f) }));
+  const tunnel = items.filter(x => x.i.categorie === 'tunnel').sort(byOrder);
+  const prods = items.filter(x => x.i.categorie === 'produit').sort(byOrder);
+  const inbox = items.filter(x => !['tunnel','produit','archive'].includes(x.i.categorie)).sort((a, b) => a.f.rel.localeCompare(b.f.rel));
+  const arch = items.filter(x => x.i.categorie === 'archive');
+  // Produits regroupés par type
+  const groups = {}; prods.forEach(x => { const k = x.i.type || 'sans type'; (groups[k] = groups[k] || []).push(x); });
+  const gkeys = Object.keys(groups).sort((a, b) => a === 'sans type' ? 1 : b === 'sans type' ? -1 : a.localeCompare(b, 'fr'));
+  $('#main').innerHTML = `<div class="wrap"><div class="board">
+    <section class="col" data-drop="tunnel">
+      <div class="col-h"><h2>Tunnel</h2><span class="n">${tunnel.length}</span><span class="sp"></span>${tunnel.some(x => x.f.kind === 'html') ? '<button class="btn sm" onclick="A.tour()">▶ Parcourir</button>' : ''}</div>
+      ${tunnel.length ? tunnel.map((x, k) => cardHtml(x.f, x.i, { step: k + 1, order: true })).join('') : '<div class="empty">Aucune page de tunnel.<br>Glisse un fichier ici ou affecte-en depuis « À affecter ».</div>'}
+    </section>
+    <section class="col" data-drop="produit">
+      <div class="col-h"><h2>Produits</h2><span class="n">${prods.length}</span></div>
+      ${prods.length ? gkeys.map(k => `<div class="sub" style="margin-top:${k === gkeys[0] ? 0 : 14}px;cursor:default">${esc(k)} · ${groups[k].length}</div>` + groups[k].map(x => cardHtml(x.f, x.i, { order: true })).join('')).join('') : '<div class="empty">Aucun produit.<br>Glisse un fichier ici ou affecte-en depuis « À affecter ».</div>'}
+    </section>
+    <section class="col" data-drop="inbox">
+      <div class="col-h"><h2>À affecter</h2><span class="n">${inbox.length}</span><span class="sp"></span><button class="btn sm" onclick="A.upload('inbox')">＋ Verser des fichiers</button></div>
+      ${inbox.length ? inbox.map(x => cardHtml(x.f, x.i, { inbox: true })).join('') : '<div class="empty">Rien à affecter 👌<br>Glisse des fichiers ici : ils iront dans <code>a-classer/</code>.</div>'}
+      ${arch.length ? `<div class="sub" onclick="A.toggleArch()">${S.showArch ? '▾' : '▸'} Archivés (${arch.length})</div>${S.showArch ? arch.map(x => cardHtml(x.f, x.i, { inbox: true })).join('') : ''}` : ''}
+    </section>
+  </div></div>`;
+  bindColumnDrops();
+}
+
+function renderAllNotes() {
+  const all = [];
+  S.files.forEach(f => { const i = info(f); i.notes.forEach(n => all.push({ f, i, n })); });
+  const shown = all.filter(x => S.nfilter === 'all' || !x.n.fait);
+  $('#main').innerHTML = `<div class="wrap">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+      <h2 style="margin:0;font-size:17px">Toutes les notes · ${esc(S.proj)}</h2>
+      <div class="tabs"><button class="${S.nfilter === 'open' ? 'on' : ''}" onclick="A.nfilter('open')">À traiter</button><button class="${S.nfilter === 'all' ? 'on' : ''}" onclick="A.nfilter('all')">Toutes</button></div>
+      <span class="sp"></span><button class="btn" onclick="A.briefProject()">📋 Brief IA de tout le projet</button>
+    </div>
+    ${all.length ? `<div class="ngrid">${Object.keys(NT).map(k => {
+      const list = shown.filter(x => x.n.type === k);
+      return `<div class="col"><div class="col-h"><h2>${NT[k][0]} ${NT[k][1]}</h2><span class="n">${list.length}</span></div>
+        ${list.length ? list.map(x => noteHtml(x.n, x.f)).join('') : '<div class="empty">—</div>'}</div>`;
+    }).join('')}</div>` : '<div class="empty" style="background:var(--surface)">Aucune note pour l’instant. Ouvre un contenu et note ce qui est bien, à changer ou à tester.</div>'}
+  </div>`;
+}
+
+function noteHtml(n, f) {
+  const t = NT[n.type] || NT.idee;
+  return `<div class="note ${esc(n.type)}${n.fait ? ' fait' : ''}" data-rel="${esc(f.rel)}" data-id="${esc(n.id)}">
+    <div class="nh"><b>${t[0]} ${t[1]}</b><span>${esc(n.date || '')}${n.auteur && n.auteur !== 'moi' ? ' · ' + esc(n.auteur) : ''}</span>
+      <span class="na"><button class="mini" title="${n.fait ? 'Rouvrir' : 'Marquer comme traité'}" onclick="A.noteDone(this)">${n.fait ? '↺' : '✓'}</button><button class="mini" title="Supprimer" onclick="A.noteDel(this)">🗑</button></span></div>
+    ${S.cur ? '' : `<div class="fl" onclick="A.open(this)">${esc(info(f).nom)}</div>`}
+    ${n.extrait ? `<div class="ex">« ${esc(n.extrait)} »</div>` : ''}
+    ${n.texte ? `<div class="tx">${esc(n.texte)}</div>` : ''}
+    ${n.proposition ? `<div class="pr">${esc(n.proposition)}</div>` : ''}
+  </div>`;
+}
+
+/* ------------------------------ détail ------------------------------ */
+function renderDetail() {
+  const f = S.cur;
+  $('#main').innerHTML = `<div class="detail">
+    <div class="dh" id="dh"></div>
+    <div class="db">
+      <div class="pv"><div class="pv-bar" id="pvbar"></div><div class="pv-body${S.mobile ? ' mobile' : ''}" id="pvbody"><div class="pv-msg"><span class="spin"></span></div></div></div>
+      <aside class="side" id="side"></aside>
+    </div></div>`;
+  renderHead(); renderBar(); renderSide(); loadPreview();
+}
+function renderHead() {
+  const f = S.cur, i = info(f), c = cfg();
+  $('#dh').innerHTML = `<button class="btn ghost" onclick="A.back()">← Retour</button>
+    <span style="font-size:20px">${ICONS[f.kind]}</span>
+    <div style="min-width:0"><div class="tt">${esc(i.nom)}</div><div class="path">${esc(f.rel)}</div></div>
+    <span class="st ${esc(i.statut)}">${esc(statutLabel(i.statut))}</span>
+    <span class="sp"></span>
+    <button class="btn" onclick="A.brief()">📋 Brief IA</button>
+    <a class="btn ghost" href="https://github.com/${esc(c.repo)}/blob/${encodeURIComponent(c.branch)}/${enc(f.full)}" target="_blank" rel="noopener">GitHub ↗</a>
+    <button class="btn ghost" onclick="A.download()">⬇︎</button>
+    <button class="btn ghost danger" title="Supprimer le fichier" onclick="A.del()">🗑</button>`;
+}
+function renderBar() {
+  const f = S.cur, bar = $('#pvbar');
+  if (f.kind !== 'html') { bar.innerHTML = `<span style="font-size:12.5px;color:var(--text2)">${esc(f.name)} · ${(f.size / 1024).toFixed(0)} Ko</span>`; return; }
+  const ed = S.mode === 'edit';
+  bar.innerHTML = `<div class="tabs"><button class="${ed ? '' : 'on'}" onclick="A.mode('apercu')">Aperçu</button><button class="${ed ? 'on' : ''}" onclick="A.mode('edit')">✏️ Modifier et annoter</button></div>
+    <div class="tabs"><button class="${S.mobile ? '' : 'on'}" onclick="A.mobile(false)" title="Ordinateur">🖥</button><button class="${S.mobile ? 'on' : ''}" onclick="A.mobile(true)" title="Mobile">📱</button></div>
+    ${ed ? `<span class="sep"></span>
+      <button class="btn sm ghost" title="Gras" onclick="A.cmd('bold')"><b>G</b></button>
+      <button class="btn sm ghost" title="Italique" onclick="A.cmd('italic')"><i>I</i></button>
+      <button class="btn sm ghost" title="Souligné" onclick="A.cmd('underline')"><u>S</u></button>
+      <button class="btn sm ghost" title="Lien" onclick="A.link()">🔗</button>
+      <button class="btn sm ghost" title="Effacer la mise en forme" onclick="A.cmd('removeFormat')">⌫</button>
+      <button class="btn sm ghost" title="Annuler" onclick="A.cmd('undo')">↶</button>
+      <button class="btn sm ghost" title="Rétablir" onclick="A.cmd('redo')">↷</button>
+      <span class="sep"></span>
+      <button class="btn sm" onclick="A.noteSel()" title="Sélectionne un passage dans la page, puis clique">📝 Noter la sélection</button>
+      <span class="sp"></span>
+      <button class="btn sm pri" id="btn-save" onclick="A.saveHtml()" ${S.dirty ? '' : 'disabled'}>${S.dirty ? 'Enregistrer sur GitHub' : 'Aucune modification'}</button>` : '<span class="sp"></span><span style="font-size:12px;color:var(--text3)">Passe en « Modifier et annoter » pour changer le texte ou noter un passage.</span>'}`;
+}
+
+function renderSide() {
+  const f = S.cur, i = info(f);
+  const seg = (field, opts, val) => `<div class="seg">${opts.map(o => `<button class="${val === o[0] ? 'on' : ''}" onclick="A.set('${field}',${esc(JSON.stringify(o[0]))})">${esc(o[1])}</button>`).join('')}</div>`;
+  const notes = i.notes.slice().sort((a, b) => (a.fait ? 1 : 0) - (b.fait ? 1 : 0) || String(b.date).localeCompare(String(a.date)));
+  $('#side').innerHTML = `
+  <div class="sec"><h3>Fiche</h3>
+    ${i.fromAI.length ? `<div class="src">✨ ${i.fromAI.map(k => ({resume:'Résumé',pour_qui:'Pour qui',promesse:'Promesse',type:'Type',categorie:'Catégorie'}[k])).join(', ')} : fourni${i.fromAI.length > 1 ? 's' : ''} par l’IA dans le fichier (balises <code>hub:</code>). Modifie pour reprendre la main.</div>` : ''}
+    <div class="fld"><label>Catégorie</label>${seg('categorie', CATS, i.categorie)}
+      ${f.rel.startsWith(DIRS.inbox) ? '<div class="help">En l’affectant, le fichier quitte <code>a-classer/</code> pour son dossier.</div>' : ''}</div>
+    ${i.categorie === 'tunnel' ? `<div class="fld"><label>Étape du tunnel</label><select class="inp" onchange="A.set('etape',this.value)"><option value="">—</option>${ETAPES.map(e => `<option value="${e[0]}"${i.etape === e[0] ? ' selected' : ''}>${esc(e[1])}</option>`).join('')}</select></div>` : ''}
+    ${i.categorie === 'produit' ? `<div class="row2">
+      <div class="fld"><label>Type de produit</label><input class="inp" list="types-dl" value="${esc(i.type)}" placeholder="ebook, quiz…" onchange="A.set('type',this.value.trim())"><datalist id="types-dl">${TYPES.map(t => `<option value="${esc(t)}">`).join('')}</datalist></div>
+      <div class="fld"><label>Rôle dans l’offre</label><select class="inp" style="width:100%" onchange="A.set('role',this.value)">${ROLES.map(r => `<option value="${r[0]}"${i.role === r[0] ? ' selected' : ''}>${esc(r[1])}</option>`).join('')}</select></div></div>` : ''}
+    <div class="fld"><label>Nom</label><input class="inp" value="${esc(i.nom)}" onchange="A.set('nom',this.value.trim())"></div>
+    <div class="fld"><label>Statut</label>${seg('statut', STATUTS, i.statut)}</div>
+    <div class="fld"><label>Ce que ça fait (résumé)</label><textarea class="inp" rows="3" placeholder="Ce que le produit / la page apporte, en 2-3 phrases" onchange="A.set('resume',this.value.trim())">${esc(i.resume)}</textarea></div>
+    <div class="row2">
+      <div class="fld"><label>Pour qui</label><input class="inp" value="${esc(i.pour_qui)}" onchange="A.set('pour_qui',this.value.trim())"></div>
+      <div class="fld"><label>Promesse</label><input class="inp" value="${esc(i.promesse)}" onchange="A.set('promesse',this.value.trim())"></div>
+    </div>
+  </div>
+  <div class="sec"><h3>Ajouter une note</h3>
+    <div class="ntypes">${Object.keys(NT).map(k => `<button class="${k}${S.ntype === k ? ' on ' + k : ''}" onclick="A.ntype('${k}')">${NT[k][0]} ${NT[k][1]}</button>`).join('')}</div>
+    <div class="fld"><label>Passage concerné <span style="font-weight:400;color:var(--text3)">(facultatif)</span></label><textarea class="inp" id="n-ex" rows="2" placeholder="Sélectionne du texte dans la page puis « 📝 Noter la sélection »"></textarea></div>
+    <div class="fld"><label>Ta remarque</label><textarea class="inp" id="n-tx" rows="3" placeholder="${S.ntype === 'garder' ? 'Pourquoi ça marche' : S.ntype === 'ab' ? 'Ce qu’on hésite à trancher' : 'Ce qui ne va pas'}"></textarea></div>
+    ${S.ntype === 'changer' || S.ntype === 'ab' ? `<div class="fld"><label>${S.ntype === 'ab' ? 'Variante B à tester' : 'Proposition'} <span style="font-weight:400;color:var(--text3)">(facultatif)</span></label><textarea class="inp" id="n-pr" rows="2"></textarea></div>` : ''}
+    <button class="btn pri" onclick="A.addNote()">Ajouter la note</button>
+  </div>
+  <div class="sec"><h3>Notes <span class="nc" style="text-transform:none;letter-spacing:0">${noteCounts(i.notes)}</span></h3>
+    ${notes.length ? notes.map(n => noteHtml(n, f)).join('') : '<div style="color:var(--text3);font-size:13px">Pas encore de note.</div>'}
+  </div>`;
+}
+
+async function loadPreview() {
+  const f = S.cur, body = $('#pvbody');
+  if (S.curBlobUrl) { URL.revokeObjectURL(S.curBlobUrl); S.curBlobUrl = null; }
+  try {
+    if (f.kind === 'html' || f.kind === 'text') {
+      if (S.curText === null) S.curText = await readBlobText(f.sha);
+      if (S.cur !== f) return;
+      if (f.kind === 'text') { body.innerHTML = '<pre style="white-space:pre-wrap;padding:20px;margin:0;width:100%;background:var(--surface)"></pre>'; body.firstChild.textContent = S.curText; return; }
+      return showHtml();
+    }
+    const blob = await readBlob(f.sha);
+    if (S.cur !== f) return;
+    const types = { pdf: 'application/pdf', image: f.ext === 'svg' ? 'image/svg+xml' : 'image/' + (f.ext === 'jpg' ? 'jpeg' : f.ext), video: 'video/' + (f.ext === 'mov' ? 'quicktime' : f.ext), audio: 'audio/' + (f.ext === 'mp3' ? 'mpeg' : f.ext) };
+    S.curBlobUrl = URL.createObjectURL(types[f.kind] ? new Blob([blob], { type: types[f.kind] }) : blob);
+    const u = S.curBlobUrl;
+    body.innerHTML = f.kind === 'pdf' ? `<iframe src="${u}"></iframe>`
+      : f.kind === 'image' ? `<img src="${u}" alt="">`
+      : f.kind === 'video' ? `<video src="${u}" controls></video>`
+      : f.kind === 'audio' ? `<div class="pv-msg"><audio src="${u}" controls></audio></div>`
+      : `<div class="pv-msg">Pas d’aperçu pour ce type de fichier.<br><br><button class="btn" onclick="A.download()">⬇︎ Télécharger</button></div>`;
+  } catch (e) { body.innerHTML = `<div class="pv-msg">Impossible de charger le fichier.<br>${esc(e.message)}</div>`; }
+}
+
+// Aperçu : scripts actifs mais isolés (pas d'accès au token). Le stockage local est simulé.
+const STORAGE_SHIM = '<script>(function(){function M(){var d={};return{getItem:function(k){return k in d?d[k]:null},setItem:function(k,v){d[k]=String(v)},removeItem:function(k){delete d[k]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}}}["localStorage","sessionStorage"].forEach(function(n){try{window[n].length}catch(e){try{Object.defineProperty(window,n,{value:M(),configurable:true})}catch(e2){}}})})();<\/script>';
+function previewDoc(html) {
+  return /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, m => m + STORAGE_SHIM) : STORAGE_SHIM + html;
+}
+function showHtml() {
+  const body = $('#pvbody');
+  body.innerHTML = '';
+  const fr = document.createElement('iframe');
+  if (S.mode === 'edit') {
+    // Édition : scripts coupés, pour enregistrer le HTML d'origine + tes modifications, sans le contenu généré à l'exécution.
+    fr.setAttribute('sandbox', 'allow-same-origin');
+    fr.className = 'editing';
+    fr.addEventListener('load', () => {
+      const d = fr.contentDocument; if (!d) return;
+      d.designMode = 'on';
+      d.addEventListener('input', () => { if (!S.dirty) { S.dirty = true; renderBar(); } });
+      d.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); A.saveHtml(); } });
+    });
+    fr.srcdoc = S.curText;
+  } else {
+    fr.setAttribute('sandbox', 'allow-scripts allow-popups allow-forms allow-modals');
+    fr.srcdoc = previewDoc(S.curText);
+  }
+  body.appendChild(fr);
+}
+const editDoc = () => { const fr = $('#pvbody iframe'); return S.mode === 'edit' && fr ? fr.contentDocument : null; };
+
+/* ------------------------------ actions ------------------------------ */
+const relOf = el => el.closest('[data-rel]').dataset.rel;
+async function reloadAll(keepRel) {
+  await loadTree();
+  fillProjects();
+  if (!S.proj || !S.projects.includes(S.proj)) { S.proj = null; S.cur = null; return render(); }
+  const prevMode = S.mode;
+  await openProject(S.proj);
+  if (keepRel) { const f = fileByRel(keepRel); if (f) { S.cur = f; S.curText = null; S.mode = prevMode; render(); } }
+}
+function confirmLeave() { return !S.dirty || confirm('Tu as des modifications non enregistrées dans l’éditeur. Les abandonner ?'); }
+
+async function setCategory(f, cat) {
+  const i = info(f);
+  const patch = { categorie: cat };
+  if (cat === 'tunnel' && !i.etape) patch.etape = guessEtape(f.name);
+  if (cat === 'tunnel' || cat === 'produit') {
+    const same = S.files.filter(x => x !== f && info(x).categorie === cat);
+    patch.ordre = same.reduce((m, x) => Math.max(m, info(x).ordre < 1e6 ? info(x).ordre : 0), 0) + 1;
+  }
+  // Un fichier de a-classer/ rejoint le dossier de sa catégorie.
+  const target = cat === 'tunnel' ? DIRS.tunnel : cat === 'produit' ? DIRS.produit : null;
+  if (target && f.rel.startsWith(DIRS.inbox)) {
+    let rel = target + f.rel.slice(DIRS.inbox.length), n = 2;
+    while (S.files.some(x => x.rel === rel)) rel = target + f.name.replace(/(\.[^.]+)?$/, '-' + (n++) + '$1');
+    setSave('<span class="spin"></span> Déplacement…');
+    try {
+      await commitWithHub([{ path: S.proj + '/' + rel, sha: f.sha }, { path: f.full, del: true }],
+        d => { const e = d.fichiers[f.rel] || {}; delete d.fichiers[f.rel]; d.fichiers[rel] = Object.assign(e, patch); },
+        'Hub copywriting · ' + S.proj + ' : ' + f.name + ' → ' + target);
+      setSave('✓ Enregistré sur GitHub');
+      await reloadAll(S.cur ? rel : null);
+    } catch (e) { setSave(''); toast(e.message, true); }
+    return;
+  }
+  change(d => Object.assign(entry(d, f.rel), patch));
+  render();
+}
+
+async function uploadFiles(list, dest) {
+  const files = Array.from(list || []); if (!files.length) return;
+  const dir = DIRS[dest] || DIRS.inbox, cat = dest === 'tunnel' ? 'tunnel' : dest === 'produit' ? 'produit' : null;
+  const tooBig = files.filter(f => f.size > 70 * 1024 * 1024);
+  if (tooBig.length) toast(tooBig.map(f => f.name).join(', ') + ' : plus de 70 Mo, à mettre ailleurs (Drive…) avec un lien', true);
+  const ok = files.filter(f => f.size <= 70 * 1024 * 1024); if (!ok.length) return;
+  const taken = new Set(S.tree.map(e => e.path));
+  let done = 0; const added = [];
+  for (const file of ok) {
+    let name = safeFileName(file.name), n = 2;
+    while (taken.has(S.proj + '/' + dir + name)) name = safeFileName(file.name).replace(/(\.[^.]+)?$/, '-' + (n++) + '$1');
+    taken.add(S.proj + '/' + dir + name);
+    setSave(`<span class="spin"></span> Envoi ${++done}/${ok.length} : ${esc(file.name)}`);
+    try { await putFile(S.proj + '/' + dir + name, await fileToB64(file), null, 'Hub copywriting · ' + S.proj + ' : ajout de ' + name); added.push(dir + name); }
+    catch (e) { toast(file.name + ' : ' + e.message, true); }
+  }
+  if (cat && added.length) { added.forEach(rel => S.pending.push(d => { entry(d, rel).categorie = cat; })); await flush(); }
+  setSave(added.length ? '✓ ' + added.length + ' fichier(s) ajouté(s)' : '');
+  await reloadAll();
+}
+
+function buildBrief(list) {
+  const lines = [];
+  lines.push(`Projet : ${S.proj} (dépôt ${cfg().repo}, dossier ${S.proj}/).`);
+  lines.push('Les fiches et les notes viennent de ' + S.proj + '/hub.json.', '');
+  list.forEach(({ f, i }) => {
+    lines.push(`## ${i.nom} — ${S.proj}/${f.rel}`);
+    lines.push(`Catégorie : ${i.categorie === 'tunnel' ? 'tunnel, étape « ' + etapeLabel(i.etape || '—') + ' »' : i.categorie === 'produit' ? 'produit' + (i.type ? ' (' + i.type + ')' : '') + (i.role ? ', rôle : ' + roleLabel(i.role) : '') : 'non affecté'} · statut : ${statutLabel(i.statut)}`);
+    if (i.resume) lines.push('Ce que ça fait : ' + i.resume);
+    if (i.pour_qui) lines.push('Pour qui : ' + i.pour_qui);
+    if (i.promesse) lines.push('Promesse : ' + i.promesse);
+    const open = i.notes.filter(n => !n.fait);
+    Object.keys(NT).forEach(k => {
+      const ns = open.filter(n => n.type === k); if (!ns.length) return;
+      lines.push(`${NT[k][0]} ${NT[k][1]} :`);
+      ns.forEach(n => lines.push('- ' + (n.extrait ? '« ' + n.extrait.replace(/\s+/g, ' ').slice(0, 300) + ' » → ' : '') + (n.texte || '').replace(/\s+/g, ' ') + (n.proposition ? ' | Proposition : ' + n.proposition.replace(/\s+/g, ' ') : '')));
+    });
+    lines.push('');
+  });
+  lines.push('Tâche : propose une nouvelle version qui traite les points ✏️, prépare une variante pour chaque point 🧪 (version A = actuelle, version B = ta proposition), et ne touche pas aux passages ✅.');
+  lines.push('Rends le fichier complet, et mets à jour les balises <meta name="hub:resume"> etc. si le fond change (voir 00-hub/FICHES-HUB.md). Français, ton direct.');
+  return lines.join('\n');
+}
+function showText(title, text) {
+  $('#modal-root').innerHTML = `<div class="ov" onclick="if(event.target===this)A.close()"><div class="modal"><h2>${esc(title)}</h2>
+    <textarea class="inp" id="mt" rows="16" style="font-family:ui-monospace,Menlo,monospace;font-size:12.5px"></textarea>
+    <div class="foot"><button class="btn" onclick="A.close()">Fermer</button><button class="btn pri" onclick="navigator.clipboard.writeText($('#mt').value).then(()=>toast('Copié'))">Copier</button></div></div></div>`;
+  $('#mt').value = text;
+}
+
+const FICHES_MD = `# Fiches du hub copywriting
+
+Le hub copywriting (https://hub-copyrighting.vercel.app) affiche, pour chaque projet, les fichiers du tunnel, les produits et les fichiers « à affecter ». Il range ses infos dans \`<projet>/hub.json\`. Ce document explique comment une IA fournit les infos de base d'un fichier qu'elle crée.
+
+## Où ranger les fichiers
+- \`<projet>/marketing/tunnels/\` : pages du tunnel (capture, vente, upsell, merci…).
+- \`<projet>/produits/\` : produits livrés au client (ebook, quiz, tracker, audio…).
+- \`<projet>/a-classer/\` : en cas de doute. Le porteur de projet affecte le fichier depuis le hub.
+
+## Fiche d'un fichier HTML : balises dans le \`<head>\`
+Toute page HTML créée par une IA commence par ces balises (contenu en français, une phrase ou deux) :
+
+\`\`\`html
+<meta name="hub:categorie" content="produit">   <!-- tunnel | produit -->
+<meta name="hub:type" content="ebook">          <!-- produits : ebook, formation, guide, quiz, outil, tracker, audio, vidéo, bibliothèque, espace membre, manifeste, bonus -->
+<meta name="hub:etape" content="vente">         <!-- tunnel : capture, vente, order-bump, upsell, downsell, merci, espace-membre, email -->
+<meta name="hub:resume" content="Ce que fait le produit ou la page, concrètement.">
+<meta name="hub:pour-qui" content="La personne visée et sa situation.">
+<meta name="hub:promesse" content="Le résultat promis, sans promesse non prouvée.">
+\`\`\`
+
+Le hub lit ces balises comme valeurs par défaut. Dès que le porteur de projet modifie un champ dans le hub, sa valeur (dans hub.json) l'emporte.
+
+## Fiche d'un autre fichier (PDF, audio, Word…) : hub.json
+Ajoute ou complète l'entrée du fichier dans \`<projet>/hub.json\`, clé = chemin depuis le dossier projet :
+
+\`\`\`json
+"produits/guide-calme-dense.pdf": {
+  "categorie": "produit",
+  "type": "guide",
+  "resume": "…",
+  "pour_qui": "…",
+  "promesse": "…"
+}
+\`\`\`
+
+## Notes du porteur de projet
+Chaque entrée de hub.json peut contenir \`notes\` : ses retours sur le fichier.
+- \`garder\` ✅ : ce qui marche, à ne pas toucher.
+- \`changer\` ✏️ : à réécrire (avec parfois une \`proposition\`).
+- \`ab\` 🧪 : pas tranché, à tester en A/B (avec parfois une variante B dans \`proposition\`).
+- \`idee\` 💡 : idée ou question.
+- \`extrait\` : le passage concerné ; \`fait: true\` : déjà traité.
+
+Avant de réécrire un fichier, une IA lit ses notes non traitées. Elle ne modifie ni ne supprime jamais les notes, le statut ou l'ordre : seul le porteur de projet les gère, depuis le hub.
+`;
+
+const A = {
+  saveToken() { const t = ($('#tok') || {}).value; if (!t || !t.trim()) return toast('Colle ton token', true); const c = cfg(); c.token = t.trim(); saveCfg(c); boot(); },
+  pick(p) { openProject(p).catch(e => toast(e.message, true)); },
+  async newProject() {
+    const n = prompt('Nom du nouveau projet (dossier du dépôt) :'); if (!n) return;
+    const slug = slugify(n); if (!slug) return;
+    if (S.projects.includes(slug)) return A.pick(slug);
+    try { await putFile(slug + '/hub.json', b64(hubText(normHub({}))), null, 'Hub copywriting : nouveau projet ' + slug); await loadTree(); fillProjects(); A.pick(slug); }
+    catch (e) { toast(e.message, true); }
+  },
+  open(el) {
+    const f = fileByRel(relOf(el)); if (!f) return;
+    S.cur = f; S.curText = null; S.dirty = false; S.mode = 'apercu'; render(); $('#main').scrollTop = 0;
+  },
+  back() { if (!confirmLeave()) return; S.cur = null; S.dirty = false; S.curText = null; render(); },
+  quickCat(el, cat) { setCategory(fileByRel(relOf(el)), cat); },
+  toggleArch() { S.showArch = !S.showArch; render(); },
+  move(el, dir) {
+    const f = fileByRel(relOf(el)), cat = info(f).categorie;
+    const list = S.files.map(x => ({ f: x, i: info(x) })).filter(x => x.i.categorie === cat).sort(byOrder);
+    const k = list.findIndex(x => x.f === f), j = k + dir; if (j < 0 || j >= list.length) return;
+    [list[k], list[j]] = [list[j], list[k]];
+    change(d => list.forEach((x, n) => { entry(d, x.f.rel).ordre = n + 1; }));
+    render();
+  },
+  set(field, val) {
+    const f = S.cur;
+    if (field === 'categorie') return setCategory(f, val);
+    change(d => { entry(d, f.rel)[field] = val; });
+    renderHead(); renderSide();
+  },
+  ntype(k) { const ex = $('#n-ex').value, tx = $('#n-tx').value; S.ntype = k; renderSide(); $('#n-ex').value = ex; $('#n-tx').value = tx; },
+  addNote() {
+    const ex = $('#n-ex').value.trim(), tx = $('#n-tx').value.trim(), pr = $('#n-pr') ? $('#n-pr').value.trim() : '';
+    if (!ex && !tx) return toast('Écris une remarque ou sélectionne un passage', true);
+    const n = { id: uid(), date: today(), auteur: 'moi', type: S.ntype, extrait: ex, texte: tx };
+    if (pr) n.proposition = pr;
+    const rel = S.cur.rel;
+    change(d => { const e = entry(d, rel); (e.notes = e.notes || []).push(n); });
+    renderSide(); renderHead();
+  },
+  noteDone(el) {
+    const rel = relOf(el), id = el.closest('[data-id]').dataset.id;
+    change(d => { const n = ((d.fichiers[rel] || {}).notes || []).find(x => x.id === id); if (n) { if (n.fait) delete n.fait; else n.fait = true; } });
+    S.cur ? renderSide() : render();
+  },
+  noteDel(el) {
+    if (!confirm('Supprimer cette note ?')) return;
+    const rel = relOf(el), id = el.closest('[data-id]').dataset.id;
+    change(d => { const e = d.fichiers[rel]; if (e && e.notes) e.notes = e.notes.filter(x => x.id !== id); });
+    S.cur ? renderSide() : render();
+  },
+  nfilter(v) { S.nfilter = v; render(); },
+  mode(m) {
+    if (m === S.mode) return;
+    if (S.mode === 'edit' && S.dirty && !confirm('Quitter l’édition sans enregistrer tes modifications ?')) return;
+    S.mode = m; S.dirty = false; renderBar(); showHtml();
+  },
+  mobile(v) { S.mobile = v; $('#pvbody').classList.toggle('mobile', v); renderBar(); },
+  cmd(c) { const d = editDoc(); if (!d) return; d.execCommand(c, false, null); S.dirty = true; renderBar(); },
+  link() { const d = editDoc(); if (!d) return; const u = prompt('Adresse du lien :', 'https://'); if (u) { d.execCommand('createLink', false, u); S.dirty = true; renderBar(); } },
+  noteSel() {
+    const d = editDoc(); const t = d ? String(d.getSelection()).trim() : '';
+    if (!t) return toast('Sélectionne d’abord un passage dans la page', true);
+    $('#n-ex').value = t; $('#n-tx').focus(); $('#side').scrollTop = 0;
+    const sec = $('#n-ex').closest('.sec'); sec.scrollIntoView({ block: 'start' });
+  },
+  async saveHtml() {
+    const d = editDoc(); if (!d || !S.dirty) return;
+    const f = S.cur, btn = $('#btn-save'); if (btn) { btn.disabled = true; btn.textContent = 'Enregistrement…'; }
+    const dt = /^\s*(<!doctype[^>]*>)/i.exec(S.curText);
+    d.designMode = 'off';
+    const html = (dt ? dt[1] : '<!DOCTYPE html>') + '\n' + d.documentElement.outerHTML + '\n';
+    d.designMode = 'on';
+    try {
+      f.sha = await putFile(f.full, b64(html), f.sha, 'Hub copywriting · ' + S.proj + ' : retouche de ' + f.name);
+      S.curText = html; S.dirty = false;
+      const cache = metaCache(); cache[f.sha] = parseMeta(html); S.metas = cache; try { localStorage.setItem(LS_META, JSON.stringify(cache)); } catch (e) {}
+      const te = S.tree.find(e => e.path === f.full); if (te) te.sha = f.sha;
+      renderBar(); toast('Page enregistrée sur GitHub');
+    } catch (e) {
+      toast(e.status === 409 ? 'Le fichier a changé sur GitHub entre-temps : copie tes modifications, puis ↻ Synchroniser' : e.message, true);
+      renderBar();
+    }
+  },
+  async download() {
+    const f = S.cur;
+    try { const b = S.curText !== null && S.curText !== undefined && (f.kind === 'html' || f.kind === 'text') ? new Blob([S.curText]) : await readBlob(f.sha);
+      const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = f.name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    } catch (e) { toast(e.message, true); }
+  },
+  async del() {
+    const f = S.cur;
+    if (!confirm('Supprimer « ' + f.name + ' » du dépôt GitHub, avec sa fiche et ses notes ?\n(Récupérable dans l’historique GitHub.)')) return;
+    try {
+      await commitWithHub([{ path: f.full, del: true }], d => { delete d.fichiers[f.rel]; }, 'Hub copywriting · ' + S.proj + ' : suppression de ' + f.name);
+      S.cur = null; S.dirty = false; toast('Fichier supprimé'); await reloadAll();
+    } catch (e) { toast(e.message, true); }
+  },
+  brief() { showText('Brief pour une IA', buildBrief([{ f: S.cur, i: info(S.cur) }])); },
+  briefProject() {
+    const list = S.files.map(f => ({ f, i: info(f) })).filter(x => x.i.notes.some(n => !n.fait));
+    if (!list.length) return toast('Aucune note à traiter', true);
+    showText('Brief IA · notes à traiter du projet', buildBrief(list));
+  },
+  upload(dest) { const inp = $('#file-input'); inp.dataset.dest = dest || 'inbox'; inp.value = ''; inp.click(); },
+  close() { $('#modal-root').innerHTML = ''; },
+  tour() {
+    const list = S.files.map(f => ({ f, i: info(f) })).filter(x => x.i.categorie === 'tunnel' && x.f.kind === 'html').sort(byOrder);
+    let k = 0;
+    const ov = document.createElement('div'); ov.className = 'tour';
+    const show = async () => {
+      const x = list[k];
+      ov.innerHTML = `<div class="tb"><b>Parcours du tunnel</b><span style="color:var(--text2)">Étape ${k + 1}/${list.length} · ${esc(x.i.nom)}${x.i.etape ? ' · ' + esc(etapeLabel(x.i.etape)) : ''}</span><span class="sp"></span>
+        <button class="btn" ${k ? '' : 'disabled'} data-g="-1">← Précédente</button><button class="btn pri" ${k < list.length - 1 ? '' : 'disabled'} data-g="1">Suivante →</button><button class="btn ghost" data-g="x">✕ Fermer</button></div>
+        <div class="pv-msg"><span class="spin"></span></div>`;
+      ov.querySelectorAll('[data-g]').forEach(b => b.onclick = () => { if (b.dataset.g === 'x') return ov.remove(); k += +b.dataset.g; show(); });
+      const html = await readBlobText(x.f.sha);
+      const fr = document.createElement('iframe'); fr.setAttribute('sandbox', 'allow-scripts allow-popups allow-forms allow-modals'); fr.srcdoc = previewDoc(html);
+      ov.querySelector('.pv-msg').replaceWith(fr);
+    };
+    document.body.appendChild(ov); show().catch(e => toast(e.message, true));
+  },
+  settings() {
+    const c = cfg();
+    $('#modal-root').innerHTML = `<div class="ov" onclick="if(event.target===this)A.close()"><div class="modal"><h2>Réglages</h2>
+      <div class="fld"><label>Dépôt GitHub (source de vérité)</label><input class="inp" id="s-repo" value="${esc(c.repo)}"></div>
+      <div class="row2"><div class="fld"><label>Branche</label><input class="inp" id="s-branch" value="${esc(c.branch)}"></div>
+      <div class="fld"><label>Token GitHub</label><input class="inp" type="password" id="s-tok" placeholder="${c.token ? '•••••• (laisser vide pour garder)' : 'github_pat_…'}"></div></div>
+      <div class="fld"><label>Convention pour les IA</label><div class="help" style="margin-bottom:6px">Installe <code>00-hub/FICHES-HUB.md</code> dans le dépôt : il explique aux IA comment déposer la fiche d’un fichier (balises <code>hub:</code> ou hub.json) et lire tes notes.</div>
+        <button class="btn sm" onclick="A.installConvention()">Installer / mettre à jour FICHES-HUB.md</button> <button class="btn sm ghost" onclick="showText('FICHES-HUB.md', FICHES_MD)">Voir le texte</button></div>
+      <div class="fld"><label>Ancien outil</label><a href="copyfunnel-dashboard.html" target="_blank">Ancien tableau de bord CopyFunnel ↗</a> <span class="help">(Brevo, WordPress, génération de tunnel)</span></div>
+      <div class="foot">${c.token ? '<button class="btn ghost danger" onclick="A.forget()" style="margin-right:auto">Oublier le token</button>' : ''}<button class="btn" onclick="A.close()">Annuler</button><button class="btn pri" onclick="A.saveSettings()">Enregistrer</button></div></div></div>`;
+  },
+  saveSettings() {
+    const c = cfg(); c.repo = $('#s-repo').value.trim() || c.repo; c.branch = $('#s-branch').value.trim() || 'main';
+    const t = $('#s-tok').value.trim(); if (t) c.token = t; saveCfg(c); A.close(); S.proj = null; S.cur = null; boot();
+  },
+  forget() { if (!confirm('Oublier le token sur ce navigateur ?')) return; const c = cfg(); delete c.token; saveCfg(c); A.close(); render(); },
+  async installConvention() {
+    try {
+      const path = '00-hub/FICHES-HUB.md';
+      const m = await gh(repoPath('/contents/' + enc(path) + '?ref=' + encodeURIComponent(cfg().branch)));
+      await putFile(path, b64(FICHES_MD), m && m.sha, 'Hub copywriting : convention des fiches pour les IA');
+      toast('FICHES-HUB.md installé dans ' + cfg().repo);
+    } catch (e) { toast(e.message, true); }
+  }
+};
+
+/* ------------------------- glisser-déposer ------------------------- */
+function bindColumnDrops() {
+  document.querySelectorAll('[data-drop]').forEach(col => {
+    col.addEventListener('dragover', e => { if (!e.dataTransfer.types.includes('Files')) return; e.preventDefault(); e.stopPropagation(); col.classList.add('drag'); $('#drop-ov').classList.remove('on'); });
+    col.addEventListener('dragleave', () => col.classList.remove('drag'));
+    col.addEventListener('drop', e => { e.preventDefault(); e.stopPropagation(); col.classList.remove('drag'); $('#drop-ov').classList.remove('on'); uploadFiles(e.dataTransfer.files, col.dataset.drop); });
+  });
+}
+let dragDepth = 0;
+window.addEventListener('dragenter', e => { if (!S.proj || !e.dataTransfer.types.includes('Files')) return; dragDepth++; $('#drop-ov').classList.add('on'); });
+window.addEventListener('dragleave', () => { if (--dragDepth <= 0) { dragDepth = 0; $('#drop-ov').classList.remove('on'); } });
+window.addEventListener('dragover', e => { if (S.proj && e.dataTransfer.types.includes('Files')) e.preventDefault(); });
+window.addEventListener('drop', e => { e.preventDefault(); dragDepth = 0; $('#drop-ov').classList.remove('on'); if (S.proj && e.dataTransfer.files.length) uploadFiles(e.dataTransfer.files, 'inbox'); });
+$('#file-input').addEventListener('change', e => uploadFiles(e.target.files, e.target.dataset.dest));
+
+/* ------------------------------ démarrage ------------------------------ */
+function setTheme(t) { document.documentElement.dataset.theme = t; localStorage.setItem(LS_THEME, t); $('#btn-theme').textContent = t === 'dark' ? '☀︎' : '☾'; }
+setTheme(localStorage.getItem(LS_THEME) || 'light');
+$('#btn-theme').onclick = () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+$('#btn-settings').onclick = () => A.settings();
+$('#btn-sync').onclick = async () => { if (!confirmLeave()) return; await flush(); S.dirty = false; const rel = S.cur && S.cur.rel; reloadAll(rel).then(() => toast('Synchronisé avec GitHub')).catch(e => toast(e.message, true)); };
+$('#proj-sel').onchange = e => { if (e.target.value === '__new') { e.target.value = S.proj || ''; return A.newProject(); } A.pick(e.target.value); };
+document.querySelectorAll('#view-tabs button').forEach(b => b.onclick = () => { if (!confirmLeave()) return; S.view = b.dataset.v; S.cur = null; S.dirty = false; render(); });
+window.addEventListener('beforeunload', e => { if (S.dirty || S.pending.length) { flush(); e.preventDefault(); e.returnValue = ''; } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') A.close(); });
+
+function fillProjects() {
+  $('#proj-sel').innerHTML = (S.proj ? '' : '<option value="">— projet —</option>') + S.projects.map(p => `<option value="${esc(p)}">${esc(p)}</option>`).join('') + '<option value="__new">＋ Nouveau projet…</option>';
+  if (S.proj) $('#proj-sel').value = S.proj;
+}
+async function boot() {
+  if (!cfg().token) { $('#proj-sel').style.display = 'none'; return render(); }
+  $('#proj-sel').style.display = '';
+  $('#main').innerHTML = '<div class="wrap"><span class="spin"></span> Connexion à GitHub…</div>';
+  try {
+    await loadTree();
+    const last = localStorage.getItem(LS_PROJ);
+    S.proj = S.projects.includes(last) ? last : null;
+    fillProjects();
+    if (S.proj) await openProject(S.proj); else render();
+  } catch (e) {
+    $('#main').innerHTML = `<div class="welcome"><h1>Connexion impossible</h1><p>${esc(e.message)}</p><button class="btn pri" onclick="A.settings()">Ouvrir les réglages</button></div>`;
+  }
+}
+boot();
+</script>
 </body>
 </html>
