@@ -5,6 +5,7 @@ Outil de gestion des contenus de copywriting : https://hub-copyrighting.vercel.a
 ## Principe
 - **Accueil** : tous les projets en vignettes, avec l'étape en cours, la barre d'avancement, le nombre de pages de tunnel, de produits, de fichiers à affecter, de contenus validés, de notes ✏️ et 🧪, la prochaine action et l'échéance.
 - **Pilotage** (par projet) : 7 étapes (cadrage, recherche, produits, tunnel, relecture & tests, lancement, optimisation). Chaque étape a sa liste de tâches (modifiable) et des vérifications automatiques calculées à partir des fichiers. « À faire maintenant » rassemble les tâches de l'étape, les notes ✏️, les fichiers à affecter et les fiches incomplètes. On passe à l'étape suivante d'un clic.
+- **Contenu du cadrage et de la recherche** : dans Pilotage, les rubriques de l'étape (cible, promesse, offre et prix, différence, limites et ton ; verbatims, concurrents, objections, angles, sources) se remplissent et s'enregistrent dans `<projet>/gestion-projet.md` (hub-projets). Les vérifications automatiques en tiennent compte (ex. au moins 20 verbatims). Bouton « Brief IA » pour faire compléter la section par une IA.
 - **Source de vérité : le dépôt GitHub `olympeathletique-34/hub-projets`.** Chaque dossier racine est un projet (aura, zone-4e…). Rien n'est stocké ailleurs : le hub lit et écrit directement dans le dépôt.
 - **Trois colonnes par projet** :
   - **Tunnel** : fichiers de `<projet>/marketing/tunnels/`, dans l'ordre du tunnel, avec leur étape (capture, vente, upsell…).

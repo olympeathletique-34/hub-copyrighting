@@ -196,6 +196,11 @@ main{flex:1;min-height:0;overflow:auto}
 .todo:hover{background:var(--surface2)}
 .todo .ic{width:20px;text-align:center;flex-shrink:0}
 .todo small{display:block;color:var(--text3);font-size:12px}
+.ggrid{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
+.ggrid .wide{grid-column:1/-1}
+@media(max-width:900px){.ggrid{grid-template-columns:1fr}}
+.ggrid label{font-size:13px;color:var(--text)}
+.cnt{font-weight:500;color:var(--text3);font-size:12px;margin-left:6px}
 .grp{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text3);margin:14px 6px 4px}
 code{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:var(--surface2);padding:1px 5px;border-radius:5px}
 .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px}
@@ -249,7 +254,7 @@ const IGNORE = ['hub.json','produits.json','tunnel.json','README.md','.gitkeep']
 const LOOSE_EXT = ['html','htm','pdf','docx','doc','odt','xlsx','xls','ods','pptx','ppt','epub','mp4','mov','webm','m4v','mp3','wav','m4a','ogg','zip'];
 const HUB_INFO = 'Fiches du hub copywriting (hub-copyrighting.vercel.app). Clé = chemin du fichier dans ce dossier projet. Champs : categorie (tunnel | produit | archive | vide = à affecter), nom, type (produits), role (produits), etape (tunnel), ordre, statut (brouillon | a-revoir | valide), resume, pour_qui, promesse, notes ; clé « projet » : étape en cours, objectif, échéance et tâches du projet (géré par le porteur de projet). Les IA peuvent ajouter ou compléter resume / pour_qui / promesse / type ; elles ne suppriment jamais les notes du porteur de projet. Voir 00-hub/FICHES-HUB.md.';
 
-const S = { tree: [], projects: [], proj: null, hub: { fichiers: {} }, legacy: {}, files: [], metas: {}, view: 'home', hubs: {}, pilotPhase: null,
+const S = { tree: [], projects: [], proj: null, hub: { fichiers: {} }, legacy: {}, files: [], metas: {}, view: 'home', hubs: {}, pilotPhase: null, gestion: parseGestion(''), gestions: {}, gPending: [], gTimer: null, gFlushing: null,
   cur: null, curText: null, curBlobUrl: null, mode: 'apercu', mobile: false, dirty: false, ntype: 'changer', nfilter: 'open',
   pending: [], flushTimer: null, flushing: null, showArch: false };
 
@@ -423,11 +428,14 @@ async function openProject(name) {
   const pre = name + '/';
   const blobs = S.tree.filter(e => e.type === 'blob' && e.path.startsWith(pre));
   const has = p => blobs.some(e => e.path === pre + p);
-  const [hub, lp, lt] = await Promise.all([
+  await flushGestion();
+  const [hub, lp, lt, gest] = await Promise.all([
     readJson(pre + 'hub.json'),
     has('produits/produits.json') ? readJson(pre + 'produits/produits.json') : null,
-    has('marketing/tunnels/tunnel.json') ? readJson(pre + 'marketing/tunnels/tunnel.json') : null
+    has('marketing/tunnels/tunnel.json') ? readJson(pre + 'marketing/tunnels/tunnel.json') : null,
+    has(GESTION_FILE) ? readText(pre + GESTION_FILE) : null
   ]);
+  S.gestion = parseGestion(gest && gest.text); S.gestions[name] = S.gestion;
   S.hub = normHub(hub && hub.data);
   // Anciens manifestes (produits.json / tunnel.json) : repris comme valeurs par défaut.
   S.legacy = {};
@@ -729,15 +737,8 @@ const editDoc = () => { const fr = $('#pvbody iframe'); return S.mode === 'edit'
 
 /* --------------------- gestion de projet (pilotage) --------------------- */
 const PHASES = [
-  { id: 'cadrage', nom: 'Cadrage', but: 'Décider quoi vendre, à qui, et à quel prix.', taches: [
-    'Définir la cible : qui, dans quelle situation, avec quelle douleur principale',
-    'Formuler la promesse principale (résultat concret, sans promesse non prouvée)',
-    'Fixer le prix et la structure de l’offre (produit principal, order bump, upsell)'] },
-  { id: 'recherche', nom: 'Recherche', but: 'Comprendre la cible avec ses propres mots.', taches: [
-    'Collecter 20 verbatims réels (forums, avis, commentaires)',
-    'Analyser 3 offres concurrentes (promesse, prix, angle)',
-    'Lister les objections principales et leurs réponses',
-    'Choisir 3 à 5 angles d’accroche à tester'] },
+  { id: 'cadrage', nom: 'Cadrage', but: 'Décider quoi vendre, à qui, et à quel prix.', taches: [] },
+  { id: 'recherche', nom: 'Recherche', but: 'Comprendre la cible avec ses propres mots.', taches: [] },
   { id: 'produits', nom: 'Produits', but: 'Créer ce que le client reçoit après l’achat.', taches: [
     'Relire chaque produit en entier',
     'Préparer la livraison (espace client, accès)'] },
@@ -757,12 +758,14 @@ const PHASES = [
     'Lancer un test A/B sur la page la plus faible',
     'Noter dans les fiches ce qui a marché'] }
 ];
+// Anciennes tâches par défaut remplacées par les rubriques de gestion-projet.md (vérifiées automatiquement).
+const SUPERSEDED = ['cadrage-1', 'cadrage-2', 'cadrage-3', 'recherche-1', 'recherche-2', 'recherche-3', 'recherche-4'];
 const phaseIdx = id => Math.max(0, PHASES.findIndex(p => p.id === id));
 function defaultTasks() { const out = []; PHASES.forEach(ph => ph.taches.forEach((t, i) => out.push({ id: ph.id + '-' + (i + 1), etape: ph.id, texte: t }))); return out; }
 function projetOf(hub) {
   const p = (hub && hub.projet) || {};
   return { etape: PHASES.some(x => x.id === p.etape) ? p.etape : 'cadrage', objectif: p.objectif || '', echeance: p.echeance || '',
-    etapes: p.etapes || {}, taches: Array.isArray(p.taches) ? p.taches : defaultTasks() };
+    etapes: p.etapes || {}, taches: (Array.isArray(p.taches) ? p.taches : defaultTasks()).filter(t => !SUPERSEDED.includes(t.id)) };
 }
 function ensureProjet(d) {
   const p = d.projet = d.projet && typeof d.projet === 'object' ? d.projet : {};
@@ -788,7 +791,14 @@ function statsOf(files, hub, legacy = {}) {
 }
 // Vérifications calculées à partir des fichiers : [libellé, ok, vue où agir]
 const AUTO = {
-  cadrage: (st, pj) => [['Objectif du projet écrit (en haut de cette page)', !!pj.objectif]],
+  cadrage: (st, pj) => { const g = (st.g || {}).cadrage || {}; const t = k => !!(g[k] && g[k].texte);
+    return [['Objectif du projet écrit (en haut de cette page)', !!pj.objectif],
+      ['Cible décrite', t('cible'), 'f:cible'], ['Promesse principale écrite', t('promesse'), 'f:promesse'], ['Offre et prix définis', t('offre'), 'f:offre']]; },
+  recherche: st => { const g = (st.g || {}).recherche || {}; const n = k => (g[k] && g[k].n) || 0;
+    return [[`Au moins 20 verbatims réels (${n('verbatims')})`, n('verbatims') >= 20, 'f:verbatims'],
+      [`Au moins 3 concurrents analysés (${n('concurrents')})`, n('concurrents') >= 3, 'f:concurrents'],
+      [`Au moins 3 objections avec leur réponse (${n('objections')})`, n('objections') >= 3, 'f:objections'],
+      [`Au moins 3 angles d’accroche (${n('angles')})`, n('angles') >= 3, 'f:angles']]; },
   produits: st => [[`Au moins un produit (${st.produit})`, st.produit > 0, 'board'],
     [`Chaque contenu a sa fiche : type et résumé${st.incomplets.length ? ' (' + st.incomplets.length + ' à compléter)' : ''}`, st.total > 0 && !st.incomplets.length, 'board']],
   tunnel: st => [['Une page de capture', st.etapes.has('capture'), 'board'], ['Une page de vente', st.etapes.has('vente'), 'board'], ['Une page de remerciement', st.etapes.has('merci'), 'board']],
@@ -809,9 +819,153 @@ function nextAction(pj, st) {
 const fmtDate = d => { try { return new Date(d + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }); } catch (e) { return d; } };
 function daysLeft(d) { const n = Math.round((new Date(d + 'T12:00:00') - new Date()) / 864e5); return n < 0 ? 'dépassée de ' + (-n) + ' j' : n === 0 ? 'aujourd’hui' : 'dans ' + n + ' j'; }
 
+/* ---------------- fichier de gestion de projet (gestion-projet.md) ---------------- */
+const GESTION_FILE = 'gestion-projet.md';
+const GESTION = {
+  cadrage: [
+    ['cible', 'Cible', 'Qui, dans quelle situation, avec quelle douleur principale.'],
+    ['promesse', 'Promesse principale', 'Le résultat concret promis, sans promesse non prouvée.'],
+    ['offre', 'Offre et prix', 'Produit principal, order bump, upsell, bonus, avec leurs prix.'],
+    ['difference', 'Ce qui nous différencie', 'Pourquoi nous plutôt qu’un concurrent.'],
+    ['limites', 'Limites et ton', 'Ce qu’on ne promet pas, les mots interdits, le ton de la marque.']
+  ],
+  recherche: [
+    ['verbatims', 'Verbatims', 'Une phrase réelle de la cible par ligne, avec sa source.', 1, 1],
+    ['concurrents', 'Concurrents', 'Une ligne par concurrent : nom — promesse — prix — angle.', 1, 1],
+    ['objections', 'Objections et réponses', 'Une ligne par objection : objection → réponse.', 1],
+    ['angles', 'Angles d’accroche', 'Un angle par ligne.', 1],
+    ['sources', 'Sources et notes', 'Liens, lectures, remarques.', 0, 1]
+  ]
+};
+const gnorm = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[’']/g, ' ').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+const gItems = t => String(t || '').split('\n').map(l => l.replace(/^\s*(?:[-*+]|\d+[.)])\s+/, '').trim()).filter(Boolean);
+function gField(phId, key) { return (GESTION[phId] || []).find(f => f[0] === key); }
+function gFieldByTitle(phId, title) { return (GESTION[phId] || []).find(f => gnorm(f[1]) === gnorm(title)); }
+function parseGestion(md) {
+  const doc = { head: '', phases: [] }; let ph = null, sec = null; const head = [];
+  String(md || '').replace(/\r/g, '').split('\n').forEach(line => {
+    let m;
+    if ((m = /^##\s+(.+?)\s*#*\s*$/.exec(line))) { ph = { titre: m[1], intro: [], sections: [] }; doc.phases.push(ph); sec = null; return; }
+    if (ph && (m = /^###\s+(.+?)\s*#*\s*$/.exec(line))) { sec = { titre: m[1], lignes: [] }; ph.sections.push(sec); return; }
+    if (sec) sec.lignes.push(line); else if (ph) ph.intro.push(line); else head.push(line);
+  });
+  doc.head = head.join('\n').trim();
+  doc.phases.forEach(p => { p.intro = p.intro.join('\n').trim(); p.sections.forEach(x => { x.texte = x.lignes.join('\n').trim(); delete x.lignes; }); });
+  return doc;
+}
+function gPhase(doc, phId, create) {
+  const P = PHASES.find(p => p.id === phId);
+  let ph = doc.phases.find(p => gnorm(p.titre) === gnorm(P.nom) || gnorm(p.titre).startsWith(phId));
+  if (!ph && create) {
+    ph = { titre: P.nom, intro: P.but, sections: [] };
+    const k = phaseIdx(phId), at = doc.phases.findIndex(p => { const q = PHASES.find(x => gnorm(p.titre).startsWith(x.id)); return q && phaseIdx(q.id) > k; });
+    if (at === -1) doc.phases.push(ph); else doc.phases.splice(at, 0, ph);
+  }
+  return ph;
+}
+function gSection(ph, title, create) {
+  let s = ph.sections.find(x => gnorm(x.titre) === gnorm(title));
+  if (!s && create) { s = { titre: title, texte: '' }; ph.sections.push(s); }
+  return s;
+}
+function gSet(doc, phId, title, value) {
+  const f = gFieldByTitle(phId, title), ph = gPhase(doc, phId, true), sec = gSection(ph, f ? f[1] : title, true);
+  sec.texte = f && f[3] ? gItems(value).map(x => '- ' + x).join('\n') : String(value || '').trim();
+}
+function serializeGestion(doc, proj) {
+  // Rubriques standard dans l'ordre, puis celles ajoutées à la main ou par une IA.
+  Object.keys(GESTION).forEach(id => {
+    const ph = gPhase(doc, id, true), std = GESTION[id].map(f => gSection(ph, f[1], true));
+    ph.sections = std.concat(ph.sections.filter(x => !std.includes(x)));
+  });
+  const head = doc.head || `# Gestion de projet — ${proj}\n\n> Géré par le hub copywriting (hub-copyrighting.vercel.app). Modifiable à la main ou par une IA : garde les titres « ## » (étapes) et « ### » (rubriques). Une ligne « - » par élément dans les listes. Avancement et tâches : clé « projet » de hub.json.`;
+  return head + '\n\n' + doc.phases.map(ph => '## ' + ph.titre + '\n\n' + (ph.intro ? ph.intro + '\n\n' : '') +
+    ph.sections.map(x => '### ' + x.titre + '\n\n' + (x.texte ? x.texte + '\n\n' : '')).join('')).join('').replace(/\n+$/, '\n');
+}
+// Valeurs utiles au pilotage : { cadrage: { cible: {texte, n} … }, recherche: … }
+function gValues(doc) {
+  const out = {};
+  Object.keys(GESTION).forEach(id => {
+    out[id] = {}; const ph = doc && gPhase(doc, id, false);
+    GESTION[id].forEach(f => { const s = ph && gSection(ph, f[1], false), t = s ? s.texte : ''; out[id][f[0]] = { texte: t, n: gItems(t).length }; });
+  });
+  return out;
+}
+async function readText(path) {
+  const m = await gh(repoPath('/contents/' + enc(path) + '?ref=' + encodeURIComponent(cfg().branch)));
+  if (!m || Array.isArray(m)) return null;
+  return { text: m.content ? unb64(m.content) : await readBlobText(m.sha), sha: m.sha };
+}
+const gPath = proj => proj + '/' + GESTION_FILE;
+function gchange(mut) {
+  mut(S.gestion); S.gPending.push(mut);
+  setSave('Modifications en attente…');
+  clearTimeout(S.gTimer); S.gTimer = setTimeout(flushGestion, 1200);
+}
+async function flushGestion() {
+  clearTimeout(S.gTimer);
+  if (S.gFlushing) await S.gFlushing;
+  if (!S.gPending.length) return;
+  const muts = S.gPending.splice(0), proj = S.proj;
+  S.gFlushing = (async () => {
+    setSave('<span class="spin"></span> Enregistrement…');
+    for (let i = 0; i < 4; i++) {
+      const cur = await readText(gPath(proj));
+      const doc = parseGestion(cur && cur.text); muts.forEach(m => m(doc));
+      try {
+        await putFile(gPath(proj), b64(serializeGestion(doc, proj)), cur && cur.sha, 'Hub copywriting · ' + proj + ' : gestion de projet');
+        if (S.proj === proj) { S.gestion = doc; S.gPending.forEach(m => m(S.gestion)); S.gestions[proj] = S.gestion; }
+        setSave('✓ Enregistré sur GitHub'); return;
+      } catch (e) { if (e.status !== 409 && e.status !== 422) { S.gPending.unshift(...muts); setSave(''); toast(e.message, true); return; } }
+    }
+    S.gPending.unshift(...muts); setSave(''); toast(GESTION_FILE + ' modifié ailleurs en même temps : clique sur ↻ Synchroniser', true);
+  })();
+  await S.gFlushing; S.gFlushing = null;
+}
+function gestionBox(phId) {
+  const fields = GESTION[phId]; if (!fields) return '';
+  const ph = gPhase(S.gestion, phId, false), P = PHASES.find(p => p.id === phId), c = cfg();
+  const known = new Set(fields.map(f => gnorm(f[1])));
+  const extras = ph ? ph.sections.filter(x => !known.has(gnorm(x.titre))) : [];
+  const fld = (key, title, help, list, wide, texte) => {
+    const val = list ? gItems(texte).join('\n') : texte, lines = val.split('\n').length;
+    return `<div class="fld${wide ? ' wide' : ''}"><label for="g-${esc(key)}">${esc(title)}${list ? ` <span class="cnt" id="gc-${esc(key)}">${gItems(texte).length} élément(s)</span>` : ''}</label>
+      <textarea class="inp" id="g-${esc(key)}" data-ph="${phId}" data-t="${esc(title)}" data-list="${list ? 1 : 0}" rows="${Math.min(16, Math.max(3, lines + 1))}" placeholder="${esc(help)}" onchange="A.gset(this)" oninput="A.gcount(this)">${esc(val)}</textarea></div>`;
+  };
+  return `<div class="box">
+    <h2>Contenu · ${esc(P.nom)}<span class="sp"></span>
+      <button class="btn sm" onclick="A.gbrief('${phId}')">📋 Brief IA</button>
+      <a class="btn sm ghost" href="https://github.com/${esc(c.repo)}/blob/${encodeURIComponent(c.branch)}/${enc(gPath(S.proj))}" target="_blank" rel="noopener">GitHub ↗</a></h2>
+    <div class="but">Enregistré dans <code>${esc(gPath(S.proj))}</code>. Tes IA peuvent le lire et le compléter (rubriques « ### »).</div>
+    <div class="ggrid">${fields.map(f => { const s = ph && gSection(ph, f[1], false); return fld(f[0], f[1], f[2], !!f[3], !!f[4], s ? s.texte : ''); }).join('')}
+    ${extras.map((x, i) => fld('x' + i, x.titre, '', false, true, x.texte)).join('')}</div>
+  </div>`;
+}
+function gBriefText(phId) {
+  const v = gValues(S.gestion), P = PHASES.find(p => p.id === phId), pj = projetOf(S.hub);
+  const show = id => GESTION[id].map(f => { const x = v[id][f[0]];
+    if (!x.texte) return `### ${f[1]}\n(vide)`;
+    return `### ${f[1]}\n` + (f[3] ? gItems(x.texte).map(i => '- ' + i).join('\n') : x.texte); }).join('\n\n');
+  const lines = [`Projet : ${S.proj} (dépôt ${cfg().repo}).`, pj.objectif ? 'Objectif : ' + pj.objectif : '', '',
+    `Fichier de gestion de projet : ${gPath(S.proj)}. Lis-le en entier, puis complète la section « ## ${P.nom} ».`, '', 'Contenu actuel :', show('cadrage')];
+  if (phId === 'recherche') lines.push(show('recherche'), '',
+    'À faire :',
+    '- Verbatims : au moins 20 phrases réellement écrites par la cible (forums, avis, commentaires, Reddit, YouTube), une par ligne, avec le lien de la source. N’en invente aucune.',
+    '- Concurrents : au moins 3, une ligne chacun : nom — promesse — prix — angle (avec le lien).',
+    '- Objections et réponses : une ligne par objection : objection → réponse.',
+    '- Angles d’accroche : 3 à 5, un par ligne, appuyés sur les verbatims.');
+  else lines.push('', 'À faire : propose une version précise de chaque rubrique vide ou faible (cible, promesse, offre et prix, différence, limites et ton), en distinguant faits sourcés et hypothèses.');
+  lines.push('', 'Rends la section complète en Markdown, en gardant exactement les titres « ### » existants et une ligne « - » par élément dans les listes. Si tu peux écrire dans le dépôt, modifie directement le fichier, sans toucher aux autres sections. Français, ton direct.');
+  return lines.filter((l, i, a) => l !== '' || a[i - 1] !== '').join('\n');
+}
+
 async function loadHubs() {
-  const res = await Promise.all(S.projects.map(p => p === S.proj ? Promise.resolve({ data: S.hub }) : readJson(p + '/hub.json').catch(() => null)));
-  S.projects.forEach((p, k) => { S.hubs[p] = normHub(res[k] && res[k].data); });
+  const has = p => S.tree.some(e => e.path === gPath(p));
+  const [res, gres] = await Promise.all([
+    Promise.all(S.projects.map(p => p === S.proj ? Promise.resolve({ data: S.hub }) : readJson(p + '/hub.json').catch(() => null))),
+    Promise.all(S.projects.map(p => p === S.proj ? Promise.resolve(null) : has(p) ? readText(gPath(p)).catch(() => null) : null))
+  ]);
+  S.projects.forEach((p, k) => { S.hubs[p] = normHub(res[k] && res[k].data); if (p !== S.proj) S.gestions[p] = parseGestion(gres[k] && gres[k].text); });
   S.homeLoaded = true;
 }
 function segsHtml(pj, st) {
@@ -823,7 +977,7 @@ function segsHtml(pj, st) {
   }).join('') + '</div>';
 }
 async function renderHome() {
-  if (S.proj) S.hubs[S.proj] = S.hub;
+  if (S.proj) { S.hubs[S.proj] = S.hub; S.gestions[S.proj] = S.gestion; }
   if (!S.homeLoaded) {
     $('#main').innerHTML = '<div class="wrap"><span class="spin"></span> Lecture des projets…</div>';
     try { await loadHubs(); } catch (e) { toast(e.message, true); }
@@ -831,6 +985,7 @@ async function renderHome() {
   }
   const cards = S.projects.map(p => {
     const hub = S.hubs[p] || normHub({}), pj = projetOf(hub), st = statsOf(filesOf(p), hub), k = phaseIdx(pj.etape);
+    st.g = gValues(S.gestions[p]);
     const nx = nextAction(pj, st);
     return `<div class="pcard" data-p="${esc(p)}" onclick="A.openPilot(this.dataset.p)">
       <div class="pc-h"><h3>${esc(p)}</h3><span class="chip">Étape ${k + 1}/${PHASES.length}</span></div>
@@ -854,7 +1009,18 @@ async function renderHome() {
 }
 
 function renderPilot() {
+  const viewId = S.pilotPhase || projetOf(S.hub).etape;
+  const [head, grid] = pilotTop().split('<!--grid-->');
+  // Pour le cadrage et la recherche, le contenu de l'étape passe avant les tâches.
+  $('#main').innerHTML = `<div class="wrap"><div id="phead">${head}</div><div id="gbox">${gestionBox(viewId)}</div><div id="pgrid" style="margin-top:16px">${grid}</div></div>`;
+}
+function refreshPilotTop() {
+  const h = $('#phead'), g = $('#pgrid'); if (!h || !g) return;
+  const [head, grid] = pilotTop().split('<!--grid-->'); h.innerHTML = head; g.innerHTML = grid;
+}
+function pilotTop() {
   const pj = projetOf(S.hub), st = statsOf(S.files, S.hub, S.legacy), cur = phaseIdx(pj.etape);
+  st.g = gValues(S.gestion);
   const viewId = S.pilotPhase || pj.etape, vk = phaseIdx(viewId), ph = PHASES[vk], s = phaseState(ph, pj, st);
   const stepper = PHASES.map((p, i) => {
     const x = phaseState(p, pj, st), cls = i === cur ? 'cur' : x.fait ? 'done' : '';
@@ -886,12 +1052,12 @@ function renderPilot() {
   if (st.incomplets.length) todo += `<div class="grp">Fiches à compléter</div>` + st.incomplets.slice(0, 5).map(x =>
     `<div class="todo" data-rel="${esc(x.f.rel)}" onclick="A.open(this)"><span class="ic">${ICONS[x.f.kind]}</span><span>${esc(x.i.nom)}<small>${x.i.categorie === 'produit' && !x.i.type ? 'type et ' : ''}${x.i.resume ? '' : 'résumé manquant'}</small></span></div>`).join('');
 
-  $('#main').innerHTML = `<div class="wrap">
+  return `
     <div class="ph-head"><h1>${esc(S.proj)}</h1>
       <input class="inp" style="flex:1;min-width:240px" placeholder="Objectif du projet (ex. : 30 ventes de l’ebook avant le 15 janvier)" value="${esc(pj.objectif)}" onchange="A.setProjet('objectif',this.value.trim())">
       <label style="font-size:12.5px;color:var(--text2);display:flex;align-items:center;gap:6px">Échéance <input class="inp" type="date" style="width:auto" value="${esc(pj.echeance)}" onchange="A.setProjet('echeance',this.value)"></label>
     </div>
-    <div class="stepper">${stepper}</div>
+    <div class="stepper">${stepper}</div><!--grid-->
     <div class="pgrid">
       <div class="box">
         <h2>Étape ${vk + 1} · ${esc(ph.nom)} <span class="st ${vk === cur ? 'a-revoir' : s.fait ? 'valide' : 'brouillon'}">${status}</span><span class="sp"></span><span style="font-size:13px;color:var(--text2);font-weight:500">${s.done}/${s.total}</span></h2>
@@ -908,7 +1074,7 @@ function renderPilot() {
           <div><b>${st.tunnel}</b><span>pages tunnel</span></div><div><b>${st.produit}</b><span>produits</span></div><div><b>${st.valides}/${st.total}</b><span>validés</span></div>
         </div>
       </div>
-    </div></div>`;
+    </div>`;
 }
 
 /* ------------------------------ actions ------------------------------ */
@@ -1048,15 +1214,39 @@ Chaque entrée de hub.json peut contenir \`notes\` : ses retours sur le fichier.
 
 Avant de réécrire un fichier, une IA lit ses notes non traitées. Elle ne modifie ni ne supprime jamais les notes, le statut ou l'ordre : seul le porteur de projet les gère, depuis le hub.
 
+## Fichier de gestion de projet : \`<projet>/gestion-projet.md\`
+Contenu des étapes Cadrage (cible, promesse principale, offre et prix, ce qui nous différencie, limites et ton) et Recherche (verbatims, concurrents, objections et réponses, angles d'accroche, sources et notes). Le hub l'affiche et l'enregistre dans l'onglet Pilotage.
+- Garde exactement les titres « ## » (étapes) et « ### » (rubriques) ; tu peux ajouter une rubrique « ### » si besoin.
+- Listes : une ligne « - » par élément. Verbatims : phrases réelles de la cible avec leur source, jamais inventées. Concurrents : nom — promesse — prix — angle. Objections : objection → réponse.
+- Lis ce fichier avant d'écrire une page ou un produit du projet : c'est la base de la copie.
+
 ## Avancement du projet
 La clé \`projet\` de hub.json indique l'étape en cours (\`etape\` : cadrage, recherche, produits, tunnel, relecture, lancement, optimisation), l'objectif, l'échéance et les tâches de chaque étape (\`taches\`, avec \`fait: true\` quand elles sont cochées). Une IA s'en sert pour savoir où en est le projet et proposer la suite ; elle ne la modifie pas.
 `;
 
 const A = {
-  home() { if (!confirmLeave()) return; flush(); S.view = 'home'; S.cur = null; S.dirty = false; render(); },
+  home() { if (!confirmLeave()) return; flush(); flushGestion(); S.view = 'home'; S.cur = null; S.dirty = false; render(); },
   openPilot(p) { S.view = 'pilot'; S.pilotPhase = null; if (p === S.proj) { S.cur = null; render(); } else A.pick(p); },
-  go(v) { S.view = v; S.cur = null; render(); },
-  setProjet(k, v) { change(d => { ensureProjet(d)[k] = v; }); render(); },
+  go(v) {
+    if (v.startsWith('f:')) {
+      const key = v.slice(2), phId = Object.keys(GESTION).find(id => gField(id, key));
+      if (phId && (S.pilotPhase || projetOf(S.hub).etape) !== phId) { S.pilotPhase = phId === projetOf(S.hub).etape ? null : phId; render(); }
+      const el = $('#g-' + key); if (el) { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); el.focus(); }
+      return;
+    }
+    S.view = v; S.cur = null; render();
+  },
+  gset(el) {
+    const ph = el.dataset.ph, t = el.dataset.t, v = el.value;
+    gchange(doc => gSet(doc, ph, t, v));
+    refreshPilotTop();
+  },
+  gcount(el) {
+    if (el.dataset.list === '1') { const c = $('#gc-' + el.id.slice(2)); if (c) c.textContent = gItems(el.value).length + ' élément(s)'; }
+    const lines = el.value.split('\n').length; if (lines + 1 > el.rows && el.rows < 16) el.rows = Math.min(16, lines + 1);
+  },
+  gbrief(phId) { showText('Brief IA · ' + PHASES.find(p => p.id === phId).nom, gBriefText(phId)); },
+  setProjet(k, v) { change(d => { ensureProjet(d)[k] = v; }); refreshPilotTop(); },
   task(el) {
     const id = el.dataset.t;
     change(d => { const t = ensureProjet(d).taches.find(x => x.id === id); if (t) { if (t.fait) { delete t.fait; delete t.date; } else { t.fait = true; t.date = today(); } } });
@@ -1076,7 +1266,8 @@ const A = {
   },
   phaseView(id) { S.pilotPhase = id === projetOf(S.hub).etape ? null : id; render(); },
   phaseDone() {
-    const pj = projetOf(S.hub), k = phaseIdx(pj.etape), s = phaseState(PHASES[k], pj, statsOf(S.files, S.hub, S.legacy));
+    const pj = projetOf(S.hub), k = phaseIdx(pj.etape), stx = statsOf(S.files, S.hub, S.legacy); stx.g = gValues(S.gestion);
+    const s = phaseState(PHASES[k], pj, stx);
     if (s.done < s.total && !confirm('Il reste ' + (s.total - s.done) + ' point(s) non cochés dans cette étape. La terminer quand même ?')) return;
     change(d => { const p = ensureProjet(d); p.etapes[pj.etape] = { fait: true, date: today() }; if (k < PHASES.length - 1) p.etape = PHASES[k + 1].id; });
     S.pilotPhase = null; render();
@@ -1255,10 +1446,10 @@ function setTheme(t) { document.documentElement.dataset.theme = t; localStorage.
 setTheme(localStorage.getItem(LS_THEME) || 'light');
 $('#btn-theme').onclick = () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
 $('#btn-settings').onclick = () => A.settings();
-$('#btn-sync').onclick = async () => { if (!confirmLeave()) return; await flush(); S.dirty = false; const rel = S.cur && S.cur.rel; reloadAll(rel).then(() => toast('Synchronisé avec GitHub')).catch(e => toast(e.message, true)); };
+$('#btn-sync').onclick = async () => { if (!confirmLeave()) return; await flush(); await flushGestion(); S.dirty = false; const rel = S.cur && S.cur.rel; reloadAll(rel).then(() => toast('Synchronisé avec GitHub')).catch(e => toast(e.message, true)); };
 $('#proj-sel').onchange = e => { if (e.target.value === '__new') { e.target.value = S.proj || ''; return A.newProject(); } A.pick(e.target.value); };
 document.querySelectorAll('#view-tabs button').forEach(b => b.onclick = () => { if (!confirmLeave()) return; if (b.dataset.v === 'home') return A.home(); S.view = b.dataset.v; S.cur = null; S.dirty = false; render(); });
-window.addEventListener('beforeunload', e => { if (S.dirty || S.pending.length) { flush(); e.preventDefault(); e.returnValue = ''; } });
+window.addEventListener('beforeunload', e => { if (S.dirty || S.pending.length || S.gPending.length) { flush(); flushGestion(); e.preventDefault(); e.returnValue = ''; } });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') A.close(); });
 
 function fillProjects() {
